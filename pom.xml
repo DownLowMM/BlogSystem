@@ -2,14 +2,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.duan</groupId>
+    <groupId>com.duan.blogos</groupId>
     <artifactId>blog-system</artifactId>
 
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <name>blog-system</name>
     <url>http://maven.apache.org</url>
+
+    <modules>
+        <module>blog-api</module>
+        <module>blog-config</module>
+        <module>blog-dao</module>
+        <module>blog-doc</module>
+        <module>blog-service</module>
+        <module>blog-util</module>
+
+        <module>blog-web-sample</module>
+    </modules>
 
     <build>
         <!--IDEA 会自动设置为1.5，用此插件强制使用jdk lanague level-->

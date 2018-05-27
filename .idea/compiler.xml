@@ -2,15 +2,40 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="BlogSystem" />
+        <module name="blog-api" />
+        <module name="blog-config" />
+        <module name="blog-dao" />
+        <module name="blog-doc" />
+        <module name="blog-service" />
+        <module name="blog-util" />
+        <module name="blog-web-sample" />
+        <module name="bos-api-interfaces" />
+        <module name="bos-api-models" />
+        <module name="bos-api-persistence" />
+        <module name="bos-api-services" />
+        <module name="bos-api-webapp" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="blog-api" target="1.8" />
+      <module name="blog-config" target="1.8" />
+      <module name="blog-dao" target="1.8" />
+      <module name="blog-doc" target="1.8" />
+      <module name="blog-service" target="1.8" />
+      <module name="blog-system" target="1.8" />
+      <module name="blog-util" target="1.8" />
+      <module name="blog-web-sample" target="1.8" />
       <module name="BlogSystem" target="1.8" />
+      <module name="bos-api-interfaces" target="1.8" />
+      <module name="bos-api-models" target="1.8" />
+      <module name="bos-api-persistence" target="1.8" />
+      <module name="bos-api-services" target="1.8" />
+      <module name="bos-api-webapp" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

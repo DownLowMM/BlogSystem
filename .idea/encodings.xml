@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/blog-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blog-config" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blog-dao" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blog-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blog-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blog-util" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blog-web-sample" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
