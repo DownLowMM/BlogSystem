@@ -3,8 +3,6 @@ package com.duan.blogos.service.manager;
 import com.duan.blogos.dao.entity.blog.Blog;
 import com.duan.blogos.service.exception.internal.LuceneException;
 import com.duan.blogos.service.manager.properties.WebsiteProperties;
-import com.duan.service.exception.internal.LuceneException;
-import com.duan.service.manager.properties.WebsiteProperties;
 import com.duan.blogos.util.common.StringUtils;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;
