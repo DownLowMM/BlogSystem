@@ -533,6 +533,7 @@ function confirmExe() {
                 confirmDeleteBlogId = -1;
                 disableButton(false, 'confirmBtn', '删除成功', "button-disable");
                 filterBloggerBlog(0, defaultBlogCount, true, false, true);
+                loadCategory();
 
                 setTimeout(function () {
                     disableButton(true, 'confirmBtn', '确认', "button-disable");

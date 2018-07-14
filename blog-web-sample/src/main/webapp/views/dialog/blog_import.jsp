@@ -40,6 +40,11 @@
                             </button>
                         </p>
                     </div>
+                    <div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>tip</b>:&nbsp;<small style="color: gray;">
+                        将同类别博文的文件放到相同目录下，文件夹名将作为类别名，导入时将自动创建类别，文件夹下的博文自动归到其类别下。
+                    </small>
+                    </div>
                 </div>
 
                 <hr>

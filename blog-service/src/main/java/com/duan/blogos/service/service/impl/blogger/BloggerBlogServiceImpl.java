@@ -22,9 +22,10 @@ import com.duan.blogos.service.manager.properties.WebsiteProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.BlogFilterAbstract;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
+import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import com.duan.blogos.util.common.CollectionUtils;
-import com.duan.blogos.util.file.FileUtils;
 import com.duan.blogos.util.common.StringUtils;
+import com.duan.blogos.util.file.FileUtils;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
@@ -77,6 +78,9 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
 
     @Autowired
     private BloggerPictureDao pictureDao;
+
+    @Autowired
+    private BloggerCategoryService categoryService;
 
     @Override
     public int insertBlog(int bloggerId, int[] categories, int[] labels,
@@ -344,16 +348,65 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
 
         ZipFile zipFile = null;
         try {
-            zipFile = new ZipFile(fullPath);
+            zipFile = new ZipFile(fullPath, Charset.forName("GBK"));
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+            int cateId = -1;
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
+                String name = entry.getName();
+
+                /*
+                entry.getName() = 随笔/
+                entry.getName() = 随笔/无标题文章.md
+                entry.getName() = 项目/
+                entry.getName() = 项目/-我的音乐（Musicoco）--本地音乐播放器开发总结.md
+                entry.getName() = 项目/BLOG---个人博文系统开发总结-一：概览.md
+                entry.getName() = 项目/BLOG---个人博文系统开发总结-三：批量博文导入功能.md
+                entry.getName() = 项目/BLOG---个人博文系统开发总结-二：使用Lucene完成博文检索功能.md
+                entry.getName() = 项目/Musicoco-用户指南.md
+                entry.getName() = java-集合-4---HashSet.md
+                entry.getName() = java-集合-5---LinkedHashMap.md
+                entry.getName() = 算法/
+                entry.getName() = 算法/n-阶贝塞尔曲线计算公式实现.md
+                entry.getName() = 算法/时间复杂度及其计算.md
+                entry.getName() = 算法/网易2017春招笔试真题编程题集合——2-优雅的点.md
+                entry.getName() = 算法/网易2017春招笔试真题编程题集合——4-消除重复元素.md
+                entry.getName() = 算法/网易2017春招笔试真题编程题集合——9-涂棋盘.md
+                */
+
+                if (entry.isDirectory()) {
+
+                    if (name.indexOf("/") != name.length() - 1) {
+                        continue; // 只取第一级目录作为类别
+                    }
+
+                    String dirName = name.substring(0, name.length() - 1);
+
+                    Integer id = categoryDao.getCategoryIdByTitle(bloggerId, dirName);
+                    if (id != null) {
+                        cateId = id;
+                    } else {
+                        cateId = categoryService.insertBlogCategory(bloggerId, -1, dirName, "");
+                    }
+
+                    continue;
+                }
+
+                // 跟目录下
+                if (!name.contains("/")) {
+                    cateId = -1;
+                }
+
                 BufferedInputStream stream = new BufferedInputStream(zipFile.getInputStream(entry));
                 InputStreamReader reader = new InputStreamReader(stream, Charset.forName("UTF-8"));
 
-                BlogTitleIdDTO node = analysisAndInsertMdFile(parser, renderer, entry, reader, bloggerId);
-                if (node != null)
+                BlogTitleIdDTO node = analysisAndInsertMdFile(parser, renderer, entry, reader, bloggerId, cateId);
+
+                if (node != null) {
                     result.add(node);
+                }
+
             }
 
         } catch (IOException e) {
@@ -454,12 +507,13 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
     }
 
     // 解析 md 文件读取字符流，新增记录到数据库
-    private BlogTitleIdDTO analysisAndInsertMdFile(Parser parser, HtmlRenderer renderer, ZipEntry entry, InputStreamReader reader, int bloggerId) throws IOException {
+    // cateId 仅 md 文件在根目录下是才为 -1
+    private BlogTitleIdDTO analysisAndInsertMdFile(Parser parser, HtmlRenderer renderer, ZipEntry entry,
+                                                   InputStreamReader reader, int bloggerId, int cateId) throws IOException {
 
-        if (!entry.getName().endsWith(".md")) return null;
+        String name = entry.getName();
 
-        // 文件名作为标题
-        String title = entry.getName().replace(".md", "");
+        if (!name.endsWith(".md")) return null;
 
         StringBuilder b = new StringBuilder((int) entry.getSize());
         int len = 0;
@@ -485,7 +539,13 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
         String summary = aftReg.length() > 200 ? aftReg.substring(0, 200) : aftReg;
 
         // UPDATE: 2018/4/4 更新 图片引用
-        int id = insertBlog(bloggerId, null, null, PUBLIC, title, htmlContent, mdContent, summary, null, false);
+
+        // 文件名作为标题
+        String title = cateId == -1 ? name.replace(".md", "") :
+                name.substring(name.lastIndexOf("/") + 1).replace(".md", "");
+
+        int id = insertBlog(bloggerId, cateId == -1 ? null : new int[]{cateId}, null, PUBLIC, title,
+                htmlContent, mdContent, summary, null, false);
         if (id < 0) return null;
 
         BlogTitleIdDTO node = new BlogTitleIdDTO();
