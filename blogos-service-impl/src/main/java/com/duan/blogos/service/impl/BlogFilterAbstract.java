@@ -6,10 +6,11 @@ import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.exception.internal.LuceneException;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.manager.comparator.BlogListItemComparatorFactory;
-import com.duan.blogos.service.manager.properties.DbProperties;
+import com.duan.blogos.service.properties.DbProperties;
 import com.duan.blogos.service.service.BlogFilter;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
@@ -100,7 +101,7 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
             ids = luceneIndexManager.search(keyWord, 10000);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
-            throw new LuceneException(e);
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
         //关键字为首要条件
         if (CollectionUtils.isEmpty(ids)) return null;

@@ -1,9 +1,9 @@
 package com.duan.blogos.websample.favourite;
 
+import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.manager.BloggerSessionManager;
-import com.duan.blogos.service.manager.properties.BloggerProperties;
+import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
@@ -63,11 +63,12 @@ public class FavouriteBlogPageController {
         mv.setViewName("/blogger/favourite_blog");
 
         // 登陆博主 id
-        int loginBloggerId = sessionManager.getLoginBloggerId(request);
+        String token = ""; // TODO redis + token 维护会话
+        int loginBloggerId = sessionManager.getLoginBloggerId(token);
         ResultBean<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBloggerId);
         mv.addObject("loginBgStat", loginBgStat.getData());
 
-        BloggerAccount account = accountService.getAccount(bloggerName);
+        BloggerAccountDTO account = accountService.getAccount(bloggerName);
         mv.addObject(bloggerProperties.getNameOfPageOwnerBloggerId(), account.getId());
         mv.addObject(bloggerProperties.getNameOfPageOwnerBloggerName(), account.getUsername());
 

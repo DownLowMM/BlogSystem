@@ -1,7 +1,7 @@
 package com.duan.blogos.websample.login;
 
 import com.duan.blogos.service.dto.blogger.BloggerBriefDTO;
-import com.duan.blogos.service.manager.properties.WebsiteProperties;
+import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.service.service.website.WebSiteStatisticsService;
 import com.duan.blogos.util.common.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;

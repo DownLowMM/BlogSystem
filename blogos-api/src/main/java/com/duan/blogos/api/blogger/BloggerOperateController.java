@@ -1,11 +1,12 @@
 package com.duan.blogos.api.blogger;
 
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.audience.BlogOperateService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,15 +59,15 @@ public class BloggerOperateController extends BaseBloggerController {
         handleBlogExistCheck(request, blogId);
 
         // 如果博文属于当前博主，收藏失败d
-        if (blogValidateManager.isCreatorOfBlog(bloggerId, blogId)) {
-            handlerOperateFail(request);
+        if (blogValidateService.isCreatorOfBlog(bloggerId, blogId)) {
+            handlerOperateFail();
         }
 
         //执行
         // UPDATE: 2018/1/19 更新 收藏到自己的某一类别不开发，只收藏到一个类别中
         int id = operateService.insertCollect(blogId, bloggerId, reason,
                 bloggerProperties.getDefaultBlogCollectCategory());
-        if (id <= 0) handlerOperateFail(request);
+        if (id <= 0) handlerOperateFail();
 
         return new ResultBean<>(id);
     }
@@ -80,14 +81,14 @@ public class BloggerOperateController extends BaseBloggerController {
                                    @PathVariable Integer bloggerId,
                                    @RequestParam("content") String content) {
         if (StringUtils.isEmpty_(content))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(request, blogId);
 
         //执行
         int id = operateService.insertComplain(blogId, bloggerId, content);
-        if (id <= 0) handlerOperateFail(request);
+        if (id <= 0) handlerOperateFail();
 
         return new ResultBean<>(id);
     }
@@ -122,7 +123,7 @@ public class BloggerOperateController extends BaseBloggerController {
 
         //执行
         boolean result = operateService.deleteCollect(bloggerId, blogId);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         return new ResultBean<>("");
 
@@ -140,7 +141,7 @@ public class BloggerOperateController extends BaseBloggerController {
 
         //执行
         boolean result = operateService.deleteLike(bloggerId, blogId);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         return new ResultBean<>("");
     }

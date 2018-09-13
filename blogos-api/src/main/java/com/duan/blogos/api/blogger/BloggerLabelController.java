@@ -1,12 +1,13 @@
 package com.duan.blogos.api.blogger;
 
-import com.duan.blogos.service.entity.blog.BlogLabel;
+import com.duan.blogos.service.dto.blog.BlogLabelDTO;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -36,16 +37,16 @@ public class BloggerLabelController extends BaseBloggerController {
      * 获取指定博主创建的标签
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<List<BlogLabel>> list(HttpServletRequest request,
-                                            @PathVariable Integer bloggerId,
-                                            @RequestParam(value = "offset", required = false) Integer offset,
-                                            @RequestParam(value = "rows", required = false) Integer rows) {
+    public ResultBean<List<BlogLabelDTO>> list(HttpServletRequest request,
+                                               @PathVariable Integer bloggerId,
+                                               @RequestParam(value = "offset", required = false) Integer offset,
+                                               @RequestParam(value = "rows", required = false) Integer rows) {
         handleAccountCheck(request, bloggerId);
 
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerBlogLabelCount() : rows;
-        ResultBean<List<BlogLabel>> result = bloggerLabelService.listLabelByBlogger(bloggerId, os, rs);
-        if (result == null) handlerEmptyResult(request);
+        ResultBean<List<BlogLabelDTO>> result = bloggerLabelService.listLabelByBlogger(bloggerId, os, rs);
+        if (result == null) handlerEmptyResult();
 
         return result;
     }
@@ -62,7 +63,7 @@ public class BloggerLabelController extends BaseBloggerController {
         handleTitleCheck(title, request);
 
         int id = bloggerLabelService.insertLabel(bloggerId, title);
-        if (id < 0) handlerOperateFail(request);
+        if (id < 0) handlerOperateFail();
 
         return new ResultBean<>(id);
     }
@@ -79,7 +80,7 @@ public class BloggerLabelController extends BaseBloggerController {
         handleTitleCheck(newTitle, request);
 
         boolean result = bloggerLabelService.updateLabel(labelId, bloggerId, newTitle);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         return new ResultBean<>("");
     }
@@ -95,7 +96,7 @@ public class BloggerLabelController extends BaseBloggerController {
         handleBloggerSignInCheck(request, bloggerId);
 
         boolean result = bloggerLabelService.deleteLabel(bloggerId, labelId);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         return new ResultBean<>("");
     }
@@ -103,7 +104,7 @@ public class BloggerLabelController extends BaseBloggerController {
     // 检查标题合法性
     private void handleTitleCheck(String title, HttpServletRequest request) {
         if (StringUtils.isEmpty(title))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
 }

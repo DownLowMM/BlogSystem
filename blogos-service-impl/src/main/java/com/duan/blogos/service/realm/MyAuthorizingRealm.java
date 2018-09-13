@@ -1,6 +1,6 @@
 package com.duan.blogos.api.realm;
 
-import com.duan.blogos.service.entity.blogger.BloggerAccount;
+import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -37,7 +37,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         //获取用户账号
         String username = token.getPrincipal().toString();
-        BloggerAccount account = accountService.getAccount(username);
+        BloggerAccountDTO account = accountService.getAccount(username);
         if (account != null) {
 
             //将查询到的用户账号和密码存放到 authenticationInfo用于后面的权限判断。第三个参数随便放一个就行了。

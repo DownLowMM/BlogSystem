@@ -1,12 +1,13 @@
 package com.duan.blogos.api.blogger;
 
-import com.duan.blogos.service.entity.blogger.BloggerAccount;
+import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -40,7 +41,7 @@ public class BloggerAccountController extends BaseBloggerController {
         handlePwdCheck(request, password);
 
         int id = accountService.insertAccount(username, password);
-        if (id < 0) handlerOperateFail(request);
+        if (id < 0) handlerOperateFail();
 
         return new ResultBean<>(id);
     }
@@ -53,9 +54,9 @@ public class BloggerAccountController extends BaseBloggerController {
                                         @RequestParam("username") String username) {
         handleNameCheck(request, username);
 
-        BloggerAccount account = accountService.getAccount(username);
+        BloggerAccountDTO account = accountService.getAccount(username);
         if (account != null) {
-            return new ResultBean(exceptionManager.getDuplicationDataException(new RequestContext(request)));
+            return new ResultBean(ResultUtil.failException(CodeMessage.COMMON_DUPLICATION_DATA));
         } else {
             return new ResultBean<>("");
         }
@@ -68,10 +69,10 @@ public class BloggerAccountController extends BaseBloggerController {
     @RequestMapping(value = "/check=phone", method = RequestMethod.GET)
     public ResultBean checkProfileExist(HttpServletRequest request,
                                         @RequestParam("phone") String phone) {
-        BloggerAccount account = accountService.getAccountByPhone(phone);
+        BloggerAccountDTO account = accountService.getAccountByPhone(phone);
 
         if (account != null) {
-            return new ResultBean(exceptionManager.getDuplicationDataException(new RequestContext(request)));
+            return new ResultBean(ResultUtil.failException(CodeMessage.COMMON_DUPLICATION_DATA));
         } else {
             return new ResultBean<>("");
         }
@@ -89,7 +90,7 @@ public class BloggerAccountController extends BaseBloggerController {
         handleNameCheck(request, newUserName);
 
         boolean result = accountService.updateAccountUserName(bloggerId, newUserName);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         // 更新session信息
         HttpSession session = request.getSession();
@@ -110,7 +111,7 @@ public class BloggerAccountController extends BaseBloggerController {
         handlePwdCheck(request, newPassword);
 
         boolean result = accountService.updateAccountPassword(bloggerId, oldPassword, newPassword);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         // session 失效，重新登录
         HttpSession session = request.getSession();
@@ -129,7 +130,7 @@ public class BloggerAccountController extends BaseBloggerController {
         handleBloggerSignInCheck(request, bloggerId);
 
         boolean result = accountService.deleteAccount(bloggerId);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         // session 失效
         HttpSession session = request.getSession();
@@ -140,13 +141,13 @@ public class BloggerAccountController extends BaseBloggerController {
 
     // 检查用户名合法性
     private void handleNameCheck(HttpServletRequest request, String userName) {
-        if (StringUtils.isEmpty_(userName) || !bloggerValidateManager.checkUserName(userName))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+        if (StringUtils.isEmpty_(userName) || !bloggerValidateService.checkUserName(userName))
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
     // 检查密码合法性
     private void handlePwdCheck(HttpServletRequest request, String password) {
-        if (StringUtils.isEmpty_(password) || !bloggerValidateManager.checkPassword(password))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+        if (StringUtils.isEmpty_(password) || !bloggerValidateService.checkPassword(password))
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 }

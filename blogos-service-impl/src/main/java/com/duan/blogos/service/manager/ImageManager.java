@@ -5,13 +5,14 @@ import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.exception.internal.InternalIOException;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.util.common.StringUtils;
+import com.duan.blogos.util.file.FileUtils;
 import com.duan.blogos.util.file.ImageUtils;
-import org.apache.commons.io.FileUtils;
+import com.duan.blogos.util.file.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -221,7 +222,7 @@ public class ImageManager {
             return moveImageAndUpdateDbAndUseCountIfNecessary(bloggerId, pictureId, -1);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new InternalIOException(e);
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
     }
 
@@ -241,7 +242,7 @@ public class ImageManager {
                         Optional.ofNullable(oldPictureId).orElse(-1));
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new InternalIOException(e);
+                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
             }
         }
 

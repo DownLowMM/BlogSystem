@@ -1,6 +1,5 @@
 package com.duan.blogos.service.dto.blogger;
 
-import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -23,7 +22,7 @@ public class BloggerLinkDTO implements Serializable {
     private int bloggerId;
 
     //图片
-    private BloggerPicture icon;
+    private BloggerPictureDTO icon;
 
     //标题
     private String title;

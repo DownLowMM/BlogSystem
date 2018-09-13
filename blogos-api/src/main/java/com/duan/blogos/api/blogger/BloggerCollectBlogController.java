@@ -4,6 +4,8 @@ import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.dto.blogger.FavouriteBlogListItemDTO;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerCollectBlogService;
 import com.duan.blogos.util.common.StringUtils;
@@ -47,8 +49,11 @@ public class BloggerCollectBlogController extends BaseBloggerController {
         //检查数据合法性
         String sor = sort == null ? Rule.VIEW_COUNT.name() : sort.toUpperCase();
         String ord = order == null ? Order.DESC.name() : order.toUpperCase();
-        if (!Rule.contains(sor)) throw exceptionManager.getBlogSortRuleUndefinedException(context);
-        if (!Order.contains(ord)) throw exceptionManager.getBlogSortOrderUndefinedException(context);
+        if (!Rule.contains(sor))
+            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);
+
+        if (!Order.contains(ord))
+            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
 
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerCollectCount() : rows;
@@ -57,7 +62,7 @@ public class BloggerCollectBlogController extends BaseBloggerController {
         ResultBean<List<FavouriteBlogListItemDTO>> result = bloggerCollectBlogService.listCollectBlog(bloggerId,
                 bloggerProperties.getDefaultBlogCollectCategory(), os, rs,
                 BlogSortRule.valueOf(sor, ord));
-        if (result == null) handlerEmptyResult(request);
+        if (result == null) handlerEmptyResult();
 
         return result;
     }
@@ -74,11 +79,11 @@ public class BloggerCollectBlogController extends BaseBloggerController {
         handleBloggerSignInCheck(request, bloggerId);
 
         if (StringUtils.isEmpty(newReason)) {
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         boolean result = bloggerCollectBlogService.updateCollect(bloggerId, blogId, newReason, -1);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         return new ResultBean<>("");
     }

@@ -1,12 +1,12 @@
 package com.duan.blogos.websample.blog;
 
+import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.manager.validate.BloggerValidateManager;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
+import com.duan.blogos.service.service.validate.BloggerValidateService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 public class EditBlogPageController {
 
     @Autowired
-    private BloggerValidateManager bloggerValidateManager;
+    private BloggerValidateService validateService;
 
     @Autowired
     private BloggerBlogService blogService;
@@ -40,12 +40,12 @@ public class EditBlogPageController {
                                  @RequestParam(value = "blogId", required = false) Integer blogId) {
         ModelAndView mv = new ModelAndView();
 
-        if (bloggerId == null || !bloggerValidateManager.checkBloggerSignIn(request, bloggerId)) {
+        if (bloggerId == null || !validateService.checkBloggerSignIn(bloggerId)) {
             return new ModelAndView("redirect:/login");
         } else {
             if (blogId != null) {
-                ResultBean<Blog> blog = blogService.getBlog(bloggerId, blogId);
-                Blog data = blog.getData();
+                ResultBean<BlogDTO> blog = blogService.getBlog(bloggerId, blogId);
+                BlogDTO data = blog.getData();
                 mv.addObject("blogId", blogId);
                 mv.addObject("categoryId", data.getCategoryIds());
                 mv.addObject("labelIds", data.getLabelIds());

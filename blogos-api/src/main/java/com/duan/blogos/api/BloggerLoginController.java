@@ -1,8 +1,9 @@
 package com.duan.blogos.api;
 
 import com.duan.blogos.api.blogger.BaseBloggerController;
-import com.duan.blogos.service.entity.blogger.BloggerAccount;
-import com.duan.blogos.service.manager.MessageManager;
+import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.util.common.StringUtils;
@@ -34,25 +35,22 @@ public class BloggerLoginController extends BaseBloggerController {
     @Autowired
     private BloggerAccountService accountService;
 
-    @Autowired
-    private MessageManager messageManager;
-
     @RequestMapping(value = "/way=name", method = RequestMethod.POST)
     public ResultBean loginWithUserName(HttpServletRequest request,
                                         @RequestParam("username") String userName,
                                         @RequestParam("password") String password) throws NoSuchAlgorithmException {
         // update 使用shiro
 
-        BloggerAccount account = accountService.getAccount(userName);
+        BloggerAccountDTO account = accountService.getAccount(userName);
 
         // 用户不存在
         if (account == null) {
-            throw exceptionManager.getUnknownBloggerException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.BLOGGER_UNKNOWN_BLOGGER);
         }
 
         // 密码错误
         if (!account.getPassword().equals(new BigInteger(StringUtils.toSha(password)).toString())) {
-            throw exceptionManager.getLoginFailException(new RequestContext(request), true);
+            throw ResultUtil.failException(CodeMessage.BLOGGER_PASSWORD_INCORRECT);
         }
 
         HttpSession session = request.getSession();
@@ -70,7 +68,7 @@ public class BloggerLoginController extends BaseBloggerController {
 
         handlePhoneCheck(phone, request);
 
-        BloggerAccount account = accountService.getAccountByPhone(phone);
+        BloggerAccountDTO account = accountService.getAccountByPhone(phone);
         if (account == null) return new ResultBean<>("", ResultBean.FAIL);
 
         HttpSession session = request.getSession();
@@ -85,7 +83,7 @@ public class BloggerLoginController extends BaseBloggerController {
     private void handlePhoneCheck(String phone, HttpServletRequest request) {
         RequestContext context = new RequestContext(request);
         if (phone != null && !StringUtils.isPhone(phone))
-            throw exceptionManager.getParameterFormatIllegalException(context);
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
 
     }
 }

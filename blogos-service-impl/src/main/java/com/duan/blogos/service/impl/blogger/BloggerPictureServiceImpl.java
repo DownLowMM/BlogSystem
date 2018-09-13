@@ -4,20 +4,24 @@ import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.exception.internal.InternalIOException;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.ImageManager;
-import com.duan.blogos.service.manager.properties.BloggerProperties;
+import com.duan.blogos.service.manager.StringConstructorManager;
+import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
 import com.duan.blogos.util.file.ImageUtils;
+import com.duan.blogos.util.file.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import static com.duan.blogos.service.enums.BloggerPictureCategoryEnum.DEFAULT_PICTURE;
 
 /**
  * Created on 2017/12/19.
@@ -26,6 +30,9 @@ import java.util.List;
  */
 @Service
 public class BloggerPictureServiceImpl implements BloggerPictureService {
+
+    @Autowired
+    private StringConstructorManager stringConstructorManager;
 
     @Autowired
     private BloggerPictureDao pictureDao;
@@ -51,8 +58,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-//    public int insertPicture(MultipartFile file, int bloggerId, String bewrite, BloggerPictureCategoryEnum category,
-    public int insertPicture(File file, int bloggerId, String bewrite, BloggerPictureCategoryEnum category,
+    public int insertPicture(MultipartFile file, int bloggerId, String bewrite, BloggerPictureCategoryEnum category,
                              String title) {
         // TODO
 
@@ -61,7 +67,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
         //保存到磁盘
         try {
-//            path = imageManager.saveImageToDisk(file, bloggerId, cate);
+            path = imageManager.saveImageToDisk(file, bloggerId, cate);
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
@@ -76,7 +82,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         }
 
         //插入新纪录
-//        String ti = StringUtils.isEmpty(title) ? ImageUtils.getImageName(file.getOriginalFilename()) : title;
+        String ti = StringUtils.isEmpty(title) ? ImageUtils.getImageName(file.getOriginalFilename()) : title;
         return insertPicture(bloggerId, path, bewrite, category, ti);
 
     }
@@ -131,7 +137,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
                 e.printStackTrace();
                 // 移动文件出错，文件移动情况未知，麻烦大了
                 // MAYBUG 回滚数据库操作，但磁盘操作无法预料，也无法处理
-                throw new InternalIOException(e);
+                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
             }
         }
 
@@ -140,7 +146,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     @Override
     public boolean deletePicture(int bloggerId, int pictureId, boolean deleteOnDisk) {
 
-        BloggerPicture picture = getPicture(pictureId);
+        BloggerPictureDTO picture = getPicture(pictureId);
 
         // 对默认图片，图片管理员只能以更新（上传）的方式删除图片，因为这些图片必须时刻存在
         int pictureManagerId = bloggerProperties.getPictureManagerBloggerId();
@@ -157,7 +163,8 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
             //删除磁盘文件
             boolean succ = imageManager.deleteImageFromDisk(path);
             // 删除失败时抛出异常，使数据库事务回滚
-            if (!succ) throw new InternalIOException();
+            if (!succ)
+                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new IOException());
         }
 
         return true;
@@ -165,7 +172,8 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
     @Override
     public BloggerPictureDTO getPicture(int pictureId) {
-        return pictureDao.getPictureById(pictureId);
+        BloggerPicture picture = pictureDao.getPictureById(pictureId);
+        return null; // TODO
     }
 
     @Override
@@ -173,13 +181,20 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         BloggerPicture picture = pictureDao.getPictureById(pictureId);
         if (picture == null || !picture.getBloggerId().equals(bloggerId)) return null;
 
-        return picture;
+        String url = stringConstructorManager.constructPictureUrl(picture, DEFAULT_PICTURE);
+        picture.setPath(url);
+
+        // TODO
+        return null;
     }
 
     @Override
     public BloggerPictureDTO getDefaultPicture(BloggerPictureCategoryEnum category) {
-        return pictureDao.getBloggerUniquePicture(bloggerProperties.getPictureManagerBloggerId(),
+        BloggerPicture picture = pictureDao.getBloggerUniquePicture(bloggerProperties.getPictureManagerBloggerId(),
                 category.getCode());
+
+        // TODO
+        return null;
     }
 
     @Override
@@ -195,7 +210,13 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
         if (CollectionUtils.isEmpty(result)) return null;
 
-        return new ResultBean<>(result);
+        for (BloggerPicture picture : result) {
+            String url = stringConstructorManager.constructPictureUrl(picture, DEFAULT_PICTURE);
+            picture.setPath(url);
+        }
+
+        // TODO
+        return null;
     }
 
     @Override
@@ -241,7 +262,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new InternalIOException(e);
+                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
             }
         }
 

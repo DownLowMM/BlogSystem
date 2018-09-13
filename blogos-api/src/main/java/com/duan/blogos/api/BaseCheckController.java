@@ -1,9 +1,10 @@
 package com.duan.blogos.api;
 
-import com.duan.blogos.service.manager.validate.BlogValidateManager;
-import com.duan.blogos.service.manager.validate.BloggerValidateManager;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.service.validate.BlogValidateService;
+import com.duan.blogos.service.service.validate.BloggerValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,17 +16,17 @@ import javax.servlet.http.HttpServletRequest;
 public class BaseCheckController extends RestController {
 
     @Autowired
-    protected BlogValidateManager blogValidateManager;
+    protected BlogValidateService blogValidateService;
 
     @Autowired
-    protected BloggerValidateManager bloggerValidateManager;
+    protected BloggerValidateService bloggerValidateService;
 
     /**
      * 检查博主是否存在，不存在直接抛出异常
      */
     protected void handleAccountCheck(HttpServletRequest request, Integer bloggerId) {
-        if (bloggerId == null || bloggerId <= 0 || !bloggerValidateManager.checkAccountExist(bloggerId)) {
-            throw exceptionManager.getUnknownBloggerException(new RequestContext(request));
+        if (bloggerId == null || bloggerId <= 0 || !bloggerValidateService.checkAccountExist(bloggerId)) {
+            throw ResultUtil.failException(CodeMessage.BLOGGER_UNKNOWN_BLOGGER);
         }
     }
 
@@ -42,16 +43,16 @@ public class BaseCheckController extends RestController {
         handleAccountCheck(request, bloggerId);
 
         // 检查当前登录否
-        if (!bloggerValidateManager.checkBloggerSignIn(request, bloggerId))
-            throw exceptionManager.getBloggerNotLoggedInException(new RequestContext(request));
+        if (!bloggerValidateService.checkBloggerSignIn(bloggerId))
+            throw ResultUtil.failException(CodeMessage.BLOGGER_NOT_LOGGED_IN);
     }
 
     /**
      * 检查博文是否存在,不存在直接抛出异常
      */
     protected void handleBlogExistCheck(HttpServletRequest request, Integer blogId) {
-        if (blogId == null || blogId <= 0 || !blogValidateManager.checkBlogExist(blogId)) {
-            throw exceptionManager.getUnknownBlogException(new RequestContext(request));
+        if (blogId == null || blogId <= 0 || !blogValidateService.checkBlogExist(blogId)) {
+            throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
         }
     }
 

@@ -38,7 +38,7 @@ public class EmailController extends BaseCheckController {
 
         String subject = new RequestContext(request).getMessage("common.feedbackTitle");
         if (!emailService.sendFeedback(bloggerId == null ? -1 : bloggerId, subject, content, contact))
-            handlerOperateFail(request);
+            handlerOperateFail();
 
         return new ResultBean<>("");
     }

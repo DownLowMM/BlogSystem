@@ -2,6 +2,8 @@ package com.duan.blogos.api.blog;
 
 import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,7 +40,7 @@ public class BlogStatisticsController extends BaseBlogController {
         handleBlogStatisticsExistCheck(request, blogId);
 
         ResultBean<BlogStatisticsDTO> result = statisticsService.getBlogStatistics(blogId);
-        if (result == null) handlerEmptyResult(request);
+        if (result == null) handlerEmptyResult();
 
         return result;
     }
@@ -53,15 +54,15 @@ public class BlogStatisticsController extends BaseBlogController {
         handleBlogStatisticsExistCheck(request, blogId);
 
         ResultBean<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
-        if (statistics == null) handlerEmptyResult(request);
+        if (statistics == null) handlerEmptyResult();
 
         return statistics;
     }
 
     // 检查博文的统计信息是否存在
     private void handleBlogStatisticsExistCheck(HttpServletRequest request, int blogId) {
-        if (!blogValidateManager.checkBlogStatisticExist(blogId))
-            throw exceptionManager.getUnknownBlogException(new RequestContext(request));
+        if (!blogValidateService.checkBlogStatisticExist(blogId))
+            throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
     }
 
 

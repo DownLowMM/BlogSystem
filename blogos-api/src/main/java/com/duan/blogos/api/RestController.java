@@ -1,17 +1,14 @@
 package com.duan.blogos.api;
 
-import com.duan.blogos.service.exception.BaseRuntimeException;
-import com.duan.blogos.service.exception.internal.InternalRuntimeException;
-import com.duan.blogos.service.manager.ExceptionManager;
+import com.duan.blogos.service.exception.BlogOSException;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,50 +19,35 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class RestController {
 
-    @Autowired
-    protected ExceptionManager exceptionManager;
-
     /**
      * 处理结果为空的情况
-     *
-     * @param request
      */
-    protected void handlerEmptyResult(HttpServletRequest request) {
-        throw exceptionManager.getEmptyResultException(new RequestContext(request));
+    protected void handlerEmptyResult() {
+        throw ResultUtil.failException(CodeMessage.COMMON_EMPTY_RESULT);
     }
 
     /**
      * 处理操作失败的情况
      */
-    protected void handlerOperateFail(HttpServletRequest request) {
-        throw exceptionManager.getOperateFailException(new RequestContext(request));
+    protected void handlerOperateFail() {
+        throw ResultUtil.failException(CodeMessage.COMMON_OPERATE_FAIL);
     }
 
     /**
      * 处理操作失败的情况
      */
-    protected void handlerOperateFail(HttpServletRequest request, Throwable e) {
-        throw exceptionManager.getOperateFailException(new RequestContext(request), e);
+    protected void handlerOperateFail(Throwable e) {
+        throw ResultUtil.failException(CodeMessage.COMMON_OPERATE_FAIL, e);
     }
 
     /**
      * 统一处理异常，这些异常需要通知API调用者
      */
-    @ExceptionHandler(BaseRuntimeException.class)
+    @ExceptionHandler(BlogOSException.class)
     @ResponseBody
     // 注解无法继承，所以子类不允许覆盖这些方法
-    protected final ResultBean handleException(BaseRuntimeException e) {
+    protected final ResultBean handleException(BlogOSException e) {
         return new ResultBean(e);
-    }
-
-    /**
-     * 统一处理异常，这些异常是服务器异常
-     */
-    @ExceptionHandler(InternalRuntimeException.class)
-    @ResponseBody
-    protected final ResultBean handleException(HttpServletRequest request, Exception e) {
-        //转化为未知异常
-        return new ResultBean(exceptionManager.getUnknownException(new RequestContext(request), e));
     }
 
     /**
@@ -73,15 +55,9 @@ public class RestController {
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    protected final ResultBean handleException(HttpServletRequest request, Throwable e) {
-
-        //---------------未进行转化但需要通知调用者的异常--------------^
-        if (e instanceof DuplicateKeyException) {
-            // 数据库“重复键”，违反唯一约束错误
-            return handleException(exceptionManager.getDuplicationDataException(new RequestContext(request)));
-        }
-
-        return handleException(request, (Exception) e);
+    protected final ResultBean handleException(Throwable e) {
+        BlogOSException exception = ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+        return new ResultBean(exception);
     }
 
 
@@ -90,8 +66,9 @@ public class RestController {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseBody
-    protected final ResultBean handlerException(HttpServletRequest request, MissingServletRequestParameterException e) {
-        return new ResultBean(exceptionManager.getMissingRequestParameterException(new RequestContext(request), e));
+    protected final ResultBean handlerException(MissingServletRequestParameterException e) {
+        BlogOSException exception = ResultUtil.failException(CodeMessage.COMMON_MISSING_REQUEST_PARAMETER, e);
+        return new ResultBean(exception);
     }
 
     /**
@@ -99,8 +76,8 @@ public class RestController {
      */
     @ExceptionHandler(TypeMismatchException.class)
     @ResponseBody
-    protected final ResultBean handlerException(HttpServletRequest request, TypeMismatchException e) {
-        return new ResultBean(exceptionManager.getParameterTypeMismatchException(new RequestContext(request), e));
+    protected final ResultBean handlerException(TypeMismatchException e) {
+        return new ResultBean(ResultUtil.failException(CodeMessage.COMMON_PARAMETER_TYPE_MISMATCH, e));
     }
 
     /**
@@ -108,7 +85,7 @@ public class RestController {
      */
     @RequestMapping
     protected void defaultOperation(HttpServletRequest request) {
-        throw exceptionManager.getUnspecifiedOperationException(new RequestContext(request));
+        throw ResultUtil.failException(CodeMessage.COMMON_UNSPECIFIED_OPERATION);
     }
 
 }

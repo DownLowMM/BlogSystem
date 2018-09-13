@@ -6,7 +6,7 @@ import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.entity.blog.*;
 import com.duan.blogos.service.manager.DataFillingManager;
-import com.duan.blogos.service.manager.properties.DbProperties;
+import com.duan.blogos.service.properties.DbProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.service.common.BlogStatisticsService;

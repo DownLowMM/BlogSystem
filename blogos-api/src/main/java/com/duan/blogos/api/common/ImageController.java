@@ -1,18 +1,19 @@
 package com.duan.blogos.api.common;
 
 import com.duan.blogos.api.BaseCheckController;
-import com.duan.blogos.service.entity.blogger.BloggerPicture;
+import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.manager.validate.BloggerValidateManager;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
+import com.duan.blogos.service.service.validate.BloggerValidateService;
 import com.duan.blogos.util.file.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -42,7 +43,7 @@ public class ImageController extends BaseCheckController {
     private BloggerPictureService bloggerPictureService;
 
     @Autowired
-    private BloggerValidateManager validateManager;
+    private BloggerValidateService validateService;
 
     /**
      * 输出公开图片，这些图片无需验证登录，如果数据库不存在指定图片，则返回默认图片
@@ -58,13 +59,13 @@ public class ImageController extends BaseCheckController {
         if (category != null)
             handleBlogCategoryDefaultCheck(request, category);
 
-        BloggerPicture picture = bloggerPictureService.getPicture(imageId, bloggerId);
+        BloggerPictureDTO picture = bloggerPictureService.getPicture(imageId, bloggerId);
 
         // 如果图片是私有的，不能访问
         if (picture != null && picture.getCategory().equals(BloggerPictureCategoryEnum.PRIVATE.getCode()))
-            throw exceptionManager.getUnauthorizedException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_UNAUTHORIZED);
 
-        BloggerPicture backupPicture = bloggerPictureService.getDefaultPicture(
+        BloggerPictureDTO backupPicture = bloggerPictureService.getDefaultPicture(
                 category == null ? BloggerPictureCategoryEnum.DEFAULT_PICTURE
                         : BloggerPictureCategoryEnum.valueOf(category)); //如果目标图片不存在，返回指定类别的默认图片
 
@@ -88,8 +89,8 @@ public class ImageController extends BaseCheckController {
         if (category != null)
             handleBlogCategoryDefaultCheck(request, category);
 
-        BloggerPicture picture = bloggerPictureService.getPicture(imageId, bloggerId);
-        BloggerPicture backupPicture = bloggerPictureService.getDefaultPicture(
+        BloggerPictureDTO picture = bloggerPictureService.getPicture(imageId, bloggerId);
+        BloggerPictureDTO backupPicture = bloggerPictureService.getDefaultPicture(
                 category == null ? BloggerPictureCategoryEnum.DEFAULT_PICTURE
                         : BloggerPictureCategoryEnum.valueOf(category)); //如果目标图片不存在，返回指定类别的默认图片
 
@@ -112,44 +113,48 @@ public class ImageController extends BaseCheckController {
 
         MultipartFile file = request.getFile("image");// 与页面input的name相同
         int id;
-        if (ImageUtils.isImageFile(file)) {
+        if (ImageUtils.isImageFile(fileTrans(file))) {
 
             // 默认上传到私有目录
             int cate = category == null ? BloggerPictureCategoryEnum.PRIVATE.getCode() : category;
 
             // 普通用户没有指定图片类别的必要
             //检查博主权限
-            if (!validateManager.checkBloggerPictureLegal(bloggerId, cate)) {
-                throw exceptionManager.getUnauthorizedException(new RequestContext(request));
+            if (!validateService.checkBloggerPictureLegal(bloggerId, cate)) {
+                throw ResultUtil.failException(CodeMessage.COMMON_UNAUTHORIZED);
             }
 
-            id = bloggerPictureService.insertPicture(file, bloggerId, bewrite, BloggerPictureCategoryEnum.valueOf(cate),
+            id = bloggerPictureService.insertPicture(fileTrans(file), bloggerId, bewrite, BloggerPictureCategoryEnum.valueOf(cate),
                     title);
-            if (id <= 0) handlerOperateFail(request);
+            if (id <= 0) handlerOperateFail();
         } else {
-            return new ResultBean(exceptionManager.getPictureFormatErrorException(new RequestContext(request)));
+            throw ResultUtil.failException(CodeMessage.COMMON_PICTURE_FORMAT_ERROR);
         }
 
         return new ResultBean<>(id);
     }
 
+    private com.duan.blogos.util.file.MultipartFile fileTrans(MultipartFile file) {
+        return null;
+    }
+
     // 检查默认图片类别是否为默认类别
     private void handleBlogCategoryDefaultCheck(HttpServletRequest request, int category) {
         if (!BloggerPictureCategoryEnum.isDefaultPictureCategory(category))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
 
     // 输出图片
-    private void outPutPicture(BloggerPicture picture, BloggerPicture backupPicture,
+    private void outPutPicture(BloggerPictureDTO picture, BloggerPictureDTO backupPicture,
                                HttpServletRequest request, HttpServletResponse response) {
         try (ServletOutputStream os = response.getOutputStream()) {
             String path = picture == null ? backupPicture.getPath() : picture.getPath();
             File image = new File(path);
-            if (!image.exists()) handlerOperateFail(request);
+            if (!image.exists()) handlerOperateFail();
 
             String type = ImageUtils.getImageMimeType(image.getName());
-            if (type == null) handlerOperateFail(request);
+            if (type == null) handlerOperateFail();
 
             response.setContentType("image/" + type);
 
@@ -157,7 +162,7 @@ public class ImageController extends BaseCheckController {
             ImageIO.write(read, type, os);
         } catch (IOException e) {
             e.printStackTrace();
-            handlerOperateFail(request, e);
+            handlerOperateFail(e);
         }
     }
 

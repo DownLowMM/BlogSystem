@@ -1,6 +1,6 @@
 package com.duan.blogos.service.restful;
 
-import com.duan.blogos.service.exception.BaseRuntimeException;
+import com.duan.blogos.service.exception.BlogOSException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +40,7 @@ public class ResultBean<T> implements Serializable {
     /**
      * 返回错误（获取数据错误）的构造函数
      */
-    public ResultBean(BaseRuntimeException e) {
+    public ResultBean(BlogOSException e) {
         this.msg = e.getMessage();
         this.code = e.getCode();
     }

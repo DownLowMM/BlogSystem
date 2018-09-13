@@ -1,13 +1,13 @@
 package com.duan.blogos.websample.main;
 
+import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
+import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
+import com.duan.blogos.service.dto.blogger.BloggerSettingDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.entity.blogger.BloggerAccount;
-import com.duan.blogos.service.entity.blogger.BloggerProfile;
-import com.duan.blogos.service.entity.blogger.BloggerSetting;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.exception.api.blogger.UnknownBloggerException;
+import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.manager.BloggerSessionManager;
-import com.duan.blogos.service.manager.properties.BloggerProperties;
+import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +56,9 @@ public class BloggerPageController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("blogger/main");
 
-        BloggerAccount account = accountService.getAccount(bloggerName);
+        BloggerAccountDTO account = accountService.getAccount(bloggerName);
         if (account == null) {
-            request.setAttribute("code", UnknownBloggerException.code);
+            request.setAttribute("code", CodeMessage.BLOGGER_UNKNOWN_BLOGGER.getCode());
             mv.setViewName("/blogger/register");
             return mv;
         }
@@ -67,7 +67,7 @@ public class BloggerPageController {
         mv.addObject(bloggerProperties.getNameOfPageOwnerBloggerName(), account.getUsername());
 
         int ownerId = account.getId();
-        BloggerProfile profile = bloggerProfileService.getBloggerProfile(ownerId);
+        BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(ownerId);
         mv.addObject("blogName", profile.getIntro());
         mv.addObject("aboutMe", profile.getAboutMe());
         mv.addObject("avatarId",
@@ -81,12 +81,13 @@ public class BloggerPageController {
         mv.addObject("ownerBgStat", ownerBgStat.getData());
 
         int loginBgId;
-        if ((loginBgId = sessionManager.getLoginBloggerId(request)) != -1) {
+        String token = ""; // TODO redis + token 维护会话
+        if ((loginBgId = sessionManager.getLoginBloggerId(token)) != -1) {
             ResultBean<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBgId);
             mv.addObject("loginBgStat", loginBgStat.getData());
         }
 
-        BloggerSetting setting = settingService.getSetting(ownerId);
+        BloggerSettingDTO setting = settingService.getSetting(ownerId);
         mv.addObject("setting", setting);
 
         return mv;

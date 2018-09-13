@@ -6,7 +6,9 @@ import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.dto.blog.BlogListItemDTO;
 import com.duan.blogos.service.dto.blog.BlogMainContentDTO;
 import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.manager.properties.WebsiteProperties;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.blogos.service.service.audience.BlogRetrievalService;
@@ -14,7 +16,6 @@ import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -33,8 +34,10 @@ public class BlogController extends BaseBlogController {
 
     @Autowired
     protected WebsiteProperties websiteProperties;
+
     @Autowired
     private BlogRetrievalService retrievalService;
+
     @Autowired
     private BlogBrowseService blogBrowseService;
 
@@ -71,7 +74,7 @@ public class BlogController extends BaseBlogController {
         ResultBean<List<BlogListItemDTO>> listResultBean = retrievalService.listFilterAll(cids, lids, keyWord, bloggerId,
                 os, rs, rule, BlogStatusEnum.PUBLIC);
 
-        if (listResultBean == null) handlerEmptyResult(request);
+        if (listResultBean == null) handlerEmptyResult();
 
         return listResultBean;
     }
@@ -93,7 +96,7 @@ public class BlogController extends BaseBlogController {
         handleBlogExistCheck(request, blogId);
 
         ResultBean<BlogMainContentDTO> mainContent = blogBrowseService.getBlogMainContent(blogId);
-        if (mainContent == null) handlerEmptyResult(request);
+        if (mainContent == null) handlerEmptyResult();
 
         return mainContent;
     }
@@ -103,15 +106,15 @@ public class BlogController extends BaseBlogController {
 
         if (!CollectionUtils.isEmpty(cids)) {
             for (int id : cids) {
-                if (!bloggerValidateManager.checkBloggerBlogCategoryExist(bloggerId, id))
-                    throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+                if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, id))
+                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
         }
 
         if (!CollectionUtils.isEmpty(lids)) {
             for (int id : lids) {
-                if (!blogValidateManager.checkLabelsExist(id))
-                    throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+                if (!blogValidateService.checkLabelsExist(id))
+                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
         }
 
@@ -121,11 +124,11 @@ public class BlogController extends BaseBlogController {
     private void handleSortRuleCheck(HttpServletRequest request, String sort, String order) {
 
         if (sort != null && !Rule.contains(sort)) {
-            throw exceptionManager.getBlogSortRuleUndefinedException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);
         }
 
         if (order != null && !Order.contains(order)) {
-            throw exceptionManager.getBlogSortOrderUndefinedException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
         }
     }
 }

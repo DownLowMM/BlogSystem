@@ -1,7 +1,6 @@
 package com.duan.blogos.util.file;
 
 import com.duan.blogos.util.common.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 

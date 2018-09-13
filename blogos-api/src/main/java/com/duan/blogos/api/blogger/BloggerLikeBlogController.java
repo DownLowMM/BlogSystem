@@ -4,6 +4,8 @@ import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.dto.blogger.FavouriteBlogListItemDTO;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerLikeBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +48,11 @@ public class BloggerLikeBlogController extends BaseBloggerController {
         //检查数据合法性
         String sor = sort == null ? Rule.VIEW_COUNT.name() : sort.toUpperCase();
         String ord = order == null ? Order.DESC.name() : order.toUpperCase();
-        if (!Rule.contains(sor)) throw exceptionManager.getBlogSortRuleUndefinedException(context);
-        if (!Order.contains(ord)) throw exceptionManager.getBlogSortOrderUndefinedException(context);
+        if (!Rule.contains(sor))
+            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);
+
+        if (!Order.contains(ord))
+            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
 
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerCollectCount() : rows;
@@ -55,7 +60,7 @@ public class BloggerLikeBlogController extends BaseBloggerController {
         // 查询数据
         ResultBean<List<FavouriteBlogListItemDTO>> result = likeBlogService.listLikeBlog(bloggerId, os, rs,
                 BlogSortRule.valueOf(sor, ord));
-        if (result == null) handlerEmptyResult(request);
+        if (result == null) handlerEmptyResult();
 
         return result;
     }

@@ -1,12 +1,13 @@
 package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.service.dto.blogger.BloggerCategoryDTO;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -44,7 +45,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerBlogCategoryCount() : rows;
         ResultBean<List<BloggerCategoryDTO>> result = bloggerCategoryService.listBlogCategory(bloggerId, os, rs);
-        if (result == null) handlerEmptyResult(request);
+        if (result == null) handlerEmptyResult();
 
         return result;
     }
@@ -61,7 +62,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         handleCategoryExistCheck(request, bloggerId, categoryId);
 
         BloggerCategoryDTO dto = bloggerCategoryService.getCategory(bloggerId, categoryId);
-        if (dto == null) handlerOperateFail(request);
+        if (dto == null) handlerOperateFail();
 
         return new ResultBean<>(dto);
     }
@@ -82,10 +83,10 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         handlePictureExistCheck(request, bloggerId, iconId);
 
         if (StringUtils.isEmpty(title))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         int id = bloggerCategoryService.insertBlogCategory(bloggerId, iconId == null ? -1 : iconId, title, bewrite);
-        if (id < 0) handlerOperateFail(request);
+        if (id < 0) handlerOperateFail();
 
         return new ResultBean<>(id);
     }
@@ -108,15 +109,15 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
 
         if (!bloggerCategoryService.updateBlogCategory(bloggerId, categoryId, Optional.ofNullable(newIconId).orElse(-1),
                 newTitle, newBewrite))
-            handlerOperateFail(request);
+            handlerOperateFail();
 
         return new ResultBean<>("");
     }
 
     // 检查指定博主是否有指定的博文类别
     private void handleCategoryExistCheck(HttpServletRequest request, int bloggerId, int categoryId) {
-        if (!bloggerValidateManager.checkBloggerBlogCategoryExist(bloggerId, categoryId))
-            throw exceptionManager.getUnknownCategoryException(new RequestContext(request));
+        if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, categoryId))
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_CATEGORY);
     }
 
     /**
@@ -137,7 +138,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
 
             //检查删除类别和原博文移动到类别是否相同
             if (newCategoryId.equals(categoryId))
-                throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+                throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
             //检查新类别
             handleCategoryExistCheck(request, bloggerId, newCategoryId);
@@ -146,7 +147,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         }
 
         if (!bloggerCategoryService.deleteCategoryAndMoveBlogsTo(bloggerId, categoryId, cate))
-            handlerOperateFail(request);
+            handlerOperateFail();
 
         return new ResultBean<>("");
     }

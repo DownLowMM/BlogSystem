@@ -31,7 +31,7 @@ public class SortRowController extends BaseCheckController {
     public ResultBean<List<BlogSortRuleDTO>> list(HttpServletRequest request) {
 
         ResultBean<List<BlogSortRuleDTO>> result = sortRuleService.listSortRule();
-        if (result == null) handlerEmptyResult(request);
+        if (result == null) handlerEmptyResult();
 
         return result;
     }
@@ -44,7 +44,7 @@ public class SortRowController extends BaseCheckController {
     public ResultBean<List<BlogSortRuleDTO>> listOrder(HttpServletRequest request) {
 
         ResultBean<List<BlogSortRuleDTO>> result = sortRuleService.listSortOrder();
-        if (result == null) handlerEmptyResult(request);
+        if (result == null) handlerEmptyResult();
 
         return result;
     }

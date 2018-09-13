@@ -1,7 +1,7 @@
 package com.duan.blogos.api.blog;
 
 import com.duan.blogos.api.BaseCheckController;
-import com.duan.blogos.service.manager.properties.AudienceProperties;
+import com.duan.blogos.service.properties.AudienceProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

@@ -1,8 +1,9 @@
 package com.duan.blogos.service.manager;
 
 import com.duan.blogos.service.entity.blog.Blog;
-import com.duan.blogos.service.exception.internal.LuceneException;
-import com.duan.blogos.service.manager.properties.WebsiteProperties;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.util.common.StringUtils;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;
@@ -150,7 +151,7 @@ public class BlogLuceneIndexManager {
             writer.commit();
 
         } catch (IOException e) {
-            throw new LuceneException(e);
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         return true;

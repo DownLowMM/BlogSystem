@@ -9,7 +9,7 @@ import com.duan.blogos.service.entity.blog.BlogLabel;
 import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.impl.BlogFilterAbstract;
 import com.duan.blogos.service.manager.DataFillingManager;
-import com.duan.blogos.service.manager.properties.DbProperties;
+import com.duan.blogos.service.properties.DbProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.audience.BlogRetrievalService;
 import com.duan.blogos.util.common.CollectionUtils;

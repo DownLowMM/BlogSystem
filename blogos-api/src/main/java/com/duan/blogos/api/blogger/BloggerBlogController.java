@@ -3,12 +3,13 @@ package com.duan.blogos.api.blogger;
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
+import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
 import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
-import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.manager.FileManager;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.util.common.CollectionUtils;
@@ -16,7 +17,6 @@ import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -48,9 +48,6 @@ public class BloggerBlogController extends BaseBloggerController {
     @Autowired
     private BloggerBlogService bloggerBlogService;
 
-    @Autowired
-    private FileManager fileManager;
-
     /**
      * 新增博文
      */
@@ -67,7 +64,7 @@ public class BloggerBlogController extends BaseBloggerController {
 
         // 检查不能为null的参数是否为null
         if (StringUtils.isEmpty_(title) || StringUtils.isEmpty_(content) || StringUtils.isEmpty_(summary))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         // 将 Unicode 解码
         content = StringUtils.unicodeToString(content);
@@ -86,7 +83,7 @@ public class BloggerBlogController extends BaseBloggerController {
         String[] kw = StringUtils.stringArrayToArray(keyWords, sp);
         // UPDATE: 2018/1/16 更新 博文审核 图片引用
         int id = bloggerBlogService.insertBlog(bloggerId, cids, lids, BlogStatusEnum.PUBLIC, title, content, contentMd, summary, kw, false);
-        if (id <= 0) handlerOperateFail(request);
+        if (id <= 0) handlerOperateFail();
 
         return new ResultBean<>(id);
     }
@@ -128,7 +125,7 @@ public class BloggerBlogController extends BaseBloggerController {
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBlogListCount() : rows;
         ResultBean<List<BlogListItemDTO>> listResultBean = bloggerBlogService.listFilterAll(cids, lids, keyWord, bloggerId,
                 os, rs, rule, stat);
-        if (listResultBean == null) handlerEmptyResult(request);
+        if (listResultBean == null) handlerEmptyResult();
 
         return listResultBean;
     }
@@ -137,16 +134,16 @@ public class BloggerBlogController extends BaseBloggerController {
      * 获取指定博文
      */
     @RequestMapping(value = "/{blogId}", method = RequestMethod.GET)
-    public ResultBean<Blog> get(HttpServletRequest request,
-                                @PathVariable Integer bloggerId,
-                                @PathVariable Integer blogId) {
+    public ResultBean<BlogDTO> get(HttpServletRequest request,
+                                   @PathVariable Integer bloggerId,
+                                   @PathVariable Integer blogId) {
         handleBloggerSignInCheck(request, bloggerId);
 
-        ResultBean<Blog> blog = bloggerBlogService.getBlog(bloggerId, blogId);
-        if (blog == null) handlerEmptyResult(request);
+        ResultBean<BlogDTO> blog = bloggerBlogService.getBlog(bloggerId, blogId);
+        if (blog == null) handlerEmptyResult();
 
         // 编码为 Unicode
-        Blog bg = blog.getData();
+        BlogDTO bg = blog.getData();
         bg.setContent(StringUtils.stringToUnicode(bg.getContent()));
         bg.setContentMd(StringUtils.stringToUnicode(bg.getContentMd()));
 
@@ -172,11 +169,11 @@ public class BloggerBlogController extends BaseBloggerController {
         // 所有参数都为null，则不更新。
         if (Stream.of(newTitle, newContent, newSummary, newCategoryIds, newLabelIds, newKeyWord, newStatus)
                 .filter(Objects::nonNull).count() <= 0)
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         // 检查修改到的博文状态是否允许
-        if (newStatus != null && !blogValidateManager.isBlogStatusAllow(newStatus))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+        if (newStatus != null && !blogValidateService.isBlogStatusAllow(newStatus))
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistAndCreatorCheck(request, bloggerId, blogId);
@@ -199,7 +196,7 @@ public class BloggerBlogController extends BaseBloggerController {
 
         //执行更新
         if (!bloggerBlogService.updateBlog(bloggerId, blogId, cids, lids, stat, newTitle, newContent, newContentMd, newSummary, kw))
-            handlerOperateFail(request);
+            handlerOperateFail();
 
         return new ResultBean<>("");
     }
@@ -216,7 +213,7 @@ public class BloggerBlogController extends BaseBloggerController {
         handleBlogExistAndCreatorCheck(request, bloggerId, blogId);
 
         if (!bloggerBlogService.deleteBlog(bloggerId, blogId))
-            handlerOperateFail(request);
+            handlerOperateFail();
 
         return new ResultBean<>("");
     }
@@ -234,14 +231,14 @@ public class BloggerBlogController extends BaseBloggerController {
         int[] blogIds = StringUtils.intStringDistinctToArray(ids,
                 websiteProperties.getUrlConditionSplitCharacter());
         if (CollectionUtils.isEmpty(blogIds))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         for (int id : blogIds) {
             handleBlogExistAndCreatorCheck(request, bloggerId, id);
         }
 
         if (!bloggerBlogService.deleteBlogPatch(bloggerId, blogIds))
-            handlerOperateFail(request);
+            handlerOperateFail();
 
         return new ResultBean<>("");
     }
@@ -260,11 +257,12 @@ public class BloggerBlogController extends BaseBloggerController {
 
         // 检查是否为 zip 文件
         if (file.isEmpty() || !file.getOriginalFilename().endsWith(".zip"))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        List<BlogTitleIdDTO> blogsTitles = bloggerBlogService.insertBlogPatch(file, bloggerId);
+        com.duan.blogos.util.file.MultipartFile fi = null;// TODO 转化
+        List<BlogTitleIdDTO> blogsTitles = bloggerBlogService.insertBlogPatch(fi, bloggerId);
         if (CollectionUtils.isEmpty(blogsTitles))
-            handlerOperateFail(request);
+            handlerOperateFail();
 
         return new ResultBean<>(blogsTitles);
     }
@@ -281,17 +279,19 @@ public class BloggerBlogController extends BaseBloggerController {
         // 检查请求的文件类别
         BlogFormatEnum format = BlogFormatEnum.get(type);
         if (format == null) {
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         String zipFilePath = bloggerBlogService.getAllBlogForDownload(bloggerId, format);
-        if (StringUtils.isEmpty(zipFilePath)) handlerOperateFail(request);
+        if (StringUtils.isEmpty(zipFilePath)) handlerOperateFail();
 
         // 输出文件流
         outFile(zipFilePath, request, response);
 
         // 删除临时 zip 文件
-        fileManager.deleteFileIfExist(zipFilePath);
+        File file = new File(zipFilePath);
+        file.delete();
+
     }
 
     // 输出文件流
@@ -299,7 +299,7 @@ public class BloggerBlogController extends BaseBloggerController {
 
         try (ServletOutputStream os = response.getOutputStream()) {
             File zipFile = new File(zipFilePath);
-            if (!zipFile.exists()) handlerOperateFail(request);
+            if (!zipFile.exists()) handlerOperateFail();
 
             response.setContentType("application/x-zip-compressed");
             FileInputStream in = new FileInputStream(zipFile);
@@ -313,15 +313,15 @@ public class BloggerBlogController extends BaseBloggerController {
             os.close();
 
         } catch (IOException e) {
-            handlerOperateFail(request, e);
+            handlerOperateFail(e);
         }
 
     }
 
     // 检查博文是否存在，且博文是否属于指定博主
     private void handleBlogExistAndCreatorCheck(HttpServletRequest request, int bloggerId, int blogId) {
-        if (!blogValidateManager.isCreatorOfBlog(bloggerId, blogId))
-            throw exceptionManager.getUnknownBlogException(new RequestContext(request));
+        if (!blogValidateService.isCreatorOfBlog(bloggerId, blogId))
+            throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
     }
 
     // 检查类别和标签
@@ -329,15 +329,15 @@ public class BloggerBlogController extends BaseBloggerController {
 
         if (!CollectionUtils.isEmpty(cids)) {
             for (int id : cids) {
-                if (!bloggerValidateManager.checkBloggerBlogCategoryExist(bloggerId, id))
-                    throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+                if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, id))
+                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
         }
 
         if (!CollectionUtils.isEmpty(lids)) {
             for (int id : lids) {
-                if (!blogValidateManager.checkLabelsExist(id))
-                    throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+                if (!blogValidateService.checkLabelsExist(id))
+                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
         }
 
@@ -346,8 +346,8 @@ public class BloggerBlogController extends BaseBloggerController {
     //博文内容审核
     private void handleBlogContentCheck(HttpServletRequest request, String title, String content, String contentMd, String summary,
                                         String keyWords) {
-        if (!blogValidateManager.verifyBlog(title, content, contentMd, summary, keyWords))
-            throw exceptionManager.getBlogIllegalException(new RequestContext(request));
+        if (!blogValidateService.verifyBlog(title, content, contentMd, summary, keyWords))
+            throw ResultUtil.failException(CodeMessage.BLOG_ILLEGAL);
 
     }
 
@@ -355,11 +355,11 @@ public class BloggerBlogController extends BaseBloggerController {
     private void handleSortRuleCheck(HttpServletRequest request, String sort, String order) {
 
         if (sort != null && !Rule.contains(sort)) {
-            throw exceptionManager.getBlogSortRuleUndefinedException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);
         }
 
         if (order != null && !Order.contains(order)) {
-            throw exceptionManager.getBlogSortOrderUndefinedException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
         }
     }
 

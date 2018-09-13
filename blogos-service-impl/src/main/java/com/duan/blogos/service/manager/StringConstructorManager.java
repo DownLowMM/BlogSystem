@@ -2,8 +2,8 @@ package com.duan.blogos.service.manager;
 
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.manager.properties.BloggerProperties;
-import com.duan.blogos.service.manager.properties.WebsiteProperties;
+import com.duan.blogos.service.properties.BloggerProperties;
+import com.duan.blogos.service.properties.WebsiteProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

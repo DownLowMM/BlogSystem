@@ -2,11 +2,11 @@ package com.duan.blogos.websample.blog;
 
 import com.duan.blogos.service.dto.blog.BlogMainContentDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
+import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.entity.blogger.BloggerAccount;
-import com.duan.blogos.service.exception.api.blogger.UnknownBloggerException;
+import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.manager.BloggerSessionManager;
-import com.duan.blogos.service.manager.properties.BloggerProperties;
+import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.blogos.service.service.blogger.*;
@@ -62,10 +62,10 @@ public class BlogReadPageController {
         ModelAndView mv = new ModelAndView();
 
         // 博文作者博主账户
-        BloggerAccount account = accountService.getAccount(bloggerName);
+        BloggerAccountDTO account = accountService.getAccount(bloggerName);
 
         if (account == null) {
-            request.setAttribute("code", UnknownBloggerException.code);
+            request.setAttribute("code", CodeMessage.BLOGGER_UNKNOWN_BLOGGER.getCode());
             mv.setViewName("/blogger/register");
             return mv;
         }
@@ -89,7 +89,8 @@ public class BlogReadPageController {
         mv.addObject("stat", statistics.getData());
 
         // 登陆博主 id
-        int loginBloggerId = sessionManager.getLoginBloggerId(request);
+        String token = ""; // TODO redis + token 维护会话
+        int loginBloggerId = sessionManager.getLoginBloggerId(token);
 
         ResultBean<BloggerStatisticsDTO> loginBgStat = bloggerStatisticsService.getBloggerStatistics(loginBloggerId);
         mv.addObject("loginBgStat", loginBgStat.getData());

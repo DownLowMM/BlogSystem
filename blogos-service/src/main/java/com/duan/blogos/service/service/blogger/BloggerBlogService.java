@@ -7,8 +7,8 @@ import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.BlogFilter;
+import com.duan.blogos.util.file.MultipartFile;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -114,7 +114,7 @@ public interface BloggerBlogService extends BlogFilter<ResultBean<List<BlogListI
      * @param bloggerId 博主id
      * @return 成功导入的博文标题和id
      */
-    List<BlogTitleIdDTO> insertBlogPatch(File file, int bloggerId);
+    List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, int bloggerId);
 
     /**
      * 生成用于 [导出所有博文] 功能的 zip 文件

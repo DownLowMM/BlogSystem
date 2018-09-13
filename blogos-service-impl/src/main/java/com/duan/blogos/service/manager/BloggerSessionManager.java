@@ -1,11 +1,8 @@
 package com.duan.blogos.service.manager;
 
-import com.duan.blogos.service.manager.properties.BloggerProperties;
+import com.duan.blogos.service.properties.BloggerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * Created on 2018/3/13.
@@ -20,31 +17,15 @@ public class BloggerSessionManager {
 
     /**
      * 获得登录博主id，未登录返回-1
-     *
-     * @param request
-     * @return
      */
-    public int getLoginBloggerId(HttpServletRequest request) {
+    public int getLoginBloggerId(String token) {
 
-        HttpSession session = request.getSession();
-        Object obj = session.getAttribute(bloggerProperties.getSessionNameOfBloggerId());
+//        HttpSession session = request.getSession();
+//        Object obj = session.getAttribute(bloggerProperties.getSessionNameOfBloggerId());
+//        return obj == null ? -1 : (Integer) obj;
 
-        return obj == null ? -1 : (Integer) obj;
+        // TODO redis + token 维护会话
+        return -1;
     }
-
-    /**
-     * 获得登录博主用户名，未登录返回null
-     *
-     * @param request
-     * @return
-     */
-    public String getLoginBloggerName(HttpServletRequest request) {
-
-        HttpSession session = request.getSession();
-        Object obj = session.getAttribute(bloggerProperties.getSessionNameOfBloggerName());
-
-        return obj == null ? null : obj.toString();
-    }
-
 
 }

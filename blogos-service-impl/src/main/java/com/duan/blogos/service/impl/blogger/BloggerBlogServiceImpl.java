@@ -12,20 +12,20 @@ import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.exception.internal.InternalIOException;
-import com.duan.blogos.service.exception.internal.LuceneException;
-import com.duan.blogos.service.exception.internal.SQLException;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.impl.BlogFilterAbstract;
 import com.duan.blogos.service.manager.DataFillingManager;
-import com.duan.blogos.service.manager.FileManager;
 import com.duan.blogos.service.manager.ImageManager;
-import com.duan.blogos.service.manager.properties.BloggerProperties;
-import com.duan.blogos.service.manager.properties.WebsiteProperties;
+import com.duan.blogos.service.properties.BloggerProperties;
+import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
+import com.duan.blogos.util.file.FileUtils;
+import com.duan.blogos.util.file.MultipartFile;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,9 +69,6 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
 
     @Autowired
     private ImageManager imageManager;
-
-    @Autowired
-    private FileManager fileManager;
 
     @Autowired
     private BlogCategoryDao categoryDao;
@@ -110,7 +108,8 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
         BlogStatistics statistics = new BlogStatistics();
         statistics.setBlogId(blogId);
         effect = statisticsDao.insert(statistics);
-        if (effect <= 0) throw new SQLException();
+        if (effect <= 0)
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
 
         if (analysisImg) {
             // 3 解析本地图片引用并使自增
@@ -127,7 +126,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
             luceneIndexManager.add(blog);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new LuceneException(e);
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         return blogId;
@@ -212,14 +211,15 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
         if (newContentMd != null) blog.setContentMd(newContentMd);
         if (newKeyWords != null) blog.setKeyWords(StringUtils.arrayToString(newKeyWords, chs));
         int effect = blogDao.update(blog);
-        if (effect <= 0) throw new SQLException();
+        if (effect <= 0)
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
 
         // 3 更新lucene
         try {
             luceneIndexManager.update(blog);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new LuceneException(e);
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         return true;
@@ -256,7 +256,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
 
         for (int id : blogIds) {
             if (!deleteBlog(bloggerId, id))
-                throw new SQLException();
+                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
         }
 
         return true;
@@ -325,10 +325,9 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
     }
 
     @Override
-//    public List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, int bloggerId) {
-    public List<BlogTitleIdDTO> insertBlogPatch(File file, int bloggerId) {
+    public List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, int bloggerId) {
 
-        fileManager.mkdirsIfNotExist(bloggerProperties.getPatchImportBlogTempPath());
+        FileUtils.mkdirsIfNotExist(bloggerProperties.getPatchImportBlogTempPath());
 
         // 保存到临时文件
         String fullPath = bloggerProperties.getPatchImportBlogTempPath() +
@@ -413,13 +412,13 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
             }
 
         } catch (IOException e) {
-            throw new InternalIOException(e);
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         } finally {
             if (zipFile != null) try {
                 zipFile.close();
 
                 // 删除临时文件
-                fileManager.deleteFileIfExist(fullPath);
+                FileUtils.deleteFileIfExist(fullPath);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -435,7 +434,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
         List<Blog> blogs = blogDao.listAllByFormat(bloggerId, format.getCode());
         if (CollectionUtils.isEmpty(blogs)) return null;
 
-        fileManager.mkdirsIfNotExist(bloggerProperties.getPatchDownloadBlogTempPath());
+        FileUtils.mkdirsIfNotExist(bloggerProperties.getPatchDownloadBlogTempPath());
 
         String zipFilePath = bloggerProperties.getPatchDownloadBlogTempPath() +
                 File.separator +
@@ -459,19 +458,19 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
                 }
             }
         } catch (IOException e) {
-            throw new InternalIOException(e);
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         } finally {
             if (zipOut != null) {
                 try {
                     zipOut.close();
                 } catch (IOException e) {
-                    throw new InternalIOException(e);
+                    throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
                 }
             }
         }
 
         // 统一删除临时博文文件
-        tempBlogFile.forEach(fileManager::deleteFileIfExist);
+        tempBlogFile.forEach(FileUtils::deleteFileIfExist);
 
         return zipFile.getAbsolutePath();
     }

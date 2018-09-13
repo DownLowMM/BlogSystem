@@ -3,8 +3,8 @@ package com.duan.blogos.service.service.blogger;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.util.file.MultipartFile;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -45,7 +45,7 @@ public interface BloggerPictureService {
      * @param title     标题
      * @return 新纪录id
      */
-    int insertPicture(File file, int bloggerId, String bewrite, BloggerPictureCategoryEnum category, String title);
+    int insertPicture(MultipartFile file, int bloggerId, String bewrite, BloggerPictureCategoryEnum category, String title);
 
     /**
      * 向数据库中新增图片记录，同时将图片保存到设备

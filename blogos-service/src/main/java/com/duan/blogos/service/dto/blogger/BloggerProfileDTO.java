@@ -11,5 +11,27 @@ import java.io.Serializable;
  */
 @Data
 public class BloggerProfileDTO implements Serializable {
-    // TODO
+
+    //id
+    private Integer id;
+
+    //博主id
+    private Integer bloggerId;
+
+    //博主头像
+    private Integer avatarId;
+
+    //电话
+    private String phone;
+
+    //邮箱
+    private String email;
+
+    //关于我
+    private String aboutMe;
+
+    //一句话简介
+    private String intro;
+
+
 }

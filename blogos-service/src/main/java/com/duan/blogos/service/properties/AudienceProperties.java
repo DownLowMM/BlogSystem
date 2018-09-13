@@ -1,4 +1,4 @@
-package com.duan.blogos.service.manager.properties;
+package com.duan.blogos.service.properties;
 
 import lombok.Data;
 

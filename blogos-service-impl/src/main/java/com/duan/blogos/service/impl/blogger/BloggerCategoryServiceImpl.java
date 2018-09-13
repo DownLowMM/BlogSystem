@@ -8,12 +8,13 @@ import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.entity.blog.BlogCategory;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.exception.internal.SQLException;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.manager.properties.BloggerProperties;
-import com.duan.blogos.service.manager.properties.DbProperties;
+import com.duan.blogos.service.properties.BloggerProperties;
+import com.duan.blogos.service.properties.DbProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import com.duan.blogos.util.common.ArrayUtils;
@@ -22,6 +23,7 @@ import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,7 +126,8 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
 
         // 删除数据库类别记录
         int effectDelete = categoryDao.delete(categoryId);
-        if (effectDelete <= 0) throw new SQLException();
+        if (effectDelete <= 0)
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
 
         // 修改博文类别
         List<Blog> blogs = blogDao.listAllCategoryByBloggerId(bloggerId);
@@ -139,7 +142,8 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
                     int[] ar = ArrayUtils.removeFromArray(cids, categoryId);
                     blog.setCategoryIds(StringUtils.intArrayToString(ar, sp));
                     int effectUpdate = blogDao.update(blog);
-                    if (effectUpdate <= 0) throw new SQLException();
+                    if (effectUpdate <= 0)
+                        throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
                 }
 
             });
@@ -152,7 +156,8 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
                     ArrayUtils.replace(cids, categoryId, newCategoryId);
                     blog.setCategoryIds(StringUtils.intArrayToString(cids, sp));
                     int effectUpdate = blogDao.update(blog);
-                    if (effectUpdate <= 0) throw new SQLException();
+                    if (effectUpdate <= 0)
+                        throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
                 }
             });
 

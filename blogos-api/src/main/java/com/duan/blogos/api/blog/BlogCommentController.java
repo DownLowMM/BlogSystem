@@ -34,7 +34,7 @@ public class BlogCommentController extends BaseBlogController {
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? audienceProperties.getRequestBloggerBlogCommentCount() : rows;
         ResultBean<List<BlogCommentDTO>> resultBean = blogBrowseService.listBlogComment(blogId, os, rs);
-        if (resultBean == null) handlerEmptyResult(request);
+        if (resultBean == null) handlerEmptyResult();
 
         return resultBean;
     }

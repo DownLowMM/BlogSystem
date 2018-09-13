@@ -1,12 +1,12 @@
 package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.api.BaseCheckController;
-import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.manager.properties.BloggerProperties;
-import com.duan.blogos.service.manager.properties.WebsiteProperties;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.properties.BloggerProperties;
+import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.util.common.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,9 +17,6 @@ import javax.servlet.http.HttpServletRequest;
  * @author DuanJiaNing
  */
 public class BaseBloggerController extends BaseCheckController {
-
-    @Autowired
-    protected StringConstructorManager stringConstructorManager;
 
     @Autowired
     protected WebsiteProperties websiteProperties;
@@ -34,13 +31,13 @@ public class BaseBloggerController extends BaseCheckController {
      */
     protected void handleParamAllNullForUpdate(HttpServletRequest request, Object... objs) {
         if (CollectionUtils.isEmpty(objs))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         for (Object obj : objs) {
             if (obj != null) return;
         }
 
-        throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+        throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
     /**
@@ -50,7 +47,7 @@ public class BaseBloggerController extends BaseCheckController {
      * @param pictureId 图片id
      */
     protected void handlePictureExistCheck(HttpServletRequest request, Integer bloggerId, Integer pictureId) {
-        if (pictureId != null && !bloggerValidateManager.checkBloggerPictureExist(bloggerId, pictureId))
-            throw exceptionManager.getUnknownPictureException(new RequestContext(request));
+        if (pictureId != null && !bloggerValidateService.checkBloggerPictureExist(bloggerId, pictureId))
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_PICTURE);
     }
 }

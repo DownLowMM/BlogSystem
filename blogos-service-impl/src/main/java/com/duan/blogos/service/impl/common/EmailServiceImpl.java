@@ -3,7 +3,7 @@ package com.duan.blogos.service.impl.common;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.manager.MailManager;
-import com.duan.blogos.service.manager.properties.WebsiteProperties;
+import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.service.service.common.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;

@@ -16,7 +16,7 @@ import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.manager.comparator.BlogListItemComparatorFactory;
-import com.duan.blogos.service.manager.properties.DbProperties;
+import com.duan.blogos.service.properties.DbProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerCollectBlogService;
 import com.duan.blogos.util.common.CollectionUtils;

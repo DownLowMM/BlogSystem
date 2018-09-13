@@ -1,7 +1,9 @@
 package com.duan.blogos.api.blogger;
 
-import com.duan.blogos.service.entity.blogger.BloggerProfile;
+import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.blogger.BloggerProfileService;
@@ -38,12 +40,12 @@ public class BloggerProfileController extends BaseBloggerController {
      * 获取资料
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<BloggerProfile> get(HttpServletRequest request,
-                                          @PathVariable Integer bloggerId) {
+    public ResultBean<BloggerProfileDTO> get(HttpServletRequest request,
+                                             @PathVariable Integer bloggerId) {
         handleAccountCheck(request, bloggerId);
 
-        BloggerProfile profile = bloggerProfileService.getBloggerProfile(bloggerId);
-        if (profile == null) handlerEmptyResult(request);
+        BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(bloggerId);
+        if (profile == null) handlerEmptyResult();
 
         return new ResultBean<>(profile);
     }
@@ -65,7 +67,7 @@ public class BloggerProfileController extends BaseBloggerController {
         handleParamsCheck(phone, email, request);
         int id = bloggerProfileService.insertBloggerProfile(bloggerId, avatarId == null || avatarId <= 0 ? -1 : avatarId,
                 phone, email, aboutMe, intro);
-        if (id <= 0) handlerOperateFail(request);
+        if (id <= 0) handlerOperateFail();
 
         return new ResultBean<>(id);
     }
@@ -83,7 +85,7 @@ public class BloggerProfileController extends BaseBloggerController {
                              @RequestParam(value = "intro", required = false) String intro) {
 
         if (phone == null && email == null && aboutMe == null && intro == null) {
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         handleBloggerSignInCheck(request, bloggerId);
@@ -92,7 +94,7 @@ public class BloggerProfileController extends BaseBloggerController {
         handleParamsCheck(phone, email, request);
         int av = avatarId == null || avatarId <= 0 ? -1 : avatarId;
         boolean result = bloggerProfileService.updateBloggerProfile(bloggerId, av, phone, email, aboutMe, intro);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         return new ResultBean<>("");
     }
@@ -107,7 +109,7 @@ public class BloggerProfileController extends BaseBloggerController {
         handleBloggerSignInCheck(request, bloggerId);
 
         boolean result = bloggerProfileService.deleteBloggerProfile(bloggerId);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         return new ResultBean<>("");
     }
@@ -126,10 +128,10 @@ public class BloggerProfileController extends BaseBloggerController {
         String base = base64urlData.replaceFirst("^data:image/(png|jpg);base64,", "");
         byte[] bs = Base64.getDecoder().decode(base);
         int id = bloggerPictureService.insertPicture(bs, bloggerId, "once-avatar-" + bloggerId + ".png", "", BloggerPictureCategoryEnum.PUBLIC, "");
-        if (id <= 0) handlerOperateFail(request);
+        if (id <= 0) handlerOperateFail();
 
         boolean res = bloggerProfileService.updateBloggerProfile(bloggerId, id, null, null, null, null);
-        if (!res) handlerOperateFail(request);
+        if (!res) handlerOperateFail();
 
         return new ResultBean<>(id);
     }
@@ -137,7 +139,7 @@ public class BloggerProfileController extends BaseBloggerController {
     private void handleImageBase64Check(HttpServletRequest request, String base64urlData) {
 
         if (!base64urlData.contains("data:image") || !base64urlData.contains("base64")) {
-            throw exceptionManager.getParameterFormatIllegalException(new RequestContext(request));
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
         }
 
     }
@@ -145,10 +147,10 @@ public class BloggerProfileController extends BaseBloggerController {
     private void handleParamsCheck(String phone, String email, HttpServletRequest request) {
         RequestContext context = new RequestContext(request);
         if (phone != null && !StringUtils.isPhone(phone))
-            throw exceptionManager.getParameterFormatIllegalException(context);
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
 
         if (email != null && !StringUtils.isEmail(email))
-            throw exceptionManager.getParameterFormatIllegalException(context);
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
     }
 
 }

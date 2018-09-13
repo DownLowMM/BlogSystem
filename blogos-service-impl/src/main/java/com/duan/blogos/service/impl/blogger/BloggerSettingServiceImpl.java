@@ -2,6 +2,7 @@ package com.duan.blogos.service.impl.blogger;
 
 import com.duan.blogos.service.dao.blogger.BloggerSettingDao;
 import com.duan.blogos.service.dto.blogger.BloggerSettingDTO;
+import com.duan.blogos.service.entity.blogger.BloggerSetting;
 import com.duan.blogos.service.service.blogger.BloggerSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,10 @@ public class BloggerSettingServiceImpl implements BloggerSettingService {
 
     @Override
     public BloggerSettingDTO getSetting(int bloggerId) {
-        return settingDao.getSetting(bloggerId);
+        BloggerSetting setting = settingDao.getSetting(bloggerId);
+
+        // TODO
+        return null;
     }
 
     @Override

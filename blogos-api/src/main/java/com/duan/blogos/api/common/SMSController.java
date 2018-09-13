@@ -2,6 +2,8 @@ package com.duan.blogos.api.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.duan.blogos.api.BaseCheckController;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.util.JiSuApiUtils;
 import okhttp3.FormBody;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class SMSController extends BaseCheckController {
         try {
             url = JiSuApiUtils.getSmsUrl(phone, content);
         } catch (UnsupportedEncodingException e) {
-            return new ResultBean(exceptionManager.getUnknownException(new RequestContext(request), e));
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         OkHttpClient client = new OkHttpClient();
@@ -53,7 +54,7 @@ public class SMSController extends BaseCheckController {
         try {
             response = client.newCall(okRequest).execute();
         } catch (IOException e) {
-            return new ResultBean(exceptionManager.getUnknownException(new RequestContext(request), e));
+            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         if (response != null) {
@@ -68,12 +69,12 @@ public class SMSController extends BaseCheckController {
                 }
 
             } catch (IOException e) {
-                return new ResultBean(exceptionManager.getUnknownException(new RequestContext(request), e));
+                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
             }
 
         }
 
-        handlerOperateFail(request);
+        handlerOperateFail();
         return null;
 
     }

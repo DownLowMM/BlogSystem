@@ -1,12 +1,13 @@
 package com.duan.blogos.api.blogger;
 
-import com.duan.blogos.service.manager.validate.BlogCommentValidateManager;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerCommentService;
+import com.duan.blogos.service.service.validate.BlogCommentValidateService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,7 +24,7 @@ import static com.duan.blogos.service.enums.BlogCommentStatusEnum.RIGHTFUL;
 public class BloggerCommentController extends BaseBloggerController {
 
     @Autowired
-    private BlogCommentValidateManager commentValidateManager;
+    private BlogCommentValidateService commentValidateService;
 
     @Autowired
     private BloggerCommentService commentService;
@@ -41,11 +42,11 @@ public class BloggerCommentController extends BaseBloggerController {
         handleBlogExistCheck(request, blogId);
         handleBloggerExist(request, listenerId);
 
-        if (StringUtils.isEmpty_(content) || !commentValidateManager.checkCommentContent(content))
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+        if (StringUtils.isEmpty_(content) || !commentValidateService.checkCommentContent(content))
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         int id = commentService.insertComment(blogId, bloggerId, listenerId, RIGHTFUL.getCode(), content);
-        if (id < 0) handlerOperateFail(request);
+        if (id < 0) handlerOperateFail();
 
         return new ResultBean<>(id);
     }
@@ -62,14 +63,14 @@ public class BloggerCommentController extends BaseBloggerController {
         handleBlogExistCheck(request, blogId);
 
         if (!commentService.deleteComment(commentId, blogId))
-            handlerOperateFail(request);
+            handlerOperateFail();
 
         return new ResultBean<>("");
     }
 
     private void handleBloggerExist(HttpServletRequest request, Integer bloggerId) {
-        if (!bloggerValidateManager.checkAccountExist(bloggerId)) {
-            throw exceptionManager.getUnknownBloggerException(new RequestContext(request));
+        if (!bloggerValidateService.checkAccountExist(bloggerId)) {
+            throw ResultUtil.failException(CodeMessage.BLOGGER_UNKNOWN_BLOGGER);
         }
     }
 

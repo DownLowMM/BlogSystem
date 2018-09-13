@@ -5,8 +5,9 @@ import com.duan.blogos.service.dao.blog.BlogLabelDao;
 import com.duan.blogos.service.dto.blog.BlogLabelDTO;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.entity.blog.BlogLabel;
-import com.duan.blogos.service.exception.internal.SQLException;
-import com.duan.blogos.service.manager.properties.DbProperties;
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.properties.DbProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import com.duan.blogos.util.common.ArrayUtils;
@@ -15,6 +16,7 @@ import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -84,7 +86,7 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
                 int[] ids = ArrayUtils.removeFromArray(lids, labelId);
                 blog.setLabelIds(StringUtils.intArrayToString(ids, ch));
                 if (blogDao.update(blog) <= 0)
-                    throw new SQLException();
+                    throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
             }
         }
 

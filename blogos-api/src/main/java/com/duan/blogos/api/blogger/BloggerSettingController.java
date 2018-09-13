@@ -1,10 +1,11 @@
 package com.duan.blogos.api.blogger;
 
+import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,14 +34,14 @@ public class BloggerSettingController extends BaseBloggerController {
         handleMainPageNavPosCheck(request, mainPageNavPos);
 
         boolean result = settingService.updateMainPageNavPos(bloggerId, mainPageNavPos);
-        if (!result) handlerOperateFail(request);
+        if (!result) handlerOperateFail();
 
         return new ResultBean<>("");
     }
 
     private void handleMainPageNavPosCheck(HttpServletRequest request, Integer mainPageNavPos) {
-        if (mainPageNavPos == null || !bloggerValidateManager.checkMainPageNavPos(mainPageNavPos)) {
-            throw exceptionManager.getParameterIllegalException(new RequestContext(request));
+        if (mainPageNavPos == null || !bloggerValidateService.checkMainPageNavPos(mainPageNavPos)) {
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
     }
 

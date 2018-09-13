@@ -6,19 +6,19 @@
        profile="prod">
 
     <!--读者配置-->
-    <bean class="com.duan.blogos.service.manager.properties.AudienceProperties" name="audienceProperties">
+    <bean class="com.duan.blogos.service.properties.AudienceProperties" name="audienceProperties">
         <property name="requestBloggerBlogListCount" value="${audience.requestBloggerBlogListCount}"/>
         <property name="requestBloggerBlogCommentCount" value="${audience.requestBloggerBlogCommentCount}"/>
     </bean>
 
     <!--数据库配置-->
-    <bean class="com.duan.blogos.service.manager.properties.DbProperties" name="dbProperties">
+    <bean class="com.duan.blogos.service.properties.DbProperties" name="dbProperties">
         <property name="stringFiledSplitCharacterForNumber" value="${db.stringFiledSplitCharacterForNumber}"/>
         <property name="stringFiledSplitCharacterForString" value="${db.stringFiledSplitCharacterForString}"/>
     </bean>
 
     <!--博主配置-->
-    <bean class="com.duan.blogos.service.manager.properties.BloggerProperties" name="bloggerProperties">
+    <bean class="com.duan.blogos.service.properties.BloggerProperties" name="bloggerProperties">
         <property name="requestBloggerLinkCount" value="${blogger.requestBloggerLinkCount}"/>
         <property name="bloggerImageRootPath" value="${prod.blogger.bloggerImageRootPath}"/>
         <property name="pictureManagerBloggerId" value="${blogger.pictureManagerBloggerId}"/>
@@ -40,7 +40,7 @@
     </bean>
 
     <!--站点配置-->
-    <bean class="com.duan.blogos.service.manager.properties.WebsiteProperties" name="websiteProperties">
+    <bean class="com.duan.blogos.service.properties.WebsiteProperties" name="websiteProperties">
         <property name="addr" value="${prod.website.addr}"/>
         <property name="urlConditionSplitCharacter" value="${website.urlConditionSplitCharacter}"/>
         <property name="luceneIndexDir" value="${prod.website.luceneIndexDir}"/>

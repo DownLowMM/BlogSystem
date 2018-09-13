@@ -84,12 +84,18 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
 
     @Override
     public BloggerProfileDTO getBloggerProfile(int bloggerId) {
-        return profileDao.getProfileByBloggerId(bloggerId);
+        BloggerProfile profile = profileDao.getProfileByBloggerId(bloggerId);
+
+        // TODO
+        return null;
     }
 
     @Override
     public BloggerProfileDTO getBloggerProfileByPhone(String phone) {
-        return profileDao.getProfileByPhone(phone);
+        BloggerProfile profile = profileDao.getProfileByPhone(phone);
+
+        // TODO
+        return null;
     }
 
 }

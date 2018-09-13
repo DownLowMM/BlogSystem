@@ -30,7 +30,7 @@ public class BloggerStatisticsController extends BaseBloggerController {
         handleAccountCheck(request, bloggerId);
 
         ResultBean<BloggerStatisticsDTO> statistics = statisticsService.getBloggerStatistics(bloggerId);
-        if (statistics == null) handlerOperateFail(request);
+        if (statistics == null) handlerOperateFail();
 
         return statistics;
     }
