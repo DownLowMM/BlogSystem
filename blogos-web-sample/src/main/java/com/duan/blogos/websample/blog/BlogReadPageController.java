@@ -5,12 +5,12 @@ import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.manager.BloggerSessionManager;
 import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
+import com.duan.blogos.service.service.common.OnlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +44,7 @@ public class BlogReadPageController {
     private BloggerProperties bloggerProperties;
 
     @Autowired
-    private BloggerSessionManager sessionManager;
+    private OnlineService onlineService;
 
     @Autowired
     private BlogBrowseService blogBrowseService;
@@ -90,7 +90,7 @@ public class BlogReadPageController {
 
         // 登陆博主 id
         String token = ""; // TODO redis + token 维护会话
-        int loginBloggerId = sessionManager.getLoginBloggerId(token);
+        int loginBloggerId = onlineService.getLoginBloggerId(token);
 
         ResultBean<BloggerStatisticsDTO> loginBgStat = bloggerStatisticsService.getBloggerStatistics(loginBloggerId);
         mv.addObject("loginBgStat", loginBgStat.getData());

@@ -2,11 +2,11 @@ package com.duan.blogos.websample.favourite;
 
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.manager.BloggerSessionManager;
 import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultBean;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
+import com.duan.blogos.service.service.common.OnlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,7 +29,7 @@ public class FavouriteBlogPageController {
     private BloggerAccountService accountService;
 
     @Autowired
-    private BloggerSessionManager sessionManager;
+    private OnlineService onlineService;
 
     @Autowired
     private BloggerProperties bloggerProperties;
@@ -64,7 +64,7 @@ public class FavouriteBlogPageController {
 
         // 登陆博主 id
         String token = ""; // TODO redis + token 维护会话
-        int loginBloggerId = sessionManager.getLoginBloggerId(token);
+        int loginBloggerId = onlineService.getLoginBloggerId(token);
         ResultBean<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBloggerId);
         mv.addObject("loginBgStat", loginBgStat.getData());
 
