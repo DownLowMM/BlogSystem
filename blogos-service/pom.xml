@@ -7,6 +7,7 @@
     <groupId>com.duan.blogos</groupId>
     <artifactId>blogos-service</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <name>blogos-service</name>
     <url>https://github.com/DuanJiaNing</url>
@@ -29,6 +30,13 @@
             <artifactId>lombok</artifactId>
             <version>1.16.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.duan.base</groupId>
+            <artifactId>base-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -7,6 +7,7 @@
     <groupId>com.duan.blogos</groupId>
     <artifactId>blogos-service-impl</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <name>blogos-service-impl</name>
     <url>https://github.com/DuanJiaNing</url>
@@ -29,12 +30,6 @@
         <dependency>
             <groupId>com.duan.blogos</groupId>
             <artifactId>blogos-service</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.duan.blogos</groupId>
-            <artifactId>blogos-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

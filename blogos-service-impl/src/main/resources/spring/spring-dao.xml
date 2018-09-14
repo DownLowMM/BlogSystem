@@ -5,7 +5,9 @@
        xmlns:aop="http://www.springframework.org/schema/aop" xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <context:component-scan base-package="com.duan.blogos.dao"/>
+    <context:component-scan base-package="com.duan.blogos.service.dao"/>
+
+    <context:property-placeholder location="classpath*:config/db.properties"/>
 
     <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
         <property name="dataSource" ref="dataSource"/>
@@ -29,7 +31,7 @@
     <!--配置事务切面-->
     <aop:config>
         <!--只对业务层启用事务 - impl包和所有子包中任意类的任意方法-->
-        <aop:pointcut id="pointCut" expression="execution(* com.duan.blogos.service.service.impl..*.*(..))"/>
+        <aop:pointcut id="pointCut" expression="execution(* com.duan.blogos.service.impl..*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut"/>
     </aop:config>
 
@@ -41,13 +43,13 @@
         <!--别名所对应的实体类-->
         <property name="typeAliasesPackage" value="com.duan.blogos.service.entity"/>
         <!--sql 与 dao 的映射文件-->
-        <property name="mapperLocations" value="classpath:mapper/blog/BlogComplainDaoMapper.xml"/>
+        <property name="mapperLocations" value="classpath:mapper/*/*.xml"/>
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <!--需要扫描的 dao 所在包-->
-        <property name="basePackage" value="com.duan.blogos.dao"/>
+        <property name="basePackage" value="com.duan.blogos.service.dao"/>
     </bean>
 
 </beans>
