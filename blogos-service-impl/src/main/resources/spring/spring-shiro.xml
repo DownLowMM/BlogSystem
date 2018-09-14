@@ -5,7 +5,7 @@
        profile="prod">
 
     <!-- 自定义Realm -->
-    <bean id="myAuthorizingRealm" class="com.duan.blogos.api.realm.MyAuthorizingRealm"/>
+    <bean id="myAuthorizingRealm" class="com.duan.blogos.service.realm.MyAuthorizingRealm"/>
 
     <!-- 安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">

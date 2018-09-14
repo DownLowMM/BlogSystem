@@ -1,0 +1,108 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      write_dates_as_timestamps: false
+    default-property-inclusion: NON_NULL
+  http:
+    multipart:
+      max-file-size: 50Mb
+      max-request-size: 128Mb
+  messages:
+    basename: i18n/messages
+    cache-seconds: 3600
+  redis:
+    host: 127.0.0.1
+    password:
+    port: 6379
+    pool:
+      maxTotal: 1024
+      maxIdle: 200
+      maxWait: 1000
+      testOnBorrow: true
+      testOnReturn: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 12345678
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: wall
+    maxActive: 100
+    initialSize: 5
+    maxWait: 60000
+    minIdle: 10
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+
+server:
+  port: 9090
+
+app:
+  name: blogos-service
+
+mybatis:
+  mapperLocations: classpath:mapper/*/*.xml
+  #  typeAliasesPackage: cn.com.*.dao
+  config: classpath:mybatis-config.xml
+  #  typeHandlersPackage: cn.com.*.dao
+  #  checkConfigLocation:
+  #  executorType:
+
+  ## 测试
+redis:
+  key:
+    expire: 2592000
+  token:
+    expire-day: 30
+
+
+preference:
+  default:
+    page-size:
+      blog: 10
+      comment: 10
+      link: 10
+      picture: 10
+      collect: 10
+      category: 10
+      label: 10
+  manager:
+    id: 1
+  blogger:
+    page-nav-pos: 0
+  website:
+    session:
+      id: bloggerId
+      name: bloggerName
+      login-signal: bloggerLoginSignal
+      error-msg: errorMsg
+    owner:
+      id: pageOwnerBloggerId
+      name: pageOwnerBloggerName
+    url-condition-split-character: ,
+    contact:
+      manager-email:
+        address: duan_jia_ning@163.com
+      sender-mail:
+        address: 2213994603@qq.com
+        password: athupcbmeyvvdjif
+    active-blogger-count: 20
+    addr: 120.79.128.250:8080
+  lucene:
+    index-dir: /usr/duan/blog/lucene
+  file:
+    image-root-path: /usr/duan/blog/blogger/image
+    patch-import-blog-temp-path: /usr/duan/blog/temp/blog-patch-import
+    patch-download-blog-temp-path: /usr/duan/blog/temp/blog-patch-download
+  db:
+    string-filed-split-character-for-number: \u0020
+    string-filed-split-character-for-string: \u0020

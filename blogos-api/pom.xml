@@ -11,105 +11,136 @@
     <name>blogos-api</name>
     <url>https://github.com/DuanJiaNing</url>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.14.RELEASE</version>
+    </parent>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.1.7.RELEASE</spring.version>
+        <logback.version>1.1.11</logback.version>
+        <slf4j.version>1.7.24</slf4j.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>com.duan.blogos</groupId>
-            <artifactId>blogos-service-impl</artifactId>
+            <artifactId>blogos-service</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <!--<dependency>-->
+        <!--后续将 blogos-service-impl 拆解为微服务调用-->
         <!--<groupId>com.duan.blogos</groupId>-->
         <!--<artifactId>blogos-service</artifactId>-->
         <!--<version>1.0-SNAPSHOT</version>-->
         <!--</dependency>-->
 
-        <!-- okhttp okio *************************************************************** ^-->
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>3.9.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
-            <groupId>com.squareup.okio</groupId>
-            <artifactId>okio</artifactId>
-            <version>1.14.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.17</version>
-        </dependency>
-        <!-- okhttp okio *************************************************************** v-->
-
-        <!-- web *************************************************************** ^-->
-        <!-- 添加sevlet支持 -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
-        <!--jackson-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.5.4</version>
-        </dependency>
-        <!-- web *************************************************************** v-->
-
-        <!-- spring-core *************************************************************** ^-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--log-->
+        <dependency>
+            <groupId>org.logback-extensions</groupId>
+            <artifactId>logback-ext-spring</artifactId>
+            <version>0.1.4</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- spring-core *************************************************************** v-->
-
-        <!-- spring-web *************************************************************** ^-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+            <version>${logback.version}</version>
         </dependency>
-        <!-- spring-web *************************************************************** v-->
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <!-- pigeon *************************************************************** ^-->
+        <dependency>
+            <groupId>com.facebook.swift</groupId>
+            <artifactId>swift-annotations</artifactId>
+            <version>0.16.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.facebook.swift</groupId>
+            <artifactId>swift-codec</artifactId>
+            <version>0.16.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.facebook.swift</groupId>
+            <artifactId>swift-generator</artifactId>
+            <version>0.16.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dianping</groupId>
+            <artifactId>pigeon</artifactId>
+            <version>2.9.12-SNAPSHOT</version>
+        </dependency>
+        <!-- pigeon *************************************************************** v-->
 
     </dependencies>
 
     <build>
         <!--IDEA 会自动设置为1.5，用此插件强制使用jdk lanague level-->
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

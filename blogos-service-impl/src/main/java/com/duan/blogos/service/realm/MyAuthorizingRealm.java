@@ -1,4 +1,4 @@
-package com.duan.blogos.api.realm;
+package com.duan.blogos.service.realm;
 
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
