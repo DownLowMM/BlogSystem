@@ -1,11 +1,11 @@
 package com.duan.blogos.service.impl.validate;
 
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class BloggerValidateServiceImpl implements BloggerValidateService {
     private BlogCategoryDao categoryDao;
 
     @Autowired
-    private BloggerProperties propertiesManager;
+    private WebsiteProperties websiteProperties;
 
     @Override
     public boolean checkAccountExist(int id) {
@@ -43,7 +43,7 @@ public class BloggerValidateServiceImpl implements BloggerValidateService {
 
     @Override
     public boolean checkBloggerPictureLegal(int bloggerId, int category) {
-        int pictureManagerId = propertiesManager.getPictureManagerBloggerId();
+        int pictureManagerId = websiteProperties.getManagerId();
 
         // 图片管理者可以操作任何类别图片,非图片管理者不能操作系统默认图片
         return bloggerId == pictureManagerId || !BloggerPictureCategoryEnum.isDefaultPictureCategory(category);

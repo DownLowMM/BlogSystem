@@ -1,6 +1,8 @@
-package com.duan.blogos.service.properties;
+package com.duan.blogos.service.config.preference;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Created on 2017/12/21.
@@ -9,6 +11,8 @@ import lombok.Data;
  * @author DuanJiaNing
  */
 @Data
+@ConfigurationProperties(prefix = "preference.db")
+@Configuration
 public class DbProperties {
 
     /**

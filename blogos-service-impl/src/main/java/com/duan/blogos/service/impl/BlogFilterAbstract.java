@@ -1,6 +1,7 @@
 package com.duan.blogos.service.impl;
 
 import com.duan.blogos.service.common.BlogSortRule;
+import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.dao.blog.BlogDao;
 import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
 import com.duan.blogos.service.entity.blog.Blog;
@@ -10,7 +11,7 @@ import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.manager.comparator.BlogListItemComparatorFactory;
-import com.duan.blogos.service.properties.DbProperties;
+import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.service.BlogFilter;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
@@ -35,12 +36,19 @@ import java.util.stream.Collectors;
 public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
 
     private static volatile AtomicInteger count = new AtomicInteger();
+
+    @Autowired
+    private DefaultProperties defaultProperties;
+
     @Autowired
     protected DbProperties dbProperties;
+
     @Autowired
     protected BlogDao blogDao;
+
     @Autowired
     protected BlogLuceneIndexManager luceneIndexManager;
+
     @Autowired
     private BlogStatisticsDao statisticsDao;
 
@@ -65,6 +73,9 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
     public T listFilterAll(int[] categoryIds, int[] labelIds, String keyWord,
                            int bloggerId, int offset, int rows, BlogSortRule sortRule,
                            BlogStatusEnum status) {
+
+        offset = offset < 0 ? 0 : offset;
+        rows = rows < 0 ? defaultProperties.getBlogCount() : rows;
 
         if (StringUtils.isEmpty(keyWord)) {
             //标签&类别检索

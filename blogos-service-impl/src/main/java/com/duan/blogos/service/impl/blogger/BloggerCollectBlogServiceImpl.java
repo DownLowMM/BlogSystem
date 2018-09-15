@@ -1,6 +1,7 @@
 package com.duan.blogos.service.impl.blogger;
 
 import com.duan.blogos.service.common.BlogSortRule;
+import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.dao.blog.*;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
@@ -16,7 +17,7 @@ import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.manager.comparator.BlogListItemComparatorFactory;
-import com.duan.blogos.service.properties.DbProperties;
+import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCollectBlogService;
 import com.duan.blogos.util.common.CollectionUtils;
@@ -68,10 +69,17 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
     private DbProperties dbProperties;
 
     @Autowired
+    private DefaultProperties defaultProperties;
+
+    @Autowired
     private StringConstructorManager constructorManager;
 
     @Override
     public ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(int bloggerId, int categoryId, int offset, int rows, BlogSortRule sortRule) {
+
+        offset =offset < 0 ? 0 : offset;
+        rows = rows < 0 ? defaultProperties.getCollectCount() : rows;
+
         List<BlogCollect> collects = collectDao.listCollectBlog(bloggerId, categoryId, offset, rows);
         if (CollectionUtils.isEmpty(collects)) return null;
 

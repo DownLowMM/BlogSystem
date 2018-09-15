@@ -42,9 +42,8 @@ public class BloggerLinkController extends BaseBloggerController {
 
         handleAccountCheck(request, bloggerId);
 
-        int os = offset == null || offset < 0 ? 0 : offset;
-        int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerLinkCount() : rows;
-        ResultModel<List<BloggerLinkDTO>> result = bloggerLinkService.listBloggerLink(bloggerId, os, rs);
+        ResultModel<List<BloggerLinkDTO>> result = bloggerLinkService.listBloggerLink(bloggerId,
+                offset == null ? 0 : offset, rows == null ? -1 : rows);
         if (result == null) handlerEmptyResult();
 
         return result;

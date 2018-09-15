@@ -73,7 +73,7 @@ public class BloggerBlogController extends BaseBloggerController {
         handleBlogContentCheck(request, title, content, contentMd, summary, keyWords);
 
 
-        String sp = websiteProperties.getUrlConditionSplitCharacter();
+        String sp = ",";
         int[] cids = StringUtils.intStringDistinctToArray(categoryIds, sp);
         int[] lids = StringUtils.intStringDistinctToArray(labelIds, sp);
 
@@ -109,7 +109,7 @@ public class BloggerBlogController extends BaseBloggerController {
         String ord = order == null ? Order.DESC.name() : order.toUpperCase();
         handleSortRuleCheck(request, sor, ord);
 
-        String sp = websiteProperties.getUrlConditionSplitCharacter();
+        String sp = ",";
         int[] cids = StringUtils.intStringDistinctToArray(categoryIds, sp);
         int[] lids = StringUtils.intStringDistinctToArray(labelIds, sp);
         //检查博文类别和标签
@@ -121,10 +121,9 @@ public class BloggerBlogController extends BaseBloggerController {
 
         //执行数据查询
         BlogSortRule rule = new BlogSortRule(Rule.valueOf(sor), Order.valueOf(ord));
-        int os = offset == null || offset < 0 ? 0 : offset;
-        int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBlogListCount() : rows;
+
         ResultModel<List<BlogListItemDTO>> listResultModel = bloggerBlogService.listFilterAll(cids, lids, keyWord, bloggerId,
-                os, rs, rule, stat);
+                offset == null ? 0 : offset, rows == null ? -1 : rows, rule, stat);
         if (listResultModel == null) handlerEmptyResult();
 
         return listResultModel;
@@ -184,7 +183,7 @@ public class BloggerBlogController extends BaseBloggerController {
 
         handleBlogContentCheck(request, newTitle, newContent, newContentMd, newSummary, newKeyWord);
 
-        String sp = websiteProperties.getUrlConditionSplitCharacter();
+        String sp = ",";
         int[] cids = newCategoryIds == null ? null : StringUtils.intStringDistinctToArray(newCategoryIds, sp);
         int[] lids = newLabelIds == null ? null : StringUtils.intStringDistinctToArray(newLabelIds, sp);
 
@@ -228,8 +227,7 @@ public class BloggerBlogController extends BaseBloggerController {
 
         handleBloggerSignInCheck(request, bloggerId);
 
-        int[] blogIds = StringUtils.intStringDistinctToArray(ids,
-                websiteProperties.getUrlConditionSplitCharacter());
+        int[] blogIds = StringUtils.intStringDistinctToArray(ids, ",");
         if (CollectionUtils.isEmpty(blogIds))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 

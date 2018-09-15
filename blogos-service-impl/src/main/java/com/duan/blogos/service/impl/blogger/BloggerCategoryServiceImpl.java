@@ -1,5 +1,7 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.duan.blogos.service.config.preference.DefaultProperties;
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blog.BlogDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
@@ -13,8 +15,7 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.properties.BloggerProperties;
-import com.duan.blogos.service.properties.DbProperties;
+import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import com.duan.blogos.util.common.ArrayUtils;
@@ -51,7 +52,11 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     private StringConstructorManager constructorManager;
 
     @Autowired
-    private BloggerProperties bloggerProperties;
+    private WebsiteProperties websiteProperties;
+
+    @Autowired
+    private DefaultProperties defaultProperties;
+
 
     @Autowired
     private ImageManager imageManager;
@@ -64,6 +69,9 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
 
     @Override
     public ResultModel<List<BloggerCategoryDTO>> listBlogCategory(int bloggerId, int offset, int rows) {
+
+        offset = offset < 0 ? 0 : offset;
+        rows = rows < 0 ? defaultProperties.getCategoryCount() : rows;
 
         List<BlogCategory> categories = categoryDao.listCategoryByBloggerId(bloggerId, offset, rows);
         if (CollectionUtils.isEmpty(categories)) return null;
@@ -179,7 +187,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
         BloggerPicture icon;
         if (iconId == null) {
             // 默认图片
-            int pictureManagerId = bloggerProperties.getPictureManagerBloggerId();
+            int pictureManagerId = websiteProperties.getManagerId();
             icon = pictureDao.getBloggerUniquePicture(pictureManagerId, DEFAULT_BLOGGER_BLOG_CATEGORY_ICON.getCode());
         } else {
             icon = pictureDao.getPictureById(iconId);

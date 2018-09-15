@@ -1,9 +1,9 @@
 package com.duan.blogos.service.impl.common;
 
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.manager.MailManager;
-import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.service.service.common.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -33,18 +33,18 @@ public class EmailServiceImpl implements EmailService {
     public boolean sendFeedback(int bloggerId, String subject, String content, String contact) {
 
         JavaMailSenderImpl mailSender = mailManager.getMailSender(
-                websiteProperties.getMailSenderAddress(),
-                websiteProperties.getMailSenderPassword());
+                websiteProperties.getSenderMail(),
+                websiteProperties.getSenderMailPassword());
 
         MimeMessage mailMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, "utf-8");
 
             // 设置发件人
-            helper.setFrom(websiteProperties.getMailSenderAddress());
+            helper.setFrom(websiteProperties.getSenderMail());
 
             // 设置收件人
-            helper.setTo(websiteProperties.getManageEmailAddress());
+            helper.setTo(websiteProperties.getManagerEmail());
 
             // 设置主题
             helper.setSubject(subject);

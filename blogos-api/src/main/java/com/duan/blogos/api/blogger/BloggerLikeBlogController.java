@@ -54,11 +54,9 @@ public class BloggerLikeBlogController extends BaseBloggerController {
         if (!Order.contains(ord))
             throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
 
-        int os = offset == null || offset < 0 ? 0 : offset;
-        int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerCollectCount() : rows;
-
         // 查询数据
-        ResultModel<List<FavouriteBlogListItemDTO>> result = likeBlogService.listLikeBlog(bloggerId, os, rs,
+        ResultModel<List<FavouriteBlogListItemDTO>> result = likeBlogService.listLikeBlog(bloggerId,
+                offset == null ? 0 : offset, rows == null ? -1 : rows,
                 BlogSortRule.valueOf(sor, ord));
         if (result == null) handlerEmptyResult();
 

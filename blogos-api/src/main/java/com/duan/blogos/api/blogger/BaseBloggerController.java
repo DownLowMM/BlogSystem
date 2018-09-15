@@ -1,9 +1,9 @@
 package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.api.BaseCheckController;
+import com.duan.blogos.config.SessionProperties;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.util.common.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 public class BaseBloggerController extends BaseCheckController {
 
     @Autowired
-    protected WebsiteProperties websiteProperties;
-
-    @Autowired
-    protected BloggerProperties bloggerProperties;
+    protected SessionProperties sessionProperties;
 
     /**
      * 检查所有参数是否都为null，在更新时这种情况下更新操作将取消

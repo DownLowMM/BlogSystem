@@ -54,9 +54,9 @@ public class BloggerLoginController extends BaseBloggerController {
         }
 
         HttpSession session = request.getSession();
-        session.setAttribute(bloggerProperties.getSessionNameOfBloggerId(), account.getId());
-        session.setAttribute(bloggerProperties.getSessionNameOfBloggerName(), account.getUsername());
-        session.setAttribute(bloggerProperties.getSessionBloggerLoginSignal(), "login");
+        session.setAttribute(sessionProperties.getBloggerId(), account.getId());
+        session.setAttribute(sessionProperties.getBloggerName(), account.getUsername());
+        session.setAttribute(sessionProperties.getLoginSignal(), "login");
 
         // 成功登录
         return new ResultModel<>("");
@@ -72,9 +72,9 @@ public class BloggerLoginController extends BaseBloggerController {
         if (account == null) return new ResultModel<>("", ResultModel.FAIL);
 
         HttpSession session = request.getSession();
-        session.setAttribute(bloggerProperties.getSessionNameOfBloggerId(), account.getId());
-        session.setAttribute(bloggerProperties.getSessionNameOfBloggerName(), account.getUsername());
-        session.setAttribute(bloggerProperties.getSessionBloggerLoginSignal(), "login");
+        session.setAttribute(sessionProperties.getBloggerId(), account.getId());
+        session.setAttribute(sessionProperties.getBloggerName(), account.getUsername());
+        session.setAttribute(sessionProperties.getLoginSignal(), "login");
 
         // 成功登录
         return new ResultModel<>(account.getUsername());

@@ -1,5 +1,7 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.duan.blogos.service.config.preference.DefaultProperties;
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blogger.BloggerLinkDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dto.blogger.BloggerLinkDTO;
@@ -8,7 +10,6 @@ import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLinkService;
 import com.duan.blogos.util.common.CollectionUtils;
@@ -39,7 +40,10 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
     private DataFillingManager fillingManager;
 
     @Autowired
-    private BloggerProperties bloggerProperties;
+    private WebsiteProperties websiteProperties;
+
+    @Autowired
+    private DefaultProperties defaultProperties;
 
     @Autowired
     private StringConstructorManager constructorManager;
@@ -50,13 +54,16 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
     @Override
     public ResultModel<List<BloggerLinkDTO>> listBloggerLink(int bloggerId, int offset, int rows) {
 
+        offset = offset < 0 ? 0 : offset;
+        rows = rows < 0 ? defaultProperties.getLinkCount() : rows;
+
         List<BloggerLink> list = linkDao.listBlogLinkByBloggerId(bloggerId, offset, rows);
 
         List<BloggerLinkDTO> result = new ArrayList<>();
         for (BloggerLink link : list) {
             Integer iconId = link.getIconId();
             BloggerPicture icon = iconId == null ?
-                    pictureDao.getBloggerUniquePicture(bloggerProperties.getPictureManagerBloggerId(),
+                    pictureDao.getBloggerUniquePicture(websiteProperties.getManagerId(),
                             DEFAULT_BLOGGER_LINK_ICON.getCode()) :
                     pictureDao.getPictureById(iconId);
 

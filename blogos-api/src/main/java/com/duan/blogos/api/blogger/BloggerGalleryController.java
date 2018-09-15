@@ -81,11 +81,9 @@ public class BloggerGalleryController extends BaseBloggerController {
                 throw ResultUtil.failException(CodeMessage.COMMON_UNAUTHORIZED);
         } else cate = -1;
 
-        int os = offset == null || offset < 0 ? 0 : offset;
-        int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerPictureCount() : rows;
-
         ResultModel<List<BloggerPictureDTO>> result = bloggerPictureService.listBloggerPicture(bloggerId,
-                cate == -1 ? null : BloggerPictureCategoryEnum.valueOf(cate), os, rs);
+                cate == -1 ? null : BloggerPictureCategoryEnum.valueOf(cate),
+                offset == null ? 0 : offset, rows == null ? -1 : rows);
         if (result == null) handlerEmptyResult();
 
         return result;

@@ -1,9 +1,9 @@
 package com.duan.blogos.service.manager;
 
+import com.duan.blogos.service.config.preference.FileProperties;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.util.common.StringUtils;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;
@@ -38,13 +38,13 @@ public class BlogLuceneIndexManager {
     private static final String INDEX_BLOG_CONTENT = "content";
 
     @Autowired
-    private WebsiteProperties propertiesManager;
+    private FileProperties fileProperties;
 
     /**
      * 获取IndexWriter实例
      */
     private IndexWriter getWriter() throws IOException {
-        String path = propertiesManager.getLuceneIndexDir();
+        String path = fileProperties.getLuceneIndexDir();
         // 创建一个索引位置
         Directory dir = FSDirectory.open(Paths.get(path));
 
@@ -167,7 +167,7 @@ public class BlogLuceneIndexManager {
     public int[] search(String word, int count) throws IOException, ParseException {
         if (StringUtils.isEmpty(word) || count <= 0) return null;
 
-        String path = propertiesManager.getLuceneIndexDir();
+        String path = fileProperties.getLuceneIndexDir();
 
         Directory dir = FSDirectory.open(Paths.get(path));
         IndexReader reader = DirectoryReader.open(dir);

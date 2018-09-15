@@ -20,40 +20,6 @@ public class AppPreference {
         @Data
         public static class PageSize {
 
-            /**
-             * 读者默认请求博主博文列表时默认返回的条目数量
-             */
-            private Integer blog;
-
-            /**
-             * 默认返回的博主博文评论数量
-             */
-            private Integer comment;
-
-            /**
-             * 博主友情链接默认请求条数
-             */
-            private Integer link;
-
-            /**
-             * 博主相册图片默认请求数量
-             */
-            private Integer picture;
-
-            /**
-             * 博主收藏博文默认请求条数
-             */
-            private Integer collect;
-
-            /**
-             * 博主收藏博文默认请求条数
-             */
-            private Integer category;
-
-            /**
-             * 博文标签默认请求条数
-             */
-            private Integer label;
         }
 
     }
@@ -96,26 +62,6 @@ public class AppPreference {
 
         @Data
         public static class Session {
-
-            /**
-             * 保存在session属性中的博主id对应的名字
-             */
-            private String id;
-
-            /**
-             * 保存在session属性中的博主用户名对应的名字
-             */
-            private String name;
-
-            /**
-             * 保存在session属性中的博主登录标识，有值（任意值）就表示已登录
-             */
-            private String loginSignal;
-
-            /**
-             * 保存在session属性中的错误信息对应的名字
-             */
-            private String errorMsg;
 
         }
 
@@ -187,8 +133,6 @@ public class AppPreference {
 
     @Data
     public static class Db {
-        private String stringFiledSplitCharacterForNumber;
-        private String stringFiledSplitCharacterForString;
     }
 
 }

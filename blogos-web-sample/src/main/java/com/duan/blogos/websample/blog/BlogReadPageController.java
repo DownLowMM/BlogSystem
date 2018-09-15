@@ -5,7 +5,6 @@ import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.blogos.service.service.blogger.*;
@@ -41,9 +40,6 @@ public class BlogReadPageController {
     private BloggerStatisticsService bloggerStatisticsService;
 
     @Autowired
-    private BloggerProperties bloggerProperties;
-
-    @Autowired
     private OnlineService onlineService;
 
     @Autowired
@@ -74,7 +70,7 @@ public class BlogReadPageController {
         if (blogId == -1) {
             mv.setViewName("error/error");
             mv.addObject("code", 5);
-            mv.addObject(bloggerProperties.getSessionNameOfErrorMsg(), "博文不存在！");
+            mv.addObject("errorMsg", "博文不存在！");
             return mv;
         }
 

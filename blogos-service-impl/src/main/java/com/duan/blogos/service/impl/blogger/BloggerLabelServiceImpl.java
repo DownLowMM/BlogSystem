@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.dao.blog.BlogDao;
 import com.duan.blogos.service.dao.blog.BlogLabelDao;
 import com.duan.blogos.service.dto.blog.BlogLabelDTO;
@@ -7,7 +8,7 @@ import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.entity.blog.BlogLabel;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.properties.DbProperties;
+import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import com.duan.blogos.util.common.ArrayUtils;
@@ -35,6 +36,9 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
 
     @Autowired
     private DbProperties dbProperties;
+
+    @Autowired
+    private DefaultProperties defaultProperties;
 
     @Override
     public int insertLabel(int bloggerId, String title) {
@@ -112,6 +116,8 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
 
     @Override
     public ResultModel<List<BlogLabelDTO>> listLabelByBlogger(int bloggerId, int offset, int rows) {
+        offset = offset < 0 ? 0 : offset;
+        rows = rows < 0 ? defaultProperties.getLabelCount() : rows;
 
         List<BlogLabel> result = labelDao.listLabelByBloggerId(bloggerId, offset, rows);
         if (CollectionUtils.isEmpty(result)) return null;

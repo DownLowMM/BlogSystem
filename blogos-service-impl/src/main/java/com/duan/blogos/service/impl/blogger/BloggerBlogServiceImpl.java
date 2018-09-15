@@ -1,5 +1,7 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.duan.blogos.service.config.preference.FileProperties;
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
@@ -17,8 +19,6 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.impl.BlogFilterAbstract;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
-import com.duan.blogos.service.properties.BloggerProperties;
-import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
@@ -62,7 +62,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     private WebsiteProperties websiteProperties;
 
     @Autowired
-    private BloggerProperties bloggerProperties;
+    private FileProperties fileProperties;
 
     @Autowired
     private DataFillingManager dataFillingManager;
@@ -327,10 +327,10 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     @Override
     public List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, int bloggerId) {
 
-        FileUtils.mkdirsIfNotExist(bloggerProperties.getPatchImportBlogTempPath());
+        FileUtils.mkdirsIfNotExist(fileProperties.getPatchImportBlogTempPath());
 
         // 保存到临时文件
-        String fullPath = bloggerProperties.getPatchImportBlogTempPath() +
+        String fullPath = fileProperties.getPatchImportBlogTempPath() +
                 File.separator +
                 "temp-" +
                 bloggerId +
@@ -434,9 +434,9 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
         List<Blog> blogs = blogDao.listAllByFormat(bloggerId, format.getCode());
         if (CollectionUtils.isEmpty(blogs)) return null;
 
-        FileUtils.mkdirsIfNotExist(bloggerProperties.getPatchDownloadBlogTempPath());
+        FileUtils.mkdirsIfNotExist(fileProperties.getPatchDownloadBlogTempPath());
 
-        String zipFilePath = bloggerProperties.getPatchDownloadBlogTempPath() +
+        String zipFilePath = fileProperties.getPatchDownloadBlogTempPath() +
                 File.separator +
                 System.currentTimeMillis() +
                 "-" +
@@ -481,7 +481,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
         String title = blog.getTitle();
         String content = format == MD ? blog.getContentMd() : blog.getContent();
 
-        String bp = bloggerProperties.getPatchDownloadBlogTempPath() +
+        String bp = fileProperties.getPatchDownloadBlogTempPath() +
                 File.separator +
                 title +
                 (format == MD ? ".md" : ".html");

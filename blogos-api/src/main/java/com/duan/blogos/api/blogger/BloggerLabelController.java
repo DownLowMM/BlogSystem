@@ -43,9 +43,8 @@ public class BloggerLabelController extends BaseBloggerController {
                                                 @RequestParam(value = "rows", required = false) Integer rows) {
         handleAccountCheck(request, bloggerId);
 
-        int os = offset == null || offset < 0 ? 0 : offset;
-        int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerBlogLabelCount() : rows;
-        ResultModel<List<BlogLabelDTO>> result = bloggerLabelService.listLabelByBlogger(bloggerId, os, rs);
+        ResultModel<List<BlogLabelDTO>> result = bloggerLabelService.listLabelByBlogger(bloggerId,
+                offset == null ? 0 : offset, rows == null ? -1 : rows);
         if (result == null) handlerEmptyResult();
 
         return result;

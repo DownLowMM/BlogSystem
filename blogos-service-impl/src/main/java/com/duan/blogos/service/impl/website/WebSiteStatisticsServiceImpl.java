@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.website;
 
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dto.blogger.BloggerBriefDTO;
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
@@ -30,10 +31,14 @@ public class WebSiteStatisticsServiceImpl implements WebSiteStatisticsService {
     private WebsiteManager websiteManager;
 
     @Autowired
+    private WebsiteProperties websiteProperties;
+
+    @Autowired
     private DataFillingManager fillingManager;
 
     @Override
     public List<BloggerBriefDTO> listActiveBlogger(int count) {
+        count = count <= 0 ? websiteProperties.getActiveBloggerCount() : count;
 
         int[] ids = websiteManager.getActiveBloggerIds(count);
         BloggerDTO[] bloggerDTOS = statisticsService.listBloggerDTO(ids);

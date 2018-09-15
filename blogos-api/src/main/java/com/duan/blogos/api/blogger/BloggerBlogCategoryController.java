@@ -42,9 +42,8 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
                                                       @RequestParam(value = "rows", required = false) Integer rows) {
         handleAccountCheck(request, bloggerId);
 
-        int os = offset == null || offset < 0 ? 0 : offset;
-        int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerBlogCategoryCount() : rows;
-        ResultModel<List<BloggerCategoryDTO>> result = bloggerCategoryService.listBlogCategory(bloggerId, os, rs);
+        ResultModel<List<BloggerCategoryDTO>> result = bloggerCategoryService.listBlogCategory(bloggerId,
+                offset == null ? 0 : offset, rows == null ? -1 : rows);
         if (result == null) handlerEmptyResult();
 
         return result;

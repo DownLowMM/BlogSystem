@@ -2,7 +2,6 @@ package com.duan.blogos.websample.favourite;
 
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
@@ -30,9 +29,6 @@ public class FavouriteBlogPageController {
 
     @Autowired
     private OnlineService onlineService;
-
-    @Autowired
-    private BloggerProperties bloggerProperties;
 
     @Autowired
     private BloggerStatisticsService statisticsService;
@@ -69,8 +65,8 @@ public class FavouriteBlogPageController {
         mv.addObject("loginBgStat", loginBgStat.getData());
 
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
-        mv.addObject(bloggerProperties.getNameOfPageOwnerBloggerId(), account.getId());
-        mv.addObject(bloggerProperties.getNameOfPageOwnerBloggerName(), account.getUsername());
+        mv.addObject("bloggerId", account.getId());
+        mv.addObject("bloggerName", account.getUsername());
 
     }
 

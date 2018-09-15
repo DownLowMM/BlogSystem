@@ -1,8 +1,6 @@
 package com.duan.blogos.api.blog;
 
 import com.duan.blogos.api.BaseCheckController;
-import com.duan.blogos.service.properties.AudienceProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created on 2017/12/26.
@@ -11,8 +9,5 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author DuanJiaNing
  */
 public class BaseBlogController extends BaseCheckController {
-
-    @Autowired
-    protected AudienceProperties audienceProperties;
 
 }

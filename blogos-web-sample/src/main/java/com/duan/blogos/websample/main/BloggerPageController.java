@@ -6,7 +6,6 @@ import com.duan.blogos.service.dto.blogger.BloggerSettingDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.OnlineService;
@@ -42,9 +41,6 @@ public class BloggerPageController {
     private BloggerPictureService bloggerPictureService;
 
     @Autowired
-    private BloggerProperties bloggerProperties;
-
-    @Autowired
     private OnlineService onlineService;
 
     @Autowired
@@ -63,8 +59,8 @@ public class BloggerPageController {
             return mv;
         }
 
-        mv.addObject(bloggerProperties.getNameOfPageOwnerBloggerId(), account.getId());
-        mv.addObject(bloggerProperties.getNameOfPageOwnerBloggerName(), account.getUsername());
+        mv.addObject("pageOwnerBloggerId", account.getId());
+        mv.addObject("pageOwnerBloggerName", account.getUsername());
 
         int ownerId = account.getId();
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(ownerId);

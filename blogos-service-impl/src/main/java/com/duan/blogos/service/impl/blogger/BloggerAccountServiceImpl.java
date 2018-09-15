@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blog.BlogCollectDao;
 import com.duan.blogos.service.dao.blog.BlogDao;
 import com.duan.blogos.service.dao.blog.BlogLikeDao;
@@ -20,7 +21,6 @@ import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.manager.ImageManager;
-import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
@@ -70,7 +70,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     private BlogLuceneIndexManager luceneIndexManager;
 
     @Autowired
-    private BloggerProperties propertiesManager;
+    private WebsiteProperties websiteProperties;
 
     @Override
     public int insertAccount(String userName, String password) {
@@ -95,7 +95,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
         // 生成博主设置数据
         BloggerSetting setting = new BloggerSetting();
         setting.setBloggerId(bloggerId);
-        setting.setMainPageNavPos(propertiesManager.getMainPageNavPos());
+        setting.setMainPageNavPos(websiteProperties.getPageNavPos());
         settingDao.insert(setting);
 
         return bloggerId;
@@ -119,7 +119,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     public boolean deleteAccount(int bloggerId) {
 
         // 图片管理员不允许注销账号
-        if (propertiesManager.getPictureManagerBloggerId().equals(bloggerId))
+        if (websiteProperties.getManagerId().equals(bloggerId))
             return false;
 
         //博主图片需要手动删除

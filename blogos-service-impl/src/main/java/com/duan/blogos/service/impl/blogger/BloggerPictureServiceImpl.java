@@ -1,5 +1,7 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.duan.blogos.service.config.preference.DefaultProperties;
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
@@ -8,7 +10,6 @@ import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.util.common.CollectionUtils;
@@ -41,7 +42,11 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     private ImageManager imageManager;
 
     @Autowired
-    private BloggerProperties bloggerProperties;
+    private WebsiteProperties websiteProperties;
+
+    @Autowired
+    private DefaultProperties defaultProperties;
+
 
     @Override
     public int insertPicture(int bloggerId, String path, String bewrite, BloggerPictureCategoryEnum category, String title) {
@@ -75,7 +80,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         if (path == null) return -1;
 
         // 如果是图片管理员上传默认图片，需要移动其文件夹
-        int pictureManagerId = bloggerProperties.getPictureManagerBloggerId();
+        int pictureManagerId = websiteProperties.getManagerId();
         if (pictureManagerId == bloggerId && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate)) {
             // 如果设备上已经有该唯一图片，将原来的图片移到私有文件夹，同时修改数据库
             removeDefaultPictureIfNecessary(bloggerId, category);
@@ -103,7 +108,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         if (path == null) return -1;
 
         // 如果是图片管理员上传默认图片，需要移动其文件夹
-        int pictureManagerId = bloggerProperties.getPictureManagerBloggerId();
+        int pictureManagerId = websiteProperties.getManagerId();
         if (pictureManagerId == bloggerId && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate)) {
             // 如果设备上已经有该唯一图片，将原来的图片移到私有文件夹，同时修改数据库
             removeDefaultPictureIfNecessary(bloggerId, category);
@@ -149,7 +154,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         BloggerPictureDTO picture = getPicture(pictureId);
 
         // 对默认图片，图片管理员只能以更新（上传）的方式删除图片，因为这些图片必须时刻存在
-        int pictureManagerId = bloggerProperties.getPictureManagerBloggerId();
+        int pictureManagerId = websiteProperties.getManagerId();
         int cate = picture.getCategory();
         if (bloggerId == pictureManagerId && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate))
             return false;
@@ -190,7 +195,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
     @Override
     public BloggerPictureDTO getDefaultPicture(BloggerPictureCategoryEnum category) {
-        BloggerPicture picture = pictureDao.getBloggerUniquePicture(bloggerProperties.getPictureManagerBloggerId(),
+        BloggerPicture picture = pictureDao.getBloggerUniquePicture(websiteProperties.getManagerId(),
                 category.getCode());
 
         // TODO
@@ -200,6 +205,9 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     @Override
     public ResultModel<List<BloggerPictureDTO>> listBloggerPicture(int bloggerId, BloggerPictureCategoryEnum category,
                                                                    int offset, int rows) {
+
+        offset = offset < 0 ? 0 : offset;
+        rows = rows < 0 ? defaultProperties.getPictureCount() : rows;
 
         List<BloggerPicture> result;
         if (category == null) {
@@ -230,7 +238,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
             int bloggerId = oldPicture.getBloggerId();
             try {
 
-                int pictureManagerId = bloggerProperties.getPictureManagerBloggerId();
+                int pictureManagerId = websiteProperties.getManagerId();
                 // 如果为图片管理员在操作
                 if (pictureManagerId == bloggerId) {
 

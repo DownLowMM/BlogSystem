@@ -33,9 +33,6 @@ import java.util.List;
 public class BlogController extends BaseBlogController {
 
     @Autowired
-    protected WebsiteProperties websiteProperties;
-
-    @Autowired
     private BlogRetrievalService retrievalService;
 
     @Autowired
@@ -61,7 +58,7 @@ public class BlogController extends BaseBlogController {
         String ord = StringUtils.isBlank(order) ? Order.DESC.name() : order.toUpperCase();
         handleSortRuleCheck(request, sor, ord);
 
-        String ch = websiteProperties.getUrlConditionSplitCharacter();
+        String ch = ",";
         int[] cids = StringUtils.intStringDistinctToArray(categoryIds, ch);
         int[] lids = StringUtils.intStringDistinctToArray(labelIds, ch);
         //检查博文类别和标签
@@ -69,10 +66,8 @@ public class BlogController extends BaseBlogController {
 
         //执行数据查询
         BlogSortRule rule = new BlogSortRule(Rule.valueOf(sor), Order.valueOf(ord));
-        int os = offset == null || offset < 0 ? 0 : offset;
-        int rs = rows == null || rows < 0 ? audienceProperties.getRequestBloggerBlogListCount() : rows;
         ResultModel<List<BlogListItemDTO>> listResultModel = retrievalService.listFilterAll(cids, lids, keyWord, bloggerId,
-                os, rs, rule, BlogStatusEnum.PUBLIC);
+                offset == null ? 0 : offset, rows == null ? 0 : rows, rule, BlogStatusEnum.PUBLIC);
 
         if (listResultModel == null) handlerEmptyResult();
 

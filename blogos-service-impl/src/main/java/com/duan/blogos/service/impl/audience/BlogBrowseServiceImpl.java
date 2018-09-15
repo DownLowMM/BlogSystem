@@ -1,6 +1,7 @@
 package com.duan.blogos.service.impl.audience;
 
 
+import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blog.BlogCommentDao;
 import com.duan.blogos.service.dao.blog.BlogDao;
@@ -51,8 +52,8 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     @Autowired
     private BlogLabelDao labelDao;
 
-    @Value("${preference.default.page-size.comment}")
-    private Integer defaultCommentCount;
+    @Autowired
+    private DefaultProperties pageSizeProperties;
 
     @Value("${preference.db.string-filed-split-character-for-number}")
     private String stringFiledSplitCharacterForNumber;
@@ -101,7 +102,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     @Override
     public ResultModel<List<BlogCommentDTO>> listBlogComment(int blogId, int offset, int rows) {
         offset = offset < 0 ? 0 : offset;
-        rows = rows < 0 ? defaultCommentCount : rows;
+        rows = rows < 0 ? pageSizeProperties.getComment() : rows;
 
         List<BlogCommentDTO> result = new ArrayList<>();
 

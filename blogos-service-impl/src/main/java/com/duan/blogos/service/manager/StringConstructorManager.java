@@ -1,9 +1,9 @@
 package com.duan.blogos.service.manager;
 
+import com.duan.blogos.service.config.preference.FileProperties;
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.properties.BloggerProperties;
-import com.duan.blogos.service.properties.WebsiteProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public class StringConstructorManager {
     private WebsiteProperties websiteProperties;
 
     @Autowired
-    private BloggerProperties propertiesManager;
+    private FileProperties fileProperties;
 
     /**
      * 构造图片的访问url
@@ -61,7 +61,7 @@ public class StringConstructorManager {
      * @return 文件夹路径
      */
     public String constructImageDirPath(String bloggerName, String categoryName) {
-        String rootDirPath = propertiesManager.getBloggerImageRootPath();
+        String rootDirPath = fileProperties.getImageRootPath();
         return rootDirPath + File.separator + bloggerName + File.separator + categoryName;
     }
 }

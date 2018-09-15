@@ -94,7 +94,7 @@ public class BloggerAccountController extends BaseBloggerController {
 
         // 更新session信息
         HttpSession session = request.getSession();
-        session.setAttribute(bloggerProperties.getSessionNameOfBloggerName(), newUserName);
+        session.setAttribute(sessionProperties.getBloggerName(), newUserName);
 
         return new ResultModel<>("");
     }
