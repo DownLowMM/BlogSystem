@@ -1,7 +1,7 @@
 package com.duan.blogos.api.blog;
 
 import com.duan.blogos.service.dto.blog.BlogCommentDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,18 +25,18 @@ public class BlogCommentController extends BaseBlogController {
      * 获得博文评论列表
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<List<BlogCommentDTO>> get(HttpServletRequest request,
-                                                @PathVariable Integer blogId,
-                                                @RequestParam(value = "offset", required = false) Integer offset,
-                                                @RequestParam(value = "rows", required = false) Integer rows) {
+    public ResultModel<List<BlogCommentDTO>> get(HttpServletRequest request,
+                                                 @PathVariable Integer blogId,
+                                                 @RequestParam(value = "offset", required = false) Integer offset,
+                                                 @RequestParam(value = "rows", required = false) Integer rows) {
         handleBlogExistCheck(request, blogId);
 
-        int os = offset == null || offset < 0 ? 0 : offset;
-        int rs = rows == null || rows < 0 ? audienceProperties.getRequestBloggerBlogCommentCount() : rows;
-        ResultBean<List<BlogCommentDTO>> resultBean = blogBrowseService.listBlogComment(blogId, os, rs);
-        if (resultBean == null) handlerEmptyResult();
+        ResultModel<List<BlogCommentDTO>> resultModel = blogBrowseService.listBlogComment(blogId,
+                offset == null ? -1 : offset,
+                rows == null ? -1 : rows);
+        if (resultModel == null) handlerEmptyResult();
 
-        return resultBean;
+        return resultModel;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.duan.blogos.api.common;
 
 import com.duan.blogos.api.BaseCheckController;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +28,10 @@ public class EmailController extends BaseCheckController {
      * 发送反馈邮件
      */
     @RequestMapping(value = "/feedback", method = RequestMethod.POST)
-    public ResultBean sendFeedback(HttpServletRequest request,
-                                   @RequestParam(value = "bloggerId", required = false) Integer bloggerId,
-                                   @RequestParam("content") String content,
-                                   @RequestParam(value = "contact", required = false) String contact) {
+    public ResultModel sendFeedback(HttpServletRequest request,
+                                    @RequestParam(value = "bloggerId", required = false) Integer bloggerId,
+                                    @RequestParam("content") String content,
+                                    @RequestParam(value = "contact", required = false) String contact) {
         if (bloggerId != null) {
             handleBloggerSignInCheck(request, bloggerId);
         }
@@ -40,7 +40,7 @@ public class EmailController extends BaseCheckController {
         if (!emailService.sendFeedback(bloggerId == null ? -1 : bloggerId, subject, content, contact))
             handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
 }

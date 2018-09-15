@@ -3,7 +3,7 @@ package com.duan.blogos.service.service.blogger;
 
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.dto.blogger.FavouriteBlogListItemDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 
 import java.util.List;
 
@@ -25,8 +25,8 @@ public interface BloggerCollectBlogService {
      * @param sortRule  排序规则，为null则不做约束
      * @return 查询结果
      */
-    ResultBean<List<FavouriteBlogListItemDTO>> listCollectBlog(int bloggerId, int categoryId,
-                                                               int offset, int rows, BlogSortRule sortRule);
+    ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(int bloggerId, int categoryId,
+                                                                int offset, int rows, BlogSortRule sortRule);
 
     /**
      * 更新收藏信息

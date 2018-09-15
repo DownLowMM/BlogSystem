@@ -5,7 +5,7 @@ import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
 import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilter;
 import com.duan.blogos.util.file.MultipartFile;
 
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author DuanJiaNing
  */
-public interface BloggerBlogService extends BlogFilter<ResultBean<List<BlogListItemDTO>>> {
+public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogListItemDTO>>> {
 
     /**
      * 1 新增博客
@@ -96,7 +96,7 @@ public interface BloggerBlogService extends BlogFilter<ResultBean<List<BlogListI
      * @param blogId    博文id
      * @return 查询结果
      */
-    ResultBean<BlogDTO> getBlog(int bloggerId, int blogId);
+    ResultModel<BlogDTO> getBlog(int bloggerId, int blogId);
 
     /**
      * 通过博主id和博文名获得博文id

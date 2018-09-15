@@ -3,7 +3,7 @@ package com.duan.blogos.service.service.audience;
 
 import com.duan.blogos.service.dto.blog.BlogCommentDTO;
 import com.duan.blogos.service.dto.blog.BlogMainContentDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public interface BlogBrowseService {
      * @param blogId 博文id
      * @return 查询结果
      */
-    ResultBean<BlogMainContentDTO> getBlogMainContent(int blogId);
+    ResultModel<BlogMainContentDTO> getBlogMainContent(int blogId);
 
     /**
      * 获得博文评论列表，这里获取的是审核通过的评论
@@ -34,6 +34,6 @@ public interface BlogBrowseService {
      * @param rows   行数
      * @return 查询结果
      */
-    ResultBean<List<BlogCommentDTO>> listBlogComment(int blogId, int offset, int rows);
+    ResultModel<List<BlogCommentDTO>> listBlogComment(int blogId, int offset, int rows);
 
 }

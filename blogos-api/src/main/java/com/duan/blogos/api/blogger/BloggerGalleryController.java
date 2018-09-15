@@ -4,7 +4,7 @@ import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +40,9 @@ public class BloggerGalleryController extends BaseBloggerController {
      * 根据id获取图片
      */
     @RequestMapping(value = "/{pictureId}", method = RequestMethod.GET)
-    public ResultBean<BloggerPictureDTO> get(HttpServletRequest request,
-                                             @PathVariable("bloggerId") Integer bloggerId,
-                                             @PathVariable("pictureId") Integer pictureId) {
+    public ResultModel<BloggerPictureDTO> get(HttpServletRequest request,
+                                              @PathVariable("bloggerId") Integer bloggerId,
+                                              @PathVariable("pictureId") Integer pictureId) {
         handleBloggerSignInCheck(request, bloggerId);
 
         RequestContext context = new RequestContext(request);
@@ -52,18 +52,18 @@ public class BloggerGalleryController extends BaseBloggerController {
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId, bloggerId);
         if (picture == null) handlerEmptyResult();
 
-        return new ResultBean<>(picture);
+        return new ResultModel<>(picture);
     }
 
     /**
      * 获得多张图片
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<List<BloggerPictureDTO>> list(HttpServletRequest request,
-                                                    @PathVariable("bloggerId") Integer bloggerId,
-                                                    @RequestParam(value = "category", required = false) Integer category,
-                                                    @RequestParam(value = "offset", required = false) Integer offset,
-                                                    @RequestParam(value = "rows", required = false) Integer rows) {
+    public ResultModel<List<BloggerPictureDTO>> list(HttpServletRequest request,
+                                                     @PathVariable("bloggerId") Integer bloggerId,
+                                                     @RequestParam(value = "category", required = false) Integer category,
+                                                     @RequestParam(value = "offset", required = false) Integer offset,
+                                                     @RequestParam(value = "rows", required = false) Integer rows) {
         handleBloggerSignInCheck(request, bloggerId);
         RequestContext context = new RequestContext(request);
 
@@ -84,7 +84,7 @@ public class BloggerGalleryController extends BaseBloggerController {
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerPictureCount() : rows;
 
-        ResultBean<List<BloggerPictureDTO>> result = bloggerPictureService.listBloggerPicture(bloggerId,
+        ResultModel<List<BloggerPictureDTO>> result = bloggerPictureService.listBloggerPicture(bloggerId,
                 cate == -1 ? null : BloggerPictureCategoryEnum.valueOf(cate), os, rs);
         if (result == null) handlerEmptyResult();
 
@@ -95,12 +95,12 @@ public class BloggerGalleryController extends BaseBloggerController {
      * 更新图片信息
      */
     @RequestMapping(value = "/{pictureId}", method = RequestMethod.PUT)
-    public ResultBean update(HttpServletRequest request,
-                             @PathVariable("bloggerId") Integer bloggerId,
-                             @PathVariable("pictureId") Integer pictureId,
-                             @RequestParam(value = "category", required = false) Integer newCategory,
-                             @RequestParam(value = "bewrite", required = false) String newBeWrite,
-                             @RequestParam(value = "title", required = false) String newTitle) {
+    public ResultModel update(HttpServletRequest request,
+                              @PathVariable("bloggerId") Integer bloggerId,
+                              @PathVariable("pictureId") Integer pictureId,
+                              @RequestParam(value = "category", required = false) Integer newCategory,
+                              @RequestParam(value = "bewrite", required = false) String newBeWrite,
+                              @RequestParam(value = "title", required = false) String newTitle) {
 
         handleBloggerSignInCheck(request, bloggerId);
         RequestContext context = new RequestContext(request);
@@ -132,7 +132,7 @@ public class BloggerGalleryController extends BaseBloggerController {
                 newCategory == null ? null : BloggerPictureCategoryEnum.valueOf(newCategory), newBeWrite, newTitle);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     /**
@@ -140,9 +140,9 @@ public class BloggerGalleryController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{pictureId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResultBean delete(HttpServletRequest request,
-                             @PathVariable("bloggerId") Integer bloggerId,
-                             @PathVariable("pictureId") Integer pictureId) {
+    public ResultModel delete(HttpServletRequest request,
+                              @PathVariable("bloggerId") Integer bloggerId,
+                              @PathVariable("pictureId") Integer pictureId) {
         handleBloggerSignInCheck(request, bloggerId);
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId, bloggerId);
@@ -157,7 +157,7 @@ public class BloggerGalleryController extends BaseBloggerController {
         boolean succ = bloggerPictureService.deletePicture(bloggerId, picture.getId(), true);
         if (!succ) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
 }

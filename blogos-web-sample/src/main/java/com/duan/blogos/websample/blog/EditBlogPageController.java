@@ -3,7 +3,7 @@ package com.duan.blogos.websample.blog;
 import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
@@ -44,7 +44,7 @@ public class EditBlogPageController {
             return new ModelAndView("redirect:/login");
         } else {
             if (blogId != null) {
-                ResultBean<BlogDTO> blog = blogService.getBlog(bloggerId, blogId);
+                ResultModel<BlogDTO> blog = blogService.getBlog(bloggerId, blogId);
                 BlogDTO data = blog.getData();
                 mv.addObject("blogId", blogId);
                 mv.addObject("categoryId", data.getCategoryIds());
@@ -57,7 +57,7 @@ public class EditBlogPageController {
                 mv.addObject("blogContentMd", StringUtils.stringToUnicode(data.getContentMd()));
             }
 
-            ResultBean<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(bloggerId);
+            ResultModel<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(bloggerId);
             mv.addObject("loginBgStat", loginBgStat.getData());
 
             mv.setViewName("/blogger/edit_blog");

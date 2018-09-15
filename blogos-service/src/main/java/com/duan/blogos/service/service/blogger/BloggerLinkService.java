@@ -2,7 +2,7 @@ package com.duan.blogos.service.service.blogger;
 
 
 import com.duan.blogos.service.dto.blogger.BloggerLinkDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public interface BloggerLinkService {
      * @param rows      行数
      * @return 查询结果
      */
-    ResultBean<List<BloggerLinkDTO>> listBloggerLink(int bloggerId, int offset, int rows);
+    ResultModel<List<BloggerLinkDTO>> listBloggerLink(int bloggerId, int offset, int rows);
 
     /**
      * 新增友情链接

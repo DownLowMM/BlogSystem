@@ -15,7 +15,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class ResultBean<T> implements Serializable {
+public class ResultModel<T> implements Serializable {
 
     /**
      * 结果状态为成功
@@ -33,14 +33,14 @@ public class ResultBean<T> implements Serializable {
     /**
      * 返回成功的构造函数
      */
-    public ResultBean(T data) {
+    public ResultModel(T data) {
         this.data = data;
     }
 
     /**
      * 返回错误（获取数据错误）的构造函数
      */
-    public ResultBean(BlogOSException e) {
+    public ResultModel(BlogOSException e) {
         this.msg = e.getMessage();
         this.code = e.getCode();
     }
@@ -48,7 +48,7 @@ public class ResultBean<T> implements Serializable {
     /**
      * 自定义信息和代码
      */
-    public ResultBean(String msg, int code) {
+    public ResultModel(String msg, int code) {
         this.msg = msg;
         this.code = code;
     }

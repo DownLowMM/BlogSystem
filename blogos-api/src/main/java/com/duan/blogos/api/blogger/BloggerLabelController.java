@@ -3,7 +3,7 @@ package com.duan.blogos.api.blogger;
 import com.duan.blogos.service.dto.blog.BlogLabelDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +37,15 @@ public class BloggerLabelController extends BaseBloggerController {
      * 获取指定博主创建的标签
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<List<BlogLabelDTO>> list(HttpServletRequest request,
-                                               @PathVariable Integer bloggerId,
-                                               @RequestParam(value = "offset", required = false) Integer offset,
-                                               @RequestParam(value = "rows", required = false) Integer rows) {
+    public ResultModel<List<BlogLabelDTO>> list(HttpServletRequest request,
+                                                @PathVariable Integer bloggerId,
+                                                @RequestParam(value = "offset", required = false) Integer offset,
+                                                @RequestParam(value = "rows", required = false) Integer rows) {
         handleAccountCheck(request, bloggerId);
 
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerBlogLabelCount() : rows;
-        ResultBean<List<BlogLabelDTO>> result = bloggerLabelService.listLabelByBlogger(bloggerId, os, rs);
+        ResultModel<List<BlogLabelDTO>> result = bloggerLabelService.listLabelByBlogger(bloggerId, os, rs);
         if (result == null) handlerEmptyResult();
 
         return result;
@@ -55,9 +55,9 @@ public class BloggerLabelController extends BaseBloggerController {
      * 新增标签
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResultBean add(HttpServletRequest request,
-                          @PathVariable Integer bloggerId,
-                          @RequestParam("title") String title) {
+    public ResultModel add(HttpServletRequest request,
+                           @PathVariable Integer bloggerId,
+                           @RequestParam("title") String title) {
 
         handleBloggerSignInCheck(request, bloggerId);
         handleTitleCheck(title, request);
@@ -65,40 +65,40 @@ public class BloggerLabelController extends BaseBloggerController {
         int id = bloggerLabelService.insertLabel(bloggerId, title);
         if (id < 0) handlerOperateFail();
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     /**
      * 修改标签
      */
     @RequestMapping(value = "/{labelId}", method = RequestMethod.PUT)
-    public ResultBean update(HttpServletRequest request,
-                             @PathVariable Integer bloggerId,
-                             @PathVariable Integer labelId,
-                             @RequestParam("title") String newTitle) {
+    public ResultModel update(HttpServletRequest request,
+                              @PathVariable Integer bloggerId,
+                              @PathVariable Integer labelId,
+                              @RequestParam("title") String newTitle) {
         handleBloggerSignInCheck(request, bloggerId);
         handleTitleCheck(newTitle, request);
 
         boolean result = bloggerLabelService.updateLabel(labelId, bloggerId, newTitle);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     /**
      * 删除标签
      */
     @RequestMapping(value = "/{labelId}", method = RequestMethod.DELETE)
-    public ResultBean delete(HttpServletRequest request,
-                             @PathVariable("labelId") Integer labelId,
-                             @PathVariable Integer bloggerId) {
+    public ResultModel delete(HttpServletRequest request,
+                              @PathVariable("labelId") Integer labelId,
+                              @PathVariable Integer bloggerId) {
         handleAccountCheck(request, bloggerId);
         handleBloggerSignInCheck(request, bloggerId);
 
         boolean result = bloggerLabelService.deleteLabel(bloggerId, labelId);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     // 检查标题合法性

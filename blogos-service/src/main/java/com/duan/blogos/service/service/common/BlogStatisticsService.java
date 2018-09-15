@@ -3,7 +3,7 @@ package com.duan.blogos.service.service.common;
 
 import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 
 /**
  * Created on 2017/12/18.
@@ -18,7 +18,7 @@ public interface BlogStatisticsService {
      * @param blogId 博文id
      * @return 查询结果
      */
-    ResultBean<BlogStatisticsDTO> getBlogStatistics(int blogId);
+    ResultModel<BlogStatisticsDTO> getBlogStatistics(int blogId);
 
     /**
      * 获取博文统计信息（只获取数据量）
@@ -26,7 +26,7 @@ public interface BlogStatisticsService {
      * @param blogId 博文id
      * @return 查询结果
      */
-    ResultBean<BlogStatisticsCountDTO> getBlogStatisticsCount(int blogId);
+    ResultModel<BlogStatisticsCountDTO> getBlogStatisticsCount(int blogId);
 
     /**
      * 更新博文浏览次数（加一）

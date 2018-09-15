@@ -2,7 +2,7 @@ package com.duan.blogos.api.common;
 
 import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.dto.blog.BlogLabelDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,16 +34,16 @@ public class LabelController extends BaseCheckController {
      * 查看所有标签
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<List<BlogLabelDTO>> get(HttpServletRequest request,
-                                              @RequestParam(value = "offset", required = false) Integer offset,
-                                              @RequestParam(value = "rows", required = false) Integer rows) {
+    public ResultModel<List<BlogLabelDTO>> get(HttpServletRequest request,
+                                               @RequestParam(value = "offset", required = false) Integer offset,
+                                               @RequestParam(value = "rows", required = false) Integer rows) {
 
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? 10 : rows;
-        ResultBean<List<BlogLabelDTO>> resultBean = bloggerLabelService.listLabel(os, rs);
-        if (resultBean == null) handlerEmptyResult();
+        ResultModel<List<BlogLabelDTO>> resultModel = bloggerLabelService.listLabel(os, rs);
+        if (resultModel == null) handlerEmptyResult();
 
-        return resultBean;
+        return resultModel;
     }
 
 
@@ -51,12 +51,12 @@ public class LabelController extends BaseCheckController {
      * 获取指定标签
      */
     @RequestMapping(value = "/{labelId}", method = RequestMethod.GET)
-    public ResultBean<BlogLabelDTO> getLabel(HttpServletRequest request, @PathVariable("labelId") Integer labelId) {
+    public ResultModel<BlogLabelDTO> getLabel(HttpServletRequest request, @PathVariable("labelId") Integer labelId) {
 
         BlogLabelDTO label = bloggerLabelService.getLabel(labelId);
         if (label == null) handlerEmptyResult();
 
-        return new ResultBean<>(label);
+        return new ResultModel<>(label);
     }
 
 }

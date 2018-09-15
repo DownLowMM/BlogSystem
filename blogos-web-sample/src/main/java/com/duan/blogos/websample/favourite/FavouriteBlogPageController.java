@@ -3,7 +3,7 @@ package com.duan.blogos.websample.favourite;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.properties.BloggerProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.service.common.OnlineService;
@@ -65,7 +65,7 @@ public class FavouriteBlogPageController {
         // 登陆博主 id
         String token = ""; // TODO redis + token 维护会话
         int loginBloggerId = onlineService.getLoginBloggerId(token);
-        ResultBean<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBloggerId);
+        ResultModel<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBloggerId);
         mv.addObject("loginBgStat", loginBgStat.getData());
 
         BloggerAccountDTO account = accountService.getAccount(bloggerName);

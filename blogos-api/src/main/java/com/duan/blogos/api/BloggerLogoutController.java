@@ -1,6 +1,6 @@
 package com.duan.blogos.api;
 
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,12 +19,12 @@ public class BloggerLogoutController extends BaseCheckController {
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResultBean logout(HttpServletRequest request,
-                             @PathVariable Integer bloggerId) {
+    public ResultModel logout(HttpServletRequest request,
+                              @PathVariable Integer bloggerId) {
         handleBloggerSignInCheck(request, bloggerId);
         request.getSession().invalidate();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
 }

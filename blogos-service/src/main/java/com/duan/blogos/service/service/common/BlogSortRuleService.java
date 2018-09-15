@@ -2,7 +2,7 @@ package com.duan.blogos.service.service.common;
 
 
 import com.duan.blogos.service.dto.blog.BlogSortRuleDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ public interface BlogSortRuleService {
      *
      * @return 结果
      */
-    ResultBean<List<BlogSortRuleDTO>> listSortRule();
+    ResultModel<List<BlogSortRuleDTO>> listSortRule();
 
     /**
      * 获得排序顺序
      *
      * @return 结果
      */
-    ResultBean<List<BlogSortRuleDTO>> listSortOrder();
+    ResultModel<List<BlogSortRuleDTO>> listSortOrder();
 
 }

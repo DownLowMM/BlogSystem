@@ -11,9 +11,9 @@ import org.springframework.context.annotation.ImportResource;
  */
 @SpringBootApplication
 @ImportResource("classpath:spring/spring-*.xml")
-public class BlogOSApplication {
+public class BlogOSApiApplication {
 
     public static void main(String[] args) {
-        new SpringApplication(BlogOSApplication.class).run(args);
+        SpringApplication.run(BlogOSApiApplication.class, args);
     }
 }

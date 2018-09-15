@@ -9,7 +9,7 @@ import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.properties.BloggerProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLinkService;
 import com.duan.blogos.util.common.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
     private ImageManager imageManager;
 
     @Override
-    public ResultBean<List<BloggerLinkDTO>> listBloggerLink(int bloggerId, int offset, int rows) {
+    public ResultModel<List<BloggerLinkDTO>> listBloggerLink(int bloggerId, int offset, int rows) {
 
         List<BloggerLink> list = linkDao.listBlogLinkByBloggerId(bloggerId, offset, rows);
 
@@ -68,7 +68,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
             result.add(dto);
         }
 
-        return CollectionUtils.isEmpty(result) ? null : new ResultBean<>(result);
+        return CollectionUtils.isEmpty(result) ? null : new ResultModel<>(result);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.duan.blogos.service.service.blogger;
 
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.util.file.MultipartFile;
 
 import java.util.List;
@@ -104,7 +104,7 @@ public interface BloggerPictureService {
      * @param rows      结果集行数
      * @return 查询结果
      */
-    ResultBean<List<BloggerPictureDTO>> listBloggerPicture(int bloggerId, BloggerPictureCategoryEnum category, int offset, int rows);
+    ResultModel<List<BloggerPictureDTO>> listBloggerPicture(int bloggerId, BloggerPictureCategoryEnum category, int offset, int rows);
 
     /**
      * 更新图片信息，当修改了图片类别时需要同步更新设备上的图片保存位置

@@ -6,7 +6,7 @@ import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.properties.BloggerProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
@@ -81,8 +81,8 @@ public class BlogReadPageController {
         // 博文浏览次数自增1
         statisticsService.updateBlogViewCountPlus(blogId);
 
-        ResultBean<BlogMainContentDTO> mainContent = blogBrowseService.getBlogMainContent(blogId);
-        ResultBean<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
+        ResultModel<BlogMainContentDTO> mainContent = blogBrowseService.getBlogMainContent(blogId);
+        ResultModel<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
 
         mv.addObject("blogOwnerBloggerId", account.getId());
         mv.addObject("main", mainContent.getData());
@@ -92,7 +92,7 @@ public class BlogReadPageController {
         String token = ""; // TODO redis + token 维护会话
         int loginBloggerId = onlineService.getLoginBloggerId(token);
 
-        ResultBean<BloggerStatisticsDTO> loginBgStat = bloggerStatisticsService.getBloggerStatistics(loginBloggerId);
+        ResultModel<BloggerStatisticsDTO> loginBgStat = bloggerStatisticsService.getBloggerStatistics(loginBloggerId);
         mv.addObject("loginBgStat", loginBgStat.getData());
 
         if (loginBloggerId != -1) {

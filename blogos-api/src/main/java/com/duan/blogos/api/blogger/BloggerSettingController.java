@@ -2,7 +2,7 @@ package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +26,9 @@ public class BloggerSettingController extends BaseBloggerController {
      * 更新博主主页导航位置
      */
     @RequestMapping(value = "/item=mainPageNavPos", method = RequestMethod.PUT)
-    public ResultBean update(HttpServletRequest request,
-                             @PathVariable Integer bloggerId,
-                             @RequestParam("mainPageNavPos") Integer mainPageNavPos) {
+    public ResultModel update(HttpServletRequest request,
+                              @PathVariable Integer bloggerId,
+                              @RequestParam("mainPageNavPos") Integer mainPageNavPos) {
 
         handleBloggerSignInCheck(request, bloggerId);
         handleMainPageNavPosCheck(request, mainPageNavPos);
@@ -36,7 +36,7 @@ public class BloggerSettingController extends BaseBloggerController {
         boolean result = settingService.updateMainPageNavPos(bloggerId, mainPageNavPos);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     private void handleMainPageNavPosCheck(HttpServletRequest request, Integer mainPageNavPos) {

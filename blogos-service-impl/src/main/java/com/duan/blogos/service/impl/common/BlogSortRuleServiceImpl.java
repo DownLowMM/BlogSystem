@@ -3,7 +3,7 @@ package com.duan.blogos.service.impl.common;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.dto.blog.BlogSortRuleDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogSortRuleService;
 import org.springframework.stereotype.Service;
 
@@ -20,20 +20,20 @@ import java.util.List;
 public class BlogSortRuleServiceImpl implements BlogSortRuleService {
 
     @Override
-    public ResultBean<List<BlogSortRuleDTO>> listSortRule() {
+    public ResultModel<List<BlogSortRuleDTO>> listSortRule() {
 
         List<BlogSortRuleDTO> list = new ArrayList<>();
         Arrays.stream(Rule.values()).forEach(rule -> list.add(new BlogSortRuleDTO(rule.name().toLowerCase(), rule.title())));
 
-        return new ResultBean<>(list);
+        return new ResultModel<>(list);
     }
 
     @Override
-    public ResultBean<List<BlogSortRuleDTO>> listSortOrder() {
+    public ResultModel<List<BlogSortRuleDTO>> listSortOrder() {
 
         List<BlogSortRuleDTO> list = new ArrayList<>();
         Arrays.stream(Order.values()).forEach(order -> list.add(new BlogSortRuleDTO(order.name().toLowerCase(), order.title())));
 
-        return new ResultBean<>(list);
+        return new ResultModel<>(list);
     }
 }

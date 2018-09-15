@@ -4,7 +4,7 @@ import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.blogger.BloggerProfileService;
 import com.duan.blogos.util.common.StringUtils;
@@ -40,27 +40,27 @@ public class BloggerProfileController extends BaseBloggerController {
      * 获取资料
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<BloggerProfileDTO> get(HttpServletRequest request,
-                                             @PathVariable Integer bloggerId) {
+    public ResultModel<BloggerProfileDTO> get(HttpServletRequest request,
+                                              @PathVariable Integer bloggerId) {
         handleAccountCheck(request, bloggerId);
 
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(bloggerId);
         if (profile == null) handlerEmptyResult();
 
-        return new ResultBean<>(profile);
+        return new ResultModel<>(profile);
     }
 
     /**
      * 新增资料
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResultBean add(HttpServletRequest request,
-                          @PathVariable Integer bloggerId,
-                          @RequestParam(value = "avatarId", required = false) Integer avatarId,
-                          @RequestParam(value = "phone", required = false) String phone,
-                          @RequestParam(value = "email", required = false) String email,
-                          @RequestParam(value = "aboutMe", required = false) String aboutMe,
-                          @RequestParam(value = "intro", required = false) String intro) {
+    public ResultModel add(HttpServletRequest request,
+                           @PathVariable Integer bloggerId,
+                           @RequestParam(value = "avatarId", required = false) Integer avatarId,
+                           @RequestParam(value = "phone", required = false) String phone,
+                           @RequestParam(value = "email", required = false) String email,
+                           @RequestParam(value = "aboutMe", required = false) String aboutMe,
+                           @RequestParam(value = "intro", required = false) String intro) {
         handleBloggerSignInCheck(request, bloggerId);
         handlePictureExistCheck(request, bloggerId, avatarId);
 
@@ -69,20 +69,20 @@ public class BloggerProfileController extends BaseBloggerController {
                 phone, email, aboutMe, intro);
         if (id <= 0) handlerOperateFail();
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     /**
      * 更新资料
      */
     @RequestMapping(method = RequestMethod.PUT)
-    public ResultBean update(HttpServletRequest request,
-                             @PathVariable Integer bloggerId,
-                             @RequestParam(value = "avatarId", required = false) Integer avatarId,
-                             @RequestParam(value = "phone", required = false) String phone,
-                             @RequestParam(value = "email", required = false) String email,
-                             @RequestParam(value = "aboutMe", required = false) String aboutMe,
-                             @RequestParam(value = "intro", required = false) String intro) {
+    public ResultModel update(HttpServletRequest request,
+                              @PathVariable Integer bloggerId,
+                              @RequestParam(value = "avatarId", required = false) Integer avatarId,
+                              @RequestParam(value = "phone", required = false) String phone,
+                              @RequestParam(value = "email", required = false) String email,
+                              @RequestParam(value = "aboutMe", required = false) String aboutMe,
+                              @RequestParam(value = "intro", required = false) String intro) {
 
         if (phone == null && email == null && aboutMe == null && intro == null) {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
@@ -96,7 +96,7 @@ public class BloggerProfileController extends BaseBloggerController {
         boolean result = bloggerProfileService.updateBloggerProfile(bloggerId, av, phone, email, aboutMe, intro);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
 
@@ -104,23 +104,23 @@ public class BloggerProfileController extends BaseBloggerController {
      * 删除资料
      */
     @RequestMapping(method = RequestMethod.DELETE)
-    public ResultBean delete(HttpServletRequest request,
-                             @PathVariable Integer bloggerId) {
+    public ResultModel delete(HttpServletRequest request,
+                              @PathVariable Integer bloggerId) {
         handleBloggerSignInCheck(request, bloggerId);
 
         boolean result = bloggerProfileService.deleteBloggerProfile(bloggerId);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     /**
      * 更新头像
      */
     @RequestMapping(value = "/avatar", method = RequestMethod.POST)
-    public ResultBean updateAvatar(HttpServletRequest request,
-                                   @PathVariable Integer bloggerId,
-                                   @RequestParam(value = "avatarBaseUrlData") String base64urlData) {
+    public ResultModel updateAvatar(HttpServletRequest request,
+                                    @PathVariable Integer bloggerId,
+                                    @RequestParam(value = "avatarBaseUrlData") String base64urlData) {
         handleImageBase64Check(request, base64urlData);
         handleBloggerSignInCheck(request, bloggerId);
 
@@ -133,7 +133,7 @@ public class BloggerProfileController extends BaseBloggerController {
         boolean res = bloggerProfileService.updateBloggerProfile(bloggerId, id, null, null, null, null);
         if (!res) handlerOperateFail();
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     private void handleImageBase64Check(HttpServletRequest request, String base64urlData) {

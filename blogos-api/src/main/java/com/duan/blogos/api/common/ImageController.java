@@ -5,7 +5,7 @@ import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
 import com.duan.blogos.util.file.ImageUtils;
@@ -104,11 +104,11 @@ public class ImageController extends BaseCheckController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public ResultBean upload(MultipartHttpServletRequest request,
-                             @PathVariable("bloggerId") Integer bloggerId,
-                             @RequestParam(value = "category", required = false) Integer category,
-                             @RequestParam(value = "bewrite", required = false) String bewrite,
-                             @RequestParam(value = "title", required = false) String title) {
+    public ResultModel upload(MultipartHttpServletRequest request,
+                              @PathVariable("bloggerId") Integer bloggerId,
+                              @RequestParam(value = "category", required = false) Integer category,
+                              @RequestParam(value = "bewrite", required = false) String bewrite,
+                              @RequestParam(value = "title", required = false) String title) {
         handleBloggerSignInCheck(request, bloggerId);
 
         MultipartFile file = request.getFile("image");// 与页面input的name相同
@@ -131,7 +131,7 @@ public class ImageController extends BaseCheckController {
             throw ResultUtil.failException(CodeMessage.COMMON_PICTURE_FORMAT_ERROR);
         }
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     private com.duan.blogos.util.file.MultipartFile fileTrans(MultipartFile file) {

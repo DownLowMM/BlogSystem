@@ -3,7 +3,7 @@ package com.duan.blogos.api.blogger;
 import com.duan.blogos.service.dto.blogger.BloggerLinkDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLinkService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +35,16 @@ public class BloggerLinkController extends BaseBloggerController {
      * 获取链接
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<List<BloggerLinkDTO>> get(HttpServletRequest request,
-                                                @PathVariable Integer bloggerId,
-                                                @RequestParam(value = "offset", required = false) Integer offset,
-                                                @RequestParam(value = "rows", required = false) Integer rows) {
+    public ResultModel<List<BloggerLinkDTO>> get(HttpServletRequest request,
+                                                 @PathVariable Integer bloggerId,
+                                                 @RequestParam(value = "offset", required = false) Integer offset,
+                                                 @RequestParam(value = "rows", required = false) Integer rows) {
 
         handleAccountCheck(request, bloggerId);
 
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerLinkCount() : rows;
-        ResultBean<List<BloggerLinkDTO>> result = bloggerLinkService.listBloggerLink(bloggerId, os, rs);
+        ResultModel<List<BloggerLinkDTO>> result = bloggerLinkService.listBloggerLink(bloggerId, os, rs);
         if (result == null) handlerEmptyResult();
 
         return result;
@@ -54,12 +54,12 @@ public class BloggerLinkController extends BaseBloggerController {
      * 新增链接
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResultBean add(HttpServletRequest request,
-                          @PathVariable Integer bloggerId,
-                          @RequestParam(value = "iconId", required = false) Integer iconId,
-                          @RequestParam("title") String title,
-                          @RequestParam("url") String url,
-                          @RequestParam(value = "bewrite", required = false) String bewrite) {
+    public ResultModel add(HttpServletRequest request,
+                           @PathVariable Integer bloggerId,
+                           @RequestParam(value = "iconId", required = false) Integer iconId,
+                           @RequestParam("title") String title,
+                           @RequestParam("url") String url,
+                           @RequestParam(value = "bewrite", required = false) String bewrite) {
         handleBloggerSignInCheck(request, bloggerId);
         handlePictureExistCheck(request, bloggerId, iconId);
 
@@ -70,20 +70,20 @@ public class BloggerLinkController extends BaseBloggerController {
         int id = bloggerLinkService.insertBloggerLink(bloggerId, iconId == null ? -1 : iconId, title, url, bewrite);
         if (id <= 0) handlerOperateFail();
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     /**
      * 更新链接
      */
     @RequestMapping(value = "/{linkId}", method = RequestMethod.PUT)
-    public ResultBean update(HttpServletRequest request,
-                             @PathVariable Integer bloggerId,
-                             @PathVariable Integer linkId,
-                             @RequestParam(value = "iconId", required = false) Integer newIconId,
-                             @RequestParam(value = "title", required = false) String newTitle,
-                             @RequestParam(value = "url", required = false) String newUrl,
-                             @RequestParam(value = "bewrite", required = false) String newBewrite) {
+    public ResultModel update(HttpServletRequest request,
+                              @PathVariable Integer bloggerId,
+                              @PathVariable Integer linkId,
+                              @RequestParam(value = "iconId", required = false) Integer newIconId,
+                              @RequestParam(value = "title", required = false) String newTitle,
+                              @RequestParam(value = "url", required = false) String newUrl,
+                              @RequestParam(value = "bewrite", required = false) String newBewrite) {
         RequestContext context = new RequestContext(request);
 
         //都为null则无需更新
@@ -103,16 +103,16 @@ public class BloggerLinkController extends BaseBloggerController {
         boolean result = bloggerLinkService.updateBloggerLink(linkId, newIconId == null ? -1 : newIconId, newTitle, newUrl, newBewrite);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     /**
      * 删除链接
      */
     @RequestMapping(value = "/{linkId}", method = RequestMethod.DELETE)
-    public ResultBean delete(HttpServletRequest request,
-                             @PathVariable Integer bloggerId,
-                             @PathVariable Integer linkId) {
+    public ResultModel delete(HttpServletRequest request,
+                              @PathVariable Integer bloggerId,
+                              @PathVariable Integer linkId) {
         handleBloggerSignInCheck(request, bloggerId);
         RequestContext context = new RequestContext(request);
         checkLinkExist(linkId, context);
@@ -120,7 +120,7 @@ public class BloggerLinkController extends BaseBloggerController {
         boolean result = bloggerLinkService.deleteBloggerLink(linkId);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
 

@@ -19,7 +19,7 @@ import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.properties.WebsiteProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import com.duan.blogos.util.common.CollectionUtils;
@@ -53,7 +53,7 @@ import static com.duan.blogos.service.enums.BlogStatusEnum.PUBLIC;
  * @author DuanJiaNing
  */
 @Service
-public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<BlogListItemDTO>>> implements BloggerBlogService {
+public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<BlogListItemDTO>>> implements BloggerBlogService {
 
     @Autowired
     private BlogStatisticsDao statisticsDao;
@@ -268,7 +268,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
     }
 
     @Override
-    public ResultBean<BlogDTO> getBlog(int bloggerId, int blogId) {
+    public ResultModel<BlogDTO> getBlog(int bloggerId, int blogId) {
 
         Blog blog = blogDao.getBlogById(blogId);
 
@@ -288,7 +288,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
             if (!StringUtils.isEmpty(lids))
                 blog.setLabelIds(lids.replace(ch, whs));
 
-            if (!StringUtils.isEmpty_(keyWords))
+            if (!StringUtils.isBlank(keyWords))
                 blog.setKeyWords(keyWords.replace(chs, whs));
 
             // TODO
@@ -300,10 +300,10 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
     }
 
     @Override
-    protected ResultBean<List<BlogListItemDTO>> constructResult(Map<Integer, Blog> blogHashMap,
-                                                                List<BlogStatistics> statistics,
-                                                                Map<Integer, int[]> blogIdMapCategoryIds,
-                                                                Map<Integer, String> blogImgs) {
+    protected ResultModel<List<BlogListItemDTO>> constructResult(Map<Integer, Blog> blogHashMap,
+                                                                 List<BlogStatistics> statistics,
+                                                                 Map<Integer, int[]> blogIdMapCategoryIds,
+                                                                 Map<Integer, String> blogImgs) {
         // 重组结果
         List<BlogListItemDTO> result = new ArrayList<>();
         for (BlogStatistics s : statistics) {
@@ -315,7 +315,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultBean<List<B
             result.add(dto);
         }
 
-        return new ResultBean<>(result);
+        return new ResultModel<>(result);
     }
 
     @Override

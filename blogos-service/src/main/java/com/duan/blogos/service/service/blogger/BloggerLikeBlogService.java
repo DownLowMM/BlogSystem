@@ -3,7 +3,7 @@ package com.duan.blogos.service.service.blogger;
 
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.dto.blogger.FavouriteBlogListItemDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 
 import java.util.List;
 
@@ -32,8 +32,8 @@ public interface BloggerLikeBlogService {
      * @param blogSortRule 排序规则
      * @return 查询结果
      */
-    ResultBean<List<FavouriteBlogListItemDTO>> listLikeBlog(int bloggerId, int offset, int rows,
-                                                            BlogSortRule blogSortRule);
+    ResultModel<List<FavouriteBlogListItemDTO>> listLikeBlog(int bloggerId, int offset, int rows,
+                                                             BlogSortRule blogSortRule);
 
     /**
      * 统计喜欢量

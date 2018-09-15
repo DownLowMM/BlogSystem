@@ -2,7 +2,7 @@ package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCommentService;
 import com.duan.blogos.service.service.validate.BlogCommentValidateService;
 import com.duan.blogos.util.common.StringUtils;
@@ -33,39 +33,39 @@ public class BloggerCommentController extends BaseBloggerController {
      * 新增评论
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResultBean add(HttpServletRequest request,
-                          @PathVariable Integer bloggerId,
-                          @RequestParam("blogId") Integer blogId,
-                          @RequestParam("content") String content,
-                          @RequestParam("listenerId") Integer listenerId) {
+    public ResultModel add(HttpServletRequest request,
+                           @PathVariable Integer bloggerId,
+                           @RequestParam("blogId") Integer blogId,
+                           @RequestParam("content") String content,
+                           @RequestParam("listenerId") Integer listenerId) {
         handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(request, blogId);
         handleBloggerExist(request, listenerId);
 
-        if (StringUtils.isEmpty_(content) || !commentValidateService.checkCommentContent(content))
+        if (StringUtils.isBlank(content) || !commentValidateService.checkCommentContent(content))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         int id = commentService.insertComment(blogId, bloggerId, listenerId, RIGHTFUL.getCode(), content);
         if (id < 0) handlerOperateFail();
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     /**
      * 删除评论
      */
     @RequestMapping(value = "/{commentId}", method = RequestMethod.DELETE)
-    public ResultBean delete(HttpServletRequest request,
-                             @RequestParam("blogId") Integer blogId,
-                             @PathVariable Integer bloggerId,
-                             @PathVariable Integer commentId) {
+    public ResultModel delete(HttpServletRequest request,
+                              @RequestParam("blogId") Integer blogId,
+                              @PathVariable Integer bloggerId,
+                              @PathVariable Integer commentId) {
         handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(request, blogId);
 
         if (!commentService.deleteComment(commentId, blogId))
             handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     private void handleBloggerExist(HttpServletRequest request, Integer bloggerId) {

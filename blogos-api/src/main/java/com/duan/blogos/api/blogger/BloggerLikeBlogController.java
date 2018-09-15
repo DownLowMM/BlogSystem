@@ -6,7 +6,7 @@ import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.dto.blogger.FavouriteBlogListItemDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLikeBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +36,12 @@ public class BloggerLikeBlogController extends BaseBloggerController {
      * 收藏博文清单
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<List<FavouriteBlogListItemDTO>> list(HttpServletRequest request,
-                                                           @PathVariable("bloggerId") Integer bloggerId,
-                                                           @RequestParam(value = "offset", required = false) Integer offset,
-                                                           @RequestParam(value = "rows", required = false) Integer rows,
-                                                           @RequestParam(value = "sort", required = false) String sort,
-                                                           @RequestParam(value = "order", required = false) String order) {
+    public ResultModel<List<FavouriteBlogListItemDTO>> list(HttpServletRequest request,
+                                                            @PathVariable("bloggerId") Integer bloggerId,
+                                                            @RequestParam(value = "offset", required = false) Integer offset,
+                                                            @RequestParam(value = "rows", required = false) Integer rows,
+                                                            @RequestParam(value = "sort", required = false) String sort,
+                                                            @RequestParam(value = "order", required = false) String order) {
         final RequestContext context = new RequestContext(request);
         handleAccountCheck(request, bloggerId);
 
@@ -58,7 +58,7 @@ public class BloggerLikeBlogController extends BaseBloggerController {
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerCollectCount() : rows;
 
         // 查询数据
-        ResultBean<List<FavouriteBlogListItemDTO>> result = likeBlogService.listLikeBlog(bloggerId, os, rs,
+        ResultModel<List<FavouriteBlogListItemDTO>> result = likeBlogService.listLikeBlog(bloggerId, os, rs,
                 BlogSortRule.valueOf(sor, ord));
         if (result == null) handlerEmptyResult();
 
@@ -70,11 +70,11 @@ public class BloggerLikeBlogController extends BaseBloggerController {
      * 统计收藏收藏量
      */
     @RequestMapping("/count")
-    public ResultBean count(HttpServletRequest request,
-                            @PathVariable("bloggerId") Integer bloggerId) {
+    public ResultModel count(HttpServletRequest request,
+                             @PathVariable("bloggerId") Integer bloggerId) {
 
         handleAccountCheck(request, bloggerId);
 
-        return new ResultBean<>(likeBlogService.countByBloggerId(bloggerId));
+        return new ResultModel<>(likeBlogService.countByBloggerId(bloggerId));
     }
 }

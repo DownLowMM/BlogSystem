@@ -21,13 +21,12 @@ import com.duan.blogos.service.entity.blogger.BloggerProfile;
 import com.duan.blogos.service.enums.BlogCommentStatusEnum;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.properties.BloggerProperties;
-import com.duan.blogos.service.properties.DbProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,17 +51,23 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     @Autowired
     private BlogLabelDao labelDao;
 
-    @Autowired
-    private DbProperties dbProperties;
+    @Value("${preference.default.page-size.comment}")
+    private Integer defaultCommentCount;
+
+    @Value("${preference.db.string-filed-split-character-for-number}")
+    private String stringFiledSplitCharacterForNumber;
+
+    @Value("${preference.db.string-filed-split-character-for-string}")
+    private String stringFiledSplitCharacterForString;
+
+    @Value("${preference.manager.id}")
+    private Integer managerId;
 
     @Autowired
     private DataFillingManager dataFillingManager;
 
     @Autowired
     private StringConstructorManager constructorManager;
-
-    @Autowired
-    private BloggerProperties bloggerProperties;
 
     @Autowired
     private BlogCommentDao commentDao;
@@ -77,26 +82,26 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     private BloggerProfileDao profileDao;
 
     @Override
-    public ResultBean<BlogMainContentDTO> getBlogMainContent(int blogId) {
+    public ResultModel<BlogMainContentDTO> getBlogMainContent(int blogId) {
 
         //查询数据
         Blog blog = blogDao.getBlogById(blogId);
         if (blog == null) return null;
-        String ch = dbProperties.getStringFiledSplitCharacterForNumber();
-        int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), ch);
-        int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), ch);
+        int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), stringFiledSplitCharacterForNumber);
+        int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), stringFiledSplitCharacterForNumber);
         List<BlogCategory> categories = cids == null ? null : categoryDao.listCategoryById(cids);
         List<BlogLabel> labels = lids == null ? null : labelDao.listLabelById(lids);
 
         //填充数据
-        String sc = dbProperties.getStringFiledSplitCharacterForString();
-        BlogMainContentDTO dto = dataFillingManager.blogMainContentToDTO(blog, categories, labels, sc);
+        BlogMainContentDTO dto = dataFillingManager.blogMainContentToDTO(blog, categories, labels, stringFiledSplitCharacterForString);
 
-        return new ResultBean<>(dto);
+        return new ResultModel<>(dto);
     }
 
     @Override
-    public ResultBean<List<BlogCommentDTO>> listBlogComment(int blogId, int offset, int rows) {
+    public ResultModel<List<BlogCommentDTO>> listBlogComment(int blogId, int offset, int rows) {
+        offset = offset < 0 ? 0 : offset;
+        rows = rows < 0 ? defaultCommentCount : rows;
 
         List<BlogCommentDTO> result = new ArrayList<>();
 
@@ -115,7 +120,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
             result.add(dto);
         }
 
-        return CollectionUtils.isEmpty(result) ? null : new ResultBean<>(result);
+        return CollectionUtils.isEmpty(result) ? null : new ResultModel<>(result);
     }
 
     private BloggerPicture getAvatar(Integer id) {
@@ -123,8 +128,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
         if (id != null) {
             avatar = pictureDao.getPictureById(id);
         } else {
-            avatar = pictureDao.getBloggerUniquePicture(bloggerProperties.getPictureManagerBloggerId(),
-                    DEFAULT_BLOGGER_AVATAR.getCode());
+            avatar = pictureDao.getBloggerUniquePicture(managerId, DEFAULT_BLOGGER_AVATAR.getCode());
         }
 
         if (avatar != null) {

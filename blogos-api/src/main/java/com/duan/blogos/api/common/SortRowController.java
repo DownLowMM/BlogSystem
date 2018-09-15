@@ -2,7 +2,7 @@ package com.duan.blogos.api.common;
 
 import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.dto.blog.BlogSortRuleDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogSortRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +28,9 @@ public class SortRowController extends BaseCheckController {
      * 获得排序规则
      */
     @RequestMapping(value = "/rule", method = RequestMethod.GET)
-    public ResultBean<List<BlogSortRuleDTO>> list(HttpServletRequest request) {
+    public ResultModel<List<BlogSortRuleDTO>> list(HttpServletRequest request) {
 
-        ResultBean<List<BlogSortRuleDTO>> result = sortRuleService.listSortRule();
+        ResultModel<List<BlogSortRuleDTO>> result = sortRuleService.listSortRule();
         if (result == null) handlerEmptyResult();
 
         return result;
@@ -41,9 +41,9 @@ public class SortRowController extends BaseCheckController {
      * 获得排序顺序
      */
     @RequestMapping(value = "/order", method = RequestMethod.GET)
-    public ResultBean<List<BlogSortRuleDTO>> listOrder(HttpServletRequest request) {
+    public ResultModel<List<BlogSortRuleDTO>> listOrder(HttpServletRequest request) {
 
-        ResultBean<List<BlogSortRuleDTO>> result = sortRuleService.listSortOrder();
+        ResultModel<List<BlogSortRuleDTO>> result = sortRuleService.listSortOrder();
         if (result == null) handlerEmptyResult();
 
         return result;

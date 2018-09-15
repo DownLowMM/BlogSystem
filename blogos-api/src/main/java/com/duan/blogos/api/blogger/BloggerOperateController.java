@@ -2,7 +2,7 @@ package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogOperateService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,26 +34,26 @@ public class BloggerOperateController extends BaseBloggerController {
      * 分享博文
      */
     @RequestMapping(value = "/operate=share", method = RequestMethod.POST)
-    public ResultBean shareBlog(HttpServletRequest request,
-                                @PathVariable Integer blogId,
-                                @PathVariable Integer bloggerId) {
+    public ResultModel shareBlog(HttpServletRequest request,
+                                 @PathVariable Integer blogId,
+                                 @PathVariable Integer bloggerId) {
         handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(request, blogId);
 
         //执行
         int count = operateService.insertShare(blogId, bloggerId);
 
-        return new ResultBean<>(count);
+        return new ResultModel<>(count);
     }
 
     /**
      * 收藏博文
      */
     @RequestMapping(value = "/operate=collect", method = RequestMethod.POST)
-    public ResultBean collectBlog(HttpServletRequest request,
-                                  @PathVariable Integer blogId,
-                                  @PathVariable Integer bloggerId,
-                                  @RequestParam(value = "reason", required = false) String reason) {
+    public ResultModel collectBlog(HttpServletRequest request,
+                                   @PathVariable Integer blogId,
+                                   @PathVariable Integer bloggerId,
+                                   @RequestParam(value = "reason", required = false) String reason) {
 
         handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(request, blogId);
@@ -69,18 +69,18 @@ public class BloggerOperateController extends BaseBloggerController {
                 bloggerProperties.getDefaultBlogCollectCategory());
         if (id <= 0) handlerOperateFail();
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     /**
      * 投诉博文
      */
     @RequestMapping(value = "/operate=complain", method = RequestMethod.POST)
-    public ResultBean complainBlog(HttpServletRequest request,
-                                   @PathVariable Integer blogId,
-                                   @PathVariable Integer bloggerId,
-                                   @RequestParam("content") String content) {
-        if (StringUtils.isEmpty_(content))
+    public ResultModel complainBlog(HttpServletRequest request,
+                                    @PathVariable Integer blogId,
+                                    @PathVariable Integer bloggerId,
+                                    @RequestParam("content") String content) {
+        if (StringUtils.isBlank(content))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         handleBloggerSignInCheck(request, bloggerId);
@@ -90,16 +90,16 @@ public class BloggerOperateController extends BaseBloggerController {
         int id = operateService.insertComplain(blogId, bloggerId, content);
         if (id <= 0) handlerOperateFail();
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     /**
      * 喜欢博文
      */
     @RequestMapping(value = "/operate=like", method = RequestMethod.POST)
-    public ResultBean likeBlog(HttpServletRequest request,
-                               @PathVariable Integer blogId,
-                               @PathVariable Integer bloggerId) {
+    public ResultModel likeBlog(HttpServletRequest request,
+                                @PathVariable Integer blogId,
+                                @PathVariable Integer bloggerId) {
 
         handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(request, blogId);
@@ -107,16 +107,16 @@ public class BloggerOperateController extends BaseBloggerController {
         //执行
         int count = operateService.insertLike(blogId, bloggerId);
 
-        return new ResultBean<>(count);
+        return new ResultModel<>(count);
     }
 
     /**
      * 取消收藏
      */
     @RequestMapping(value = "/operate=collect", method = RequestMethod.DELETE)
-    public ResultBean removeCollect(HttpServletRequest request,
-                                    @PathVariable Integer blogId,
-                                    @PathVariable Integer bloggerId) {
+    public ResultModel removeCollect(HttpServletRequest request,
+                                     @PathVariable Integer blogId,
+                                     @PathVariable Integer bloggerId) {
 
         handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(request, blogId);
@@ -125,7 +125,7 @@ public class BloggerOperateController extends BaseBloggerController {
         boolean result = operateService.deleteCollect(bloggerId, blogId);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
 
     }
 
@@ -133,9 +133,9 @@ public class BloggerOperateController extends BaseBloggerController {
      * 取消喜欢
      */
     @RequestMapping(value = "/operate=like", method = RequestMethod.DELETE)
-    public ResultBean removeLike(HttpServletRequest request,
-                                 @PathVariable Integer blogId,
-                                 @PathVariable Integer bloggerId) {
+    public ResultModel removeLike(HttpServletRequest request,
+                                  @PathVariable Integer blogId,
+                                  @PathVariable Integer bloggerId) {
         handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(request, blogId);
 
@@ -143,7 +143,7 @@ public class BloggerOperateController extends BaseBloggerController {
         boolean result = operateService.deleteLike(bloggerId, blogId);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
 }

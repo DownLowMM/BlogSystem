@@ -1,7 +1,7 @@
 package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +24,12 @@ public class BloggerStatisticsController extends BaseBloggerController {
     private BloggerStatisticsService statisticsService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<BloggerStatisticsDTO> get(HttpServletRequest request,
-                                                @PathVariable Integer bloggerId) {
+    public ResultModel<BloggerStatisticsDTO> get(HttpServletRequest request,
+                                                 @PathVariable Integer bloggerId) {
 
         handleAccountCheck(request, bloggerId);
 
-        ResultBean<BloggerStatisticsDTO> statistics = statisticsService.getBloggerStatistics(bloggerId);
+        ResultModel<BloggerStatisticsDTO> statistics = statisticsService.getBloggerStatistics(bloggerId);
         if (statistics == null) handlerOperateFail();
 
         return statistics;

@@ -106,7 +106,7 @@ public class StringUtils {
      * @param str 字符串
      * @return 是返回true
      */
-    public static boolean isEmpty_(String str) {
+    public static boolean isBlank(String str) {
         return str == null || "".equals(str);
     }
 
@@ -162,7 +162,7 @@ public class StringUtils {
      * @return 16 进制字符串
      */
     public static String stringToUnicode(String str) {
-        if (isEmpty_(str)) return "";
+        if (isBlank(str)) return "";
 
         StringBuilder builder = new StringBuilder();
         for (char ch : str.toCharArray()) {
@@ -186,7 +186,7 @@ public class StringUtils {
      * @return 普通字符串
      */
     public static String unicodeToString(String unicode) {
-        if (isEmpty_(unicode)) return "";
+        if (isBlank(unicode)) return "";
 
         StringBuffer string = new StringBuffer();
         String[] hex = unicode.split("\\\\u");

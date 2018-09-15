@@ -3,7 +3,7 @@ package com.duan.blogos.service.service.blogger;
 
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 
 /**
  * Created on 2018/1/17.
@@ -19,7 +19,7 @@ public interface BloggerStatisticsService {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    ResultBean<BloggerStatisticsDTO> getBloggerStatistics(int bloggerId);
+    ResultModel<BloggerStatisticsDTO> getBloggerStatistics(int bloggerId);
 
     /**
      * 根据 id 获取博主的 dto 对象

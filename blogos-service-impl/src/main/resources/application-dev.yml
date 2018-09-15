@@ -17,6 +17,7 @@ spring:
     host: 127.0.0.1
     password:
     port: 6379
+    timeout: 0
     pool:
       maxTotal: 1024
       maxIdle: 200
@@ -64,6 +65,10 @@ redis:
   token:
     expire-day: 30
 
+jisu:
+  appkey: 5171de6ae9fd57a6
+  smssend-url: http://api.jisuapi.com/sms/send
+
 preference:
   default:
     page-size:
@@ -87,10 +92,9 @@ preference:
     owner:
       id: pageOwnerBloggerId # 页面所属博主id
       name: pageOwnerBloggerName # 页面所属博主name
-    url-condition-split-character: , # 默认的url请求参数的间隔字符（英文字符）
+    url-condition-split-character: \u002C # 默认的url请求参数的间隔字符（英文字符）
     contact:
-      manager-email:
-        address: duan_jia_ning@163.com # 网站管理者的邮箱（反馈邮件发送到的邮箱）
+      manager-email: duan_jia_ning@163.com # 网站管理者的邮箱（反馈邮件发送到的邮箱）
       sender-mail:
         address: 2213994603@qq.com # 配置了smtp 的邮件发送者
         password: athupcbmeyvvdjif # 配置了smtp 的邮件发送者的授权码

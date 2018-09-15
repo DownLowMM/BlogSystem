@@ -3,7 +3,7 @@ package com.duan.blogos.api.blogger;
 import com.duan.blogos.service.dto.blogger.BloggerCategoryDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -36,15 +36,15 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
      * 查看所有类别
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<List<BloggerCategoryDTO>> list(HttpServletRequest request,
-                                                     @PathVariable Integer bloggerId,
-                                                     @RequestParam(value = "offset", required = false) Integer offset,
-                                                     @RequestParam(value = "rows", required = false) Integer rows) {
+    public ResultModel<List<BloggerCategoryDTO>> list(HttpServletRequest request,
+                                                      @PathVariable Integer bloggerId,
+                                                      @RequestParam(value = "offset", required = false) Integer offset,
+                                                      @RequestParam(value = "rows", required = false) Integer rows) {
         handleAccountCheck(request, bloggerId);
 
         int os = offset == null || offset < 0 ? 0 : offset;
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerBlogCategoryCount() : rows;
-        ResultBean<List<BloggerCategoryDTO>> result = bloggerCategoryService.listBlogCategory(bloggerId, os, rs);
+        ResultModel<List<BloggerCategoryDTO>> result = bloggerCategoryService.listBlogCategory(bloggerId, os, rs);
         if (result == null) handlerEmptyResult();
 
         return result;
@@ -55,16 +55,16 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
      * 查看指定类别
      */
     @RequestMapping(value = "/{categoryId}", method = RequestMethod.GET)
-    public ResultBean<BloggerCategoryDTO> get(HttpServletRequest request,
-                                              @PathVariable Integer bloggerId,
-                                              @PathVariable Integer categoryId) {
+    public ResultModel<BloggerCategoryDTO> get(HttpServletRequest request,
+                                               @PathVariable Integer bloggerId,
+                                               @PathVariable Integer categoryId) {
         handleAccountCheck(request, bloggerId);
         handleCategoryExistCheck(request, bloggerId, categoryId);
 
         BloggerCategoryDTO dto = bloggerCategoryService.getCategory(bloggerId, categoryId);
         if (dto == null) handlerOperateFail();
 
-        return new ResultBean<>(dto);
+        return new ResultModel<>(dto);
     }
 
 
@@ -72,11 +72,11 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
      * 增加类别
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResultBean add(HttpServletRequest request,
-                          @PathVariable Integer bloggerId,
-                          @RequestParam(value = "iconId", required = false) Integer iconId,
-                          @RequestParam("title") String title,
-                          @RequestParam(value = "bewrite", required = false) String bewrite) {
+    public ResultModel add(HttpServletRequest request,
+                           @PathVariable Integer bloggerId,
+                           @RequestParam(value = "iconId", required = false) Integer iconId,
+                           @RequestParam("title") String title,
+                           @RequestParam(value = "bewrite", required = false) String bewrite) {
 
         // 检查博主是否登录
         handleBloggerSignInCheck(request, bloggerId);
@@ -88,19 +88,19 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         int id = bloggerCategoryService.insertBlogCategory(bloggerId, iconId == null ? -1 : iconId, title, bewrite);
         if (id < 0) handlerOperateFail();
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     /**
      * 修改类别
      */
     @RequestMapping(value = "/{categoryId}", method = RequestMethod.PUT)
-    public ResultBean update(HttpServletRequest request,
-                             @PathVariable Integer bloggerId,
-                             @PathVariable Integer categoryId,
-                             @RequestParam(value = "iconId", required = false) Integer newIconId,
-                             @RequestParam(value = "title", required = false) String newTitle,
-                             @RequestParam(value = "bewrite", required = false) String newBewrite) {
+    public ResultModel update(HttpServletRequest request,
+                              @PathVariable Integer bloggerId,
+                              @PathVariable Integer categoryId,
+                              @RequestParam(value = "iconId", required = false) Integer newIconId,
+                              @RequestParam(value = "title", required = false) String newTitle,
+                              @RequestParam(value = "bewrite", required = false) String newBewrite) {
 
         handleParamAllNullForUpdate(request, newIconId, newTitle, newBewrite);
         handleBloggerSignInCheck(request, bloggerId);
@@ -111,7 +111,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
                 newTitle, newBewrite))
             handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     // 检查指定博主是否有指定的博文类别
@@ -125,10 +125,10 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
      * 不能同时删除类别下的所有文章，删除博文通过博文api操控。
      */
     @RequestMapping(value = "/{categoryId}", method = RequestMethod.DELETE)
-    public ResultBean delete(HttpServletRequest request,
-                             @PathVariable Integer bloggerId,
-                             @PathVariable Integer categoryId,
-                             @RequestParam(value = "newCategoryId", required = false) Integer newCategoryId) {
+    public ResultModel delete(HttpServletRequest request,
+                              @PathVariable Integer bloggerId,
+                              @PathVariable Integer categoryId,
+                              @RequestParam(value = "newCategoryId", required = false) Integer newCategoryId) {
 
         handleBloggerSignInCheck(request, bloggerId);
         handleCategoryExistCheck(request, bloggerId, categoryId);
@@ -149,7 +149,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         if (!bloggerCategoryService.deleteCategoryAndMoveBlogsTo(bloggerId, categoryId, cate))
             handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
 

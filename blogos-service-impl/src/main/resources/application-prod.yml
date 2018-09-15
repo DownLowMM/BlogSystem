@@ -65,6 +65,10 @@ redis:
     expire-day: 30
 
 
+jisu:
+  appkey: 5171de6ae9fd57a6
+  smssend-url: http://api.jisuapi.com/sms/send
+
 preference:
   default:
     page-size:
@@ -88,7 +92,7 @@ preference:
     owner:
       id: pageOwnerBloggerId
       name: pageOwnerBloggerName
-    url-condition-split-character: ,
+    url-condition-split-character: \u002C
     contact:
       manager-email:
         address: duan_jia_ning@163.com

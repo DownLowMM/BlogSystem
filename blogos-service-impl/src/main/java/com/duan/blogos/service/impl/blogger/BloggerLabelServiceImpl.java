@@ -8,7 +8,7 @@ import com.duan.blogos.service.entity.blog.BlogLabel;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.properties.DbProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import com.duan.blogos.util.common.ArrayUtils;
 import com.duan.blogos.util.common.CollectionUtils;
@@ -94,7 +94,7 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
     }
 
     @Override
-    public ResultBean<List<BlogLabelDTO>> listLabel(int offset, int rows) {
+    public ResultModel<List<BlogLabelDTO>> listLabel(int offset, int rows) {
 
         List<BlogLabel> result = labelDao.listLabel(offset, rows);
         if (CollectionUtils.isEmpty(result)) return null;
@@ -111,7 +111,7 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
     }
 
     @Override
-    public ResultBean<List<BlogLabelDTO>> listLabelByBlogger(int bloggerId, int offset, int rows) {
+    public ResultModel<List<BlogLabelDTO>> listLabelByBlogger(int bloggerId, int offset, int rows) {
 
         List<BlogLabel> result = labelDao.listLabelByBloggerId(bloggerId, offset, rows);
         if (CollectionUtils.isEmpty(result)) return null;

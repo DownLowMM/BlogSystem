@@ -9,7 +9,7 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.properties.BloggerProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
@@ -198,8 +198,8 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-    public ResultBean<List<BloggerPictureDTO>> listBloggerPicture(int bloggerId, BloggerPictureCategoryEnum category,
-                                                                  int offset, int rows) {
+    public ResultModel<List<BloggerPictureDTO>> listBloggerPicture(int bloggerId, BloggerPictureCategoryEnum category,
+                                                                   int offset, int rows) {
 
         List<BloggerPicture> result;
         if (category == null) {

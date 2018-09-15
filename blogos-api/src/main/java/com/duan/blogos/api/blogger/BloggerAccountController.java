@@ -3,7 +3,7 @@ package com.duan.blogos.api.blogger;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,31 +34,31 @@ public class BloggerAccountController extends BaseBloggerController {
      * 注册
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResultBean register(HttpServletRequest request,
-                               @RequestParam("username") String username,
-                               @RequestParam("password") String password) {
+    public ResultModel register(HttpServletRequest request,
+                                @RequestParam("username") String username,
+                                @RequestParam("password") String password) {
         handleNameCheck(request, username);
         handlePwdCheck(request, password);
 
         int id = accountService.insertAccount(username, password);
         if (id < 0) handlerOperateFail();
 
-        return new ResultBean<>(id);
+        return new ResultModel<>(id);
     }
 
     /**
      * 检查用户名是否存在
      */
     @RequestMapping(value = "/check=username", method = RequestMethod.GET)
-    public ResultBean checkUsernameUsed(HttpServletRequest request,
-                                        @RequestParam("username") String username) {
+    public ResultModel checkUsernameUsed(HttpServletRequest request,
+                                         @RequestParam("username") String username) {
         handleNameCheck(request, username);
 
         BloggerAccountDTO account = accountService.getAccount(username);
         if (account != null) {
-            return new ResultBean(ResultUtil.failException(CodeMessage.COMMON_DUPLICATION_DATA));
+            return new ResultModel(ResultUtil.failException(CodeMessage.COMMON_DUPLICATION_DATA));
         } else {
-            return new ResultBean<>("");
+            return new ResultModel<>("");
         }
 
     }
@@ -67,14 +67,14 @@ public class BloggerAccountController extends BaseBloggerController {
      * 检查电话号码是否存在
      */
     @RequestMapping(value = "/check=phone", method = RequestMethod.GET)
-    public ResultBean checkProfileExist(HttpServletRequest request,
-                                        @RequestParam("phone") String phone) {
+    public ResultModel checkProfileExist(HttpServletRequest request,
+                                         @RequestParam("phone") String phone) {
         BloggerAccountDTO account = accountService.getAccountByPhone(phone);
 
         if (account != null) {
-            return new ResultBean(ResultUtil.failException(CodeMessage.COMMON_DUPLICATION_DATA));
+            return new ResultModel(ResultUtil.failException(CodeMessage.COMMON_DUPLICATION_DATA));
         } else {
-            return new ResultBean<>("");
+            return new ResultModel<>("");
         }
 
     }
@@ -83,9 +83,9 @@ public class BloggerAccountController extends BaseBloggerController {
      * 修改用户名
      */
     @RequestMapping(value = "/{bloggerId}/item=name", method = RequestMethod.PUT)
-    public ResultBean modifyUsername(HttpServletRequest request,
-                                     @PathVariable Integer bloggerId,
-                                     @RequestParam(value = "username") String newUserName) {
+    public ResultModel modifyUsername(HttpServletRequest request,
+                                      @PathVariable Integer bloggerId,
+                                      @RequestParam(value = "username") String newUserName) {
         handleBloggerSignInCheck(request, bloggerId);
         handleNameCheck(request, newUserName);
 
@@ -96,17 +96,17 @@ public class BloggerAccountController extends BaseBloggerController {
         HttpSession session = request.getSession();
         session.setAttribute(bloggerProperties.getSessionNameOfBloggerName(), newUserName);
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     /**
      * 修改密码
      */
     @RequestMapping(value = "/{bloggerId}/item=pwd", method = RequestMethod.PUT)
-    public ResultBean modifyPassword(HttpServletRequest request,
-                                     @PathVariable Integer bloggerId,
-                                     @RequestParam(value = "old") String oldPassword,
-                                     @RequestParam(value = "new") String newPassword) {
+    public ResultModel modifyPassword(HttpServletRequest request,
+                                      @PathVariable Integer bloggerId,
+                                      @RequestParam(value = "old") String oldPassword,
+                                      @RequestParam(value = "new") String newPassword) {
         handleBloggerSignInCheck(request, bloggerId);
         handlePwdCheck(request, newPassword);
 
@@ -117,7 +117,7 @@ public class BloggerAccountController extends BaseBloggerController {
         HttpSession session = request.getSession();
         session.invalidate();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
 
@@ -125,8 +125,8 @@ public class BloggerAccountController extends BaseBloggerController {
      * 注销账号
      */
     @RequestMapping(value = "/{bloggerId}", method = RequestMethod.DELETE)
-    public ResultBean delete(HttpServletRequest request,
-                             @PathVariable Integer bloggerId) {
+    public ResultModel delete(HttpServletRequest request,
+                              @PathVariable Integer bloggerId) {
         handleBloggerSignInCheck(request, bloggerId);
 
         boolean result = accountService.deleteAccount(bloggerId);
@@ -136,18 +136,18 @@ public class BloggerAccountController extends BaseBloggerController {
         HttpSession session = request.getSession();
         session.invalidate();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     // 检查用户名合法性
     private void handleNameCheck(HttpServletRequest request, String userName) {
-        if (StringUtils.isEmpty_(userName) || !bloggerValidateService.checkUserName(userName))
+        if (StringUtils.isBlank(userName) || !bloggerValidateService.checkUserName(userName))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
     // 检查密码合法性
     private void handlePwdCheck(HttpServletRequest request, String password) {
-        if (StringUtils.isEmpty_(password) || !bloggerValidateService.checkPassword(password))
+        if (StringUtils.isBlank(password) || !bloggerValidateService.checkPassword(password))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 }

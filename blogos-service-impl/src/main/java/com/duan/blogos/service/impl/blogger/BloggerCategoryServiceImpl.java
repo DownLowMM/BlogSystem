@@ -15,7 +15,7 @@ import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.properties.BloggerProperties;
 import com.duan.blogos.service.properties.DbProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import com.duan.blogos.util.common.ArrayUtils;
 import com.duan.blogos.util.common.CollectionUtils;
@@ -63,7 +63,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     private BlogDao blogDao;
 
     @Override
-    public ResultBean<List<BloggerCategoryDTO>> listBlogCategory(int bloggerId, int offset, int rows) {
+    public ResultModel<List<BloggerCategoryDTO>> listBlogCategory(int bloggerId, int offset, int rows) {
 
         List<BlogCategory> categories = categoryDao.listCategoryByBloggerId(bloggerId, offset, rows);
         if (CollectionUtils.isEmpty(categories)) return null;
@@ -73,7 +73,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
             result.add(getBloggerCategoryDTO(bloggerId, category));
         }
 
-        return new ResultBean<>(result);
+        return new ResultModel<>(result);
     }
 
     @Override

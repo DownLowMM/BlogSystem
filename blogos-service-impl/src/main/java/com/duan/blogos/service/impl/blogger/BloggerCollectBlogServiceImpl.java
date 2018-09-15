@@ -17,7 +17,7 @@ import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.manager.comparator.BlogListItemComparatorFactory;
 import com.duan.blogos.service.properties.DbProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCollectBlogService;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
@@ -71,7 +71,7 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
     private StringConstructorManager constructorManager;
 
     @Override
-    public ResultBean<List<FavouriteBlogListItemDTO>> listCollectBlog(int bloggerId, int categoryId, int offset, int rows, BlogSortRule sortRule) {
+    public ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(int bloggerId, int categoryId, int offset, int rows, BlogSortRule sortRule) {
         List<BlogCollect> collects = collectDao.listCollectBlog(bloggerId, categoryId, offset, rows);
         if (CollectionUtils.isEmpty(collects)) return null;
 
@@ -142,7 +142,7 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
             result.add(dto);
         }
 
-        return new ResultBean<>(result);
+        return new ResultModel<>(result);
     }
 
     @Override

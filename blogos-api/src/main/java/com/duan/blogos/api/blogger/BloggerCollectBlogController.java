@@ -6,7 +6,7 @@ import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.dto.blogger.FavouriteBlogListItemDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCollectBlogService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +37,12 @@ public class BloggerCollectBlogController extends BaseBloggerController {
      * 收藏博文清单
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<List<FavouriteBlogListItemDTO>> list(HttpServletRequest request,
-                                                           @PathVariable("bloggerId") Integer bloggerId,
-                                                           @RequestParam(value = "offset", required = false) Integer offset,
-                                                           @RequestParam(value = "rows", required = false) Integer rows,
-                                                           @RequestParam(value = "sort", required = false) String sort,
-                                                           @RequestParam(value = "order", required = false) String order) {
+    public ResultModel<List<FavouriteBlogListItemDTO>> list(HttpServletRequest request,
+                                                            @PathVariable("bloggerId") Integer bloggerId,
+                                                            @RequestParam(value = "offset", required = false) Integer offset,
+                                                            @RequestParam(value = "rows", required = false) Integer rows,
+                                                            @RequestParam(value = "sort", required = false) String sort,
+                                                            @RequestParam(value = "order", required = false) String order) {
         final RequestContext context = new RequestContext(request);
         handleAccountCheck(request, bloggerId);
 
@@ -59,7 +59,7 @@ public class BloggerCollectBlogController extends BaseBloggerController {
         int rs = rows == null || rows < 0 ? bloggerProperties.getRequestBloggerCollectCount() : rows;
 
         // 查询数据
-        ResultBean<List<FavouriteBlogListItemDTO>> result = bloggerCollectBlogService.listCollectBlog(bloggerId,
+        ResultModel<List<FavouriteBlogListItemDTO>> result = bloggerCollectBlogService.listCollectBlog(bloggerId,
                 bloggerProperties.getDefaultBlogCollectCategory(), os, rs,
                 BlogSortRule.valueOf(sor, ord));
         if (result == null) handlerEmptyResult();
@@ -71,10 +71,10 @@ public class BloggerCollectBlogController extends BaseBloggerController {
      * 修改博文收藏
      */
     @RequestMapping(value = "/{blogId}", method = RequestMethod.PUT)
-    public ResultBean update(HttpServletRequest request,
-                             @PathVariable("blogId") Integer blogId,
-                             @PathVariable("bloggerId") Integer bloggerId,
-                             @RequestParam(value = "reason", required = false) String newReason) {
+    public ResultModel update(HttpServletRequest request,
+                              @PathVariable("blogId") Integer blogId,
+                              @PathVariable("bloggerId") Integer bloggerId,
+                              @RequestParam(value = "reason", required = false) String newReason) {
 
         handleBloggerSignInCheck(request, bloggerId);
 
@@ -85,7 +85,7 @@ public class BloggerCollectBlogController extends BaseBloggerController {
         boolean result = bloggerCollectBlogService.updateCollect(bloggerId, blogId, newReason, -1);
         if (!result) handlerOperateFail();
 
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
 
@@ -93,11 +93,11 @@ public class BloggerCollectBlogController extends BaseBloggerController {
      * 统计收藏收藏量
      */
     @RequestMapping("/count")
-    public ResultBean count(HttpServletRequest request,
-                            @PathVariable("bloggerId") Integer bloggerId) {
+    public ResultModel count(HttpServletRequest request,
+                             @PathVariable("bloggerId") Integer bloggerId) {
 
         handleAccountCheck(request, bloggerId);
 
-        return new ResultBean<>(bloggerCollectBlogService.countByBloggerId(bloggerId));
+        return new ResultModel<>(bloggerCollectBlogService.countByBloggerId(bloggerId));
     }
 }

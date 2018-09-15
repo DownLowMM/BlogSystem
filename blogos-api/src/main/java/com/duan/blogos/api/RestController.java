@@ -3,7 +3,7 @@ package com.duan.blogos.api;
 import com.duan.blogos.service.exception.BlogOSException;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,8 +46,8 @@ public class RestController {
     @ExceptionHandler(BlogOSException.class)
     @ResponseBody
     // 注解无法继承，所以子类不允许覆盖这些方法
-    protected final ResultBean handleException(BlogOSException e) {
-        return new ResultBean(e);
+    protected final ResultModel handleException(BlogOSException e) {
+        return new ResultModel(e);
     }
 
     /**
@@ -55,9 +55,9 @@ public class RestController {
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    protected final ResultBean handleException(Throwable e) {
+    protected final ResultModel handleException(Throwable e) {
         BlogOSException exception = ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
-        return new ResultBean(exception);
+        return new ResultModel(exception);
     }
 
 
@@ -66,9 +66,9 @@ public class RestController {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseBody
-    protected final ResultBean handlerException(MissingServletRequestParameterException e) {
+    protected final ResultModel handlerException(MissingServletRequestParameterException e) {
         BlogOSException exception = ResultUtil.failException(CodeMessage.COMMON_MISSING_REQUEST_PARAMETER, e);
-        return new ResultBean(exception);
+        return new ResultModel(exception);
     }
 
     /**
@@ -76,8 +76,8 @@ public class RestController {
      */
     @ExceptionHandler(TypeMismatchException.class)
     @ResponseBody
-    protected final ResultBean handlerException(TypeMismatchException e) {
-        return new ResultBean(ResultUtil.failException(CodeMessage.COMMON_PARAMETER_TYPE_MISMATCH, e));
+    protected final ResultModel handlerException(TypeMismatchException e) {
+        return new ResultModel(ResultUtil.failException(CodeMessage.COMMON_PARAMETER_TYPE_MISMATCH, e));
     }
 
     /**

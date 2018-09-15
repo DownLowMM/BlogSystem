@@ -4,7 +4,7 @@ import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,11 +35,11 @@ public class BlogStatisticsController extends BaseBlogController {
      * 获得博文统计信息
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<BlogStatisticsDTO> get(HttpServletRequest request,
-                                             @PathVariable Integer blogId) {
+    public ResultModel<BlogStatisticsDTO> get(HttpServletRequest request,
+                                              @PathVariable Integer blogId) {
         handleBlogStatisticsExistCheck(request, blogId);
 
-        ResultBean<BlogStatisticsDTO> result = statisticsService.getBlogStatistics(blogId);
+        ResultModel<BlogStatisticsDTO> result = statisticsService.getBlogStatistics(blogId);
         if (result == null) handlerEmptyResult();
 
         return result;
@@ -49,11 +49,11 @@ public class BlogStatisticsController extends BaseBlogController {
      * 获取统计信息（简版，只获取各项信息的次数）
      */
     @RequestMapping(value = "/count", method = RequestMethod.GET)
-    public ResultBean<BlogStatisticsCountDTO> getCount(HttpServletRequest request,
-                                                       @PathVariable Integer blogId) {
+    public ResultModel<BlogStatisticsCountDTO> getCount(HttpServletRequest request,
+                                                        @PathVariable Integer blogId) {
         handleBlogStatisticsExistCheck(request, blogId);
 
-        ResultBean<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
+        ResultModel<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
         if (statistics == null) handlerEmptyResult();
 
         return statistics;

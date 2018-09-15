@@ -73,7 +73,7 @@ public class BloggerValidateServiceImpl implements BloggerValidateService {
 
     @Override
     public boolean checkUserName(String username) {
-        if (StringUtils.isEmpty_(username)) return false;
+        if (StringUtils.isBlank(username)) return false;
 
         // UPDATE: 2018/2/2 更新 当前版本对用户名（如格式）不做限制
         return true;
@@ -81,7 +81,7 @@ public class BloggerValidateServiceImpl implements BloggerValidateService {
 
     @Override
     public boolean checkPassword(String password) {
-        if (StringUtils.isEmpty_(password)) return false;
+        if (StringUtils.isBlank(password)) return false;
 
         String regex = "^(?:(?=.*[A-z])(?=.*[0-9])).{6,12}$";
         return password.matches(regex);

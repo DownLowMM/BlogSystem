@@ -4,7 +4,7 @@ import com.duan.blogos.api.blogger.BaseBloggerController;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +36,9 @@ public class BloggerLoginController extends BaseBloggerController {
     private BloggerAccountService accountService;
 
     @RequestMapping(value = "/way=name", method = RequestMethod.POST)
-    public ResultBean loginWithUserName(HttpServletRequest request,
-                                        @RequestParam("username") String userName,
-                                        @RequestParam("password") String password) throws NoSuchAlgorithmException {
+    public ResultModel loginWithUserName(HttpServletRequest request,
+                                         @RequestParam("username") String userName,
+                                         @RequestParam("password") String password) throws NoSuchAlgorithmException {
         // update 使用shiro
 
         BloggerAccountDTO account = accountService.getAccount(userName);
@@ -59,17 +59,17 @@ public class BloggerLoginController extends BaseBloggerController {
         session.setAttribute(bloggerProperties.getSessionBloggerLoginSignal(), "login");
 
         // 成功登录
-        return new ResultBean<>("");
+        return new ResultModel<>("");
     }
 
     @RequestMapping(value = "/way=phone", method = RequestMethod.POST)
-    public ResultBean loginWithPhoneNumber(HttpServletRequest request,
-                                           @RequestParam("phone") String phone) {
+    public ResultModel loginWithPhoneNumber(HttpServletRequest request,
+                                            @RequestParam("phone") String phone) {
 
         handlePhoneCheck(phone, request);
 
         BloggerAccountDTO account = accountService.getAccountByPhone(phone);
-        if (account == null) return new ResultBean<>("", ResultBean.FAIL);
+        if (account == null) return new ResultModel<>("", ResultModel.FAIL);
 
         HttpSession session = request.getSession();
         session.setAttribute(bloggerProperties.getSessionNameOfBloggerId(), account.getId());
@@ -77,7 +77,7 @@ public class BloggerLoginController extends BaseBloggerController {
         session.setAttribute(bloggerProperties.getSessionBloggerLoginSignal(), "login");
 
         // 成功登录
-        return new ResultBean<>(account.getUsername());
+        return new ResultModel<>(account.getUsername());
     }
 
     private void handlePhoneCheck(String phone, HttpServletRequest request) {

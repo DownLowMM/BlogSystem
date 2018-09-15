@@ -10,7 +10,7 @@ import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.impl.BlogFilterAbstract;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.properties.DbProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogRetrievalService;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @author DuanJiaNing
  */
 @Service
-public class BlogRetrievalServiceImpl extends BlogFilterAbstract<ResultBean<List<BlogListItemDTO>>> implements
+public class BlogRetrievalServiceImpl extends BlogFilterAbstract<ResultModel<List<BlogListItemDTO>>> implements
         BlogRetrievalService {
 
     @Autowired
@@ -44,10 +44,10 @@ public class BlogRetrievalServiceImpl extends BlogFilterAbstract<ResultBean<List
     private DbProperties dbProperties;
 
     @Override
-    protected ResultBean<List<BlogListItemDTO>> constructResult(Map<Integer, Blog> blogHashMap,
-                                                                List<BlogStatistics> statistics,
-                                                                Map<Integer, int[]> blogIdMapCategoryIds,
-                                                                Map<Integer, String> blogImgs) {
+    protected ResultModel<List<BlogListItemDTO>> constructResult(Map<Integer, Blog> blogHashMap,
+                                                                 List<BlogStatistics> statistics,
+                                                                 Map<Integer, int[]> blogIdMapCategoryIds,
+                                                                 Map<Integer, String> blogImgs) {
 
         // 重组结果
         List<BlogListItemDTO> result = new ArrayList<>();
@@ -80,7 +80,7 @@ public class BlogRetrievalServiceImpl extends BlogFilterAbstract<ResultBean<List
             result.add(dto);
         }
 
-        return new ResultBean<>(result);
+        return new ResultModel<>(result);
 
     }
 }

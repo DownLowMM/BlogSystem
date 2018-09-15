@@ -2,7 +2,7 @@ package com.duan.blogos.service.service.audience;
 
 
 import com.duan.blogos.service.dto.blog.BlogListItemDTO;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilter;
 
 import java.util.List;
@@ -18,6 +18,6 @@ import java.util.List;
  *
  * @author DuanJiaNing
  */
-public interface BlogRetrievalService extends BlogFilter<ResultBean<List<BlogListItemDTO>>> {
+public interface BlogRetrievalService extends BlogFilter<ResultModel<List<BlogListItemDTO>>> {
 
 }

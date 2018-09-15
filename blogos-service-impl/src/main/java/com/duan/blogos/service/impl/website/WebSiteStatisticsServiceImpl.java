@@ -5,7 +5,7 @@ import com.duan.blogos.service.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.WebsiteManager;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.service.website.WebSiteStatisticsService;
 import com.duan.blogos.util.common.CollectionUtils;
@@ -41,7 +41,7 @@ public class WebSiteStatisticsServiceImpl implements WebSiteStatisticsService {
 
         List<BloggerBriefDTO> dtos = new ArrayList<>();
         for (BloggerDTO blogger : bloggerDTOS) {
-            ResultBean<BloggerStatisticsDTO> statistics = statisticsService.getBloggerStatistics(blogger.getId());
+            ResultModel<BloggerStatisticsDTO> statistics = statisticsService.getBloggerStatistics(blogger.getId());
             final BloggerBriefDTO dto = fillingManager.bloggerTobrief(blogger, statistics.getData());
             dtos.add(dto);
         }

@@ -7,7 +7,7 @@ import com.duan.blogos.service.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.entity.blog.*;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.properties.DbProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
 import com.duan.blogos.util.common.CollectionUtils;
@@ -58,7 +58,7 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
     private BloggerStatisticsService statisticsService;
 
     @Override
-    public ResultBean<BlogStatisticsDTO> getBlogStatistics(int blogId) {
+    public ResultModel<BlogStatisticsDTO> getBlogStatistics(int blogId) {
 
         Blog blog = blogDao.getBlogById(blogId);
         if (blog == null) return null;
@@ -127,18 +127,18 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
         BlogStatisticsDTO dto = dataFillingManager.blogStatisticsToDTO(blog, statistics, categories, labels,
                 likes, collects, commenter, dbProperties.getStringFiledSplitCharacterForString());
 
-        return new ResultBean<>(dto);
+        return new ResultModel<>(dto);
     }
 
 
     @Override
-    public ResultBean<BlogStatisticsCountDTO> getBlogStatisticsCount(int blogId) {
+    public ResultModel<BlogStatisticsCountDTO> getBlogStatisticsCount(int blogId) {
 
         BlogStatistics statistics = statisticsDao.getStatistics(blogId);
         if (statistics == null) return null;
 
         BlogStatisticsCountDTO dto = dataFillingManager.blogStatisticsCountToDTO(statistics);
-        return new ResultBean<>(dto);
+        return new ResultModel<>(dto);
     }
 
     @Override

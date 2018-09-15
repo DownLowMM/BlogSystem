@@ -7,7 +7,7 @@ import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.properties.BloggerProperties;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.OnlineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,13 +77,13 @@ public class BloggerPageController {
                                 .getId()));
 
 
-        ResultBean<BloggerStatisticsDTO> ownerBgStat = statisticsService.getBloggerStatistics(ownerId);
+        ResultModel<BloggerStatisticsDTO> ownerBgStat = statisticsService.getBloggerStatistics(ownerId);
         mv.addObject("ownerBgStat", ownerBgStat.getData());
 
         int loginBgId;
         String token = ""; // TODO redis + token 维护会话
         if ((loginBgId = onlineService.getLoginBloggerId(token)) != -1) {
-            ResultBean<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBgId);
+            ResultModel<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBgId);
             mv.addObject("loginBgStat", loginBgStat.getData());
         }
 

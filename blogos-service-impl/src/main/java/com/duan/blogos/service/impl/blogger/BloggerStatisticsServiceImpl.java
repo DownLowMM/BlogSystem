@@ -15,7 +15,7 @@ import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.restful.ResultBean;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.util.common.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +69,7 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
     private BloggerProfileDao profileDao;
 
     @Override
-    public ResultBean<BloggerStatisticsDTO> getBloggerStatistics(int bloggerId) {
+    public ResultModel<BloggerStatisticsDTO> getBloggerStatistics(int bloggerId) {
 
         int blogCount = blogDao.countBlogByBloggerId(bloggerId, BlogStatusEnum.PUBLIC.getCode());
 
@@ -91,7 +91,7 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
         BloggerStatisticsDTO dto = dataFillingManager.bloggerStatisticToDTO(blogCount, wordCountSum, likeCount, likeGiveCount,
                 categoryCount, labelCount, collectCount, collectedCount, linkCount);
 
-        return new ResultBean<>(dto);
+        return new ResultModel<>(dto);
     }
 
     // 获得博主dto
