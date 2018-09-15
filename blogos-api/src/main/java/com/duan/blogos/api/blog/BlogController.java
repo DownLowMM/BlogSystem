@@ -8,7 +8,6 @@ import com.duan.blogos.service.dto.blog.BlogMainContentDTO;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.blogos.service.service.audience.BlogRetrievalService;

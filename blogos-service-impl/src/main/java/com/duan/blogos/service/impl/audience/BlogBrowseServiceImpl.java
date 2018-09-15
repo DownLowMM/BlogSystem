@@ -1,7 +1,9 @@
 package com.duan.blogos.service.impl.audience;
 
 
+import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
+import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blog.BlogCommentDao;
 import com.duan.blogos.service.dao.blog.BlogDao;
@@ -27,7 +29,6 @@ import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.blogos.util.common.CollectionUtils;
 import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,16 +54,12 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     private BlogLabelDao labelDao;
 
     @Autowired
-    private DefaultProperties pageSizeProperties;
+    private DefaultProperties defaultProperties;
 
-    @Value("${preference.db.string-filed-split-character-for-number}")
-    private String stringFiledSplitCharacterForNumber;
+    @Autowired
+    private DbProperties dbProperties;
 
-    @Value("${preference.db.string-filed-split-character-for-string}")
-    private String stringFiledSplitCharacterForString;
-
-    @Value("${preference.manager.id}")
-    private Integer managerId;
+    private WebsiteProperties websiteProperties;
 
     @Autowired
     private DataFillingManager dataFillingManager;
@@ -88,13 +85,15 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
         //查询数据
         Blog blog = blogDao.getBlogById(blogId);
         if (blog == null) return null;
-        int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), stringFiledSplitCharacterForNumber);
-        int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), stringFiledSplitCharacterForNumber);
+        String nsp = dbProperties.getStringFiledSplitCharacterForNumber();
+        int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), nsp);
+        int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), nsp);
         List<BlogCategory> categories = cids == null ? null : categoryDao.listCategoryById(cids);
         List<BlogLabel> labels = lids == null ? null : labelDao.listLabelById(lids);
 
         //填充数据
-        BlogMainContentDTO dto = dataFillingManager.blogMainContentToDTO(blog, categories, labels, stringFiledSplitCharacterForString);
+        BlogMainContentDTO dto = dataFillingManager.blogMainContentToDTO(blog, categories, labels,
+                dbProperties.getStringFiledSplitCharacterForString());
 
         return new ResultModel<>(dto);
     }
@@ -102,7 +101,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     @Override
     public ResultModel<List<BlogCommentDTO>> listBlogComment(int blogId, int offset, int rows) {
         offset = offset < 0 ? 0 : offset;
-        rows = rows < 0 ? pageSizeProperties.getComment() : rows;
+        rows = rows < 0 ? defaultProperties.getCommentCount() : rows;
 
         List<BlogCommentDTO> result = new ArrayList<>();
 
@@ -129,7 +128,8 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
         if (id != null) {
             avatar = pictureDao.getPictureById(id);
         } else {
-            avatar = pictureDao.getBloggerUniquePicture(managerId, DEFAULT_BLOGGER_AVATAR.getCode());
+            avatar = pictureDao.getBloggerUniquePicture(websiteProperties.getManagerId(),
+                    DEFAULT_BLOGGER_AVATAR.getCode());
         }
 
         if (avatar != null) {

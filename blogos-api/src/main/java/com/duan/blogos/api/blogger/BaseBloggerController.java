@@ -4,7 +4,6 @@ import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.config.SessionProperties;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.properties.WebsiteProperties;
 import com.duan.blogos.util.common.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 

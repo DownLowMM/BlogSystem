@@ -1,3 +1,8 @@
+server:
+  port: 7070
+
+
+# 直接依赖 blog-service-impl 项目，而不是 rpc 的方式，因此需要将配置移到这里
 spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -42,12 +47,6 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
 
-server:
-  port: 9090
-
-app:
-  name: blogos-service
-
 mybatis:
   mapperLocations: classpath:mapper/*/*.xml
   typeAliasesPackage: com.duan.blogos.service.entity
@@ -78,14 +77,6 @@ preference:
     label-count: 10 # 博文标签默认请求条数
     blog-category-id: 1 # 默认收藏到博主的该类别博文下
     url-condition-split-character: \u002C # 默认的url请求参数的间隔字符（英文字符）
-  website:
-    manager-id: 1 # 拥有唯一图片管理权限的博主的id
-    manager-email: duan_jia_ning@163.com # 网站管理者的邮箱（反馈邮件发送到的邮箱）
-    page-nav-pos: 0 # 默认的博主主页个人信息栏位置，0在左，1在右
-    sender-mail: 2213994603@qq.com # 配置了smtp 的邮件发送者
-    sender-mail-password: athupcbmeyvvdjif # 配置了smtp 的邮件发送者的授权码
-    active-blogger-count: 20 # 默认获取活跃博主数
-    addr: 127.0.0.1:8080 # 站点域名
   file:
     image-root-path: E:/blog/blogger/image # 博主图片保存根路径
     patch-import-blog-temp-path: E:/blog/temp/blog-patch-import # 批量导入博文时临时 zip 文件路径
@@ -94,3 +85,19 @@ preference:
   db:
     string-filed-split-character-for-number: \u0020
     string-filed-split-character-for-string: \u0020
+  website:
+    manager-id: 1 # 拥有唯一图片管理权限的博主的id
+    manager-email: duan_jia_ning@163.com # 网站管理者的邮箱（反馈邮件发送到的邮箱）
+    page-nav-pos: 0 # 默认的博主主页个人信息栏位置，0在左，1在右
+    sender-mail: 2213994603@qq.com # 配置了smtp 的邮件发送者
+    sender-mail-password: athupcbmeyvvdjif # 配置了smtp 的邮件发送者的授权码
+    active-blogger-count: 20 # 默认获取活跃博主数
+    addr: 127.0.0.1:8080 # 站点域名
+
+    session:
+      blogger-id: bloggerId # 保存在session属性中的博主id对应的名字
+      blogger-name: bloggerName # 保存在session属性中的博主用户名对应的名字
+      login-signal: bloggerLoginSignal # 保存在session属性中的博主登录标识，有值（任意值）就表示已登录
+      error-msg: errorMsg # 保存在session属性中的错误信息对应的名字
+      owner-id: pageOwnerBloggerId # 页面所属博主id
+      owner-name: pageOwnerBloggerName # 页面所属博主name
