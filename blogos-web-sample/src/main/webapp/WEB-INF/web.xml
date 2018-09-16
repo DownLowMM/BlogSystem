@@ -8,15 +8,15 @@
     <!--<welcome-file>/views/blogger/register.jsp</welcome-file>-->
     <!--</welcome-file-list>-->
 
-    <error-page>
-        <error-code>404</error-code>
-        <location>/views/error/404.jsp</location>
-    </error-page>
+    <!--<error-page>-->
+    <!--<error-code>404</error-code>-->
+    <!--<location>/views/error/404.jsp</location>-->
+    <!--</error-page>-->
 
-    <error-page>
-        <error-code>500</error-code>
-        <location>/views/error/500.jsp</location>
-    </error-page>
+    <!--<error-page>-->
+    <!--<error-code>500</error-code>-->
+    <!--<location>/views/error/500.jsp</location>-->
+    <!--</error-page>-->
 
     <!--<context-param> 和 servlet的<init-param>只能二选一 见chrome的javaee-spring书签-->
     <!--种方式的各自配置文件里的配置项在某种意义上并不是合并互补，而是各成一个体系（虽然普通的bean看似是都加载到全局上下文来了，
@@ -30,9 +30,7 @@
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>
-                classpath:applicationContext.xml, <!--blogos-web-sample-->
-                classpath*:temp/applicationContext.xml, <!--blogos-service-impl-->
-                <!--classpath:spring/spring-*.xml-->
+                classpath:applicationContext.xml
             </param-value>
         </init-param>
         <!--<init-param>-->

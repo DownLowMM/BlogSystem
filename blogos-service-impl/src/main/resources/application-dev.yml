@@ -77,7 +77,6 @@ preference:
     category-count: 10 # 博主收藏博文默认请求条数
     label-count: 10 # 博文标签默认请求条数
     blog-category-id: 1 # 默认收藏到博主的该类别博文下
-    url-condition-split-character: \u002C # 默认的url请求参数的间隔字符（英文字符）
   website:
     manager-id: 1 # 拥有唯一图片管理权限的博主的id
     manager-email: duan_jia_ning@163.com # 网站管理者的邮箱（反馈邮件发送到的邮箱）
@@ -86,6 +85,7 @@ preference:
     sender-mail-password: athupcbmeyvvdjif # 配置了smtp 的邮件发送者的授权码
     active-blogger-count: 20 # 默认获取活跃博主数
     addr: 127.0.0.1:8080 # 站点域名
+    url-condition-split-character: \u002C # 默认的url请求参数的间隔字符（英文字符）
   file:
     image-root-path: E:/blog/blogger/image # 博主图片保存根路径
     patch-import-blog-temp-path: E:/blog/temp/blog-patch-import # 批量导入博文时临时 zip 文件路径

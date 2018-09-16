@@ -42,7 +42,10 @@
         <setting name="jdbcTypeForNull" value="NULL"/>
 
         <setting name="callSettersOnNulls" value="true"/>
-        <setting name="logImpl" value="SLF4J"/>
+        <!--<setting name="logImpl" value="SLF4J"/>-->
+
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
 
     </settings>
 

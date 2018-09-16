@@ -3,31 +3,36 @@
 	<br/><h1 align="center">BlogSystem<br/></h1><br/><br/>
 </p>
 
-## 博客系统
-
-BLOG 是学习 JavaWeb 开发4个月以来的总结实践项目，使用 SSM（Spring、SpringMVC、MyBatis）框架，MVC 三层结构、Lucene全文检索引擎、Junit 4单元测试、logback日志框架、Druid数据库连接池、Shiro安全框架的一个博文系统；
-
-在线查看：[sample](http://120.79.128.250:8080/)<br>
-
-#### 项目简介
+## 项目简介
 
 网站面向有撰写博客习惯的用户，个人可注册成为网站用户（博主），在系统中创建自己的博文类别、标签，使用Markdown语法创作博文，创作好后将博文分类，贴上标签既可发布；普通用户通过用户名就能浏览和检索博主的公开博文，注册成为博主后可以评论、喜欢和收藏博文。
 
 ### 在 dev/2.0.0 分支把项目的源代码结构修改为多模块方式
+- blogos-api
+
+spring boot 项目，对外暴露 api 接口
+
+- blogos-service
+
+项目的所有服务接口定义，后续可业务拆分为更细的模块
+
+- blogos-service-impl
+blogos-service 接口的实现
+
+- blogos-web-sample
+
+spring + jsp 前端
 
 部署方式
+1. blogos-web-sample 直接以 jar 的方式依赖 blogos-service-impl，这导致 blogos-web-sample 项目中需要对
+blogos-service-impl 中的组件（bean） 进行扫描路径配置，后续 blogos-service-impl 拆分为微服务就可以
+去掉这一部分配置。
 
-1. 导入 sql ：blog-config/resources/sql/db_blog.sql
-2. 修改数据库连接密码：blog-config/resources/config/db.properties
-3. 如果电脑上没有 E 盘（Windows 系统），修改 blog-config/resources/config/conf.properties 中一些文件保存路径
-4. 配置项目
-5. 部署运行，参看，主页（注册页）底部左侧指南
+2. spring boot 模块启动在 7070 端口，blogos-web-sample 模块按 war 的方式启动即可
 
-#### 配置项目说明
-![](https://raw.githubusercontent.com/DuanJiaNing/Pictures/master/BlogSystem/dep-1.png)
-<br>
-![](https://raw.githubusercontent.com/DuanJiaNing/Pictures/master/BlogSystem/dep-2.png)
-
+#### 现存问题
+1. blogos-web-sample 中对图片的 url 访问直接在 .jsp 写死了路径，需要配置化
+2. 还没完整的测试走通
 
 License
 ============

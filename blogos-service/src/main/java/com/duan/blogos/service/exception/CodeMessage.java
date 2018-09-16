@@ -8,7 +8,7 @@ package com.duan.blogos.service.exception;
 public enum CodeMessage {
 
 
-    BLOGGER_PASSWORD_INCORRECT("blogger.asswordIncorrect", 2),
+    BLOGGER_PASSWORD_INCORRECT("blogger.passwordIncorrect", 2),
 
     BLOGGER_UNKNOWN_ACCOUNT("blogger.unknownAccount", 2),
 
@@ -69,4 +69,6 @@ public enum CodeMessage {
     public String getMsg() {
         return msg;
     }
+
+
 }

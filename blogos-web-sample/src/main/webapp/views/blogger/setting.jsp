@@ -81,7 +81,7 @@
         <div class="col-md-9">
 
             <div id="divBase">
-                <img src="/image/${sessionScope.bloggerId}/type=public/${profile.avatarId}?default=13"
+                <img src="http://127.0.0.1:7070/image/${sessionScope.bloggerId}/type=public/${profile.avatarId}?default=13"
                      id="blogAvatar"
                      class="avatar-img">
                 &nbsp;&nbsp;&nbsp;&nbsp;

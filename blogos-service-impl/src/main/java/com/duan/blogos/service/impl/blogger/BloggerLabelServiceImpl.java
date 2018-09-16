@@ -12,6 +12,7 @@ import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.entity.blog.BlogLabel;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created on 2017/12/19.
@@ -39,6 +41,9 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
 
     @Autowired
     private DefaultProperties defaultProperties;
+
+    @Autowired
+    private DataFillingManager dataFillingManager;
 
     @Override
     public int insertLabel(int bloggerId, String title) {
@@ -103,15 +108,14 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
         List<BlogLabel> result = labelDao.listLabel(offset, rows);
         if (CollectionUtils.isEmpty(result)) return null;
 
-        // TODO
-        return null;
+        List<BlogLabelDTO> dtos = result.stream().map(dataFillingManager::blogLabel2DTO).collect(Collectors.toList());
+        return new ResultModel<>(dtos);
     }
 
     @Override
     public BlogLabelDTO getLabel(int labelId) {
         BlogLabel label = labelDao.getLabel(labelId);
-        // TODO
-        return null;
+        return dataFillingManager.blogLabel2DTO(label);
     }
 
     @Override
@@ -121,8 +125,8 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
 
         List<BlogLabel> result = labelDao.listLabelByBloggerId(bloggerId, offset, rows);
         if (CollectionUtils.isEmpty(result)) return null;
-        // TODO
 
-        return null;
+        List<BlogLabelDTO> dtos = result.stream().map(dataFillingManager::blogLabel2DTO).collect(Collectors.toList());
+        return new ResultModel<>(dtos);
     }
 }

@@ -189,7 +189,7 @@
                                 <div class="avatar">
                                     <a class="avatar-edit" id="editAvatar" style="display: none">点击更换头像</a>
 
-                                    <img src="/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
+                                    <img src="http://127.0.0.1:7070/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
                                          class="avatar-img avatar-img-editable"
                                          id="bloggerAvatar"
                                          onmouseenter="if(isPageOwnerBloggerLogin())$('#editAvatar').show()"
@@ -204,7 +204,7 @@
                             <c:otherwise>
                                 <%--头像--%>
                                 <div class="avatar">
-                                    <img src="/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
+                                    <img src="http://127.0.0.1:7070/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
                                          class="avatar-img">
                                 </div>
                                 <%--用户名--%>
@@ -348,7 +348,7 @@
                                 <div class="avatar">
                                     <a class="avatar-edit" id="editAvatar" style="display: none">点击更换头像</a>
 
-                                    <img src="/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
+                                    <img src="http://127.0.0.1:7070/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
                                          class="avatar-img avatar-img-editable"
                                          id="bloggerAvatar"
                                          onmouseenter="if(isPageOwnerBloggerLogin())$('#editAvatar').show()"
@@ -363,7 +363,7 @@
                             <c:otherwise>
                                 <%--头像--%>
                                 <div class="avatar">
-                                    <img src="/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
+                                    <img src="http://127.0.0.1:7070/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
                                          class="avatar-img">
                                 </div>
                                 <%--用户名--%>

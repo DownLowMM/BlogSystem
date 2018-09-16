@@ -12,6 +12,7 @@ import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.ResultModel;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.duan.blogos.service.enums.BloggerPictureCategoryEnum.DEFAULT_PICTURE;
 
@@ -46,6 +48,9 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
     @Autowired
     private DefaultProperties defaultProperties;
+
+    @Autowired
+    private DataFillingManager dataFillingManager;
 
 
     @Override
@@ -178,7 +183,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     @Override
     public BloggerPictureDTO getPicture(int pictureId) {
         BloggerPicture picture = pictureDao.getPictureById(pictureId);
-        return null; // TODO
+        return dataFillingManager.bloggerPicture2DTO(picture);
     }
 
     @Override
@@ -189,8 +194,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         String url = stringConstructorManager.constructPictureUrl(picture, DEFAULT_PICTURE);
         picture.setPath(url);
 
-        // TODO
-        return null;
+        return dataFillingManager.bloggerPicture2DTO(picture);
     }
 
     @Override
@@ -198,8 +202,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         BloggerPicture picture = pictureDao.getBloggerUniquePicture(websiteProperties.getManagerId(),
                 category.getCode());
 
-        // TODO
-        return null;
+        return dataFillingManager.bloggerPicture2DTO(picture);
     }
 
     @Override
@@ -223,8 +226,9 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
             picture.setPath(url);
         }
 
-        // TODO
-        return null;
+        List<BloggerPictureDTO> dtos = result.stream().map(dataFillingManager::bloggerPicture2DTO)
+                .collect(Collectors.toList());
+        return new ResultModel<>(dtos);
     }
 
     @Override

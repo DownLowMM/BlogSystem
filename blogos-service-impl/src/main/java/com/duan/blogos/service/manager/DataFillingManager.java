@@ -6,10 +6,7 @@ import com.duan.blogos.service.dto.blog.*;
 import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
 import com.duan.blogos.service.dto.blogger.*;
 import com.duan.blogos.service.entity.blog.*;
-import com.duan.blogos.service.entity.blogger.BloggerAccount;
-import com.duan.blogos.service.entity.blogger.BloggerLink;
-import com.duan.blogos.service.entity.blogger.BloggerPicture;
-import com.duan.blogos.service.entity.blogger.BloggerProfile;
+import com.duan.blogos.service.entity.blogger.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -222,7 +219,7 @@ public class DataFillingManager {
 
 // ------------------------------------------------------------------------------------------------
 
-    private BlogLabelDTO blogLabel2DTO(BlogLabel label) {
+    public BlogLabelDTO blogLabel2DTO(BlogLabel label) {
         BlogLabelDTO d = new BlogLabelDTO();
         d.setId(label.getId());
         d.setBloggerId(label.getBloggerId());
@@ -232,7 +229,7 @@ public class DataFillingManager {
         return d;
     }
 
-    private BlogCategoryDTO blogCategory2DTO(BlogCategory category) {
+    public BlogCategoryDTO blogCategory2DTO(BlogCategory category) {
         BlogCategoryDTO d = new BlogCategoryDTO();
         d.setId(category.getId());
         d.setBloggerId(category.getBloggerId());
@@ -243,7 +240,7 @@ public class DataFillingManager {
         return d;
     }
 
-    private BlogLabelDTO[] blogLabel2DTO(List<BlogLabel> labels) {
+    public BlogLabelDTO[] blogLabel2DTO(List<BlogLabel> labels) {
         BlogLabelDTO[] dtos = new BlogLabelDTO[labels.size()];
         for (int i = 0; i < labels.size(); i++) {
             dtos[i] = blogLabel2DTO(labels.get(i));
@@ -252,7 +249,7 @@ public class DataFillingManager {
         return dtos;
     }
 
-    private BlogCategoryDTO[] blogCategory2DTO(List<BlogCategory> categories) {
+    public BlogCategoryDTO[] blogCategory2DTO(List<BlogCategory> categories) {
         BlogCategoryDTO[] dtos = new BlogCategoryDTO[categories.size()];
         for (int i = 0; i < categories.size(); i++) {
             dtos[i] = blogCategory2DTO(categories.get(i));
@@ -261,7 +258,7 @@ public class DataFillingManager {
         return dtos;
     }
 
-    private BloggerPictureDTO bloggerPicture2DTO(BloggerPicture avatar) {
+    public BloggerPictureDTO bloggerPicture2DTO(BloggerPicture avatar) {
 
         BloggerPictureDTO pictureDTO = new BloggerPictureDTO();
         pictureDTO.setId(avatar.getId());
@@ -275,7 +272,7 @@ public class DataFillingManager {
         return pictureDTO;
     }
 
-    private BloggerProfileDTO bloggerProfile2DTO(BloggerProfile profile) {
+    public BloggerProfileDTO bloggerProfile2DTO(BloggerProfile profile) {
 
         BloggerProfileDTO profileDTO = new BloggerProfileDTO();
         profileDTO.setId(profile.getId());
@@ -289,7 +286,7 @@ public class DataFillingManager {
         return profileDTO;
     }
 
-    private BlogCategoryDTO[] blogCategory2DTO(BlogCategory[] categories) {
+    public BlogCategoryDTO[] blogCategory2DTO(BlogCategory[] categories) {
 
         BlogCategoryDTO[] cs = new BlogCategoryDTO[categories.length];
         for (int i = 0; i < categories.length; i++) {
@@ -299,7 +296,7 @@ public class DataFillingManager {
         return cs;
     }
 
-    private BlogLabelDTO[] blogLabel2DTO(BlogLabel[] labels) {
+    public BlogLabelDTO[] blogLabel2DTO(BlogLabel[] labels) {
         BlogLabelDTO[] bl = new BlogLabelDTO[labels.length];
         for (int i = 0; i < labels.length; i++) {
             bl[i] = blogLabel2DTO(labels[i]);
@@ -308,7 +305,7 @@ public class DataFillingManager {
         return bl;
     }
 
-    private BlogBaseStatisticsDTO blogStatistics2DTO(BlogStatistics statistics) {
+    public BlogBaseStatisticsDTO blogStatistics2DTO(BlogStatistics statistics) {
         BlogBaseStatisticsDTO dto = new BlogBaseStatisticsDTO();
         dto.setId(statistics.getId());
         dto.setBlogId(statistics.getBlogId());
@@ -325,4 +322,43 @@ public class DataFillingManager {
         return dto;
     }
 
+    public BloggerAccountDTO bloggerAccount2DTO(BloggerAccount account) {
+        BloggerAccountDTO dto = new BloggerAccountDTO();
+        dto.setId(account.getId());
+        dto.setUsername(account.getUsername());
+        dto.setPassword(account.getPassword());
+        dto.setRegisterDate(account.getRegisterDate());
+
+        return dto;
+    }
+
+    public BlogDTO blog2DTO(Blog blog) {
+        BlogDTO dto = new BlogDTO();
+
+        dto.setId(blog.getId());
+        dto.setBloggerId(blog.getBloggerId());
+        dto.setCategoryIds(blog.getCategoryIds());
+        dto.setLabelIds(blog.getLabelIds());
+        dto.setState(blog.getState());
+        dto.setTitle(blog.getTitle());
+        dto.setContent(blog.getContent());
+        dto.setContentMd(blog.getContentMd());
+        dto.setSummary(blog.getSummary());
+        dto.setReleaseDate(blog.getReleaseDate());
+        dto.setNearestModifyDate(blog.getNearestModifyDate());
+        dto.setKeyWords(blog.getKeyWords());
+        dto.setWordCount(blog.getWordCount());
+
+        return dto;
+    }
+
+    public BloggerSettingDTO bloggerSetting2DTO(BloggerSetting setting) {
+        BloggerSettingDTO dto = new BloggerSettingDTO();
+
+        dto.setId(setting.getId());
+        dto.setBloggerId(setting.getBloggerId());
+        dto.setMainPageNavPos(setting.getMainPageNavPos());
+
+        return dto;
+    }
 }

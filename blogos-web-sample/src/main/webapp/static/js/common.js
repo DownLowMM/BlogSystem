@@ -240,30 +240,32 @@ function initToolTip() {
 }
 
 function ajax(url, data, async, type, success) {
-    var host = 'http://127.0.0.1:7070/';
+    var host = 'http://127.0.0.1:7070';
     $.ajax({
         url: host + url,
         data: data,
         async: async,
         type: type,
-        success: success
+        success: success,
+        crossDomain: true
     });
 }
 
 function ajaxSpe(url, data, async, type, dataType, success) {
-    var host = 'http://127.0.0.1:7070/';
+    var host = 'http://127.0.0.1:7070';
     $.ajax({
         url: host + url,
         data: data,
         async: async,
         type: type,
         dataType: dataType,
-        success: success
+        success: success,
+        crossDomain: true
     });
 }
 
 function ajaxForUpload(url, data, cache, type, processData, contentType, success) {
-    var host = 'http://127.0.0.1:7070/';
+    var host = 'http://127.0.0.1:7070';
     $.ajax({
         url: host + url,
         type: type,
@@ -271,12 +273,13 @@ function ajaxForUpload(url, data, cache, type, processData, contentType, success
         cache: cache,
         processData: processData,
         contentType: contentType,
-        success: success
+        success: success,
+        crossDomain: true
     });
 }
 
 function ajaxUploadBase64Url(url, data, cache, type, dataType, beforeSend, success) {
-    var host = 'http://127.0.0.1:7070/';
+    var host = 'http://127.0.0.1:7070';
     $.ajax({
         url: host + url,
         type: type,
@@ -284,6 +287,7 @@ function ajaxUploadBase64Url(url, data, cache, type, dataType, beforeSend, succe
         cache: cache,
         dataType: dataType,
         beforeSend: beforeSend,
-        success: success
+        success: success,
+        crossDomain: true
     });
 }

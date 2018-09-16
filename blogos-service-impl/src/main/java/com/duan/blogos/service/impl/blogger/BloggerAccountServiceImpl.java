@@ -22,6 +22,7 @@ import com.duan.blogos.service.entity.blogger.BloggerSetting;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
+import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,9 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     @Autowired
     private WebsiteProperties websiteProperties;
 
+    @Autowired
+    private DataFillingManager dataFillingManager;
+
     @Override
     public int insertAccount(String userName, String password) {
 
@@ -104,15 +108,13 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     @Override
     public BloggerAccountDTO getAccount(int bloggerId) {
         BloggerAccount account = accountDao.getAccountById(bloggerId);
-        // TODO
-        return null;
+        return dataFillingManager.bloggerAccount2DTO(account);
     }
 
     @Override
     public BloggerAccountDTO getAccount(String bloggerName) {
         BloggerAccount account = accountDao.getAccountByName(bloggerName);
-        // TODO
-        return null;
+        return dataFillingManager.bloggerAccount2DTO(account);
     }
 
     @Override
@@ -197,8 +199,6 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
         BloggerProfile profile = profileDao.getProfileByPhone(phone);
         if (profile == null) return null;
         BloggerAccount account = accountDao.getAccountById(profile.getBloggerId());
-
-        // TODO
-        return null;
+        return dataFillingManager.bloggerAccount2DTO(account);
     }
 }

@@ -291,12 +291,11 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
             if (!StringUtils.isBlank(keyWords))
                 blog.setKeyWords(keyWords.replace(chs, whs));
 
-            // TODO
-            return null;
+            return new ResultModel<>(dataFillingManager.blog2DTO(blog));
 
         }
 
-        return null;
+        throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG, new SQLException());
     }
 
     @Override

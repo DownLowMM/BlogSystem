@@ -14,8 +14,6 @@ import java.sql.Timestamp;
 @Data
 public class Blog implements Serializable {
 
-    private static final long serialVersionUID = -4505057630620968435L;
-
     //博文id
     private Integer id;
 
