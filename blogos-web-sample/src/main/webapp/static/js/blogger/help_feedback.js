@@ -13,9 +13,7 @@ function sendFeedback(bloggerId) {
         (bloggerId === undefined ? '' : '&bloggerId=' + bloggerId);
 
     disableButton(false, 'sendFeedbackBtn', '正在提交...', "button-disable");
-    $.post(
-        '/email/feedback',
-        data,
+    ajax('/email/feedback', data, true, 'post',
         function (result) {
             if (result.code === 0) {
                 disableButton(false, 'sendFeedbackBtn', '提交成功', "button-disable");
@@ -34,8 +32,31 @@ function sendFeedback(bloggerId) {
                 disableButton(true, 'sendFeedbackBtn', '提交', "button-disable");
                 error(result.msg, 'sendFeedbackErrorMsg', true, 3000);
             }
-        }
-    )
+        });
+
+    // $.post(
+    //     '/email/feedback',
+    //     data,
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'sendFeedbackBtn', '提交成功', "button-disable");
+    //
+    //             setTimeout(function () {
+    //                 disableButton(true, 'sendFeedbackBtn', '提交', "button-disable");
+    //
+    //                 $('#adviceOrOpinion').val('');
+    //                 $('#contactInfo').val('');
+    //             }, 1000);
+    //
+    //         } else if (result.code === 18) {
+    //             disableButton(true, 'sendFeedbackBtn', '提交', "button-disable");
+    //             error('发送失败', 'sendFeedbackErrorMsg', true, 3000);
+    //         } else {
+    //             disableButton(true, 'sendFeedbackBtn', '提交', "button-disable");
+    //             error(result.msg, 'sendFeedbackErrorMsg', true, 3000);
+    //         }
+    //     }
+    // )
 
 }
 

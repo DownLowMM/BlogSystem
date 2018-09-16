@@ -52,14 +52,8 @@ function importBlog(bloggerId) {
     var data = new FormData();
     data.append('zipFile', $('#zipFile').prop('files')[0]);
 
-    $.ajax({
-        url: '/blogger/' + bloggerId + '/blog/patch',
-        type: 'POST',
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function (result) {
+    ajaxForUpload('/blogger/' + bloggerId + '/blog/patch', 'POST', data, false, false, false,
+        function (result) {
 
             if (result.code === 0) {
                 stopSuc = true;
@@ -97,8 +91,55 @@ function importBlog(bloggerId) {
                 error(result.msg, 'blogImportErrorMsg', true, 3000);
             }
 
-        }
-    });
+        });
+
+    // $.ajax({
+    //     url: '/blogger/' + bloggerId + '/blog/patch',
+    //     type: 'POST',
+    //     data: data,
+    //     cache: false,
+    //     processData: false,
+    //     contentType: false,
+    //     success: function (result) {
+    //
+    //         if (result.code === 0) {
+    //             stopSuc = true;
+    //
+    //             // 60% -> 100% 处理时间
+    //             $('#processStatus').html('正在解析...');
+    //             countDown(40, 20, function (count) {
+    //                 if (count === 0) {
+    //                     process = false;
+    //                     $('#progressbar').css('width', '100%');
+    //
+    //                     $('#progressbar').removeClass('active');
+    //
+    //                     $('#processStatus').html('');
+    //                     $('#showChoosedFileName').html('');
+    //                     $('#zipFile').val('');
+    //
+    //                     handleImportSucc(result.data);
+    //                     return true;
+    //                 } else {
+    //                     $('#progressbar').css('width', (100 - count) + '%');
+    //                 }
+    //             });
+    //
+    //         } else {
+    //             process = false;
+    //             stopFail = true;
+    //
+    //             $('#processStatus').html('');
+    //             $('#showChoosedFileName').html('');
+    //             $('#zipFile').val('');
+    //
+    //             $('#progressbar').css('width', '0%');
+    //             $('#progressbar').removeClass('active');
+    //             error(result.msg, 'blogImportErrorMsg', true, 3000);
+    //         }
+    //
+    //     }
+    // });
 }
 
 function handleImportSucc(data) {

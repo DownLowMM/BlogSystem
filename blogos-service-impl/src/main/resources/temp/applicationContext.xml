@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       profile="prod">
+
+    <!-- ############################ rpc 方式调用服务前需要在此进行配置 ############################ -->
+
+    <!--使用 spring 注解模式-->
+    <mvc:annotation-driven/>
+
+    <!--引入 properties 文件 properties文件要在一个地方统一引入，context:property-placeholder 只能定义一次（见spring笔记）-->
+    <context:property-placeholder location="classpath*:config/db.properties"/>
+
+    <!--国际化-->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="useCodeAsDefaultMessage" value="true"/>
+    </bean>
+    <!-- 配置基于Session的处理,将提交上来的locale参数进行处理 -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <!-- 该属性可以不用配置 -->
+        <property name="defaultLocale" value="zh"/>
+    </bean>
+    <!-- 国际化请求拦截器处理 -->
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+    </mvc:interceptors>
+
+    <!-- 配置事务通知属性 -->
+    <aop:aspectj-autoproxy/>
+
+    <!-- ############################ aop ############################ -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 定义事务传播属性 -->
+        <!--tx:method也规定了如果方法名匹配“add*”和“get*”...方法时使用事务，propagation是设定事务的传播级别。-->
+        <tx:attributes>
+            <!--propagation 传播行为
+            REQUIRED 如果当前没有事务，就创建一个新事务，如果当前存在事务，就加入该事务-->
+            <tx:method name="insert*" propagation="REQUIRED" isolation="DEFAULT"/>
+            <tx:method name="update*" propagation="REQUIRED" isolation="DEFAULT"/>
+            <tx:method name="delete*" propagation="REQUIRED" isolation="DEFAULT"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--配置事务切面-->
+    <aop:config>
+        <!--只对业务层启用事务 - impl包和所有子包中任意类的任意方法-->
+        <aop:pointcut id="pointCut" expression="execution(* com.duan.blogos.service.impl..*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut"/>
+    </aop:config>
+
+    <!-- ############################ dao ############################ -->
+    <context:component-scan base-package="com.duan.blogos.service.dao"/>
+
+    <!--数据库连接池-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="3"/>
+        <property name="minIdle" value="3"/>
+        <property name="maxActive" value="20"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="20"/>
+        <!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->
+        <property name="filters" value="stat"/>
+    </bean>
+
+    <!--sqlSessionFactory对象-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--mybatis 全局配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!--别名所对应的实体类-->
+        <property name="typeAliasesPackage" value="com.duan.blogos.entity"/>
+        <!--sql 与 dao 的映射文件-->
+        <property name="mapperLocations" value="classpath:mapper/*/*.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!--需要扫描的 dao 所在包-->
+        <property name="basePackage" value="com.duan.blogos.dao"/>
+    </bean>
+
+    <!-- ############################ service ############################ -->
+    <!--扫描 service 包下所有被 @Service 注解的类-->
+    <context:component-scan base-package="com.duan.blogos.service.impl"/>
+
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- ############################ shiro ############################ -->
+    <!-- 自定义Realm -->
+    <bean id="myAuthorizingRealm" class="com.duan.blogos.service.realm.MyAuthorizingRealm"/>
+
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myAuthorizingRealm"/>
+    </bean>
+
+    <!-- Shiro过滤器 -->
+    <bean class="org.apache.shiro.spring.web.ShiroFilterFactoryBean" id="shiroFilter">
+
+        <!-- Shiro的核心安全接口,这个属性是必须的 -->
+        <property name="securityManager" ref="securityManager"/>
+
+        <!-- 身份认证失败，则跳转到登录页面的配置 -->
+        <property name="loginUrl" value="/login.jsp"/>
+
+        <!-- 权限认证失败，则跳转到指定页面 -->
+        <property name="unauthorizedUrl" value="/nopower.jsp"/>
+
+        <!-- Shiro连接约束配置,即过滤链的定义 -->
+        <property name="filterChainDefinitions">
+            <value>
+                <!--anon 表示匿名访问，不需要认证以及授权-->
+                /blogger/login=anon
+
+                <!--authc表示需要认证 没有进行身份认证是不能进行访问的-->
+                /admin*=authc
+                /blogger/login/*=authc
+
+                <!--/student=roles[teacher]-->
+                <!--/teacher=perms["user:create"]-->
+
+            </value>
+        </property>
+    </bean>
+
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!-- 开启Shiro注解 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <!-- ############################ web ############################ -->
+    <context:component-scan base-package="com.duan.blogos.websample"/>
+
+    <!--视图解析器-->
+    <!-- 3.配置jsp 显示ViewResolver -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--对于静态资源使用默认的拦截器-->
+    <!--<mvc:default-servlet-handler/>-->
+    <!--把静态资源放在了statics目录下，资源映射如下-->
+    <mvc:resources mapping="/css/**" location="/static/css/"/>
+    <mvc:resources mapping="/js/**" location="/static/js/"/>
+    <mvc:resources mapping="/images/**" location="/static/image/"/>
+    <mvc:resources mapping="/plugin/**" location="/static/plugin/"/>
+    <mvc:resources mapping="/favicon.ico" location="/static/image/favicon.ico"/>
+
+    <!-- 文件上传 -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 默认编码 -->
+        <property name="defaultEncoding" value="utf-8"/>
+        <!-- 文件大小最大值 -->
+        <property name="maxUploadSize" value="10485760000"/>
+        <!-- 内存中的最大值 -->
+        <property name="maxInMemorySize" value="40960"/>
+    </bean>
+
+</beans>

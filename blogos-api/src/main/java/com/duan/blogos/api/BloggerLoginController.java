@@ -1,12 +1,12 @@
 package com.duan.blogos.api;
 
+import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.api.blogger.BaseBloggerController;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
-import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

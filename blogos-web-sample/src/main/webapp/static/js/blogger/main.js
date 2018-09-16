@@ -15,9 +15,8 @@ var lidsArray = [];
 
 // -----------------------------------------------------------------------------------------------------------------加载
 function loadLabel() {
-    $.get(
-        '/blogger/' + pageOwnerBloggerId + '/label',
-        {offset: 0, rows: 20},
+    ajaxSpe('/blogger/' + pageOwnerBloggerId + '/label',
+        {offset: 0, rows: 20}, true, 'get', 'json',
         function (result) {
             var html = '';
             if (result.code === 0) {
@@ -43,14 +42,43 @@ function loadLabel() {
                 $('#blogLabel').html(html);
             }
 
-        }, 'json'
-    )
+        });
+
+    // $.get(
+    //     '/blogger/' + pageOwnerBloggerId + '/label',
+    //     {offset: 0, rows: 20},
+    //     function (result) {
+    //         var html = '';
+    //         if (result.code === 0) {
+    //             var array = result.data;
+    //             // 设置高级筛选框内容
+    //             setComplexFilterLabel(array);
+    //             // 设置标签编辑框内容
+    //             setModifyLabel(array);
+    //
+    //             $('#labelCount').html('(' + array.length + ')');
+    //
+    //             for (var index in array) {
+    //                 var size = 0.4 + 1.5 * Math.random();
+    //                 var label = array[index];
+    //                 html += '<a class="blog-list-item-label" style="font-size: ' + size + 'em" onclick="filterBlogByLabel(' + label.id + ')">' +
+    //                     label.title + '</a>&nbsp;&nbsp;';
+    //             }
+    //         }
+    //
+    //         if (html === '') {
+    //             setLabelWhenEmpty('blogLabel');
+    //         } else {
+    //             $('#blogLabel').html(html);
+    //         }
+    //
+    //     }, 'json'
+    // )
 }
 
 function loadCategory() {
-    $.get(
-        '/blogger/' + pageOwnerBloggerId + '/category',
-        {offset: 0, rows: 1000},
+    ajaxSpe('/blogger/' + pageOwnerBloggerId + '/category',
+        {offset: 0, rows: 1000}, true, 'get', 'json',
         function (result) {
             var html = '';
             if (result.code === 0) {
@@ -77,14 +105,44 @@ function loadCategory() {
                 $('#blogCategory').html(html);
             }
 
-        }, 'json'
-    )
+        });
+
+    // $.get(
+    //     '/blogger/' + pageOwnerBloggerId + '/category',
+    //     {offset: 0, rows: 1000},
+    //     function (result) {
+    //         var html = '';
+    //         if (result.code === 0) {
+    //             var array = result.data;
+    //             // 设置高级筛选框内容
+    //             setComplexFilterCategory(array);
+    //             // 设置类别编辑框内容
+    //             setModifyCategory(array);
+    //             $('#categoryCount').html('(' + array.length + ')');
+    //
+    //             for (var index in array) {
+    //                 var ca = array[index];
+    //                 html += '<a class="list-group-item vertical-center border0" ' +
+    //                     'onclick="filterBlogByCategory(' + ca.id + ')"' +
+    //                     'onmouseenter="if(isPageOwnerBloggerLogin()) $(this).find(\'.badge\').fadeToggle(\'fast\',\'linear\');"' +
+    //                     'onmouseleave="if(isPageOwnerBloggerLogin()) $(this).find(\'.badge\').fadeToggle(\'fast\',\'linear\');">'
+    //                     + ca.title + '<span class="count">&nbsp;(' + ca.count + ')</span></a>'
+    //             }
+    //         }
+    //
+    //         if (html === '') {
+    //             setCategoryWhenEmpty('blogCategory');
+    //         } else {
+    //             $('#blogCategory').html(html);
+    //         }
+    //
+    //     }, 'json'
+    // )
 }
 
 function loadContact() {
-    $.get(
-        '/blogger/' + pageOwnerBloggerId + '/link',
-        {offset: 0, rows: 20},
+    ajaxSpe('/blogger/' + pageOwnerBloggerId + '/link',
+        {offset: 0, rows: 20}, true, 'get', 'json',
         function (result) {
             var html = '';
             if (result.code === 0) {
@@ -112,15 +170,46 @@ function loadContact() {
                 initToolTip();
             }
 
-        }, 'json'
-    );
+        });
+
+    // $.get(
+    //     '/blogger/' + pageOwnerBloggerId + '/link',
+    //     {offset: 0, rows: 20},
+    //     function (result) {
+    //         var html = '';
+    //         if (result.code === 0) {
+    //             var array = result.data;
+    //             setModifyLink(array);
+    //             $('#linkCount').html('(' + array.length + ')');
+    //
+    //             for (var index in array) {
+    //                 var link = array[index];
+    //                 html += '<a class="blogger-link-item"';
+    //
+    //                 var bewrite = link.bewrite;
+    //                 if (!isStrEmpty_(bewrite))
+    //                     html += ' data-toggle="tooltip" title="' + bewrite + '" data-placement="bottom"';
+    //
+    //                 html += ' target="_blank" href="' + link.url + '">' + link.title + '</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    //             }
+    //
+    //         }
+    //
+    //         if (html === '') {
+    //             setContactWhenEmpty("bloggerLink");
+    //         } else {
+    //             $('#bloggerLink').html(html);
+    //             initToolTip();
+    //         }
+    //
+    //     }, 'json'
+    // );
 }
 
 function loadSortRule() {
 
-    $.get(
-        '/sort-rule/rule',
-        null,
+    ajaxSpe('/sort-rule/rule',
+        null, true, 'get', 'json',
         function (result) {
             if (result.code === 0) {
                 var html = '';
@@ -132,11 +221,26 @@ function loadSortRule() {
                 $('#complexFilterSortRuleShow').html(array[0].title + '<span class="caret"></span>&nbsp;');
                 $('#complexFilterSortRule').html(html);
             }
-        }, 'json');
+        });
 
-    $.get(
-        '/sort-rule/order',
-        null,
+    // $.get(
+    //     '/sort-rule/rule',
+    //     null,
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             var html = '';
+    //             var array = result.data;
+    //             for (var index in array) {
+    //                 var item = array[index];
+    //                 html += '<li><a onclick="setSortRule(\'' + item.key + '\',\'' + item.title + '\')">' + item.title + '</a></li>';
+    //             }
+    //             $('#complexFilterSortRuleShow').html(array[0].title + '<span class="caret"></span>&nbsp;');
+    //             $('#complexFilterSortRule').html(html);
+    //         }
+    //     }, 'json');
+
+    ajaxSpe('/sort-rule/order',
+        null, true, 'get', 'json',
         function (result) {
             if (result.code === 0) {
                 var html = '';
@@ -148,7 +252,23 @@ function loadSortRule() {
                 $('#complexFilterSortOrderShow').html(array[0].title + '<span class="caret"></span>');
                 $('#complexFilterSortOrder').html(html);
             }
-        }, 'json');
+        });
+
+    // $.get(
+    //     '/sort-rule/order',
+    //     null,
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             var html = '';
+    //             var array = result.data;
+    //             for (var index in array) {
+    //                 var item = array[index];
+    //                 html += '<li><a onclick="setSortOrder(\'' + item.key + '\',\'' + item.title + '\')">' + item.title + '</a></li>';
+    //             }
+    //             $('#complexFilterSortOrderShow').html(array[0].title + '<span class="caret"></span>');
+    //             $('#complexFilterSortOrder').html(html);
+    //         }
+    //     }, 'json');
 
 }
 
@@ -336,8 +456,7 @@ function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTot
 
     $('#blogList').html('<br><br><br><p class="text-center lead">正在加载...</p><br><br><br>');
 
-    $.get(
-        '/blog',
+    ajaxSpe('/blog',
         {
             bloggerId: pageOwnerBloggerId,
             offset: offset,
@@ -347,7 +466,7 @@ function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTot
             kword: filterData.kword,
             sort: filterData.sort,
             order: filterData.order
-        },
+        }, true, 'get', 'json',
         function (result) {
 
             var ins = '';
@@ -368,8 +487,42 @@ function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTot
 
             initToolTip();
 
-        }, 'json'
-    );
+        });
+
+    // $.get(
+    //     '/blog',
+    //     {
+    //         bloggerId: pageOwnerBloggerId,
+    //         offset: offset,
+    //         rows: rows,
+    //         cids: filterData.cids,
+    //         lids: filterData.lids,
+    //         kword: filterData.kword,
+    //         sort: filterData.sort,
+    //         order: filterData.order
+    //     },
+    //     function (result) {
+    //
+    //         var ins = '';
+    //         if (isPageOwnerBloggerLogin())
+    //             ins = '，去<a style="font-size: x-large" href="/edit_blog?bid=' + loginBloggerId + '" target="_blank">写博文</a>';
+    //
+    //         setBlogs(result.data, '<br><br><br><p class="text-center lead">没有博文' + ins + '</p><br><br><br>');
+    //
+    //         if (refreshPageIndicator) {
+    //             setPageIndicator(0);
+    //         }
+    //
+    //         if (refreshTotalRealCount) {
+    //             $('#blogCount').html(result.data.length + '&nbsp;篇博文');
+    //             $('#subBlogCount').html('(' + result.data.length + ')');
+    //
+    //         }
+    //
+    //         initToolTip();
+    //
+    //     }, 'json'
+    // );
 }
 
 function filterBlogByLabel(id) {
@@ -524,11 +677,9 @@ function showBlogStatisticsDialog(blogId) {
 function confirmExe() {
 
     disableButton(false, 'confirmBtn', '正在删除...', "button-disable");
-    $.ajax({
-        url: '/blogger/' + loginBloggerId + '/blog/' + confirmDeleteBlogId,
-        async: false,
-        type: 'delete',
-        success: function (result) {
+
+    ajax('/blogger/' + loginBloggerId + '/blog/' + confirmDeleteBlogId, null, false, 'delete',
+        function (result) {
             if (result.code === 0) {
                 confirmDeleteBlogId = -1;
                 disableButton(false, 'confirmBtn', '删除成功', "button-disable");
@@ -547,8 +698,33 @@ function confirmExe() {
                 disableButton(true, 'confirmBtn', '确认', "button-disable");
                 error('删除失败：' + result.msg, 'confirmErrorMsg', true, 3000);
             }
-        }
-    });
+        });
+
+    // $.ajax({
+    //     url: '/blogger/' + loginBloggerId + '/blog/' + confirmDeleteBlogId,
+    //     async: false,
+    //     type: 'delete',
+    //     success: function (result) {
+    //         if (result.code === 0) {
+    //             confirmDeleteBlogId = -1;
+    //             disableButton(false, 'confirmBtn', '删除成功', "button-disable");
+    //             filterBloggerBlog(0, defaultBlogCount, true, false, true);
+    //             loadCategory();
+    //
+    //             setTimeout(function () {
+    //                 disableButton(true, 'confirmBtn', '确认', "button-disable");
+    //
+    //                 $('#confirmDialog').modal('hide');
+    //                 clearDiv('confirmText');
+    //
+    //             }, 1000);
+    //
+    //         } else {
+    //             disableButton(true, 'confirmBtn', '确认', "button-disable");
+    //             error('删除失败：' + result.msg, 'confirmErrorMsg', true, 3000);
+    //         }
+    //     }
+    // });
 }
 
 // -----------------------------------------------------------------------------------------------------重置高级检索条件
@@ -596,9 +772,8 @@ function setFilterData(cids, lids, kword, sort, order) {
 // 刷新分页插件
 function setPageIndicator(initIndex) {
     var init = true;
-    $.get(
-        '/blog/count',
-        null,
+    ajaxSpe('/blog/count',
+        null, true, 'get', 'json',
         function (result) {
             if (result.code === 0) {
                 var count = result.data;
@@ -618,8 +793,32 @@ function setPageIndicator(initIndex) {
                     }
                 })
             }
-        }, 'json'
-    );
+        });
+
+    // $.get(
+    //     '/blog/count',
+    //     null,
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             var count = result.data;
+    //             $('#box').paging({
+    //                 initPageNo: initIndex, // 初始页码
+    //                 totalPages: Math.ceil(count / defaultBlogCount), //总页数
+    //                 totalCount: count + '条', // 条目总数
+    //                 slideSpeed: 600, // 缓动速度。单位毫秒
+    //                 jump: true, //是否支持跳转
+    //                 callback: function (page) { // 回调函数
+    //                     if (init && page === 1) {
+    //                         init = false;
+    //                         return;
+    //                     }
+    //
+    //                     filterBloggerBlog((page - 1) * defaultBlogCount, defaultBlogCount, false, true, false);
+    //                 }
+    //             })
+    //         }
+    //     }, 'json'
+    // );
 
 }
 

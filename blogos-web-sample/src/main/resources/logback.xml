@@ -9,7 +9,7 @@
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/blogos-service-impl.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>./logs/blogos-web-sample.log.%d{yyyy-MM-dd}</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>

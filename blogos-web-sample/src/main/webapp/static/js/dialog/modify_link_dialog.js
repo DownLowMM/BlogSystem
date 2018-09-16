@@ -62,11 +62,9 @@ function exeLinkUpdate(th, bloggerId, funWhenEditLinkSuccess) {
 
     data = data.substr(0, data.length - 1);
     var id = $('#showChoosedLink > span').attr('did');
-    $.ajax({
-        url: '/blogger/' + bloggerId + '/link/' + id,
-        data: data,
-        type: 'put',
-        success: function (result) {
+
+    ajax('/blogger/' + bloggerId + '/link/' + id, data, true, 'put',
+        function (result) {
             if (result.code === 0) {
                 disableButton(false, 'modifyEditLinkBtn', '修改成功', "button-disable");
 
@@ -87,8 +85,35 @@ function exeLinkUpdate(th, bloggerId, funWhenEditLinkSuccess) {
             } else {
                 error(result.msg, 'modifyLinkErrorMsg', false, 3000);
             }
-        }
-    });
+        });
+
+    // $.ajax({
+    //     url: '/blogger/' + bloggerId + '/link/' + id,
+    //     data: data,
+    //     type: 'put',
+    //     success: function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'modifyEditLinkBtn', '修改成功', "button-disable");
+    //
+    //             setTimeout(function () {
+    //                 disableButton(true, 'modifyEditLinkBtn', '提交', "button-disable");
+    //                 funWhenEditLinkSuccess();
+    //
+    //                 $('#modifyLinkDialog').modal('hide');
+    //
+    //                 $('#editLinkTitle').val('');
+    //                 $('#editLinkUrl').val('');
+    //                 $('#editLinkBewrite').val('');
+    //                 clearDiv('showChoosedLink');
+    //                 clearDiv('showChoosedLinkDetail');
+    //
+    //             }, 1000);
+    //
+    //         } else {
+    //             error(result.msg, 'modifyLinkErrorMsg', false, 3000);
+    //         }
+    //     }
+    // });
 
 }
 
@@ -107,17 +132,25 @@ function exeLinkDelete(th, bloggerId, funWhenDeleteLinkSuccess) {
     for (; i < doms.length; i++) {
         var id = $(doms[i]).attr('did');
 
-        $.ajax({
-            url: '/blogger/' + bloggerId + '/link/' + id,
-            async: false,
-            type: 'delete',
-            success: function (result) {
+        ajax('/blogger/' + bloggerId + '/link/' + id, null, false, 'delete',
+            function (result) {
                 if (result.code !== 0) {
                     fail = true;
                     msg = result.msg;
                 }
-            }
-        });
+            });
+
+        // $.ajax({
+        //     url: '/blogger/' + bloggerId + '/link/' + id,
+        //     async: false,
+        //     type: 'delete',
+        //     success: function (result) {
+        //         if (result.code !== 0) {
+        //             fail = true;
+        //             msg = result.msg;
+        //         }
+        //     }
+        // });
 
         if (fail) {
             error(msg, 'modifyLinkErrorMsg', true, 3000);

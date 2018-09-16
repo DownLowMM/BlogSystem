@@ -22,9 +22,12 @@ function createLink(funWhenCreateLinkSuccess, funWhenCreateLinkFail) {
     error("", 'linkErrorMsg', true, 2000);
 
     disableButton(false, 'newLinkBtn', '正在创建...', "button-disable");
-    $.post(
-        '/blogger/' + pageOwnerBloggerId + '/link',
-        {title: title, url: url, bewrite: bewrite},
+
+    ajaxSpe('/blogger/' + pageOwnerBloggerId + '/link', {
+            title: title,
+            url: url,
+            bewrite: bewrite
+        }, true, 'post', 'json',
         function (result) {
             if (result.code === 0) {
                 disableButton(false, 'newLinkBtn', '创建成功', "button-disable");
@@ -45,7 +48,32 @@ function createLink(funWhenCreateLinkSuccess, funWhenCreateLinkFail) {
 
                 funWhenCreateLinkFail(result);
             }
-        }, 'json'
-    );
+        });
+
+    // $.post(
+    //     '/blogger/' + pageOwnerBloggerId + '/link',
+    //     {title: title, url: url, bewrite: bewrite},
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'newLinkBtn', '创建成功', "button-disable");
+    //             funWhenCreateLinkSuccess(result.data);
+    //
+    //             setTimeout(function () {
+    //                 disableButton(true, 'newLinkBtn', '创建', "button-disable");
+    //                 $('#linkTitle').val('');
+    //                 $('#linkUrl').val('');
+    //                 $('#linkBewrite').val('');
+    //
+    //                 $('#newLinkDialog').modal('toggle');
+    //             }, 1000);
+    //
+    //         } else {
+    //             disableButton(true, 'newLinkBtn', '创建', "button-disable");
+    //             error(result.msg, 'linkErrorMsg', true, 3000);
+    //
+    //             funWhenCreateLinkFail(result);
+    //         }
+    //     }, 'json'
+    // );
 
 }

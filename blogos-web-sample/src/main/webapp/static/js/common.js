@@ -238,3 +238,52 @@ function stringToUnicode(str) {
 function initToolTip() {
     $('[data-toggle="tooltip"]').tooltip();
 }
+
+function ajax(url, data, async, type, success) {
+    var host = 'http://127.0.0.1:7070/';
+    $.ajax({
+        url: host + url,
+        data: data,
+        async: async,
+        type: type,
+        success: success
+    });
+}
+
+function ajaxSpe(url, data, async, type, dataType, success) {
+    var host = 'http://127.0.0.1:7070/';
+    $.ajax({
+        url: host + url,
+        data: data,
+        async: async,
+        type: type,
+        dataType: dataType,
+        success: success
+    });
+}
+
+function ajaxForUpload(url, data, cache, type, processData, contentType, success) {
+    var host = 'http://127.0.0.1:7070/';
+    $.ajax({
+        url: host + url,
+        type: type,
+        data: data,
+        cache: cache,
+        processData: processData,
+        contentType: contentType,
+        success: success
+    });
+}
+
+function ajaxUploadBase64Url(url, data, cache, type, dataType, beforeSend, success) {
+    var host = 'http://127.0.0.1:7070/';
+    $.ajax({
+        url: host + url,
+        type: type,
+        data: data,
+        cache: cache,
+        dataType: dataType,
+        beforeSend: beforeSend,
+        success: success
+    });
+}

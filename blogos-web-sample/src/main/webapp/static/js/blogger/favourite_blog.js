@@ -5,14 +5,12 @@ var filterData = {
 };
 
 function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTotalRealCount) {
-    $.get(
-        '/blogger/' + pageOwnerBloggerId + '/' + type,
-        {
+    ajaxSpe('/blogger/' + pageOwnerBloggerId + '/' + type, {
             offset: offset,
             rows: rows,
             sort: filterData.sort,
             order: filterData.order
-        },
+        }, true, 'get', 'json',
         function (result) {
 
             setBlogs(result.data, '<br><br><br><p class="text-center lead">没有博文</p><br><br><br>');
@@ -30,8 +28,35 @@ function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTot
 
             initToolTip();
 
-        }
-    );
+        });
+
+    // $.get(
+    //     '/blogger/' + pageOwnerBloggerId + '/' + type,
+    //     {
+    //         offset: offset,
+    //         rows: rows,
+    //         sort: filterData.sort,
+    //         order: filterData.order
+    //     },
+    //     function (result) {
+    //
+    //         setBlogs(result.data, '<br><br><br><p class="text-center lead">没有博文</p><br><br><br>');
+    //
+    //         if (refreshPageIndicator) {
+    //             setPageIndicator(0);
+    //         }
+    //
+    //         // if (refreshTotalRealCount)
+    //         // $('#blogCount').html(result.data.length + '篇博文');
+    //
+    //         if (toTop) {
+    //             scrollToTop();
+    //         }
+    //
+    //         initToolTip();
+    //
+    //     }
+    // );
 }
 
 // ------------------------------------------------------------------------------------------------------ 登录对话框回调
@@ -56,9 +81,9 @@ var defaultBlogCount = 10;
 // 刷新分页插件
 function setPageIndicator(initIndex) {
     var init = true;
-    $.get(
-        '/blogger/' + pageOwnerBloggerId + '/' + type + '/count',
-        null,
+
+    ajaxSpe('/blogger/' + pageOwnerBloggerId + '/' + type + '/count',
+        null, true, 'get', 'json',
         function (result) {
             if (result.code === 0) {
                 var count = result.data;
@@ -85,8 +110,39 @@ function setPageIndicator(initIndex) {
                     }
                 })
             }
-        }, 'json'
-    );
+        });
+
+    // $.get(
+    //     '/blogger/' + pageOwnerBloggerId + '/' + type + '/count',
+    //     null,
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             var count = result.data;
+    //             $('#blogCount').html('共&nbsp;' + count + '&nbsp;篇');
+    //             if (type === 'like') {
+    //                 $('#favouriteLikeCount').html('(' + count + ')');
+    //             } else {
+    //                 $('#favouriteCollectCount').html('(' + count + ')');
+    //             }
+    //
+    //             $('#box').paging({
+    //                 initPageNo: initIndex, // 初始页码
+    //                 totalPages: Math.ceil(count / defaultBlogCount), //总页数
+    //                 totalCount: count + '条', // 条目总数
+    //                 slideSpeed: 600, // 缓动速度。单位毫秒
+    //                 jump: true, //是否支持跳转
+    //                 callback: function (page) { // 回调函数
+    //                     if (init && page === 1) {
+    //                         init = false;
+    //                         return;
+    //                     }
+    //
+    //                     filterBloggerBlog((page - 1) * defaultBlogCount, defaultBlogCount, false, true, false);
+    //                 }
+    //             })
+    //         }
+    //     }, 'json'
+    // );
 
 }
 
@@ -174,10 +230,9 @@ function gotoBloggerMainPage(name) {
 }
 
 function removeFavourite(blogId) {
-    $.ajax({
-        url: '/blogger/' + loginBloggerId + '/' + blogId + '/operate=' + type,
-        type: 'delete',
-        success: function (result) {
+
+    ajax('/blogger/' + loginBloggerId + '/' + blogId + '/operate=' + type, null, true, 'delete',
+        function (result) {
             if (result.code === 0) {
                 filterBloggerBlog(0, defaultBlogCount, true, false, true);
                 toast('已移除', 500);
@@ -185,8 +240,21 @@ function removeFavourite(blogId) {
             } else {
                 toast('出错啦：' + result.msg, 2000);
             }
-        }
-    });
+        });
+
+    // $.ajax({
+    //     url: '/blogger/' + loginBloggerId + '/' + blogId + '/operate=' + type,
+    //     type: 'delete',
+    //     success: function (result) {
+    //         if (result.code === 0) {
+    //             filterBloggerBlog(0, defaultBlogCount, true, false, true);
+    //             toast('已移除', 500);
+    //
+    //         } else {
+    //             toast('出错啦：' + result.msg, 2000);
+    //         }
+    //     }
+    // });
 
 }
 

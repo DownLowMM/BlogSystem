@@ -253,16 +253,28 @@
                     dialog.loading(true);
                 }
 
-                $.getJSON(path + "emoji.json?temp=" + Math.random(), function (json) {
+                ajaxSpe(path + "emoji.json?temp=" + Math.random(), null, true, 'get', 'json',
+                    function (json) {
 
-                    if (typeof dialog.loading === "function") {
-                        dialog.loading(false);
-                    }
+                        if (typeof dialog.loading === "function") {
+                            dialog.loading(false);
+                        }
 
-                    emojiData = json;
-                    emojiData[logoPrefix] = logos;
-                    drawTable();
-                });
+                        emojiData = json;
+                        emojiData[logoPrefix] = logos;
+                        drawTable();
+                    });
+
+                // $.getJSON(path + "emoji.json?temp=" + Math.random(), function (json) {
+                //
+                //     if (typeof dialog.loading === "function") {
+                //         dialog.loading(false);
+                //     }
+                //
+                //     emojiData = json;
+                //     emojiData[logoPrefix] = logos;
+                //     drawTable();
+                // });
             }
             else {
                 drawTable();

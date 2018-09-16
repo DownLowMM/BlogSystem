@@ -20,29 +20,49 @@ function login() {
     }
 
     disableButton(false, 'loginBtn', '正在登录...', "button-disable");
-    $.post(
-        '/blogger/login/way=name',
-        {
-            username: name,
-            password: pwd
-        },
-        function (result) {
-            if (result.code === 0) {
-                disableButton(false, 'loginBtn', '登录成功', "button-disable");
+    ajax('/blogger/login/way=name', {
+        username: name,
+        password: pwd
+    }, true, 'post', function (result) {
+        if (result.code === 0) {
+            disableButton(false, 'loginBtn', '登录成功', "button-disable");
 
-                setTimeout(function () {
-                    disableButton(true, 'loginBtn', '登录', "button-disable");
-
-                    window.location.href = '/' + name + '/archives';
-                }, 1000);
-
-            } else {
-                errorInfoWhenLogin(result.msg);
+            setTimeout(function () {
                 disableButton(true, 'loginBtn', '登录', "button-disable");
 
-            }
+                window.location.href = '/' + name + '/archives';
+            }, 1000);
+
+        } else {
+            errorInfoWhenLogin(result.msg);
+            disableButton(true, 'loginBtn', '登录', "button-disable");
+
         }
-    );
+    });
+
+    // $.post(
+    //     '/blogger/login/way=name',
+    //     {
+    //         username: name,
+    //         password: pwd
+    //     },
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'loginBtn', '登录成功', "button-disable");
+    //
+    //             setTimeout(function () {
+    //                 disableButton(true, 'loginBtn', '登录', "button-disable");
+    //
+    //                 window.location.href = '/' + name + '/archives';
+    //             }, 1000);
+    //
+    //         } else {
+    //             errorInfoWhenLogin(result.msg);
+    //             disableButton(true, 'loginBtn', '登录', "button-disable");
+    //
+    //         }
+    //     }
+    // );
 
 }
 

@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
        profile="prod">
+
+    <!-- ############################
+    1. rpc 方式调用服务前需要在此进行 web 基础配置
+    2. 同时在 blogos-service-impl ../resources/temp/applicationContext.xml 中进行其他配置
+    ############################ -->
+
+    <!--使用 spring 注解模式-->
+    <mvc:annotation-driven/>
+
+    <!-- ############################ web ############################ -->
+    <context:component-scan base-package="com.duan.blogos.websample"/>
 
     <!--视图解析器-->
     <!-- 3.配置jsp 显示ViewResolver -->
@@ -16,7 +27,6 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-
     <!--对于静态资源使用默认的拦截器-->
     <!--<mvc:default-servlet-handler/>-->
     <!--把静态资源放在了statics目录下，资源映射如下-->
@@ -25,5 +35,16 @@
     <mvc:resources mapping="/images/**" location="/static/image/"/>
     <mvc:resources mapping="/plugin/**" location="/static/plugin/"/>
     <mvc:resources mapping="/favicon.ico" location="/static/image/favicon.ico"/>
+
+    <!-- 文件上传 -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 默认编码 -->
+        <property name="defaultEncoding" value="utf-8"/>
+        <!-- 文件大小最大值 -->
+        <property name="maxUploadSize" value="10485760000"/>
+        <!-- 内存中的最大值 -->
+        <property name="maxInMemorySize" value="40960"/>
+    </bean>
 
 </beans>

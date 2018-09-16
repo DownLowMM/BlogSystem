@@ -15,6 +15,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.1.7.RELEASE</spring.version>
+        <logback.version>1.1.11</logback.version>
+        <slf4j.version>1.7.24</slf4j.version>
     </properties>
 
     <dependencies>
@@ -26,8 +28,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.duan.blogos</groupId>
-            <artifactId>blogos-util</artifactId>
+            <groupId>com.duan.base</groupId>
+            <artifactId>base-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
@@ -40,9 +42,33 @@
         <!-- 1.日志 -->
         <!-- 实现slf4j接口并整合 -->
         <dependency>
+            <groupId>org.logback-extensions</groupId>
+            <artifactId>logback-ext-spring</artifactId>
+            <version>0.1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.1</version>
+            <version>${logback.version}</version>
         </dependency>
 
         <!-- web *************************************************************** ^-->

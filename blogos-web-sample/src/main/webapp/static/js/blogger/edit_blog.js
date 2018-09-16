@@ -48,31 +48,51 @@ $(document).ready(function () {
 
 
 function loadLabel() {
-    $.get(
-        '/blogger/' + bloggerId + '/label',
-        {offset: 0, rows: 20},
+    ajaxSpe('/blogger/' + bloggerId + '/label',
+        {offset: 0, rows: 20}, true, 'get', 'json',
         function (result) {
             if (result.code === 0) {
                 var array = result.data;
                 // 填充立即发布对话框数据
                 setLabel(array);
             }
-        }, 'json'
-    )
+        });
+
+    // $.get(
+    //     '/blogger/' + bloggerId + '/label',
+    //     {offset: 0, rows: 20},
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             var array = result.data;
+    //             // 填充立即发布对话框数据
+    //             setLabel(array);
+    //         }
+    //     }, 'json'
+    // )
 }
 
 function loadCategory() {
-    $.get(
-        '/blogger/' + bloggerId + '/category',
-        {offset: 0, rows: 1000},
+    ajaxSpe('/blogger/' + bloggerId + '/category',
+        {offset: 0, rows: 1000}, true, 'get', 'json',
         function (result) {
             if (result.code === 0) {
                 var array = result.data;
                 // 填充立即发布对话框数据
                 setCategory(array);
             }
-        }, 'json'
-    )
+        });
+
+    // $.get(
+    //     '/blogger/' + bloggerId + '/category',
+    //     {offset: 0, rows: 1000},
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             var array = result.data;
+    //             // 填充立即发布对话框数据
+    //             setCategory(array);
+    //         }
+    //     }, 'json'
+    // )
 }
 
 var funAfterReleaseBlogSuccess = function (title) {

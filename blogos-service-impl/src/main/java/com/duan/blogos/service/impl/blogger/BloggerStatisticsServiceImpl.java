@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.duan.base.util.common.CollectionUtils;
 import com.duan.blogos.service.dao.blog.*;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.dao.blogger.BloggerLinkDao;
@@ -17,7 +18,6 @@ import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
-import com.duan.blogos.util.common.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

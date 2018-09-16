@@ -15,9 +15,7 @@ function createLabel(funWhenCreateLabelSuccess, funWhenCreateLabelFail) {
     }
 
     disableButton(false, 'newLabelBtn', '正在创建...', "button-disable");
-    $.post(
-        '/blogger/' + pageOwnerBloggerId + '/label',
-        {title: name},
+    ajaxSpe('/blogger/' + pageOwnerBloggerId + '/label', {title: name}, true, 'post', 'json',
         function (result) {
             if (result.code === 0) {
                 disableButton(false, 'newLabelBtn', '创建成功', "button-disable");
@@ -36,6 +34,29 @@ function createLabel(funWhenCreateLabelSuccess, funWhenCreateLabelFail) {
 
                 funWhenCreateLabelFail(result);
             }
-        }, 'json'
-    );
+        });
+
+    // $.post(
+    //     '/blogger/' + pageOwnerBloggerId + '/label',
+    //     {title: name},
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'newLabelBtn', '创建成功', "button-disable");
+    //             funWhenCreateLabelSuccess(result.data);
+    //
+    //             setTimeout(function () {
+    //                 disableButton(true, 'newLabelBtn', '创建', "button-disable");
+    //                 $('#labelName').val('');
+    //
+    //                 $('#newLabelDialog').modal('toggle');
+    //             }, 1000);
+    //
+    //         } else {
+    //             disableButton(true, 'newLabelBtn', '创建', "button-disable");
+    //             error(result.msg, 'labelErrorMsg', true, 3000);
+    //
+    //             funWhenCreateLabelFail(result);
+    //         }
+    //     }, 'json'
+    // );
 }

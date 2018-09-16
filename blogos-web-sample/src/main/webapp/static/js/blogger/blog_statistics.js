@@ -1,7 +1,5 @@
 function loadBlogStatistics(blogId) {
-    $.get(
-        '/blog/' + blogId + '/statistics',
-        null,
+    ajax('/blog/' + blogId + '/statistics', null, true, 'get',
         function (result) {
             if (result.code === 0) {
                 setData(result.data);
@@ -9,8 +7,20 @@ function loadBlogStatistics(blogId) {
                 $('#blogStatisticsDialog').modal('hide');
                 toast(result.msg, 2000);
             }
-        }
-    )
+        });
+
+    // $.get(
+    //     '/blog/' + blogId + '/statistics',
+    //     null,
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             setData(result.data);
+    //         } else {
+    //             $('#blogStatisticsDialog').modal('hide');
+    //             toast(result.msg, 2000);
+    //         }
+    //     }
+    // )
 }
 
 // ------------------------------------------------------------------------------------------------------ 登录对话框回调
@@ -116,20 +126,33 @@ function setComment(data) {
 function loadBlogComment(blogId) {
 
     var count = 40; // 默认加载40条
-    $.get(
-        '/blog/' + blogId + '/comment',
+    ajax('/blog/' + blogId + '/comment',
         {
             rows: count,
             offset: 0
-        },
+        }, true, 'get',
         function (result) {
             if (result.code === 0) {
                 setComment(result.data);
             } else if (result.code === 14) {
                 $('#blogStatistics-comment').html('<h4>还没有评论，去&nbsp;<a onclick="goCheckBlog()">查看</a>&nbsp;并发表评论。</h4>');
             }
-        }
-    );
+        });
+
+    // $.get(
+    //     '/blog/' + blogId + '/comment',
+    //     {
+    //         rows: count,
+    //         offset: 0
+    //     },
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             setComment(result.data);
+    //         } else if (result.code === 14) {
+    //             $('#blogStatistics-comment').html('<h4>还没有评论，去&nbsp;<a onclick="goCheckBlog()">查看</a>&nbsp;并发表评论。</h4>');
+    //         }
+    //     }
+    // );
 }
 
 function goCheckBlog() {

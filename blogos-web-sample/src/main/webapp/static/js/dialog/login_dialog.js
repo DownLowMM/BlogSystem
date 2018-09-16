@@ -22,29 +22,49 @@ function login(funAfterLoginSuccess, funAfterLoginFail) {
         }
 
         disableButton(false, 'loginBtn', '正在登录...', "button-disable");
-        $.post(
-            '/blogger/login/way=name',
-            {
-                username: name,
-                password: pwd
-            },
-            function (result) {
-                if (result.code === 0) {
-                    disableButton(false, 'loginBtn', '登录成功', "button-disable");
+        ajax('/blogger/login/way=name', {
+            username: name,
+            password: pwd
+        }, true, 'post', function (result) {
+            if (result.code === 0) {
+                disableButton(false, 'loginBtn', '登录成功', "button-disable");
 
-                    setTimeout(function () {
-                        disableButton(true, 'loginBtn', '登录', "button-disable");
-                        funAfterLoginSuccess(result, name);
-                    }, 1000);
-
-                } else {
-                    errorInfoWhenLogin(result.msg);
+                setTimeout(function () {
                     disableButton(true, 'loginBtn', '登录', "button-disable");
+                    funAfterLoginSuccess(result, name);
+                }, 1000);
 
-                    funAfterLoginFail(result);
-                }
+            } else {
+                errorInfoWhenLogin(result.msg);
+                disableButton(true, 'loginBtn', '登录', "button-disable");
+
+                funAfterLoginFail(result);
             }
-        );
+        });
+
+        // $.post(
+        //     '/blogger/login/way=name',
+        //     {
+        //         username: name,
+        //         password: pwd
+        //     },
+        //     function (result) {
+        //         if (result.code === 0) {
+        //             disableButton(false, 'loginBtn', '登录成功', "button-disable");
+        //
+        //             setTimeout(function () {
+        //                 disableButton(true, 'loginBtn', '登录', "button-disable");
+        //                 funAfterLoginSuccess(result, name);
+        //             }, 1000);
+        //
+        //         } else {
+        //             errorInfoWhenLogin(result.msg);
+        //             disableButton(true, 'loginBtn', '登录', "button-disable");
+        //
+        //             funAfterLoginFail(result);
+        //         }
+        //     }
+        // );
 
     } else {
         // 电话验证码登录
@@ -64,9 +84,7 @@ function login(funAfterLoginSuccess, funAfterLoginFail) {
 
         if (inputPhoneCode === phoneCode) {
             disableButton(false, 'loginBtn', '正在登录...', "button-disable");
-            $.post(
-                '/blogger/login/way=phone',
-                {phone: phone},
+            ajax('/blogger/login/way=phone', {phone: phone}, true, 'post',
                 function (result) {
                     if (result.code === 0) {
                         disableButton(false, 'loginBtn', '登录成功', "button-disable");
@@ -82,8 +100,28 @@ function login(funAfterLoginSuccess, funAfterLoginFail) {
 
                         funAfterLoginFail(result);
                     }
-                }
-            );
+                });
+
+            // $.post(
+            //     '/blogger/login/way=phone',
+            //     {phone: phone},
+            //     function (result) {
+            //         if (result.code === 0) {
+            //             disableButton(false, 'loginBtn', '登录成功', "button-disable");
+            //
+            //             setTimeout(function () {
+            //                 disableButton(true, 'loginBtn', '登录', "button-disable");
+            //                 funAfterLoginSuccess(result);
+            //             }, 1000);
+            //
+            //         } else {
+            //             errorInfoWhenLogin(result.msg);
+            //             disableButton(true, 'loginBtn', '登录', "button-disable");
+            //
+            //             funAfterLoginFail(result);
+            //         }
+            //     }
+            // );
         } else {
             errorInfoWhenLogin('验证码错误');
         }
@@ -111,26 +149,44 @@ function sendPhoneCode() {
         phoneCode = null;
     }, 10 * 60 * 1000);
 
-    $.post(
-        '/sms',
-        {
-            phone: phone,
-            content: '【BLOG】 你的验证码是: ' + phoneCode + ' ,此验证码用于登录 BLOG，10分钟内有效。'
-        },
-        function (result) {
-            if (result.code === 0) {
-                countDown(60, 1000, function (c) {
-                    if (c === 0) {
-                        return true;
-                    } else {
-                        disableButton(false, 'sendPhoneCodeBtn', c + ' 秒后重新发送', "button-info-disable");
-                        return false;
-                    }
-                });
-            } else {
-                errorInfoWhenLogin('验证码无法发送');
-            }
-        }, 'json');
+    ajaxSpe('/sms', {
+        phone: phone,
+        content: '【BLOG】 你的验证码是: ' + phoneCode + ' ,此验证码用于登录 BLOG，10分钟内有效。'
+    }, true, 'get', 'json', function (result) {
+        if (result.code === 0) {
+            countDown(60, 1000, function (c) {
+                if (c === 0) {
+                    return true;
+                } else {
+                    disableButton(false, 'sendPhoneCodeBtn', c + ' 秒后重新发送', "button-info-disable");
+                    return false;
+                }
+            });
+        } else {
+            errorInfoWhenLogin('验证码无法发送');
+        }
+    });
+
+    // $.post(
+    //     '/sms',
+    //     {
+    //         phone: phone,
+    //         content: '【BLOG】 你的验证码是: ' + phoneCode + ' ,此验证码用于登录 BLOG，10分钟内有效。'
+    //     },
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             countDown(60, 1000, function (c) {
+    //                 if (c === 0) {
+    //                     return true;
+    //                 } else {
+    //                     disableButton(false, 'sendPhoneCodeBtn', c + ' 秒后重新发送', "button-info-disable");
+    //                     return false;
+    //                 }
+    //             });
+    //         } else {
+    //             errorInfoWhenLogin('验证码无法发送');
+    //         }
+    //     }, 'json');
 }
 
 // 短信验证码

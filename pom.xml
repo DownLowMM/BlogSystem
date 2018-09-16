@@ -12,7 +12,6 @@
         <module>blogos-api</module>
         <module>blogos-service</module>
         <module>blogos-service-impl</module>
-        <module>blogos-util</module>
         <module>blogos-web-sample</module>
     </modules>
 

@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.validate;
 
+import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
@@ -7,7 +8,6 @@ import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
-import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

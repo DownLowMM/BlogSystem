@@ -27,17 +27,11 @@ function saveAvatar(bloggerId) {
 
 function sendAvatarData(base64url, bloggerId) {
 
-    $.ajax({
-        url: '/blogger/' + bloggerId + '/profile/avatar',
-        type: 'POST',
-        cache: false,
-        // 修改tomcat对post请求的长度限制，默认2M，maxPostSize=-1，tomcat 6及以下版本修改为0
-        data: {avatarBaseUrlData: base64url},
-        dataType: "json",
-        beforeSend: function () {
+    ajaxUploadBase64Url('/blogger/' + bloggerId + '/profile/avatar', {avatarBaseUrlData: base64url}, false, 'post', 'json',
+        function () {
             disableButton(false, 'editAvatarBtn', '正在上传...', 'button-disable');
         },
-        success: function (result) {
+        function (result) {
             if (result.code === 0) {
                 disableButton(false, 'editAvatarBtn', '上传成功', 'button-disable');
 
@@ -54,8 +48,37 @@ function sendAvatarData(base64url, bloggerId) {
                 error('上传失败', 'editAvatarErrorMsg', true, 2000);
                 disableButton(true, 'editAvatarBtn', '上传', "button-disable");
             }
-        }
-    });
+        });
+
+    // $.ajax({
+    //     url: '/blogger/' + bloggerId + '/profile/avatar',
+    //     type: 'POST',
+    //     cache: false,
+    //     // 修改tomcat对post请求的长度限制，默认2M，maxPostSize=-1，tomcat 6及以下版本修改为0
+    //     data: {avatarBaseUrlData: base64url},
+    //     dataType: "json",
+    //     beforeSend: function () {
+    //         disableButton(false, 'editAvatarBtn', '正在上传...', 'button-disable');
+    //     },
+    //     success: function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'editAvatarBtn', '上传成功', 'button-disable');
+    //
+    //             setTimeout(function () {
+    //                 var imgId = result.data;
+    //                 funAfterAvatarUpdateSuccess(imgId);
+    //
+    //                 disableButton(true, 'editAvatarBtn', '上传', "button-disable");
+    //
+    //                 $('#editAvatarDialog').modal('toggle');
+    //             }, 1000);
+    //
+    //         } else {
+    //             error('上传失败', 'editAvatarErrorMsg', true, 2000);
+    //             disableButton(true, 'editAvatarBtn', '上传', "button-disable");
+    //         }
+    //     }
+    // });
 
 }
 

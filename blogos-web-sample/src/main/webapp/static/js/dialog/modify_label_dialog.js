@@ -36,11 +36,9 @@ function exeLabelUpdate(th, bloggerId, funWhenEditLabelSuccess) {
     }
 
     var labelId = $('#showChoosedLabel > span').attr('did');
-    $.ajax({
-        url: '/blogger/' + bloggerId + '/label/' + labelId,
-        data: {title: newName},
-        type: 'put',
-        success: function (result) {
+
+    ajax('/blogger/' + bloggerId + '/label/' + labelId, {title: newName}, false, 'put',
+        function (result) {
             if (result.code === 0) {
                 disableButton(false, 'modifyEditLabelBtn', '修改成功', "button-disable");
 
@@ -57,8 +55,51 @@ function exeLabelUpdate(th, bloggerId, funWhenEditLabelSuccess) {
             } else {
                 error(result.msg, 'modifyLabelErrorMsg', false, 3000);
             }
-        }
-    });
+        });
+
+    ajax('/blogger/' + bloggerId + '/label/' + labelId, {title: newName}, true, 'put',
+        function (result) {
+            if (result.code === 0) {
+                disableButton(false, 'modifyEditLabelBtn', '修改成功', "button-disable");
+
+                setTimeout(function () {
+                    disableButton(true, 'modifyEditLabelBtn', '提交', "button-disable");
+
+                    funWhenEditLabelSuccess();
+                    $('#modifyLabelDialog').modal('hide');
+
+                    clearDiv('showChoosedLabel');
+                    $('#chooseEditLabel > div > input').val('');
+                }, 1000);
+
+            } else {
+                error(result.msg, 'modifyLabelErrorMsg', false, 3000);
+            }
+        });
+
+    // $.ajax({
+    //     url: '/blogger/' + bloggerId + '/label/' + labelId,
+    //     data: {title: newName},
+    //     type: 'put',
+    //     success: function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'modifyEditLabelBtn', '修改成功', "button-disable");
+    //
+    //             setTimeout(function () {
+    //                 disableButton(true, 'modifyEditLabelBtn', '提交', "button-disable");
+    //
+    //                 funWhenEditLabelSuccess();
+    //                 $('#modifyLabelDialog').modal('hide');
+    //
+    //                 clearDiv('showChoosedLabel');
+    //                 $('#chooseEditLabel > div > input').val('');
+    //             }, 1000);
+    //
+    //         } else {
+    //             error(result.msg, 'modifyLabelErrorMsg', false, 3000);
+    //         }
+    //     }
+    // });
 
 }
 
@@ -77,17 +118,25 @@ function exeLabelDelete(th, bloggerId, funWhenDeleteLabelSuccess) {
     for (; i < doms.length; i++) {
         var id = $(doms[i]).attr('did');
 
-        $.ajax({
-            url: '/blogger/' + bloggerId + '/label/' + id,
-            async: false,
-            type: 'delete',
-            success: function (result) {
+        ajax('/blogger/' + bloggerId + '/label/' + id, null, false, 'delete',
+            function (result) {
                 if (result.code !== 0) {
                     fail = true;
                     msg = result.msg;
                 }
-            }
-        });
+            });
+
+        // $.ajax({
+        //     url: '/blogger/' + bloggerId + '/label/' + id,
+        //     async: false,
+        //     type: 'delete',
+        //     success: function (result) {
+        //         if (result.code !== 0) {
+        //             fail = true;
+        //             msg = result.msg;
+        //         }
+        //     }
+        // });
 
         if (fail) {
             error(msg, 'modifyLabelErrorMsg', true, 3000);

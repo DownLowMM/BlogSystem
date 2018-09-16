@@ -15,9 +15,7 @@ function createCategory(funWhenCreateCategorySuccess, funWhenCreateCategoryFail)
     }
 
     disableButton(false, 'newCategoryBtn', '正在创建...', "button-disable");
-    $.post(
-        '/blogger/' + pageOwnerBloggerId + '/category',
-        {title: title, bewrite: bewrite},
+    ajaxSpe('/blogger/' + pageOwnerBloggerId + '/category', {title: title, bewrite: bewrite}, true, 'post', 'json',
         function (result) {
             if (result.code === 0) {
                 disableButton(false, 'newCategoryBtn', '创建成功', "button-disable");
@@ -37,7 +35,31 @@ function createCategory(funWhenCreateCategorySuccess, funWhenCreateCategoryFail)
 
                 funWhenCreateCategoryFail(result);
             }
-        }, 'json'
-    );
+        });
+
+    // $.post(
+    //     '/blogger/' + pageOwnerBloggerId + '/category',
+    //     {title: title, bewrite: bewrite},
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'newCategoryBtn', '创建成功', "button-disable");
+    //             funWhenCreateCategorySuccess(result.data);
+    //
+    //             setTimeout(function () {
+    //                 disableButton(true, 'newCategoryBtn', '创建', "button-disable");
+    //                 $('#categoryTitle').val('');
+    //                 $('#categoryBewrite').val('');
+    //
+    //                 $('#newCategoryDialog').modal('toggle');
+    //             }, 1000);
+    //
+    //         } else {
+    //             error(result.msg, 'categoryErrorMsg', true, 3000);
+    //             disableButton(true, 'newCategoryBtn', '创建', "button-disable");
+    //
+    //             funWhenCreateCategoryFail(result);
+    //         }
+    //     }, 'json'
+    // );
 
 }

@@ -66,15 +66,11 @@ function saveProfileDiv() {
 
         disableButton(false, btnId, '正在修改...', "button-disable");
 
-        $.ajax({
-            url: '/blogger/' + bloggerId + '/profile',
-            data: {
+        ajax('/blogger/' + bloggerId + '/profile', {
                 intro: mIntro,
                 aboutMe: mAboutMe
-            },
-            async: false,
-            type: 'put',
-            success: function (result) {
+            }, false, 'put',
+            function (result) {
                 if (result.code === 0) {
                     disableButton(false, btnId, '修改成功', "button-disable");
                     toast('修改成功', 1000);
@@ -87,8 +83,31 @@ function saveProfileDiv() {
                 } else {
                     error(result.msg, 'settingErrorMsg', true, 3000);
                 }
-            }
-        });
+            });
+
+        // $.ajax({
+        //     url: '/blogger/' + bloggerId + '/profile',
+        //     data: {
+        //         intro: mIntro,
+        //         aboutMe: mAboutMe
+        //     },
+        //     async: false,
+        //     type: 'put',
+        //     success: function (result) {
+        //         if (result.code === 0) {
+        //             disableButton(false, btnId, '修改成功', "button-disable");
+        //             toast('修改成功', 1000);
+        //             setTimeout(function () {
+        //                 disableButton(true, btnId, '保存', "button-disable");
+        //             }, 1000);
+        //
+        //             intro = mIntro;
+        //             aboutMe = mAboutMe;
+        //         } else {
+        //             error(result.msg, 'settingErrorMsg', true, 3000);
+        //         }
+        //     }
+        // });
 
     } else {
         error('未修改', 'settingErrorMsg', true, 3000);
@@ -110,12 +129,8 @@ function saveBaseDiv() {
     if (mBloggerName !== bloggerName) {
         disableButton(false, btnId, '正在修改...', "button-disable");
 
-        $.ajax({
-            url: '/blogger/' + bloggerId + '/item=name',
-            data: {username: mBloggerName},
-            async: false,
-            type: 'put',
-            success: function (result) {
+        ajax('/blogger/' + bloggerId + '/item=name', {username: mBloggerName}, false, 'put',
+            function (result) {
                 if (result.code === 0) {
                     bloggerName = mBloggerName;
                     bloggerNameModify = true;
@@ -124,23 +139,35 @@ function saveBaseDiv() {
                     editSucc = false;
                     error(result.msg, 'settingErrorMsg', true, 3000);
                 }
-            }
-        });
+            });
+
+        // $.ajax({
+        //     url: '/blogger/' + bloggerId + '/item=name',
+        //     data: {username: mBloggerName},
+        //     async: false,
+        //     type: 'put',
+        //     success: function (result) {
+        //         if (result.code === 0) {
+        //             bloggerName = mBloggerName;
+        //             bloggerNameModify = true;
+        //             editSucc = true;
+        //         } else {
+        //             editSucc = false;
+        //             error(result.msg, 'settingErrorMsg', true, 3000);
+        //         }
+        //     }
+        // });
     }
 
     // 若 email ，phone 任一项修改，发起 Profile 修改请求
     if (mEmail !== email || mPhone !== phone) {
         disableButton(false, btnId, '正在修改...', "button-disable");
 
-        $.ajax({
-            url: '/blogger/' + bloggerId + '/profile',
-            data: {
+        ajax('/blogger/' + bloggerId + '/profile', {
                 phone: mPhone,
                 email: mEmail
-            },
-            async: false,
-            type: 'put',
-            success: function (result) {
+            }, false, 'put',
+            function (result) {
                 if (result.code === 0) {
                     email = mEmail;
                     phone = mPhone;
@@ -149,8 +176,27 @@ function saveBaseDiv() {
                     editSucc = false;
                     error(result.msg, 'settingErrorMsg', true, 3000);
                 }
-            }
-        });
+            });
+
+        // $.ajax({
+        //     url: '/blogger/' + bloggerId + '/profile',
+        //     data: {
+        //         phone: mPhone,
+        //         email: mEmail
+        //     },
+        //     async: false,
+        //     type: 'put',
+        //     success: function (result) {
+        //         if (result.code === 0) {
+        //             email = mEmail;
+        //             phone = mPhone;
+        //             editSucc = true;
+        //         } else {
+        //             editSucc = false;
+        //             error(result.msg, 'settingErrorMsg', true, 3000);
+        //         }
+        //     }
+        // });
     }
 
     // 若 mMainNavPos 修改，发起 Setting 请求
@@ -158,12 +204,8 @@ function saveBaseDiv() {
         sendReq = true;
         disableButton(false, btnId, '正在修改...', "button-disable");
 
-        $.ajax({
-            url: '/blogger/' + bloggerId + '/setting/item=mainPageNavPos',
-            data: {mainPageNavPos: mMainNavPos},
-            async: false,
-            type: 'put',
-            success: function (result) {
+        ajax('/blogger/' + bloggerId + '/setting/item=mainPageNavPos', {mainPageNavPos: mMainNavPos}, false, 'put',
+            function (result) {
                 if (result.code === 0) {
                     editSucc = true;
                     mainNavPos = mMainNavPos;
@@ -171,8 +213,23 @@ function saveBaseDiv() {
                     editSucc = false;
                     error(result.msg, 'settingErrorMsg', true, 3000);
                 }
-            }
-        });
+            });
+
+        // $.ajax({
+        //     url: '/blogger/' + bloggerId + '/setting/item=mainPageNavPos',
+        //     data: {mainPageNavPos: mMainNavPos},
+        //     async: false,
+        //     type: 'put',
+        //     success: function (result) {
+        //         if (result.code === 0) {
+        //             editSucc = true;
+        //             mainNavPos = mMainNavPos;
+        //         } else {
+        //             editSucc = false;
+        //             error(result.msg, 'settingErrorMsg', true, 3000);
+        //         }
+        //     }
+        // });
     }
 
     if (editSucc) {
@@ -211,11 +268,8 @@ function confirmExe() {
 
     disableButton(false, 'confirmBtn', '正在删除...', 'button-disable');
 
-    $.ajax({
-        url: '/blogger/' + bloggerId,
-        async: false,
-        type: 'delete',
-        success: function (result) {
+    ajax('/blogger/' + bloggerId, null, false, 'delete',
+        function (result) {
             if (result.code === 0) {
                 disableButton(false, 'confirmBtn', '删除成功', 'button-disable');
 
@@ -227,8 +281,26 @@ function confirmExe() {
                 error(result.msg, 'confirmErrorMsg', true, 3000);
                 disableButton(true, 'confirmBtn', '删除', 'button-disable');
             }
-        }
-    });
+        });
+
+    // $.ajax({
+    //     url: '/blogger/' + bloggerId,
+    //     async: false,
+    //     type: 'delete',
+    //     success: function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'confirmBtn', '删除成功', 'button-disable');
+    //
+    //             setTimeout(function () {
+    //                 location.href = '/register';
+    //             }, 1000);
+    //
+    //         } else {
+    //             error(result.msg, 'confirmErrorMsg', true, 3000);
+    //             disableButton(true, 'confirmBtn', '删除', 'button-disable');
+    //         }
+    //     }
+    // });
 }
 
 
@@ -247,12 +319,10 @@ function sendPhoneCode() {
         phoneCode = null;
     }, 10 * 60 * 1000);
 
-    $.post(
-        '/sms',
-        {
+    ajaxSpe('/sms', {
             phone: phone,
             content: '【BLOG】 你的验证码是: ' + phoneCode + ' ,此验证码用于重置登录密码，10分钟内有效。'
-        },
+        }, true, 'post', 'json',
         function (result) {
             if (result.code === 0) {
                 countDown(60, 1000, function (c) {
@@ -266,7 +336,28 @@ function sendPhoneCode() {
             } else {
                 error('验证码无法发送', 'errorMsgOperAccount', true, 3000);
             }
-        }, 'json');
+        });
+
+    // $.post(
+    //     '/sms',
+    //     {
+    //         phone: phone,
+    //         content: '【BLOG】 你的验证码是: ' + phoneCode + ' ,此验证码用于重置登录密码，10分钟内有效。'
+    //     },
+    //     function (result) {
+    //         if (result.code === 0) {
+    //             countDown(60, 1000, function (c) {
+    //                 if (c === 0) {
+    //                     return true;
+    //                 } else {
+    //                     disableButton(false, 'sendPhoneCodeBtn', c + ' 秒后重新发送', "button-info-disable");
+    //                     return false;
+    //                 }
+    //             });
+    //         } else {
+    //             error('验证码无法发送', 'errorMsgOperAccount', true, 3000);
+    //         }
+    //     }, 'json');
 }
 
 // 短信验证码

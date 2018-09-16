@@ -185,20 +185,23 @@ function releaseBlog(editMode, funAfterReleaseBlogSuccess) {
         }
 
         data = data.substr(0, data.length - 1);
-        $.ajax({
-            url: '/blogger/' + bloggerId + '/blog/' + blogId,
-            data: data,
-            type: 'put',
-            success: function (result) {
+        ajax('/blogger/' + bloggerId + '/blog/' + blogId, data, true, 'put',
+            function (result) {
                 afterReleaseSuccess(result);
-            }
-        });
+            });
+
+        // $.ajax({
+        //     url: '/blogger/' + bloggerId + '/blog/' + blogId,
+        //     data: data,
+        //     type: 'put',
+        //     success: function (result) {
+        //         afterReleaseSuccess(result);
+        //     }
+        // });
 
     } else if (editMode === 2) {
         // 创作模式
-        $.post(
-            '/blogger/' + bloggerId + '/blog',
-            {
+        ajaxSpe('/blogger/' + bloggerId + '/blog', {
                 cids: cidsArray.length === 0 ? '' : cidsArray.join(','),
                 lids: lidsArray.length === 0 ? '' : lidsArray.join(','),
                 title: title,
@@ -206,11 +209,26 @@ function releaseBlog(editMode, funAfterReleaseBlogSuccess) {
                 contentMd: stringToUnicode(contentMd),
                 summary: summary,
                 keywords: ''
-            },
+            }, true, 'post', 'json',
             function (result) {
                 afterReleaseSuccess(result);
-            }
-        );
+            });
+
+        // $.post(
+        //     '/blogger/' + bloggerId + '/blog',
+        //     {
+        //         cids: cidsArray.length === 0 ? '' : cidsArray.join(','),
+        //         lids: lidsArray.length === 0 ? '' : lidsArray.join(','),
+        //         title: title,
+        //         content: stringToUnicode(content),
+        //         contentMd: stringToUnicode(contentMd),
+        //         summary: summary,
+        //         keywords: ''
+        //     },
+        //     function (result) {
+        //         afterReleaseSuccess(result);
+        //     }
+        // );
     }
 
     function afterReleaseSuccess(result) {

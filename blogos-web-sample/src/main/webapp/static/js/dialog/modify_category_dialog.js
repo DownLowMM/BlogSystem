@@ -61,11 +61,8 @@ function exeCategoryUpdate(th, bloggerId, funWhenEditCategorySuccess) {
     }
 
     var id = $('#showChoosedCategory > span').attr('did');
-    $.ajax({
-        url: '/blogger/' + bloggerId + '/category/' + id,
-        data: data,
-        type: 'put',
-        success: function (result) {
+    ajax('/blogger/' + bloggerId + '/category/' + id, data, true, 'put',
+        function (result) {
             if (result.code === 0) {
                 disableButton(false, 'modifyEditCategoryBtn', '修改成功', "button-disable");
 
@@ -85,8 +82,34 @@ function exeCategoryUpdate(th, bloggerId, funWhenEditCategorySuccess) {
             } else {
                 error(result.msg, 'modifyCategoryErrorMsg', false, 3000);
             }
-        }
-    });
+        });
+
+    // $.ajax({
+    //     url: '/blogger/' + bloggerId + '/category/' + id,
+    //     data: data,
+    //     type: 'put',
+    //     success: function (result) {
+    //         if (result.code === 0) {
+    //             disableButton(false, 'modifyEditCategoryBtn', '修改成功', "button-disable");
+    //
+    //             setTimeout(function () {
+    //                 disableButton(true, 'modifyEditCategoryBtn', '提交', "button-disable");
+    //
+    //                 funWhenEditCategorySuccess();
+    //
+    //                 $('#modifyCategoryDialog').modal('hide');
+    //
+    //                 $('#editCategoryTitle').val('');
+    //                 $('#editCategoryBewrite').val('');
+    //                 clearDiv('showChoosedCategoryBewrite');
+    //                 clearDiv('showChoosedCategory');
+    //             }, 1000);
+    //
+    //         } else {
+    //             error(result.msg, 'modifyCategoryErrorMsg', false, 3000);
+    //         }
+    //     }
+    // });
 
 }
 
@@ -105,17 +128,25 @@ function exeCategoryDelete(th, bloggerId, funWhenDeleteCategorySuccess) {
     for (; i < doms.length; i++) {
         var id = $(doms[i]).attr('did');
 
-        $.ajax({
-            url: '/blogger/' + bloggerId + '/category/' + id,
-            async: false,
-            type: 'delete',
-            success: function (result) {
+        ajax('/blogger/' + bloggerId + '/category/' + id, null, false, 'delete',
+            function (result) {
                 if (result.code !== 0) {
                     fail = true;
                     msg = result.msg;
                 }
-            }
-        });
+            });
+
+        // $.ajax({
+        //     url: '/blogger/' + bloggerId + '/category/' + id,
+        //     async: false,
+        //     type: 'delete',
+        //     success: function (result) {
+        //         if (result.code !== 0) {
+        //             fail = true;
+        //             msg = result.msg;
+        //         }
+        //     }
+        // });
 
         if (fail) {
             error(msg, 'modifyCategoryErrorMsg', true, 2000);

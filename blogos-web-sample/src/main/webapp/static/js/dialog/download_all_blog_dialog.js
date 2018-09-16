@@ -14,7 +14,6 @@ function beginDownload(bloggerId) {
     var format = $('.file-format-choosed > div').attr('value');
 
     var ref = '/blogger/' + bloggerId + '/blog/download-type=' + format;
-    // $.get(ref);
     location.href = ref;
 
     $('#downloadAllBlogDialog').modal('hide');

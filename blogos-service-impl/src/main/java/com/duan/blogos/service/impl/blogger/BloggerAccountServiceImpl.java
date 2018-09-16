@@ -1,5 +1,7 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.duan.base.util.common.CollectionUtils;
+import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blog.BlogCollectDao;
 import com.duan.blogos.service.dao.blog.BlogDao;
@@ -22,8 +24,6 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
-import com.duan.blogos.util.common.CollectionUtils;
-import com.duan.blogos.util.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

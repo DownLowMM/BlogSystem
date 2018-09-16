@@ -69,17 +69,26 @@ function checkInputAccount() {
     }
 
     // 检查用户名是否存在
-    $.ajax({
-        url: '/blogger/check=username?username=' + $('#registerUserName').val(),
-        async: false,
-        success: function (result) {
+    ajax('/blogger/check=username?username=' + $('#registerUserName').val(), null, false, 'get',
+        function (result) {
             if (result.code === 18) {
                 errorInfoWhenRegister('用户名已被占用');
             } else {
                 errorInfoWhenRegister('');
             }
-        }
-    });
+        });
+
+    // $.ajax({
+    //     url: '/blogger/check=username?username=' + $('#registerUserName').val(),
+    //     async: false,
+    //     success: function (result) {
+    //         if (result.code === 18) {
+    //             errorInfoWhenRegister('用户名已被占用');
+    //         } else {
+    //             errorInfoWhenRegister('');
+    //         }
+    //     }
+    // });
 
     if ($('#registerErrorMsg').html() === '') return true;
     else return false;
@@ -126,17 +135,26 @@ function checkInputProfile() {
     }
 
     //检查电话号码重复
-    $.ajax({
-        url: '/blogger/check=phone?phone=' + phone,
-        async: false,
-        success: function (result) {
+    ajax('/blogger/check=phone?phone=' + phone, null, false, 'get',
+        function (result) {
             if (result.code === 18) {
                 errorInfoWhenRegister('该手机号已经被注册');
             } else {
                 errorInfoWhenRegister('');
             }
-        }
-    });
+        });
+
+    // $.ajax({
+    //     url: '/blogger/check=phone?phone=' + phone,
+    //     async: false,
+    //     success: function (result) {
+    //         if (result.code === 18) {
+    //             errorInfoWhenRegister('该手机号已经被注册');
+    //         } else {
+    //             errorInfoWhenRegister('');
+    //         }
+    //     }
+    // });
 
     if ($('#registerErrorMsg').html() === '') return true;
     else return false;
@@ -158,12 +176,10 @@ function register() {
 
     info('正在注册...');
 
-    $.post(
-        '/blogger',
-        {
+    ajaxSpe('/blogger', {
             username: userName,
             password: password
-        },
+        }, true, 'post', 'json',
         function (result) {
 
             if (result.code === 0) {
@@ -173,14 +189,12 @@ function register() {
             }
 
             function addProfile(id) {
-                $.post(
-                    '/blogger/' + id + '/profile',
-                    {
+                ajaxSpe('/blogger/' + id + '/profile', {
                         phone: phone,
                         email: email,
                         aboutMe: aboutMe,
                         intro: intro
-                    },
+                    }, true, 'post', 'json',
                     function (result) {
                         if (result.code === 0) {
                             countDown(3, 1000, function (c) {
@@ -195,26 +209,120 @@ function register() {
                         } else {
                             failInfo(result.msg);
                         }
-                    }, 'json'
-                )
+                    });
+
+                // $.post(
+                //     '/blogger/' + id + '/profile',
+                //     {
+                //         phone: phone,
+                //         email: email,
+                //         aboutMe: aboutMe,
+                //         intro: intro
+                //     },
+                //     function (result) {
+                //         if (result.code === 0) {
+                //             countDown(3, 1000, function (c) {
+                //                 if (c === 0) {
+                //                     location.href = '/' + userName + '/archives';
+                //                     return true;
+                //                 } else {
+                //                     info('<small> 注册成功，' + c + '秒后将进入</small><a>个人主页</a>');
+                //                     return false;
+                //                 }
+                //             });
+                //         } else {
+                //             failInfo(result.msg);
+                //         }
+                //     }, 'json'
+                // )
             }
 
             function login(id) {
-                $.post(
-                    '/blogger/login/way=name',
-                    {
+                ajaxSpe('/blogger/login/way=name', {
                         username: userName,
                         password: password
-                    }, function (result) {
+                    }, true, 'post', 'json',
+                    function (result) {
                         if (result.code === 0) {
                             addProfile(id);
                         } else {
                             failInfo(result.msg);
                         }
-                    }, 'json');
+                    });
+
+                // $.post(
+                //     '/blogger/login/way=name',
+                //     {
+                //         username: userName,
+                //         password: password
+                //     }, function (result) {
+                //         if (result.code === 0) {
+                //             addProfile(id);
+                //         } else {
+                //             failInfo(result.msg);
+                //         }
+                //     }, 'json');
             }
 
-        }, 'json');
+        });
+
+    // $.post(
+    //     '/blogger',
+    //     {
+    //         username: userName,
+    //         password: password
+    //     },
+    //     function (result) {
+    //
+    //         if (result.code === 0) {
+    //             login(result.data);
+    //         } else {
+    //             failInfo(result.msg);
+    //         }
+    //
+    //         function addProfile(id) {
+    //             $.post(
+    //                 '/blogger/' + id + '/profile',
+    //                 {
+    //                     phone: phone,
+    //                     email: email,
+    //                     aboutMe: aboutMe,
+    //                     intro: intro
+    //                 },
+    //                 function (result) {
+    //                     if (result.code === 0) {
+    //                         countDown(3, 1000, function (c) {
+    //                             if (c === 0) {
+    //                                 location.href = '/' + userName + '/archives';
+    //                                 return true;
+    //                             } else {
+    //                                 info('<small> 注册成功，' + c + '秒后将进入</small><a>个人主页</a>');
+    //                                 return false;
+    //                             }
+    //                         });
+    //                     } else {
+    //                         failInfo(result.msg);
+    //                     }
+    //                 }, 'json'
+    //             )
+    //         }
+    //
+    //         function login(id) {
+    //             $.post(
+    //                 '/blogger/login/way=name',
+    //                 {
+    //                     username: userName,
+    //                     password: password
+    //                 }, function (result) {
+    //                     if (result.code === 0) {
+    //                         addProfile(id);
+    //                     } else {
+    //                         failInfo(result.msg);
+    //                     }
+    //                 }, 'json');
+    //         }
+    //
+    //     }, 'json');
 
     function info(info) {
         $('#finalInfo').html('&nbsp;&nbsp;' + info);

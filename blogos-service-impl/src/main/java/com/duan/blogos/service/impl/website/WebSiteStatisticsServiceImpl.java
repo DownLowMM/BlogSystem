@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.website;
 
+import com.duan.base.util.common.CollectionUtils;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dto.blogger.BloggerBriefDTO;
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
@@ -9,7 +10,6 @@ import com.duan.blogos.service.manager.WebsiteManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.service.website.WebSiteStatisticsService;
-import com.duan.blogos.util.common.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

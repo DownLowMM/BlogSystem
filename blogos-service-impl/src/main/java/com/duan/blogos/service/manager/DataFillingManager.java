@@ -1,5 +1,7 @@
 package com.duan.blogos.service.manager;
 
+import com.duan.base.util.common.CollectionUtils;
+import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.dto.blog.*;
 import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
 import com.duan.blogos.service.dto.blogger.*;
@@ -8,8 +10,6 @@ import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.entity.blogger.BloggerLink;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
-import com.duan.blogos.util.common.CollectionUtils;
-import com.duan.blogos.util.common.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

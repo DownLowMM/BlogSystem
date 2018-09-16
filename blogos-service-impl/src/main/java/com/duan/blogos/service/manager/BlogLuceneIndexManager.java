@@ -1,10 +1,10 @@
 package com.duan.blogos.service.manager;
 
+import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.config.preference.FileProperties;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.util.common.StringUtils;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;

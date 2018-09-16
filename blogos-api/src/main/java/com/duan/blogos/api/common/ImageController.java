@@ -1,5 +1,6 @@
 package com.duan.blogos.api.common;
 
+import com.duan.base.util.file.ImageUtils;
 import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
@@ -8,7 +9,6 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
-import com.duan.blogos.util.file.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -134,7 +134,7 @@ public class ImageController extends BaseCheckController {
         return new ResultModel<>(id);
     }
 
-    private com.duan.blogos.util.file.MultipartFile fileTrans(MultipartFile file) {
+    private com.duan.base.util.file.MultipartFile fileTrans(MultipartFile file) {
         return null;
     }
 
