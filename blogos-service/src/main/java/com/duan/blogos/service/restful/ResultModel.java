@@ -1,8 +1,7 @@
 package com.duan.blogos.service.restful;
 
 import com.duan.blogos.service.exception.BlogOSException;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -13,18 +12,17 @@ import java.io.Serializable;
  * @author DuanJiaNing
  */
 
-@Getter
-@Setter
+@Data
 public class ResultModel<T> implements Serializable {
 
     /**
      * 结果状态为成功
      */
-    public static final int SUCCESS = 0;
+    public static final int SUCCESS = 200;
     /**
      * 结果状态为失败
      */
-    public static final int FAIL = -1;
+    public static final int FAIL = 500;
     private static final long serialVersionUID = -4101051436094606437L;
     public int code = SUCCESS;
     private String msg = "success";

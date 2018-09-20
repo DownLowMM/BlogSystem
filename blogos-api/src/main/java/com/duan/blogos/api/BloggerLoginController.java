@@ -7,10 +7,13 @@ import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
+import com.duan.common.spring.verify.VerifyRule;
+import com.duan.common.spring.verify.VerifyValueRule;
+import com.duan.common.spring.verify.annoation.method.RequestParamValueVerify;
+import com.duan.common.spring.verify.annoation.method.RequestParamsValueVerify;
+import com.duan.common.spring.verify.annoation.parameter.ParamVerify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.RequestContext;
 
@@ -35,10 +38,15 @@ public class BloggerLoginController extends BaseBloggerController {
     @Autowired
     private BloggerAccountService accountService;
 
-    @RequestMapping(value = "/way=name", method = RequestMethod.POST)
+    @RequestParamsValueVerify({
+            @RequestParamValueVerify(param = "password", rule = VerifyValueRule.TEXT_LENGTH_NOT_LESS_THAN, value = "6"),
+            @RequestParamValueVerify(param = "password", rule = VerifyValueRule.TEXT_LENGTH_NOT_GREATER_THAN, value = "10")
+    })
+    @PostMapping("/way=name")
     public ResultModel loginWithUserName(HttpServletRequest request,
-                                         @RequestParam("username") String userName,
-                                         @RequestParam("password") String password) throws NoSuchAlgorithmException {
+                                         @ParamVerify(rule = VerifyRule.NOT_BLANK)
+                                         @RequestParam String userName,
+                                         @RequestParam String password) throws NoSuchAlgorithmException {
         // update 使用shiro
 
         BloggerAccountDTO account = accountService.getAccount(userName);

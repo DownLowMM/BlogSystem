@@ -1,5 +1,7 @@
 package com.duan.blogos.service.impl.common;
 
+import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
+import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.OnlineService;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,16 @@ public class OnlineServiceImpl implements OnlineService {
 
         // TODO redis + token 维护会话
         return -1;
+    }
+
+    @Override
+    public ResultModel login(BloggerAccountDTO account) {
+        return null;
+    }
+
+    @Override
+    public ResultModel logout(BloggerAccountDTO account) {
+        return null;
     }
 
 }

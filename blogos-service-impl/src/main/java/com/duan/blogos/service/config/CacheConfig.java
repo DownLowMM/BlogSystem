@@ -15,7 +15,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author DuanJiaNing
  */
 @Configuration
-public class AppConfig {
+public class CacheConfig {
 
     @Value("${spring.redis.host}")
     private String host;

@@ -1,0 +1,23 @@
+### -------------------------------------------------------- BloggerLoginController
+POST http://localhost:7070/blogger/login/way=name?username=12&password=12
+
+#{
+#  "username": ads,
+#  "password": as
+#}
+
+
+###
+GET http://localhost:9090/app/info
+
+<> 2018-09-10T085742.200.json
+
+###
+
+GET http://localhost:9090/auditevents
+Accept: application/vnd.spring-boot.actuator.v1+json
+
+<> 2018-09-10T085805.401.txt
+
+###
+
