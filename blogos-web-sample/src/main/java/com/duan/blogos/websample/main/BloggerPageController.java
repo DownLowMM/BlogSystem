@@ -1,9 +1,6 @@
 package com.duan.blogos.websample.main;
 
-import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
-import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
-import com.duan.blogos.service.dto.blogger.BloggerSettingDTO;
-import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
+import com.duan.blogos.service.dto.blogger.*;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.restful.ResultModel;
@@ -66,12 +63,11 @@ public class BloggerPageController {
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(ownerId);
         mv.addObject("blogName", profile.getIntro());
         mv.addObject("aboutMe", profile.getAboutMe());
+
+        BloggerPictureDTO defaultPicture = bloggerPictureService.getDefaultPicture(BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR);
         mv.addObject("avatarId",
                 Optional.ofNullable(profile.getAvatarId())
-                        .orElse(bloggerPictureService
-                                .getDefaultPicture(BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR)
-                                .getId()));
-
+                        .orElse(defaultPicture == null ? null : defaultPicture.getId()));
 
         ResultModel<BloggerStatisticsDTO> ownerBgStat = statisticsService.getBloggerStatistics(ownerId);
         mv.addObject("ownerBgStat", ownerBgStat.getData());

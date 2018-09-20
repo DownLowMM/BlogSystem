@@ -202,6 +202,10 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         BloggerPicture picture = pictureDao.getBloggerUniquePicture(websiteProperties.getManagerId(),
                 category.getCode());
 
+        if (picture == null) {
+            return null; // 没有默认的图片
+        }
+
         return dataFillingManager.bloggerPicture2DTO(picture);
     }
 
