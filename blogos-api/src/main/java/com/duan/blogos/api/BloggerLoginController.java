@@ -5,11 +5,8 @@ import com.duan.blogos.api.blogger.BaseBloggerController;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.OnlineService;
-import com.duan.common.spring.verify.VerifyRule;
-import com.duan.common.spring.verify.VerifyValueRule;
-import com.duan.common.spring.verify.annoation.method.RequestParamValueVerify;
-import com.duan.common.spring.verify.annoation.method.RequestParamsValueVerify;
-import com.duan.common.spring.verify.annoation.parameter.ParamVerify;
+import com.duan.common.spring.verify.Rule;
+import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,14 +29,11 @@ public class BloggerLoginController extends BaseBloggerController {
     @Autowired
     private OnlineService onlineService;
 
-    @RequestParamsValueVerify({
-            @RequestParamValueVerify(param = "password", rule = VerifyValueRule.TEXT_LENGTH_NOT_LESS_THAN, value = "6"),
-            @RequestParamValueVerify(param = "password", rule = VerifyValueRule.TEXT_LENGTH_NOT_GREATER_THAN, value = "10")
-    })
     @PostMapping("/way=name")
     @TokenNotRequired
-    public ResultModel loginWithUserName(@ParamVerify(rule = VerifyRule.NOT_BLANK)
+    public ResultModel loginWithUserName(@ArgVerify(rule = Rule.NOT_BLANK)
                                          @RequestParam String userName,
+                                         @ArgVerify(rule = Rule.NOT_BLANK)
                                          @RequestParam String password) {
         BloggerAccountDTO dto = new BloggerAccountDTO();
         dto.setUsername(userName);

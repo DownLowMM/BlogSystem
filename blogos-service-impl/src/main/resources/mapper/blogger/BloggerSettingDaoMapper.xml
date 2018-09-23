@@ -35,9 +35,6 @@
     </select>
 
     <insert id="insert" parameterType="BloggerSetting" useGeneratedKeys="true" keyProperty="id">
-        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-            SELECT LAST_INSERT_ID() AS id
-        </selectKey>
         INSERT INTO blogger_setting (
         blogger_id,
         main_page_nav_pos

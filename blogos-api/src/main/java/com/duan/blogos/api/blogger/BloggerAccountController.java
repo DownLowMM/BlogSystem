@@ -8,6 +8,8 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.common.OnlineService;
+import com.duan.common.spring.verify.Rule;
+import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger")
+@RequestMapping("/blogger/account")
 public class BloggerAccountController extends BaseBloggerController {
 
     @Autowired
@@ -38,10 +40,16 @@ public class BloggerAccountController extends BaseBloggerController {
      */
     @PostMapping
     @TokenNotRequired
-    public ResultModel register(@RequestParam String username,
-                                @RequestParam String password) {
+    public ResultModel register(
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam String username,
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam String password) {
+
         handleNameCheck(username);
-        handlePwdCheck(password);
+        if (!bloggerValidateService.checkPassword(password)) {
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+        }
 
         Long id = accountService.insertAccount(username, password);
         if (id == null) handlerOperateFail();
@@ -54,7 +62,9 @@ public class BloggerAccountController extends BaseBloggerController {
      */
     @GetMapping("/check=username")
     @TokenNotRequired
-    public ResultModel checkUsernameUsed(@RequestParam String username) {
+    public ResultModel checkUsernameUsed(
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam String username) {
         handleNameCheck(username);
 
         BloggerAccountDTO account = accountService.getAccount(username);
@@ -71,7 +81,10 @@ public class BloggerAccountController extends BaseBloggerController {
      */
     @GetMapping("/check=phone")
     @TokenNotRequired
-    public ResultModel checkProfileExist(@RequestParam String phone) {
+    public ResultModel checkProfileExist(
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam String phone) {
+
         BloggerAccountDTO account = accountService.getAccountByPhone(phone);
 
         if (account != null) {
@@ -86,7 +99,9 @@ public class BloggerAccountController extends BaseBloggerController {
      * 修改用户名
      */
     @PutMapping("/item=name")
-    public ResultModel modifyUsername(@Uid Long uid, @RequestParam(value = "username") String newUserName) {
+    public ResultModel modifyUsername(@Uid Long uid,
+                                      @ArgVerify(rule = Rule.NOT_BLANK)
+                                      @RequestParam(value = "username") String newUserName) {
         handleNameCheck(newUserName);
 
         boolean result = accountService.updateAccountUserName(uid, newUserName);
@@ -100,16 +115,20 @@ public class BloggerAccountController extends BaseBloggerController {
      */
     @PutMapping("/item=pwd")
     public ResultModel modifyPassword(@Uid Long uid,
+                                      @ArgVerify(rule = Rule.NOT_BLANK)
                                       @RequestParam(value = "old") String oldPassword,
+                                      @ArgVerify(rule = Rule.NOT_BLANK)
                                       @RequestParam(value = "new") String newPassword) {
-        handlePwdCheck(newPassword);
+
+        if (!bloggerValidateService.checkPassword(newPassword)) {
+            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+        }
 
         boolean result = accountService.updateAccountPassword(uid, oldPassword, newPassword);
         if (!result) handlerOperateFail();
 
         return new ResultModel<>("");
     }
-
 
     /**
      * 注销账号
@@ -131,9 +150,4 @@ public class BloggerAccountController extends BaseBloggerController {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
-    // 检查密码合法性
-    private void handlePwdCheck(String password) {
-        if (StringUtils.isBlank(password) || !bloggerValidateService.checkPassword(password))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-    }
 }
