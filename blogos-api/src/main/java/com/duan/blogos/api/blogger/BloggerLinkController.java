@@ -40,7 +40,7 @@ public class BloggerLinkController extends BaseBloggerController {
                                                  @RequestParam(value = "offset", required = false) Integer offset,
                                                  @RequestParam(value = "rows", required = false) Integer rows) {
 
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         ResultModel<List<BloggerLinkDTO>> result = bloggerLinkService.listBloggerLink(bloggerId,
                 offset == null ? 0 : offset, rows == null ? -1 : rows);

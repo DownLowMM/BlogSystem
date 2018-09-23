@@ -41,7 +41,7 @@ public class BloggerLabelController extends BaseBloggerController {
                                                 @PathVariable Integer bloggerId,
                                                 @RequestParam(value = "offset", required = false) Integer offset,
                                                 @RequestParam(value = "rows", required = false) Integer rows) {
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         ResultModel<List<BlogLabelDTO>> result = bloggerLabelService.listLabelByBlogger(bloggerId,
                 offset == null ? 0 : offset, rows == null ? -1 : rows);
@@ -91,7 +91,7 @@ public class BloggerLabelController extends BaseBloggerController {
     public ResultModel delete(HttpServletRequest request,
                               @PathVariable("labelId") Integer labelId,
                               @PathVariable Integer bloggerId) {
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
         handleBloggerSignInCheck(request, bloggerId);
 
         boolean result = bloggerLabelService.deleteLabel(bloggerId, labelId);

@@ -1,6 +1,5 @@
 package com.duan.blogos.api.blog;
 
-import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.exception.CodeMessage;
@@ -8,9 +7,10 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created on 2018/1/17.
@@ -33,7 +33,7 @@ public class BlogStatisticsController extends BaseBlogController {
      * 获得博文统计信息
      */
     @GetMapping
-    public ResultModel<BlogStatisticsDTO> get(@Uid Long uid, @PathVariable Integer blogId) {
+    public ResultModel<BlogStatisticsDTO> get(@PathVariable Integer blogId) {
         handleBlogStatisticsExistCheck(blogId);
 
         ResultModel<BlogStatisticsDTO> result = statisticsService.getBlogStatistics(blogId);
@@ -45,9 +45,8 @@ public class BlogStatisticsController extends BaseBlogController {
     /**
      * 获取统计信息（简版，只获取各项信息的次数）
      */
-    @RequestMapping(value = "/count", method = RequestMethod.GET)
-    public ResultModel<BlogStatisticsCountDTO> getCount(HttpServletRequest request,
-                                                        @PathVariable Integer blogId) {
+    @GetMapping("/count")
+    public ResultModel<BlogStatisticsCountDTO> getCount(@PathVariable Integer blogId) {
         handleBlogStatisticsExistCheck(blogId);
 
         ResultModel<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);

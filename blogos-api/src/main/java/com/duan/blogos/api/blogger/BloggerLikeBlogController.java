@@ -43,7 +43,7 @@ public class BloggerLikeBlogController extends BaseBloggerController {
                                                             @RequestParam(value = "sort", required = false) String sort,
                                                             @RequestParam(value = "order", required = false) String order) {
         final RequestContext context = new RequestContext(request);
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         //检查数据合法性
         String sor = sort == null ? Rule.VIEW_COUNT.name() : sort.toUpperCase();
@@ -71,7 +71,7 @@ public class BloggerLikeBlogController extends BaseBloggerController {
     public ResultModel count(HttpServletRequest request,
                              @PathVariable("bloggerId") Integer bloggerId) {
 
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         return new ResultModel<>(likeBlogService.countByBloggerId(bloggerId));
     }

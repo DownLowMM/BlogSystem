@@ -40,6 +40,7 @@ public class BlogController extends BaseBlogController {
     /**
      * 检索指定博主的博文列表
      */
+    // TODO
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<List<BlogListItemDTO>> list(HttpServletRequest request,
                                                    @RequestParam("bloggerId") Integer bloggerId,
@@ -50,7 +51,7 @@ public class BlogController extends BaseBlogController {
                                                    @RequestParam(value = "rows", required = false) Integer rows,
                                                    @RequestParam(value = "sort", required = false) String sort,
                                                    @RequestParam(value = "order", required = false) String order) {
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         //检查数据合法性
         String sor = StringUtils.isBlank(sort) ? Rule.VIEW_COUNT.name() : sort.toUpperCase();

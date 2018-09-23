@@ -27,7 +27,7 @@ public class BloggerStatisticsController extends BaseBloggerController {
     public ResultModel<BloggerStatisticsDTO> get(HttpServletRequest request,
                                                  @PathVariable Integer bloggerId) {
 
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         ResultModel<BloggerStatisticsDTO> statistics = statisticsService.getBloggerStatistics(bloggerId);
         if (statistics == null) handlerOperateFail();

@@ -53,7 +53,7 @@ public class ImageController extends BaseCheckController {
                                @PathVariable("bloggerId") Integer bloggerId,
                                @PathVariable("imageId") Integer imageId,
                                @RequestParam(value = "default", required = false) Integer category) {
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         // 检查default是否为默认类别
         if (category != null)

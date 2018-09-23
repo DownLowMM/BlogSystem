@@ -42,7 +42,7 @@ public class BloggerProfileController extends BaseBloggerController {
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<BloggerProfileDTO> get(HttpServletRequest request,
                                               @PathVariable Integer bloggerId) {
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(bloggerId);
         if (profile == null) handlerEmptyResult();

@@ -24,7 +24,7 @@ public class BaseCheckController extends RestController {
     /**
      * 检查博主是否存在，不存在直接抛出异常
      */
-    protected void handleAccountCheck(HttpServletRequest request, Integer bloggerId) {
+    protected void handleAccountCheck(Integer bloggerId) {
         if (bloggerId == null || bloggerId <= 0 || !bloggerValidateService.checkAccountExist(bloggerId)) {
             throw ResultUtil.failException(CodeMessage.BLOGGER_UNKNOWN_BLOGGER);
         }
@@ -40,7 +40,7 @@ public class BaseCheckController extends RestController {
      * @param bloggerId 博主id
      */
     protected void handleBloggerSignInCheck(HttpServletRequest request, Integer bloggerId) {
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         // 检查当前登录否
         if (!bloggerValidateService.checkBloggerSignIn(bloggerId))

@@ -64,8 +64,6 @@ public interface BlogDao extends BaseDao<Blog> {
      *
      * @param ids    博文id
      * @param status 博文状态
-     * @param offset 偏移位置
-     * @param rows   行数
      * @return 查询结果
      */
     List<Blog> listBlogByBlogIds(@Param("ids") List<Integer> ids,

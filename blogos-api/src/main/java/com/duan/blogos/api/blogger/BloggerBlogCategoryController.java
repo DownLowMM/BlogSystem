@@ -40,7 +40,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
                                                       @PathVariable Integer bloggerId,
                                                       @RequestParam(value = "offset", required = false) Integer offset,
                                                       @RequestParam(value = "rows", required = false) Integer rows) {
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
 
         ResultModel<List<BloggerCategoryDTO>> result = bloggerCategoryService.listBlogCategory(bloggerId,
                 offset == null ? 0 : offset, rows == null ? -1 : rows);
@@ -57,7 +57,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
     public ResultModel<BloggerCategoryDTO> get(HttpServletRequest request,
                                                @PathVariable Integer bloggerId,
                                                @PathVariable Integer categoryId) {
-        handleAccountCheck(request, bloggerId);
+        handleAccountCheck(bloggerId);
         handleCategoryExistCheck(request, bloggerId, categoryId);
 
         BloggerCategoryDTO dto = bloggerCategoryService.getCategory(bloggerId, categoryId);
