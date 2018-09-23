@@ -24,7 +24,7 @@ public interface BlogFilter<T> {
      * @param status      博文状态
      * @return 查询结果
      */
-    T listFilterAll(int[] categoryIds, int[] labelIds, String keyWord, int bloggerId, int offset, int rows,
+    T listFilterAll(Long[] categoryIds, Long[] labelIds, String keyWord, Long bloggerId, int offset, int rows,
                     BlogSortRule sortRule, BlogStatusEnum status);
 
     /**
@@ -39,7 +39,7 @@ public interface BlogFilter<T> {
      * @param status      博文状态
      * @return 查询结果
      */
-    T listFilterByLabelAndCategory(int[] categoryIds, int[] labelIds, int bloggerId, int offset, int rows,
+    T listFilterByLabelAndCategory(Long[] categoryIds, Long[] labelIds, Long bloggerId, int offset, int rows,
                                    BlogSortRule sortRule, BlogStatusEnum status);
 
     /**

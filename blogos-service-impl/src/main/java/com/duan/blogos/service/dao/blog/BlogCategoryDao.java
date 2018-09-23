@@ -21,7 +21,7 @@ public interface BlogCategoryDao extends BaseDao<BlogCategory> {
      * @param ids 类别id
      * @return 查询结果
      */
-    List<BlogCategory> listCategoryById(@Param("ids") int[] ids);
+    List<BlogCategory> listCategoryById(@Param("ids") Long[] ids);
 
     /**
      * 查询博主创建的所有博文类别
@@ -31,7 +31,7 @@ public interface BlogCategoryDao extends BaseDao<BlogCategory> {
      * @param rows      行数
      * @return 查询结果
      */
-    List<BlogCategory> listCategoryByBloggerId(@Param("bloggerId") int bloggerId,
+    List<BlogCategory> listCategoryByBloggerId(@Param("bloggerId") Long bloggerId,
                                                @Param("offset") int offset,
                                                @Param("rows") int rows);
 
@@ -42,8 +42,8 @@ public interface BlogCategoryDao extends BaseDao<BlogCategory> {
      * @param categoryId 类别id
      * @return 查询结果
      */
-    BlogCategory getCategory(@Param("bloggerId") int bloggerId,
-                             @Param("categoryId") int categoryId);
+    BlogCategory getCategory(@Param("bloggerId") Long bloggerId,
+                             @Param("categoryId") Long categoryId);
 
     /**
      * 统计指定博主创建的类别数量
@@ -51,7 +51,7 @@ public interface BlogCategoryDao extends BaseDao<BlogCategory> {
      * @param bloggerId 博主id
      * @return 数量
      */
-    Integer countByBloggerId(int bloggerId);
+    Integer countByBloggerId(Long bloggerId);
 
     /**
      * 根据类别名精确查询类别 id
@@ -60,5 +60,5 @@ public interface BlogCategoryDao extends BaseDao<BlogCategory> {
      * @param title     类别名
      * @return 存在返回 id
      */
-    Integer getCategoryIdByTitle(@Param("bloggerId") int bloggerId, @Param("title") String title);
+    Long getCategoryIdByTitle(@Param("bloggerId") Long bloggerId, @Param("title") String title);
 }

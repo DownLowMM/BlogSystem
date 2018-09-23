@@ -44,28 +44,28 @@ public class BlogRetrievalServiceImpl extends BlogFilterAbstract<ResultModel<Lis
     private DbProperties dbProperties;
 
     @Override
-    protected ResultModel<List<BlogListItemDTO>> constructResult(Map<Integer, Blog> blogHashMap,
+    protected ResultModel<List<BlogListItemDTO>> constructResult(Map<Long, Blog> blogHashMap,
                                                                  List<BlogStatistics> statistics,
-                                                                 Map<Integer, int[]> blogIdMapCategoryIds,
-                                                                 Map<Integer, String> blogImgs) {
+                                                                 Map<Long, Long[]> blogIdMapCategoryIds,
+                                                                 Map<Long, String> blogImgs) {
 
         // 重组结果
         List<BlogListItemDTO> result = new ArrayList<>();
         String ch = dbProperties.getStringFiledSplitCharacterForNumber();
 
         for (BlogStatistics ss : statistics) {
-            Integer blogId = ss.getBlogId();
+            Long blogId = ss.getBlogId();
             Blog blog = blogHashMap.get(blogId);
 
             // category
-            int[] cids = blogIdMapCategoryIds.get(blogId);
+            Long[] cids = blogIdMapCategoryIds.get(blogId);
             List<BlogCategory> categories = null;
             if (!CollectionUtils.isEmpty(cids)) {
                 categories = categoryDao.listCategoryById(cids);
             }
 
             // label
-            int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), ch);
+            Long[] lids = StringUtils.longStringDistinctToArray(blog.getLabelIds(), ch);
             List<BlogLabel> labels = null;
             if (!CollectionUtils.isEmpty(lids)) {
                 labels = labelDao.listLabelById(lids);
@@ -73,8 +73,8 @@ public class BlogRetrievalServiceImpl extends BlogFilterAbstract<ResultModel<Lis
 
             String blogImg = blogImgs.get(blogId);
             BlogListItemDTO dto = dataFillingManager.blogListItemToDTO(ss,
-                    CollectionUtils.isEmpty(categories) ? null : categories.toArray(new BlogCategory[categories.size()]),
-                    CollectionUtils.isEmpty(labels) ? null : labels.toArray(new BlogLabel[labels.size()]),
+                    CollectionUtils.isEmpty(categories) ? null : categories.toArray(new BlogCategory[0]),
+                    CollectionUtils.isEmpty(labels) ? null : labels.toArray(new BlogLabel[0]),
                     blog, blogImg);
 
             result.add(dto);

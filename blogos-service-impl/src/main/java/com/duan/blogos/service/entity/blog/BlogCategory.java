@@ -17,13 +17,13 @@ public class BlogCategory implements Serializable {
     private static final long serialVersionUID = -7413640669767387180L;
 
     //id
-    private Integer id;
+    private Long id;
 
     //类别所属博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //类别图标
-    private Integer iconId;
+    private Long iconId;
 
     //类别标题
     private String title;

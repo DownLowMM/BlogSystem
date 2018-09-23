@@ -38,7 +38,7 @@ public class BloggerLabelController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<List<BlogLabelDTO>> list(HttpServletRequest request,
-                                                @PathVariable Integer bloggerId,
+                                                @PathVariable Long bloggerId,
                                                 @RequestParam(value = "offset", required = false) Integer offset,
                                                 @RequestParam(value = "rows", required = false) Integer rows) {
         handleAccountCheck(bloggerId);
@@ -55,13 +55,12 @@ public class BloggerLabelController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResultModel add(HttpServletRequest request,
-                           @PathVariable Integer bloggerId,
+                           @PathVariable Long bloggerId,
                            @RequestParam("title") String title) {
 
-        handleBloggerSignInCheck(request, bloggerId);
         handleTitleCheck(title, request);
 
-        int id = bloggerLabelService.insertLabel(bloggerId, title);
+        Long id = bloggerLabelService.insertLabel(bloggerId, title);
         if (id < 0) handlerOperateFail();
 
         return new ResultModel<>(id);
@@ -72,10 +71,9 @@ public class BloggerLabelController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{labelId}", method = RequestMethod.PUT)
     public ResultModel update(HttpServletRequest request,
-                              @PathVariable Integer bloggerId,
-                              @PathVariable Integer labelId,
+                              @PathVariable Long bloggerId,
+                              @PathVariable Long labelId,
                               @RequestParam("title") String newTitle) {
-        handleBloggerSignInCheck(request, bloggerId);
         handleTitleCheck(newTitle, request);
 
         boolean result = bloggerLabelService.updateLabel(labelId, bloggerId, newTitle);
@@ -89,11 +87,9 @@ public class BloggerLabelController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{labelId}", method = RequestMethod.DELETE)
     public ResultModel delete(HttpServletRequest request,
-                              @PathVariable("labelId") Integer labelId,
-                              @PathVariable Integer bloggerId) {
+                              @PathVariable("labelId") Long labelId,
+                              @PathVariable Long bloggerId) {
         handleAccountCheck(bloggerId);
-        handleBloggerSignInCheck(request, bloggerId);
-
         boolean result = bloggerLabelService.deleteLabel(bloggerId, labelId);
         if (!result) handlerOperateFail();
 

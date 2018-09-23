@@ -17,10 +17,10 @@ public class BloggerPicture implements Serializable {
     private static final long serialVersionUID = -3280469592527512808L;
 
     //id
-    private Integer id;
+    private Long id;
 
     //所属博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //描述
     private String bewrite;

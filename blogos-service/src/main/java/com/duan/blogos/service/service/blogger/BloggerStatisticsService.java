@@ -19,7 +19,7 @@ public interface BloggerStatisticsService {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    ResultModel<BloggerStatisticsDTO> getBloggerStatistics(int bloggerId);
+    ResultModel<BloggerStatisticsDTO> getBloggerStatistics(Long bloggerId);
 
     /**
      * 根据 id 获取博主的 dto 对象
@@ -27,6 +27,6 @@ public interface BloggerStatisticsService {
      * @param ids 博主 id
      * @return 数组
      */
-    BloggerDTO[] listBloggerDTO(int... ids);
+    BloggerDTO[] listBloggerDTO(Long... ids);
 
 }

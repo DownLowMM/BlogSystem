@@ -22,7 +22,7 @@ public interface BloggerCategoryService {
      * @param rows      行数
      * @return 查询结果
      */
-    ResultModel<List<BloggerCategoryDTO>> listBlogCategory(int bloggerId, int offset, int rows);
+    ResultModel<List<BloggerCategoryDTO>> listBlogCategory(Long bloggerId, int offset, int rows);
 
     /**
      * 修改类别
@@ -34,7 +34,7 @@ public interface BloggerCategoryService {
      * @param newBewrite 新描述，不修改传 null
      * @return 更新失败为false
      */
-    boolean updateBlogCategory(int bloggerId, int categoryId, int newIconId, String newTitle, String newBewrite);
+    boolean updateBlogCategory(Long bloggerId, Long categoryId, Long newIconId, String newTitle, String newBewrite);
 
     /**
      * 新增博文类别
@@ -46,7 +46,7 @@ public interface BloggerCategoryService {
      * @param desc      描述
      * @return 新纪录id
      */
-    int insertBlogCategory(int bloggerId, int iconId, String title, String desc);
+    Long insertBlogCategory(Long bloggerId, Long iconId, String title, String desc);
 
     /**
      * 删除类别，同时移动类别下所有文章到新的类别中
@@ -55,7 +55,7 @@ public interface BloggerCategoryService {
      * @param categoryId    要删除的类别
      * @param newCategoryId 新的类别（新类别创建者创建的类别），不修改传递-1
      */
-    boolean deleteCategoryAndMoveBlogsTo(int bloggerId, int categoryId, int newCategoryId);
+    boolean deleteCategoryAndMoveBlogsTo(Long bloggerId, Long categoryId, Long newCategoryId);
 
     /**
      * 根据id获得指定博文类别
@@ -64,5 +64,5 @@ public interface BloggerCategoryService {
      * @param categoryId 博文类别id
      * @return 查询结果
      */
-    BloggerCategoryDTO getCategory(int bloggerId, int categoryId);
+    BloggerCategoryDTO getCategory(Long bloggerId, Long categoryId);
 }

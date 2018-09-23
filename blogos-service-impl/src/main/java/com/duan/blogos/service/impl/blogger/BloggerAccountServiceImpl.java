@@ -77,7 +77,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     private DataFillingManager dataFillingManager;
 
     @Override
-    public int insertAccount(String userName, String password) {
+    public Long insertAccount(String userName, String password) {
 
         String shaPwd;
         try {
@@ -92,9 +92,9 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
         account.setUsername(userName);
         account.setPassword(shaPwd);
         int effect = accountDao.insert(account);
-        if (effect <= 0) return -1;
+        if (effect <= 0) return null;
 
-        int bloggerId = account.getId();
+        Long bloggerId = account.getId();
 
         // 生成博主设置数据
         BloggerSetting setting = new BloggerSetting();
@@ -106,7 +106,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     }
 
     @Override
-    public BloggerAccountDTO getAccount(int bloggerId) {
+    public BloggerAccountDTO getAccount(Long bloggerId) {
         BloggerAccount account = accountDao.getAccountById(bloggerId);
         return dataFillingManager.bloggerAccount2DTO(account);
     }
@@ -118,7 +118,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     }
 
     @Override
-    public boolean deleteAccount(int bloggerId) {
+    public boolean deleteAccount(Long bloggerId) {
 
         // 图片管理员不允许注销账号
         if (websiteProperties.getManagerId().equals(bloggerId))
@@ -132,16 +132,16 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
         // 删除博文的lucene索引
         List<Blog> blogIds = blogDao.listAllLabelByBloggerId(bloggerId);
         if (!CollectionUtils.isEmpty(blogIds))
-            blogIds.stream().mapToInt(Blog::getId).forEach(luceneIndexManager::delete);
+            blogIds.stream().mapToLong(Blog::getId).forEach(luceneIndexManager::delete);
 
         // 将博主喜欢和收藏的博文的喜欢/收藏次数减一
         List<BlogCollect> collects = collectDao.listAllIdByBloggerId(bloggerId);
         if (!CollectionUtils.isEmpty(collects))
-            collects.stream().mapToInt(BlogCollect::getBlogId).forEach(blogStatisticsDao::updateCollectCountMinus);
+            collects.stream().mapToLong(BlogCollect::getBlogId).forEach(blogStatisticsDao::updateCollectCountMinus);
 
         List<BlogLike> likes = likeDao.listAllIdByBloggerId(bloggerId);
         if (!CollectionUtils.isEmpty(likes))
-            likes.stream().mapToInt(BlogLike::getBlogId).forEach(blogStatisticsDao::updateLikeCountMinus);
+            likes.stream().mapToLong(BlogLike::getBlogId).forEach(blogStatisticsDao::updateLikeCountMinus);
 
 
         // 账户相关数据删除由关系数据库负责处理
@@ -154,10 +154,10 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     }
 
     @Override
-    public boolean updateAccountUserName(int bloggerId, String newUserName) {
+    public boolean updateAccountUserName(Long uid, String newUserName) {
 
         BloggerAccount account = new BloggerAccount();
-        account.setId(bloggerId);
+        account.setId(uid);
         account.setUsername(newUserName);
         int effect = accountDao.update(account);
         if (effect <= 0) return false;
@@ -166,7 +166,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     }
 
     @Override
-    public boolean updateAccountPassword(int bloggerId, String oldPassword, String newPassword) {
+    public boolean updateAccountPassword(Long bloggerId, String oldPassword, String newPassword) {
 
         String oldSha;
         String newSha;

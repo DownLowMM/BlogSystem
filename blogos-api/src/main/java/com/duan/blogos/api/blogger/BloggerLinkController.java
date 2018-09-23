@@ -36,7 +36,7 @@ public class BloggerLinkController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<List<BloggerLinkDTO>> get(HttpServletRequest request,
-                                                 @PathVariable Integer bloggerId,
+                                                 @PathVariable Long bloggerId,
                                                  @RequestParam(value = "offset", required = false) Integer offset,
                                                  @RequestParam(value = "rows", required = false) Integer rows) {
 
@@ -54,19 +54,18 @@ public class BloggerLinkController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResultModel add(HttpServletRequest request,
-                           @PathVariable Integer bloggerId,
-                           @RequestParam(value = "iconId", required = false) Integer iconId,
+                           @PathVariable Long bloggerId,
+                           @RequestParam(value = "iconId", required = false) Long iconId,
                            @RequestParam("title") String title,
                            @RequestParam("url") String url,
                            @RequestParam(value = "bewrite", required = false) String bewrite) {
-        handleBloggerSignInCheck(request, bloggerId);
         handlePictureExistCheck(request, bloggerId, iconId);
 
         //检查title和url规范
         if (StringUtils.isEmpty(title) || !StringUtils.isURL(url))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        int id = bloggerLinkService.insertBloggerLink(bloggerId, iconId == null ? -1 : iconId, title, url, bewrite);
+        Long id = bloggerLinkService.insertBloggerLink(bloggerId, iconId == null ? -1 : iconId, title, url, bewrite);
         if (id <= 0) handlerOperateFail();
 
         return new ResultModel<>(id);
@@ -77,9 +76,9 @@ public class BloggerLinkController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{linkId}", method = RequestMethod.PUT)
     public ResultModel update(HttpServletRequest request,
-                              @PathVariable Integer bloggerId,
-                              @PathVariable Integer linkId,
-                              @RequestParam(value = "iconId", required = false) Integer newIconId,
+                              @PathVariable Long bloggerId,
+                              @PathVariable Long linkId,
+                              @RequestParam(value = "iconId", required = false) Long newIconId,
                               @RequestParam(value = "title", required = false) String newTitle,
                               @RequestParam(value = "url", required = false) String newUrl,
                               @RequestParam(value = "bewrite", required = false) String newBewrite) {
@@ -90,7 +89,6 @@ public class BloggerLinkController extends BaseBloggerController {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
-        handleBloggerSignInCheck(request, bloggerId);
         handlePictureExistCheck(request, bloggerId, newIconId);
         checkLinkExist(linkId, context);
 
@@ -110,9 +108,8 @@ public class BloggerLinkController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{linkId}", method = RequestMethod.DELETE)
     public ResultModel delete(HttpServletRequest request,
-                              @PathVariable Integer bloggerId,
-                              @PathVariable Integer linkId) {
-        handleBloggerSignInCheck(request, bloggerId);
+                              @PathVariable Long bloggerId,
+                              @PathVariable Long linkId) {
         RequestContext context = new RequestContext(request);
         checkLinkExist(linkId, context);
 
@@ -124,7 +121,7 @@ public class BloggerLinkController extends BaseBloggerController {
 
 
     //检查链接是否存在
-    private void checkLinkExist(Integer linkId, RequestContext context) {
+    private void checkLinkExist(Long linkId, RequestContext context) {
         if (linkId == null || linkId <= 0 || !bloggerLinkService.getLinkForCheckExist(linkId)) {
             throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_LINK);
         }

@@ -69,13 +69,13 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
     private BloggerProfileDao profileDao;
 
     @Override
-    public ResultModel<BloggerStatisticsDTO> getBloggerStatistics(int bloggerId) {
+    public ResultModel<BloggerStatisticsDTO> getBloggerStatistics(Long bloggerId) {
 
         int blogCount = blogDao.countBlogByBloggerId(bloggerId, BlogStatusEnum.PUBLIC.getCode());
 
         List<Blog> blogs = blogDao.listAllWordCountByBloggerId(bloggerId, BlogStatusEnum.PUBLIC.getCode());
         int wordCountSum = blogs.stream().mapToInt(Blog::getWordCount).sum();
-        int likeCount = blogs.stream().mapToInt(Blog::getId).map(statisticsDao::getLikeCount).sum();
+        int likeCount = blogs.stream().mapToLong(Blog::getId).mapToInt(statisticsDao::getLikeCount).sum();
 
         int likeGiveCount = likeDao.countLikeByLikerId(bloggerId);
 
@@ -84,7 +84,7 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
         int labelCount = labelDao.countByBloggerId(bloggerId);
 
         int collectCount = collectDao.countByCollectorId(bloggerId);
-        int collectedCount = blogs.stream().mapToInt(Blog::getId).map(statisticsDao::getCollectCount).sum();
+        int collectedCount = blogs.stream().mapToLong(Blog::getId).mapToInt(statisticsDao::getCollectCount).sum();
 
         int linkCount = linkDao.countLinkByBloggerId(bloggerId);
 
@@ -96,16 +96,16 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
 
     // 获得博主dto
     @Override
-    public BloggerDTO[] listBloggerDTO(int... ids) {
+    public BloggerDTO[] listBloggerDTO(Long... ids) {
         if (CollectionUtils.isEmpty(ids)) return null;
 
         BloggerDTO[] dtos = new BloggerDTO[ids.length];
         int c = 0;
-        for (int id : ids) {
+        for (Long id : ids) {
             BloggerAccount account = accountDao.getAccountById(id);
             BloggerProfile profile = profileDao.getProfileByBloggerId(id);
             BloggerPicture avatar = null;
-            Integer avatarId = profile.getAvatarId();
+            Long avatarId = profile.getAvatarId();
             if (avatarId != null)
                 avatar = pictureDao.getPictureById(avatarId);
 
@@ -117,7 +117,7 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
                 avatar = new BloggerPicture();
                 avatar.setBloggerId(id);
                 avatar.setCategory(BloggerPictureCategoryEnum.PUBLIC.getCode());
-                avatar.setId(-1);
+                avatar.setId(null);
                 avatar.setPath(stringConstructorManager.constructPictureUrl(avatar, BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR));
             }
 

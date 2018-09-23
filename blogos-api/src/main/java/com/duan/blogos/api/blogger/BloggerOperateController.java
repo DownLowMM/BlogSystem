@@ -35,9 +35,8 @@ public class BloggerOperateController extends BaseBloggerController {
      */
     @RequestMapping(value = "/operate=share", method = RequestMethod.POST)
     public ResultModel shareBlog(HttpServletRequest request,
-                                 @PathVariable Integer blogId,
-                                 @PathVariable Integer bloggerId) {
-        handleBloggerSignInCheck(request, bloggerId);
+                                 @PathVariable Long blogId,
+                                 @PathVariable Long bloggerId) {
         handleBlogExistCheck(blogId);
 
         //执行
@@ -51,11 +50,10 @@ public class BloggerOperateController extends BaseBloggerController {
      */
     @RequestMapping(value = "/operate=collect", method = RequestMethod.POST)
     public ResultModel collectBlog(HttpServletRequest request,
-                                   @PathVariable Integer blogId,
-                                   @PathVariable Integer bloggerId,
+                                   @PathVariable Long blogId,
+                                   @PathVariable Long bloggerId,
                                    @RequestParam(value = "reason", required = false) String reason) {
 
-        handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(blogId);
 
         // 如果博文属于当前博主，收藏失败d
@@ -65,7 +63,7 @@ public class BloggerOperateController extends BaseBloggerController {
 
         //执行
         // UPDATE: 2018/1/19 更新 收藏到自己的某一类别不开发，只收藏到一个类别中
-        int id = operateService.insertCollect(blogId, bloggerId, reason, -1);
+        Long id = operateService.insertCollect(blogId, bloggerId, reason, null);
         if (id <= 0) handlerOperateFail();
 
         return new ResultModel<>(id);
@@ -76,17 +74,16 @@ public class BloggerOperateController extends BaseBloggerController {
      */
     @RequestMapping(value = "/operate=complain", method = RequestMethod.POST)
     public ResultModel complainBlog(HttpServletRequest request,
-                                    @PathVariable Integer blogId,
-                                    @PathVariable Integer bloggerId,
+                                    @PathVariable Long blogId,
+                                    @PathVariable Long bloggerId,
                                     @RequestParam("content") String content) {
         if (StringUtils.isBlank(content))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(blogId);
 
         //执行
-        int id = operateService.insertComplain(blogId, bloggerId, content);
+        Long id = operateService.insertComplain(blogId, bloggerId, content);
         if (id <= 0) handlerOperateFail();
 
         return new ResultModel<>(id);
@@ -97,10 +94,9 @@ public class BloggerOperateController extends BaseBloggerController {
      */
     @RequestMapping(value = "/operate=like", method = RequestMethod.POST)
     public ResultModel likeBlog(HttpServletRequest request,
-                                @PathVariable Integer blogId,
-                                @PathVariable Integer bloggerId) {
+                                @PathVariable Long blogId,
+                                @PathVariable Long bloggerId) {
 
-        handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(blogId);
 
         //执行
@@ -114,10 +110,9 @@ public class BloggerOperateController extends BaseBloggerController {
      */
     @RequestMapping(value = "/operate=collect", method = RequestMethod.DELETE)
     public ResultModel removeCollect(HttpServletRequest request,
-                                     @PathVariable Integer blogId,
-                                     @PathVariable Integer bloggerId) {
+                                     @PathVariable Long blogId,
+                                     @PathVariable Long bloggerId) {
 
-        handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistCheck(blogId);
 
         //执行
@@ -133,9 +128,8 @@ public class BloggerOperateController extends BaseBloggerController {
      */
     @RequestMapping(value = "/operate=like", method = RequestMethod.DELETE)
     public ResultModel removeLike(HttpServletRequest request,
-                                  @PathVariable Integer blogId,
-                                  @PathVariable Integer bloggerId) {
-        handleBloggerSignInCheck(request, bloggerId);
+                                  @PathVariable Long blogId,
+                                  @PathVariable Long bloggerId) {
         handleBlogExistCheck(blogId);
 
         //执行

@@ -68,7 +68,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     private BlogDao blogDao;
 
     @Override
-    public ResultModel<List<BloggerCategoryDTO>> listBlogCategory(int bloggerId, int offset, int rows) {
+    public ResultModel<List<BloggerCategoryDTO>> listBlogCategory(Long bloggerId, int offset, int rows) {
 
         offset = offset < 0 ? 0 : offset;
         rows = rows < 0 ? defaultProperties.getCategoryCount() : rows;
@@ -85,11 +85,11 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     }
 
     @Override
-    public boolean updateBlogCategory(int bloggerId, int categoryId, int newIconId, String newTitle,
+    public boolean updateBlogCategory(Long bloggerId, Long categoryId, Long newIconId, String newTitle,
                                       String newBewrite) {
 
         BlogCategory category = categoryDao.getCategory(bloggerId, categoryId);
-        Integer oldIconId = category.getIconId();
+        Long oldIconId = category.getIconId();
         if (!StringUtils.isEmpty(newTitle)) category.setTitle(newTitle);
         if (!StringUtils.isEmpty(newBewrite)) category.setBewrite(newBewrite);
         if (newIconId > 0) category.setIconId(newIconId);
@@ -104,7 +104,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     }
 
     @Override
-    public int insertBlogCategory(int bloggerId, int iconId, String title, String bewrite) {
+    public Long insertBlogCategory(Long bloggerId, Long iconId, String title, String bewrite) {
 
         BlogCategory category = new BlogCategory();
         category.setBewrite(bewrite);
@@ -112,7 +112,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
         category.setBloggerId(bloggerId);
         category.setTitle(title);
         int effect = categoryDao.insert(category);
-        if (effect <= 0) return -1;
+        if (effect <= 0) return null;
 
         // 修改图片可见性，引用次数
         imageManager.imageInsertHandle(bloggerId, iconId);
@@ -121,13 +121,13 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     }
 
     @Override
-    public boolean deleteCategoryAndMoveBlogsTo(int bloggerId, int categoryId, int newCategoryId) {
+    public boolean deleteCategoryAndMoveBlogsTo(Long bloggerId, Long categoryId, Long newCategoryId) {
 
         BlogCategory category = categoryDao.getCategory(bloggerId, categoryId);
         if (category == null) return false;
 
         // 图片引用次数--
-        Integer iconId;
+        Long iconId;
         if ((iconId = category.getIconId()) != null && pictureDao.getUseCount(iconId) > 0) {
             pictureDao.updateUseCountMinus(iconId);
         }
@@ -145,10 +145,10 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
         if (newCategoryId <= 0) {
             blogs.forEach(blog -> {
 
-                int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), sp);
-                if (CollectionUtils.intArrayContain(cids, categoryId)) {
-                    int[] ar = ArrayUtils.removeFromArray(cids, categoryId);
-                    blog.setCategoryIds(StringUtils.intArrayToString(ar, sp));
+                Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), sp);
+                if (CollectionUtils.longArrayContain(cids, categoryId)) {
+                    Long[] ar = ArrayUtils.removeFromArray(cids, categoryId);
+                    blog.setCategoryIds(StringUtils.longArrayToString(ar, sp));
                     int effectUpdate = blogDao.update(blog);
                     if (effectUpdate <= 0)
                         throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
@@ -159,10 +159,10 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
         } else { // 替换类别
             blogs.forEach(blog -> {
 
-                int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), sp);
-                if (CollectionUtils.intArrayContain(cids, categoryId)) {
+                Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), sp);
+                if (CollectionUtils.longArrayContain(cids, categoryId)) {
                     ArrayUtils.replace(cids, categoryId, newCategoryId);
-                    blog.setCategoryIds(StringUtils.intArrayToString(cids, sp));
+                    blog.setCategoryIds(StringUtils.longArrayToString(cids, sp));
                     int effectUpdate = blogDao.update(blog);
                     if (effectUpdate <= 0)
                         throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
@@ -175,19 +175,19 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     }
 
     @Override
-    public BloggerCategoryDTO getCategory(int bloggerId, int categoryId) {
+    public BloggerCategoryDTO getCategory(Long bloggerId, Long categoryId) {
         return getBloggerCategoryDTO(bloggerId, categoryDao.getCategory(bloggerId, categoryId));
     }
 
     // 获得单个类别
-    private BloggerCategoryDTO getBloggerCategoryDTO(int bloggerId, BlogCategory category) {
+    private BloggerCategoryDTO getBloggerCategoryDTO(Long bloggerId, BlogCategory category) {
 
-        Integer iconId = category.getIconId();
+        Long iconId = category.getIconId();
 
         BloggerPicture icon;
         if (iconId == null) {
             // 默认图片
-            int pictureManagerId = websiteProperties.getManagerId();
+            Long pictureManagerId = websiteProperties.getManagerId();
             icon = pictureDao.getBloggerUniquePicture(pictureManagerId, DEFAULT_BLOGGER_BLOG_CATEGORY_ICON.getCode());
         } else {
             icon = pictureDao.getPictureById(iconId);

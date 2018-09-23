@@ -59,7 +59,7 @@ public class BloggerPageController {
         mv.addObject("pageOwnerBloggerId", account.getId());
         mv.addObject("pageOwnerBloggerName", account.getUsername());
 
-        int ownerId = account.getId();
+        Long ownerId = account.getId();
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(ownerId);
         mv.addObject("blogName", profile.getIntro());
         mv.addObject("aboutMe", profile.getAboutMe());
@@ -72,7 +72,7 @@ public class BloggerPageController {
         ResultModel<BloggerStatisticsDTO> ownerBgStat = statisticsService.getBloggerStatistics(ownerId);
         mv.addObject("ownerBgStat", ownerBgStat.getData());
 
-        int loginBgId;
+        Long loginBgId;
         String token = ""; // TODO redis + token 维护会话
         if ((loginBgId = onlineService.getLoginBloggerId(token)) != -1) {
             ResultModel<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBgId);

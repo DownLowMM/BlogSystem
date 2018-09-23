@@ -14,10 +14,10 @@ import java.sql.Timestamp;
 public class BloggerPictureDTO implements Serializable {
 
     //id
-    private Integer id;
+    private Long id;
 
     //所属博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //描述
     private String bewrite;

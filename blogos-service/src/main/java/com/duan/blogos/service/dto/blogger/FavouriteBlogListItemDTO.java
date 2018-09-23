@@ -15,13 +15,11 @@ import java.sql.Timestamp;
 @Data
 public class FavouriteBlogListItemDTO implements Serializable {
 
-    private static final long serialVersionUID = 1348316821909506029L;
-
     // 记录id
-    private int id;
+    private Long id;
 
     //博主id
-    private int bloggerId;
+    private Long bloggerId;
 
     // 博文内容
     private BlogListItemDTO blog;

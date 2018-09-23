@@ -23,7 +23,7 @@ public interface BloggerLinkDao extends BaseDao<BloggerLink> {
      * @param rows      行数
      * @return 查询结果
      */
-    List<BloggerLink> listBlogLinkByBloggerId(@Param("bloggerId") int bloggerId,
+    List<BloggerLink> listBlogLinkByBloggerId(@Param("bloggerId") Long bloggerId,
                                               @Param("offset") int offset,
                                               @Param("rows") int rows);
 
@@ -33,7 +33,7 @@ public interface BloggerLinkDao extends BaseDao<BloggerLink> {
      * @param linkId 链接id
      * @return 链接id
      */
-    Integer getLinkForCheckExist(int linkId);
+    Long getLinkForCheckExist(Long linkId);
 
     /**
      * 根据id查询链接
@@ -41,7 +41,7 @@ public interface BloggerLinkDao extends BaseDao<BloggerLink> {
      * @param linkId id
      * @return 查询结果
      */
-    BloggerLink getLink(int linkId);
+    BloggerLink getLink(Long linkId);
 
     /**
      * 统计博主的链接数量
@@ -49,5 +49,5 @@ public interface BloggerLinkDao extends BaseDao<BloggerLink> {
      * @param bloggerId 博主id
      * @return 统计结果
      */
-    int countLinkByBloggerId(int bloggerId);
+    int countLinkByBloggerId(Long bloggerId);
 }

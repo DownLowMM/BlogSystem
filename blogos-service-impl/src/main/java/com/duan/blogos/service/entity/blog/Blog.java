@@ -15,10 +15,10 @@ import java.sql.Timestamp;
 public class Blog implements Serializable {
 
     //博文id
-    private Integer id;
+    private Long id;
 
     //博文所属博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //博文所属类别id
     private String categoryIds;

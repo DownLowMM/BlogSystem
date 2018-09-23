@@ -22,7 +22,7 @@ public interface BlogCollectDao extends BaseDao<BlogCollect> {
      * @param blogId    博文id
      * @return 执行结果
      */
-    int deleteCollectByBloggerId(@Param("bloggerId") int bloggerId, @Param("blogId") int blogId);
+    int deleteCollectByBloggerId(@Param("bloggerId") Long bloggerId, @Param("blogId") Long blogId);
 
     /**
      * 获取指定博主指定类别的收藏博文
@@ -33,8 +33,8 @@ public interface BlogCollectDao extends BaseDao<BlogCollect> {
      * @param rows      结果集数量
      * @return 查询结果
      */
-    List<BlogCollect> listCollectBlog(@Param("bloggerId") int bloggerId,
-                                      @Param("category") int category,
+    List<BlogCollect> listCollectBlog(@Param("bloggerId") Long bloggerId,
+                                      @Param("category") Long category,
                                       @Param("offset") int offset,
                                       @Param("rows") int rows);
 
@@ -47,8 +47,8 @@ public interface BlogCollectDao extends BaseDao<BlogCollect> {
      * @param category  收藏到类别
      * @return 影响行数
      */
-    int updateByUnique(@Param("bloggerId") int bloggerId,
-                       @Param("blogId") int blogId,
+    int updateByUnique(@Param("bloggerId") Long bloggerId,
+                       @Param("blogId") Long blogId,
                        @Param("reason") String reason,
                        @Param("category") Integer category);
 
@@ -58,7 +58,7 @@ public interface BlogCollectDao extends BaseDao<BlogCollect> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    List<BlogCollect> listAllCollectByBlogId(int blogId);
+    List<BlogCollect> listAllCollectByBlogId(Long blogId);
 
     /**
      * 统计指定博主的博文收藏数
@@ -66,7 +66,7 @@ public interface BlogCollectDao extends BaseDao<BlogCollect> {
      * @param bloggerId 博主id
      * @return 数量
      */
-    Integer countByCollectorId(int bloggerId);
+    Integer countByCollectorId(Long bloggerId);
 
     /**
      * 根据博主id和博文id获取收藏记录
@@ -75,7 +75,7 @@ public interface BlogCollectDao extends BaseDao<BlogCollect> {
      * @param blogId    博文id
      * @return 查询记录
      */
-    BlogCollect getCollect(@Param("bloggerId") int bloggerId, @Param("blogId") int blogId);
+    BlogCollect getCollect(@Param("bloggerId") Long bloggerId, @Param("blogId") Long blogId);
 
     /**
      * 查询指定博主收藏的所有博文id
@@ -83,5 +83,5 @@ public interface BlogCollectDao extends BaseDao<BlogCollect> {
      * @param bloggerId 博主id
      * @return 只查询收藏博文 id
      */
-    List<BlogCollect> listAllIdByBloggerId(int bloggerId);
+    List<BlogCollect> listAllIdByBloggerId(Long bloggerId);
 }

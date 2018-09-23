@@ -14,13 +14,13 @@ import java.sql.Timestamp;
 public class BlogCategoryDTO implements Serializable {
 
     //id
-    private Integer id;
+    private Long id;
 
     //类别所属博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //类别图标
-    private Integer iconId;
+    private Long iconId;
 
     //类别标题
     private String title;

@@ -11,9 +11,9 @@ import com.duan.blogos.service.restful.ResultModel;
 public interface OnlineService {
 
     /**
-     * 获得登录博主id，未登录返回-1
+     * 获得登录博主id，未登录返回 null
      */
-    long getLoginBloggerId(String token);
+    Long getLoginBloggerId(String token);
 
     /**
      * 登入

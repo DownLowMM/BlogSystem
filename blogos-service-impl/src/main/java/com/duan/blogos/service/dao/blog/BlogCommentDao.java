@@ -22,7 +22,7 @@ public interface BlogCommentDao extends BaseDao<BlogComment> {
      * @param status 博文状态
      * @return 查询结果
      */
-    List<BlogComment> listCommentByBlogId(@Param("blogId") int blogId,
+    List<BlogComment> listCommentByBlogId(@Param("blogId") Long blogId,
                                           @Param("status") int status);
 
     /**
@@ -31,5 +31,5 @@ public interface BlogCommentDao extends BaseDao<BlogComment> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    List<BlogComment> listAllCommentByBlogId(int blogId);
+    List<BlogComment> listAllCommentByBlogId(Long blogId);
 }

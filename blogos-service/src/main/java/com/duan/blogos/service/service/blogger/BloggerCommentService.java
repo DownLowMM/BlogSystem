@@ -17,7 +17,7 @@ public interface BloggerCommentService {
      * @param content     评论内容
      * @return 新纪录id
      */
-    int insertComment(int blogId, int spokesmanId, int listenerId, int state, String content);
+    Long insertComment(Long blogId, Long spokesmanId, Long listenerId, int state, String content);
 
     /**
      * 删除评论
@@ -26,6 +26,6 @@ public interface BloggerCommentService {
      * @param blogId    博文id
      * @return 删除成功返回true
      */
-    boolean deleteComment(int commentId, int blogId);
+    boolean deleteComment(Long commentId, Long blogId);
 
 }

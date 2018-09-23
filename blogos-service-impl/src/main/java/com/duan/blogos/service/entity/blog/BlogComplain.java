@@ -17,13 +17,13 @@ public class BlogComplain implements Serializable {
     private static final long serialVersionUID = -2651098932919577290L;
 
     //表id
-    private Integer id;
+    private Long id;
 
     //投诉的博文id
-    private Integer blogId;
+    private Long blogId;
 
     //投诉者id
-    private Integer complainerId;
+    private Long complainerId;
 
     //投诉内容
     private String content;

@@ -33,7 +33,7 @@ public class BlogStatisticsController extends BaseBlogController {
      * 获得博文统计信息
      */
     @GetMapping
-    public ResultModel<BlogStatisticsDTO> get(@PathVariable Integer blogId) {
+    public ResultModel<BlogStatisticsDTO> get(@PathVariable Long blogId) {
         handleBlogStatisticsExistCheck(blogId);
 
         ResultModel<BlogStatisticsDTO> result = statisticsService.getBlogStatistics(blogId);
@@ -46,7 +46,7 @@ public class BlogStatisticsController extends BaseBlogController {
      * 获取统计信息（简版，只获取各项信息的次数）
      */
     @GetMapping("/count")
-    public ResultModel<BlogStatisticsCountDTO> getCount(@PathVariable Integer blogId) {
+    public ResultModel<BlogStatisticsCountDTO> getCount(@PathVariable Long blogId) {
         handleBlogStatisticsExistCheck(blogId);
 
         ResultModel<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
@@ -56,7 +56,7 @@ public class BlogStatisticsController extends BaseBlogController {
     }
 
     // 检查博文的统计信息是否存在
-    private void handleBlogStatisticsExistCheck(int blogId) {
+    private void handleBlogStatisticsExistCheck(Long blogId) {
         if (!blogValidateService.checkBlogStatisticExist(blogId))
             throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
     }

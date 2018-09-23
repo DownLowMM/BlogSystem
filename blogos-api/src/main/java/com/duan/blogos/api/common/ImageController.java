@@ -50,8 +50,8 @@ public class ImageController extends BaseCheckController {
      */
     @RequestMapping(value = "/type=public/{imageId}", method = RequestMethod.GET)
     public void getBlogPicture(HttpServletRequest request, HttpServletResponse response,
-                               @PathVariable("bloggerId") Integer bloggerId,
-                               @PathVariable("imageId") Integer imageId,
+                               @PathVariable("bloggerId") Long bloggerId,
+                               @PathVariable("imageId") Long imageId,
                                @RequestParam(value = "default", required = false) Integer category) {
         handleAccountCheck(bloggerId);
 
@@ -80,10 +80,9 @@ public class ImageController extends BaseCheckController {
      */
     @RequestMapping(value = "/type=private/{imageId}", method = RequestMethod.GET)
     public void getBloggerPicture(HttpServletRequest request, HttpServletResponse response,
-                                  @PathVariable("bloggerId") Integer bloggerId,
-                                  @PathVariable("imageId") Integer imageId,
+                                  @PathVariable("bloggerId") Long bloggerId,
+                                  @PathVariable("imageId") Long imageId,
                                   @RequestParam(value = "default", required = false) Integer category) {
-        handleBloggerSignInCheck(request, bloggerId);
 
         // 检查默认图片类别是否为默认类别
         if (category != null)
@@ -105,14 +104,13 @@ public class ImageController extends BaseCheckController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ResultModel upload(MultipartHttpServletRequest request,
-                              @PathVariable("bloggerId") Integer bloggerId,
+                              @PathVariable("bloggerId") Long bloggerId,
                               @RequestParam(value = "category", required = false) Integer category,
                               @RequestParam(value = "bewrite", required = false) String bewrite,
                               @RequestParam(value = "title", required = false) String title) {
-        handleBloggerSignInCheck(request, bloggerId);
 
         MultipartFile file = request.getFile("image");// 与页面input的name相同
-        int id;
+        Long id;
         if (ImageUtils.isImageFile(fileTrans(file))) {
 
             // 默认上传到私有目录

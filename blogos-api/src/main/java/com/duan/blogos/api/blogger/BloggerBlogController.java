@@ -53,7 +53,7 @@ public class BloggerBlogController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResultModel add(HttpServletRequest request,
-                           @PathVariable Integer bloggerId,
+                           @PathVariable Long bloggerId,
                            @RequestParam(value = "cids", required = false) String categoryIds,
                            @RequestParam(value = "lids", required = false) String labelIds,
                            @RequestParam("title") String title,
@@ -74,15 +74,15 @@ public class BloggerBlogController extends BaseBloggerController {
 
 
         String sp = ",";
-        int[] cids = StringUtils.intStringDistinctToArray(categoryIds, sp);
-        int[] lids = StringUtils.intStringDistinctToArray(labelIds, sp);
+        Long[] cids = StringUtils.longStringDistinctToArray(categoryIds, sp);
+        Long[] lids = StringUtils.longStringDistinctToArray(labelIds, sp);
 
         //检查博文类别和标签
         handleCategoryAndLabelCheck(request, bloggerId, cids, lids);
 
         String[] kw = StringUtils.stringArrayToArray(keyWords, sp);
         // UPDATE: 2018/1/16 更新 博文审核 图片引用
-        int id = bloggerBlogService.insertBlog(bloggerId, cids, lids, BlogStatusEnum.PUBLIC, title, content, contentMd, summary, kw, false);
+        Long id = bloggerBlogService.insertBlog(bloggerId, cids, lids, BlogStatusEnum.PUBLIC, title, content, contentMd, summary, kw, false);
         if (id <= 0) handlerOperateFail();
 
         return new ResultModel<>(id);
@@ -93,7 +93,7 @@ public class BloggerBlogController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<List<BlogListItemDTO>> list(HttpServletRequest request,
-                                                   @PathVariable Integer bloggerId,
+                                                   @PathVariable Long bloggerId,
                                                    @RequestParam(value = "cids", required = false) String categoryIds,
                                                    @RequestParam(value = "lids", required = false) String labelIds,
                                                    @RequestParam(value = "kword", required = false) String keyWord,
@@ -102,7 +102,6 @@ public class BloggerBlogController extends BaseBloggerController {
                                                    @RequestParam(value = "sort", required = false) String sort,
                                                    @RequestParam(value = "order", required = false) String order,
                                                    @RequestParam(value = "status", required = false) Integer status) {
-        handleBloggerSignInCheck(request, bloggerId);
 
         //检查排序规则
         String sor = sort == null ? Rule.VIEW_COUNT.name() : sort.toUpperCase();
@@ -110,8 +109,8 @@ public class BloggerBlogController extends BaseBloggerController {
         handleSortRuleCheck(request, sor, ord);
 
         String sp = ",";
-        int[] cids = StringUtils.intStringDistinctToArray(categoryIds, sp);
-        int[] lids = StringUtils.intStringDistinctToArray(labelIds, sp);
+        Long[] cids = StringUtils.longStringDistinctToArray(categoryIds, sp);
+        Long[] lids = StringUtils.longStringDistinctToArray(labelIds, sp);
         //检查博文类别和标签
         handleCategoryAndLabelCheck(request, bloggerId, cids, lids);
 
@@ -134,9 +133,8 @@ public class BloggerBlogController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{blogId}", method = RequestMethod.GET)
     public ResultModel<BlogDTO> get(HttpServletRequest request,
-                                    @PathVariable Integer bloggerId,
-                                    @PathVariable Integer blogId) {
-        handleBloggerSignInCheck(request, bloggerId);
+                                    @PathVariable Long bloggerId,
+                                    @PathVariable Long blogId) {
 
         ResultModel<BlogDTO> blog = bloggerBlogService.getBlog(bloggerId, blogId);
         if (blog == null) handlerEmptyResult();
@@ -154,8 +152,8 @@ public class BloggerBlogController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{blogId}", method = RequestMethod.PUT)
     public ResultModel update(HttpServletRequest request,
-                              @PathVariable Integer bloggerId,
-                              @PathVariable Integer blogId,
+                              @PathVariable Long bloggerId,
+                              @PathVariable Long blogId,
                               @RequestParam(value = "title", required = false) String newTitle,
                               @RequestParam(value = "content", required = false) String newContent,
                               @RequestParam(value = "contentMd", required = false) String newContentMd,
@@ -174,7 +172,6 @@ public class BloggerBlogController extends BaseBloggerController {
         if (newStatus != null && !blogValidateService.isBlogStatusAllow(newStatus))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistAndCreatorCheck(request, bloggerId, blogId);
 
         // 将 Unicode 解码
@@ -184,8 +181,8 @@ public class BloggerBlogController extends BaseBloggerController {
         handleBlogContentCheck(request, newTitle, newContent, newContentMd, newSummary, newKeyWord);
 
         String sp = ",";
-        int[] cids = newCategoryIds == null ? null : StringUtils.intStringDistinctToArray(newCategoryIds, sp);
-        int[] lids = newLabelIds == null ? null : StringUtils.intStringDistinctToArray(newLabelIds, sp);
+        Long[] cids = newCategoryIds == null ? null : StringUtils.longStringDistinctToArray(newCategoryIds, sp);
+        Long[] lids = newLabelIds == null ? null : StringUtils.longStringDistinctToArray(newLabelIds, sp);
 
         //检查博文类别和标签
         handleCategoryAndLabelCheck(request, bloggerId, cids, lids);
@@ -205,10 +202,9 @@ public class BloggerBlogController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{blogId}", method = RequestMethod.DELETE)
     public ResultModel delete(HttpServletRequest request,
-                              @PathVariable Integer bloggerId,
-                              @PathVariable Integer blogId) {
+                              @PathVariable Long bloggerId,
+                              @PathVariable Long blogId) {
 
-        handleBloggerSignInCheck(request, bloggerId);
         handleBlogExistAndCreatorCheck(request, bloggerId, blogId);
 
         if (!bloggerBlogService.deleteBlog(bloggerId, blogId))
@@ -222,16 +218,14 @@ public class BloggerBlogController extends BaseBloggerController {
      */
     @RequestMapping(value = "/patch", method = RequestMethod.DELETE)
     public ResultModel deletePatch(HttpServletRequest request,
-                                   @PathVariable Integer bloggerId,
+                                   @PathVariable Long bloggerId,
                                    @RequestParam("ids") String ids) {
 
-        handleBloggerSignInCheck(request, bloggerId);
-
-        int[] blogIds = StringUtils.intStringDistinctToArray(ids, ",");
+        Long[] blogIds = StringUtils.longStringDistinctToArray(ids, ",");
         if (CollectionUtils.isEmpty(blogIds))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        for (int id : blogIds) {
+        for (Long id : blogIds) {
             handleBlogExistAndCreatorCheck(request, bloggerId, id);
         }
 
@@ -248,10 +242,8 @@ public class BloggerBlogController extends BaseBloggerController {
      */
     @RequestMapping(value = "/patch", method = RequestMethod.POST)
     public ResultModel<List<BlogTitleIdDTO>> patchImportBlog(HttpServletRequest request,
-                                                             @PathVariable Integer bloggerId,
+                                                             @PathVariable Long bloggerId,
                                                              @RequestParam("zipFile") MultipartFile file) {
-
-        handleBloggerSignInCheck(request, bloggerId);
 
         // 检查是否为 zip 文件
         if (file.isEmpty() || !file.getOriginalFilename().endsWith(".zip"))
@@ -270,9 +262,8 @@ public class BloggerBlogController extends BaseBloggerController {
      */
     @RequestMapping(value = "/download-type={type}", method = RequestMethod.GET)
     public void download(HttpServletRequest request, HttpServletResponse response,
-                         @PathVariable Integer bloggerId,
+                         @PathVariable Long bloggerId,
                          @PathVariable String type) {
-        handleBloggerSignInCheck(request, bloggerId);
 
         // 检查请求的文件类别
         BlogFormatEnum format = BlogFormatEnum.get(type);
@@ -317,23 +308,23 @@ public class BloggerBlogController extends BaseBloggerController {
     }
 
     // 检查博文是否存在，且博文是否属于指定博主
-    private void handleBlogExistAndCreatorCheck(HttpServletRequest request, int bloggerId, int blogId) {
+    private void handleBlogExistAndCreatorCheck(HttpServletRequest request, Long bloggerId, Long blogId) {
         if (!blogValidateService.isCreatorOfBlog(bloggerId, blogId))
             throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
     }
 
     // 检查类别和标签
-    private void handleCategoryAndLabelCheck(HttpServletRequest request, int bloggerId, int[] cids, int[] lids) {
+    private void handleCategoryAndLabelCheck(HttpServletRequest request, Long bloggerId, Long[] cids, Long[] lids) {
 
         if (!CollectionUtils.isEmpty(cids)) {
-            for (int id : cids) {
+            for (Long id : cids) {
                 if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, id))
                     throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
         }
 
         if (!CollectionUtils.isEmpty(lids)) {
-            for (int id : lids) {
+            for (Long id : lids) {
                 if (!blogValidateService.checkLabelsExist(id))
                     throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }

@@ -13,10 +13,10 @@ import java.io.Serializable;
 public class BloggerSettingDTO implements Serializable {
 
     // id
-    private Integer id;
+    private Long id;
 
     // 博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     // 博主主页个人信息栏位置，0为左，1为右
     private Integer mainPageNavPos;

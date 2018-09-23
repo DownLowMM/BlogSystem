@@ -22,7 +22,7 @@ public interface BaseDao<T> {
      * @param id id
      * @return 操作影响的行数
      */
-    int delete(int id);
+    int delete(Long id);
 
     /**
      * 新增数据

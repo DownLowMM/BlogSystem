@@ -21,7 +21,7 @@ public interface BloggerLikeBlogService {
      * @param blogId    博文id
      * @return 已喜欢返回 true
      */
-    boolean getLikeState(int bloggerId, int blogId);
+    boolean getLikeState(Long bloggerId, Long blogId);
 
     /**
      * 获取博主喜欢博文列表
@@ -32,7 +32,7 @@ public interface BloggerLikeBlogService {
      * @param blogSortRule 排序规则
      * @return 查询结果
      */
-    ResultModel<List<FavouriteBlogListItemDTO>> listLikeBlog(int bloggerId, int offset, int rows,
+    ResultModel<List<FavouriteBlogListItemDTO>> listLikeBlog(Long bloggerId, int offset, int rows,
                                                              BlogSortRule blogSortRule);
 
     /**
@@ -41,5 +41,5 @@ public interface BloggerLikeBlogService {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    int countByBloggerId(int bloggerId);
+    int countByBloggerId(Long bloggerId);
 }

@@ -33,16 +33,16 @@ public class BlogOperateServiceImpl implements BlogOperateService {
     private BlogComplainDao complainDao;
 
     @Override
-    public int insertShare(int blogId, int sharerId) {
+    public Integer insertShare(Long blogId, Long sharerId) {
 
         statisticsDao.updateShareCountPlus(blogId);
         Integer count = statisticsDao.getShareCount(blogId);
 
-        return count == null ? -1 : count;
+        return count;
     }
 
     @Override
-    public int insertCollect(int blogId, int collectorId, String reason, int categoryId) {
+    public Long insertCollect(Long blogId, Long collectorId, String reason, Long categoryId) {
 
         BlogCollect collect = new BlogCollect();
         collect.setBlogId(blogId);
@@ -54,12 +54,11 @@ public class BlogOperateServiceImpl implements BlogOperateService {
         //博文收藏次数加一
         statisticsDao.updateCollectCountPlus(blogId);
 
-        Integer id = collect.getId();
-        return id == null ? -1 : id;
+        return collect.getId();
     }
 
     @Override
-    public int insertLike(int blogId, int likerId) {
+    public Integer insertLike(Long blogId, Long likerId) {
 
         BlogLike like = new BlogLike();
         like.setBlogId(blogId);
@@ -74,7 +73,7 @@ public class BlogOperateServiceImpl implements BlogOperateService {
     }
 
     @Override
-    public int insertComplain(int blogId, int complainId, String content) {
+    public Long insertComplain(Long blogId, Long complainId, String content) {
 
         BlogComplain complain = new BlogComplain();
         complain.setBlogId(blogId);
@@ -85,12 +84,11 @@ public class BlogOperateServiceImpl implements BlogOperateService {
         //博文投诉次数加一
         statisticsDao.updateComplainCountPlus(blogId);
 
-        Integer id = complain.getId();
-        return id == null ? -1 : id;
+        return complain.getId();
     }
 
     @Override
-    public boolean deleteCollect(int bloggerId, int blogId) {
+    public boolean deleteCollect(Long bloggerId, Long blogId) {
         int effect = collectDao.deleteCollectByBloggerId(bloggerId, blogId);
         if (effect <= 0) return false;
 
@@ -101,7 +99,7 @@ public class BlogOperateServiceImpl implements BlogOperateService {
     }
 
     @Override
-    public boolean deleteLike(int likerId, int blogId) {
+    public boolean deleteLike(Long likerId, Long blogId) {
         int effect = likeDao.deleteLikeByBloggerId(likerId, blogId);
         if (effect <= 0) return false;
 

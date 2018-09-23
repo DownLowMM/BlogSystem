@@ -16,13 +16,13 @@ public class BloggerProfile implements Serializable {
     private static final long serialVersionUID = -1116962500544770692L;
 
     //id
-    private Integer id;
+    private Long id;
 
     //博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //博主头像
-    private Integer avatarId;
+    private Long avatarId;
 
     //电话
     private String phone;

@@ -13,13 +13,11 @@ import java.io.Serializable;
 @Data
 public class BloggerLinkDTO implements Serializable {
 
-    private static final long serialVersionUID = -558005429949054040L;
-
     // id
-    private int id;
+    private Long id;
 
     //博主id
-    private int bloggerId;
+    private Long bloggerId;
 
     //图片
     private BloggerPictureDTO icon;

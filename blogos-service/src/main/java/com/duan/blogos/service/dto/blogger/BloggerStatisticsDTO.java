@@ -13,32 +13,30 @@ import java.io.Serializable;
 @Data
 public class BloggerStatisticsDTO implements Serializable {
 
-    private static final long serialVersionUID = 7340323568288854227L;
-
     //发表的博文数
-    private int blogCount;
+    private Integer blogCount;
 
     //总字数
-    private long wordCount;
+    private Integer wordCount;
 
     //收获的喜欢数
-    private long likeCount;
+    private Integer likeCount;
 
     //送出的喜欢数
-    private long likedCount;
+    private Integer likedCount;
 
     //创建的博文类别数
-    private int categoryCount;
+    private Integer categoryCount;
 
     //创建的标签数
-    private int labelCount;
+    private Integer labelCount;
 
     //收藏的博文数
-    private int collectCount;
+    private Integer collectCount;
 
     //文章被收藏数
-    private int collectedCount;
+    private Integer collectedCount;
 
     //链接数量
-    private int linkCount;
+    private Integer linkCount;
 }

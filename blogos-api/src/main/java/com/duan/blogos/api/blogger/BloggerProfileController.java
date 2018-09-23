@@ -41,7 +41,7 @@ public class BloggerProfileController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<BloggerProfileDTO> get(HttpServletRequest request,
-                                              @PathVariable Integer bloggerId) {
+                                              @PathVariable Long bloggerId) {
         handleAccountCheck(bloggerId);
 
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(bloggerId);
@@ -55,17 +55,16 @@ public class BloggerProfileController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResultModel add(HttpServletRequest request,
-                           @PathVariable Integer bloggerId,
-                           @RequestParam(value = "avatarId", required = false) Integer avatarId,
+                           @PathVariable Long bloggerId,
+                           @RequestParam(value = "avatarId", required = false) Long avatarId,
                            @RequestParam(value = "phone", required = false) String phone,
                            @RequestParam(value = "email", required = false) String email,
                            @RequestParam(value = "aboutMe", required = false) String aboutMe,
                            @RequestParam(value = "intro", required = false) String intro) {
-        handleBloggerSignInCheck(request, bloggerId);
         handlePictureExistCheck(request, bloggerId, avatarId);
 
         handleParamsCheck(phone, email, request);
-        int id = bloggerProfileService.insertBloggerProfile(bloggerId, avatarId == null || avatarId <= 0 ? -1 : avatarId,
+        Long id = bloggerProfileService.insertBloggerProfile(bloggerId, avatarId == null || avatarId <= 0 ? -1 : avatarId,
                 phone, email, aboutMe, intro);
         if (id <= 0) handlerOperateFail();
 
@@ -77,8 +76,8 @@ public class BloggerProfileController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.PUT)
     public ResultModel update(HttpServletRequest request,
-                              @PathVariable Integer bloggerId,
-                              @RequestParam(value = "avatarId", required = false) Integer avatarId,
+                              @PathVariable Long bloggerId,
+                              @RequestParam(value = "avatarId", required = false) Long avatarId,
                               @RequestParam(value = "phone", required = false) String phone,
                               @RequestParam(value = "email", required = false) String email,
                               @RequestParam(value = "aboutMe", required = false) String aboutMe,
@@ -88,11 +87,10 @@ public class BloggerProfileController extends BaseBloggerController {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
-        handleBloggerSignInCheck(request, bloggerId);
         handlePictureExistCheck(request, bloggerId, avatarId);
 
         handleParamsCheck(phone, email, request);
-        int av = avatarId == null || avatarId <= 0 ? -1 : avatarId;
+        Long av = avatarId == null || avatarId <= 0 ? -1 : avatarId;
         boolean result = bloggerProfileService.updateBloggerProfile(bloggerId, av, phone, email, aboutMe, intro);
         if (!result) handlerOperateFail();
 
@@ -105,8 +103,7 @@ public class BloggerProfileController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.DELETE)
     public ResultModel delete(HttpServletRequest request,
-                              @PathVariable Integer bloggerId) {
-        handleBloggerSignInCheck(request, bloggerId);
+                              @PathVariable Long bloggerId) {
 
         boolean result = bloggerProfileService.deleteBloggerProfile(bloggerId);
         if (!result) handlerOperateFail();
@@ -119,15 +116,14 @@ public class BloggerProfileController extends BaseBloggerController {
      */
     @RequestMapping(value = "/avatar", method = RequestMethod.POST)
     public ResultModel updateAvatar(HttpServletRequest request,
-                                    @PathVariable Integer bloggerId,
+                                    @PathVariable Long bloggerId,
                                     @RequestParam(value = "avatarBaseUrlData") String base64urlData) {
         handleImageBase64Check(request, base64urlData);
-        handleBloggerSignInCheck(request, bloggerId);
 
         // 保存图片
         String base = base64urlData.replaceFirst("^data:image/(png|jpg);base64,", "");
         byte[] bs = Base64.getDecoder().decode(base);
-        int id = bloggerPictureService.insertPicture(bs, bloggerId, "once-avatar-" + bloggerId + ".png", "", BloggerPictureCategoryEnum.PUBLIC, "");
+        Long id = bloggerPictureService.insertPicture(bs, bloggerId, "once-avatar-" + bloggerId + ".png", "", BloggerPictureCategoryEnum.PUBLIC, "");
         if (id <= 0) handlerOperateFail();
 
         boolean res = bloggerProfileService.updateBloggerProfile(bloggerId, id, null, null, null, null);

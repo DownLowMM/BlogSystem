@@ -43,7 +43,7 @@ public class BlogController extends BaseBlogController {
     // TODO
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<List<BlogListItemDTO>> list(HttpServletRequest request,
-                                                   @RequestParam("bloggerId") Integer bloggerId,
+                                                   @RequestParam("bloggerId") Long bloggerId,
                                                    @RequestParam(value = "cids", required = false) String categoryIds,
                                                    @RequestParam(value = "lids", required = false) String labelIds,
                                                    @RequestParam(value = "kword", required = false) String keyWord,
@@ -59,8 +59,8 @@ public class BlogController extends BaseBlogController {
         handleSortRuleCheck(request, sor, ord);
 
         String ch = ",";
-        int[] cids = StringUtils.intStringDistinctToArray(categoryIds, ch);
-        int[] lids = StringUtils.intStringDistinctToArray(labelIds, ch);
+        Long[] cids = StringUtils.longStringDistinctToArray(categoryIds, ch);
+        Long[] lids = StringUtils.longStringDistinctToArray(labelIds, ch);
         //检查博文类别和标签
         handleCategoryAndLabelCheck(request, bloggerId, cids, lids);
 
@@ -87,7 +87,7 @@ public class BlogController extends BaseBlogController {
      */
     @RequestMapping(value = "/{blogId}", method = RequestMethod.GET)
     public ResultModel<BlogMainContentDTO> get(HttpServletRequest request,
-                                               @PathVariable Integer blogId) {
+                                               @PathVariable Long blogId) {
         handleBlogExistCheck(blogId);
 
         ResultModel<BlogMainContentDTO> mainContent = blogBrowseService.getBlogMainContent(blogId);
@@ -97,17 +97,17 @@ public class BlogController extends BaseBlogController {
     }
 
     // 检查类别和标签
-    private void handleCategoryAndLabelCheck(HttpServletRequest request, int bloggerId, int[] cids, int[] lids) {
+    private void handleCategoryAndLabelCheck(HttpServletRequest request, Long bloggerId, Long[] cids, Long[] lids) {
 
         if (!CollectionUtils.isEmpty(cids)) {
-            for (int id : cids) {
+            for (Long id : cids) {
                 if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, id))
                     throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
         }
 
         if (!CollectionUtils.isEmpty(lids)) {
-            for (int id : lids) {
+            for (Long id : lids) {
                 if (!blogValidateService.checkLabelsExist(id))
                     throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }

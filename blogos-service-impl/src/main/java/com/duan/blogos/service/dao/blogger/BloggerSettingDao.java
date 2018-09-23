@@ -19,7 +19,7 @@ public interface BloggerSettingDao extends BaseDao<BloggerSetting> {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    BloggerSetting getSetting(int bloggerId);
+    BloggerSetting getSetting(Long bloggerId);
 
     /**
      * 更新博主主页个人信息栏位置
@@ -28,6 +28,6 @@ public interface BloggerSettingDao extends BaseDao<BloggerSetting> {
      * @param pos       0为左，1为右
      * @return 影响行数
      */
-    int updateMainPageNavPos(@Param("bloggerId") int bloggerId,
+    int updateMainPageNavPos(@Param("bloggerId") Long bloggerId,
                              @Param("pos") int pos);
 }

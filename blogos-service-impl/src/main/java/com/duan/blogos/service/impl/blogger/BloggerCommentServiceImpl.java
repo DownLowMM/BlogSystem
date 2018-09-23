@@ -22,7 +22,7 @@ public class BloggerCommentServiceImpl implements BloggerCommentService {
     private BlogCommentDao commentDao;
 
     @Override
-    public int insertComment(int blogId, int spokesmanId, int listenerId, int state, String content) {
+    public Long insertComment(Long blogId, Long spokesmanId, Long listenerId, int state, String content) {
 
         BlogComment comment = new BlogComment();
         comment.setBlogId(blogId);
@@ -34,13 +34,11 @@ public class BloggerCommentServiceImpl implements BloggerCommentService {
 
         //博文评论次数加一
         statisticsDao.updateCommentCountPlus(blogId);
-        Integer id = comment.getId();
-
-        return id == null ? -1 : id;
+        return comment.getId();
     }
 
     @Override
-    public boolean deleteComment(int commentId, int blogId) {
+    public boolean deleteComment(Long commentId, Long blogId) {
 
         int effect = commentDao.delete(commentId);
 

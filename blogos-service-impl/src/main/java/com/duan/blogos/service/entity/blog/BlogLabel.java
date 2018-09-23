@@ -17,10 +17,10 @@ public class BlogLabel implements Serializable {
     private static final long serialVersionUID = 4565919455090875775L;
 
     //id
-    private Integer id;
+    private Long id;
 
     //所属博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //标题
     private String title;

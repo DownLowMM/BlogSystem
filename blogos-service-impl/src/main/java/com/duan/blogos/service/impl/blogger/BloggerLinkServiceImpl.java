@@ -52,7 +52,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
     private ImageManager imageManager;
 
     @Override
-    public ResultModel<List<BloggerLinkDTO>> listBloggerLink(int bloggerId, int offset, int rows) {
+    public ResultModel<List<BloggerLinkDTO>> listBloggerLink(Long bloggerId, int offset, int rows) {
 
         offset = offset < 0 ? 0 : offset;
         rows = rows < 0 ? defaultProperties.getLinkCount() : rows;
@@ -61,7 +61,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
 
         List<BloggerLinkDTO> result = new ArrayList<>();
         for (BloggerLink link : list) {
-            Integer iconId = link.getIconId();
+            Long iconId = link.getIconId();
             BloggerPicture icon = iconId == null ?
                     pictureDao.getBloggerUniquePicture(websiteProperties.getManagerId(),
                             DEFAULT_BLOGGER_LINK_ICON.getCode()) :
@@ -79,7 +79,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
     }
 
     @Override
-    public int insertBloggerLink(int bloggerId, int iconId, String title, String url, String bewrite) {
+    public Long insertBloggerLink(Long bloggerId, Long iconId, String title, String url, String bewrite) {
 
         // 新增链接
         BloggerLink link = new BloggerLink();
@@ -89,7 +89,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
         link.setTitle(title);
         link.setUrl(url);
         int effect = linkDao.insert(link);
-        if (effect < 0) return -1;
+        if (effect < 0) return null;
 
         // 修改图片可见性，引用次数
         imageManager.imageInsertHandle(bloggerId, iconId);
@@ -98,11 +98,11 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
     }
 
     @Override
-    public boolean updateBloggerLink(int linkId, int newIconId, String newTitle, String newUrl, String newBewrite) {
+    public boolean updateBloggerLink(Long linkId, Long newIconId, String newTitle, String newUrl, String newBewrite) {
 
         // 修改链接
         BloggerLink link = linkDao.getLink(linkId);
-        Integer oldIconId = link.getIconId();
+        Long oldIconId = link.getIconId();
         link.setBewrite(newBewrite);
         link.setIconId(newIconId < 0 ? null : newIconId);
         link.setTitle(newTitle);
@@ -118,7 +118,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
     }
 
     @Override
-    public boolean deleteBloggerLink(int linkId) {
+    public boolean deleteBloggerLink(Long linkId) {
         BloggerLink link = linkDao.getLink(linkId);
         if (link == null) return false;
         if (link.getIconId() != null) pictureDao.updateUseCountMinus(link.getIconId());
@@ -129,9 +129,9 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
     }
 
     @Override
-    public boolean getLinkForCheckExist(int linkId) {
-        Integer id = linkDao.getLinkForCheckExist(linkId);
-        if (id == null || id != linkId) return false;
+    public boolean getLinkForCheckExist(Long linkId) {
+        Long id = linkDao.getLinkForCheckExist(linkId);
+        if (id == null || !id.equals(linkId)) return false;
         return true;
     }
 }

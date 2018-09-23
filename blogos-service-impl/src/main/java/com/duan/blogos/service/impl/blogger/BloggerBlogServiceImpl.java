@@ -13,7 +13,6 @@ import com.duan.blogos.service.entity.blog.BlogCategory;
 import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.impl.BlogFilterAbstract;
@@ -38,7 +37,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.IntStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -80,17 +78,17 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     private BloggerCategoryService categoryService;
 
     @Override
-    public int insertBlog(int bloggerId, int[] categories, int[] labels,
-                          BlogStatusEnum status, String title, String content, String contentMd,
-                          String summary, String[] keyWords, boolean analysisImg) {
+    public Long insertBlog(Long bloggerId, Long[] categories, Long[] labels,
+                           BlogStatusEnum status, String title, String content, String contentMd,
+                           String summary, String[] keyWords, boolean analysisImg) {
 
         // 1 插入数据到bolg表
         String ch = dbProperties.getStringFiledSplitCharacterForNumber();
         String chs = dbProperties.getStringFiledSplitCharacterForString();
         Blog blog = new Blog();
         blog.setBloggerId(bloggerId);
-        blog.setCategoryIds(StringUtils.intArrayToString(categories, ch));
-        blog.setLabelIds(StringUtils.intArrayToString(labels, ch));
+        blog.setCategoryIds(StringUtils.longArrayToString(categories, ch));
+        blog.setLabelIds(StringUtils.longArrayToString(labels, ch));
         blog.setState(status.getCode());
         blog.setTitle(title);
         blog.setContent(content);
@@ -100,9 +98,9 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
         blog.setWordCount(content.length());
 
         int effect = blogDao.insert(blog);
-        if (effect <= 0) return -1;
+        if (effect <= 0) return null;
 
-        int blogId = blog.getId();
+        Long blogId = blog.getId();
 
         // 2 插入数据到blog_statistics表（生成博文信息记录）
         BlogStatistics statistics = new BlogStatistics();
@@ -113,7 +111,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
 
         if (analysisImg) {
             // 3 解析本地图片引用并使自增
-            int[] imids = parseContentForImageIds(content, bloggerId);
+            Long[] imids = parseContentForImageIds(content, bloggerId);
             // UPDATE: 2018/1/19 更新 自增并没有实际作用
             if (!CollectionUtils.isEmpty(imids)) {
                 // 修改图片可见性，引用次数
@@ -133,7 +131,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     }
 
     // 解析博文中引用的相册图片
-    private int[] parseContentForImageIds(String content, int bloggerId) {
+    private Long[] parseContentForImageIds(String content, Long bloggerId) {
         //http://localhost:8080/image/1/type=public/523?default=5
         //http://localhost:8080/image/1/type=private/1
         String regex = "http://" + websiteProperties.getAddr() + "/image/" + bloggerId + "/.*?/(\\d+)";
@@ -147,27 +145,34 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
             res.add(str.substring(index + 1));
         }
 
-        return res.stream()
-                .mapToInt(Integer::valueOf)
+        long[] arr = res.stream()
+                .mapToLong(Integer::valueOf)
                 .distinct()
                 .toArray();
+
+        Long[] ls = new Long[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            ls[i] = arr[i];
+        }
+
+        return ls;
     }
 
     @Override
-    public boolean updateBlog(int bloggerId, int blogId, int[] newCategories, int[] newLabels, BlogStatusEnum newStatus,
+    public boolean updateBlog(Long bloggerId, Long blogId, Long[] newCategories, Long[] newLabels, BlogStatusEnum newStatus,
                               String newTitle, String newContent, String newContentMd, String newSummary, String[] newKeyWords) {
 
         // 1 更新博文中引用的本地图片（取消引用的useCount--，新增的useCount++）
         Blog oldBlog = blogDao.getBlogById(blogId);
-        if (newContent != null) {
+       /* if (newContent != null) {
             if (!oldBlog.getContent().equals(newContent)) {
 
-                final int[] oldIids = parseContentForImageIds(oldBlog.getContent(), bloggerId); // 1 2 3 4
-                final int[] newIids = parseContentForImageIds(newContent, bloggerId); // 1 3 4 6
+                final Long[] oldIids = parseContentForImageIds(oldBlog.getContent(), bloggerId); // 1 2 3 4
+                final Long[] newIids = parseContentForImageIds(newContent, bloggerId); // 1 3 4 6
 
                 // 求交集 1 3 4
                 int[] array = IntStream.of(oldIids).filter(value -> {
-                    for (int id : newIids) if (id == value) return true;
+                    for (Long id : newIids) if (id == value) return true;
                     return false;
                 }).toArray();
 
@@ -193,15 +198,15 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
 
                 });
             }
-        }
+        }*/
 
         // 2 更新博文
         String ch = dbProperties.getStringFiledSplitCharacterForNumber();
         String chs = dbProperties.getStringFiledSplitCharacterForString();
         Blog blog = new Blog();
         blog.setId(blogId);
-        if (newCategories != null) blog.setCategoryIds(StringUtils.intArrayToString(newCategories, ch));
-        if (newLabels != null) blog.setLabelIds(StringUtils.intArrayToString(newLabels, ch));
+        if (newCategories != null) blog.setCategoryIds(StringUtils.longArrayToString(newCategories, ch));
+        if (newLabels != null) blog.setLabelIds(StringUtils.longArrayToString(newLabels, ch));
         // 博文未通过审核时不能修改状态
         if (newStatus != null && !oldBlog.getState().equals(BlogStatusEnum.VERIFY.getCode()))
             blog.setState(newStatus.getCode());
@@ -226,7 +231,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     }
 
     @Override
-    public boolean deleteBlog(int bloggerId, int blogId) {
+    public boolean deleteBlog(Long bloggerId, Long blogId) {
 
         Blog blog = blogDao.getBlogById(blogId);
         if (blog == null) return false;
@@ -241,7 +246,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
         //if (effectS <= 0) throw new UnknownException(blog");
 
         // 3 图片引用useCount--
-        int[] ids = parseContentForImageIds(blog.getContent(), bloggerId);
+        Long[] ids = parseContentForImageIds(blog.getContent(), bloggerId);
         if (!CollectionUtils.isEmpty(ids))
             Arrays.stream(ids).forEach(pictureDao::updateUseCountMinus);
 
@@ -252,9 +257,9 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     }
 
     @Override
-    public boolean deleteBlogPatch(int bloggerId, int[] blogIds) {
+    public boolean deleteBlogPatch(Long bloggerId, Long[] blogIds) {
 
-        for (int id : blogIds) {
+        for (Long id : blogIds) {
             if (!deleteBlog(bloggerId, id))
                 throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
         }
@@ -263,12 +268,12 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     }
 
     @Override
-    public boolean getBlogForCheckExist(int blogId) {
+    public boolean getBlogForCheckExist(Long blogId) {
         return !(blogDao.getBlogIdById(blogId) == null);
     }
 
     @Override
-    public ResultModel<BlogDTO> getBlog(int bloggerId, int blogId) {
+    public ResultModel<BlogDTO> getBlog(Long bloggerId, Long blogId) {
 
         Blog blog = blogDao.getBlogById(blogId);
 
@@ -299,15 +304,15 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     }
 
     @Override
-    protected ResultModel<List<BlogListItemDTO>> constructResult(Map<Integer, Blog> blogHashMap,
+    protected ResultModel<List<BlogListItemDTO>> constructResult(Map<Long, Blog> blogHashMap,
                                                                  List<BlogStatistics> statistics,
-                                                                 Map<Integer, int[]> blogIdMapCategoryIds,
-                                                                 Map<Integer, String> blogImgs) {
+                                                                 Map<Long, Long[]> blogIdMapCategoryIds,
+                                                                 Map<Long, String> blogImgs) {
         // 重组结果
         List<BlogListItemDTO> result = new ArrayList<>();
         for (BlogStatistics s : statistics) {
-            Integer blogId = s.getBlogId();
-            int[] ids = blogIdMapCategoryIds.get(blogId);
+            Long blogId = s.getBlogId();
+            Long[] ids = blogIdMapCategoryIds.get(blogId);
             List<BlogCategory> categories = CollectionUtils.isEmpty(ids) ? null : categoryDao.listCategoryById(ids);
             Blog blog = blogHashMap.get(blogId);
             BlogListItemDTO dto = dataFillingManager.bloggerBlogListItemToDTO(blog, s, categories);
@@ -318,13 +323,12 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     }
 
     @Override
-    public int getBlogId(int bloggerId, String blogName) {
-        Integer id = blogDao.getBlogIdByUniqueKey(bloggerId, blogName);
-        return Optional.ofNullable(id).orElse(-1);
+    public Long getBlogId(Long bloggerId, String blogName) {
+        return blogDao.getBlogIdByUniqueKey(bloggerId, blogName);
     }
 
     @Override
-    public List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, int bloggerId) {
+    public List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, Long bloggerId) {
 
         FileUtils.mkdirsIfNotExist(fileProperties.getPatchImportBlogTempPath());
 
@@ -352,7 +356,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
             zipFile = new ZipFile(fullPath, Charset.forName("GBK"));
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-            int cateId = -1;
+            Long cateId = null;
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 String name = entry.getName();
@@ -384,11 +388,11 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
 
                     String dirName = name.substring(0, name.length() - 1);
 
-                    Integer id = categoryDao.getCategoryIdByTitle(bloggerId, dirName);
+                    Long id = categoryDao.getCategoryIdByTitle(bloggerId, dirName);
                     if (id != null) {
                         cateId = id;
                     } else {
-                        cateId = categoryService.insertBlogCategory(bloggerId, -1, dirName, "");
+                        cateId = categoryService.insertBlogCategory(bloggerId, null, dirName, "");
                     }
 
                     continue;
@@ -396,7 +400,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
 
                 // 跟目录下
                 if (!name.contains("/")) {
-                    cateId = -1;
+                    cateId = null;
                 }
 
                 BufferedInputStream stream = new BufferedInputStream(zipFile.getInputStream(entry));
@@ -429,7 +433,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     }
 
     @Override
-    public String getAllBlogForDownload(int bloggerId, BlogFormatEnum format) {
+    public String getAllBlogForDownload(Long bloggerId, BlogFormatEnum format) {
         List<Blog> blogs = blogDao.listAllByFormat(bloggerId, format.getCode());
         if (CollectionUtils.isEmpty(blogs)) return null;
 
@@ -510,7 +514,7 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
     // 解析 md 文件读取字符流，新增记录到数据库
     // cateId 仅 md 文件在根目录下是才为 -1
     private BlogTitleIdDTO analysisAndInsertMdFile(Parser parser, HtmlRenderer renderer, ZipEntry entry,
-                                                   InputStreamReader reader, int bloggerId, int cateId) throws IOException {
+                                                   InputStreamReader reader, Long bloggerId, Long cateId) throws IOException {
 
         String name = entry.getName();
 
@@ -545,9 +549,17 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
         String title = cateId == -1 ? name.replace(".md", "") :
                 name.substring(name.lastIndexOf("/") + 1).replace(".md", "");
 
-        int id = insertBlog(bloggerId, cateId == -1 ? null : new int[]{cateId}, null, PUBLIC, title,
-                htmlContent, mdContent, summary, null, false);
-        if (id < 0) return null;
+        Long id = insertBlog(bloggerId,
+                new Long[]{cateId},
+                null,
+                PUBLIC,
+                title,
+                htmlContent,
+                mdContent,
+                summary,
+                null,
+                false);
+        if (id == null) return null;
 
         BlogTitleIdDTO node = new BlogTitleIdDTO();
         node.setTitle(title);

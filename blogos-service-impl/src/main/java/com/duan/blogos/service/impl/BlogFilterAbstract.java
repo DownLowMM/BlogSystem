@@ -66,12 +66,12 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
      * @param blogImgs
      * @return 最终结果
      */
-    protected abstract T constructResult(Map<Integer, Blog> blogHashMap, List<BlogStatistics> statistics,
-                                         Map<Integer, int[]> blogIdMapCategoryIds, Map<Integer, String> blogImgs);
+    protected abstract T constructResult(Map<Long, Blog> blogHashMap, List<BlogStatistics> statistics,
+                                         Map<Long, Long[]> blogIdMapCategoryIds, Map<Long, String> blogImgs);
 
     @Override
-    public T listFilterAll(int[] categoryIds, int[] labelIds, String keyWord,
-                           int bloggerId, int offset, int rows, BlogSortRule sortRule,
+    public T listFilterAll(Long[] categoryIds, Long[] labelIds, String keyWord,
+                           Long bloggerId, int offset, int rows, BlogSortRule sortRule,
                            BlogStatusEnum status) {
 
         offset = offset < 0 ? 0 : offset;
@@ -101,12 +101,12 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
      * @param status      博文状态
      * @return 经过筛选、排序的结果集
      */
-    protected T filterByLucene(String keyWord, int[] categoryIds, int[] labelIds,
-                               int bloggerId, int offset, int rows, BlogSortRule sortRule,
+    protected T filterByLucene(String keyWord, Long[] categoryIds, Long[] labelIds,
+                               Long bloggerId, int offset, int rows, BlogSortRule sortRule,
                                BlogStatusEnum status) {
 
         // ------------------------关键字筛选
-        int[] ids;
+        Long[] ids;
         try {
             // 搜索结果无法使用类似于sql limit的方式分页，这里一次性将所有结果查询出，后续考虑使用缓存实现分页
             ids = luceneIndexManager.search(keyWord, 10000);
@@ -118,19 +118,19 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
         if (CollectionUtils.isEmpty(ids)) return null;
 
         // 关键字检索得到的博文集合
-        List<Integer> filterByLuceneIds = new ArrayList<>();
+        List<Long> filterByLuceneIds = new ArrayList<>();
         // UPDATE 取最前面的rows条结果
         int row = Math.min(rows, ids.length);
         for (int i = 0; i < row; i++) filterByLuceneIds.add(ids[i]);
 
         // ----------------------类别、标签筛选
-        Map<Integer, int[]> map = getMapFilterByLabelAndCategory(bloggerId, categoryIds, labelIds, status);
-        Integer[] mids = map.keySet().toArray(new Integer[map.size()]);
+        Map<Long, Long[]> map = getMapFilterByLabelAndCategory(bloggerId, categoryIds, labelIds, status);
+        Long[] mids = map.keySet().toArray(new Long[0]);
         // 类别、标签检索得到的博文集合
-        List<Integer> filterByOtherIds = Arrays.asList(mids);
+        List<Long> filterByOtherIds = Arrays.asList(mids);
 
         //求两者交集得到最终结果集
-        List<Integer> resultIds = filterByLuceneIds.stream().filter(filterByOtherIds::contains).collect(Collectors.toList());
+        List<Long> resultIds = filterByLuceneIds.stream().filter(filterByOtherIds::contains).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(resultIds)) return null;
 
         //构造结果,排序并重组
@@ -140,13 +140,13 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
     }
 
     @Override
-    public T listFilterByLabelAndCategory(int[] categoryIds, int[] labelIds,
-                                          int bloggerId, int offset, int rows,
+    public T listFilterByLabelAndCategory(Long[] categoryIds, Long[] labelIds,
+                                          Long bloggerId, int offset, int rows,
                                           BlogSortRule sortRule, BlogStatusEnum status) {
 
-        Map<Integer, int[]> map = getMapFilterByLabelAndCategory(bloggerId, categoryIds, labelIds, status);
+        Map<Long, Long[]> map = getMapFilterByLabelAndCategory(bloggerId, categoryIds, labelIds, status);
 
-        Integer[] ids = map.keySet().toArray(new Integer[map.size()]);
+        Long[] ids = map.keySet().toArray(new Long[0]);
         if (CollectionUtils.isEmpty(ids)) return null;
 
         //构造结果,排序并重组
@@ -157,19 +157,19 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
 
 
     // 对筛选出的博文进行排序并重组结果集
-    private T sortAndConstructResult(List<Blog> blogs, BlogSortRule sortRule, Map<Integer, int[]> map) {
+    private T sortAndConstructResult(List<Blog> blogs, BlogSortRule sortRule, Map<Long, Long[]> map) {
 
         //用于排序
         List<BlogStatistics> temp = new ArrayList<>();
 
         //方便排序后的重组
-        Map<Integer, Blog> blogHashMap = new HashMap<>();
+        Map<Long, Blog> blogHashMap = new HashMap<>();
 
         // 从 html 中获得图片
-        Map<Integer, String> blogImgs = new HashMap<>();
+        Map<Long, String> blogImgs = new HashMap<>();
 
         for (Blog blog : blogs) {
-            int blogId = blog.getId();
+            Long blogId = blog.getId();
             BlogStatistics statistics = statisticsDao.getStatistics(blogId);
             temp.add(statistics);
             blogHashMap.put(blogId, blog);
@@ -191,38 +191,38 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
 
     // 通过类别和标签筛选出指定博主的符合条件的博文id及对应的类别id数组
     // 类别和标签没有限制时返回指定博主的所有博文id集
-    private Map<Integer, int[]> getMapFilterByLabelAndCategory(int bloggerId, int[] categoryIds, int[] labelIds,
-                                                               BlogStatusEnum status) {
+    private Map<Long, Long[]> getMapFilterByLabelAndCategory(Long bloggerId, Long[] categoryIds, Long[] labelIds,
+                                                             BlogStatusEnum status) {
 
         // 查询博主的所有标签和类别
         List<Blog> blogs = blogDao.listAllCategoryAndLabel(bloggerId, status.getCode());
 
         // 筛选符合条件的博文的id
-        Map<Integer, int[]> map = new HashMap<>(); // 方便后面复用categories的id数组
+        Map<Long, Long[]> map = new HashMap<>(); // 方便后面复用categories的id数组
         String ch = dbProperties.getStringFiledSplitCharacterForNumber();
 
         if (categoryIds == null && labelIds == null) { // 两者都没限定
             for (Blog blog : blogs) {
-                int[] categoriesIds = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), ch);
+                Long[] categoriesIds = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), ch);
                 map.put(blog.getId(), categoriesIds);
             }
         } else if (categoryIds != null && labelIds != null) { // 两者都限定
             for (Blog blog : blogs) {
                 int accordCount = 0;
 
-                int[] categoriesIds = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), ch);
-                int[] labels = StringUtils.intStringDistinctToArray(blog.getLabelIds(), ch);
+                Long[] categoriesIds = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), ch);
+                Long[] labels = StringUtils.longStringDistinctToArray(blog.getLabelIds(), ch);
                 if (categoriesIds == null || labels == null) continue;
 
-                for (int categoryId : categoriesIds) {
-                    if (CollectionUtils.intArrayContain(categoryIds, categoryId)) {
+                for (Long categoryId : categoriesIds) {
+                    if (CollectionUtils.longArrayContain(categoryIds, categoryId)) {
                         accordCount++;
                         break;
                     }
                 }
 
-                for (int labelId : labels) {
-                    if (CollectionUtils.intArrayContain(labelIds, labelId)) {
+                for (Long labelId : labels) {
+                    if (CollectionUtils.longArrayContain(labelIds, labelId)) {
                         accordCount++;
                         break;
                     }
@@ -236,11 +236,11 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
         } else if (categoryIds != null) { // 只限定了categoryIds
             for (Blog blog : blogs) {
 
-                int[] categoriesIds = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), ch);
+                Long[] categoriesIds = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), ch);
                 //博文没有分类，直接检查下一篇博文
                 if (categoriesIds == null) continue;
-                for (int categoryId : categoriesIds) {
-                    if (CollectionUtils.intArrayContain(categoryIds, categoryId)) {
+                for (Long categoryId : categoriesIds) {
+                    if (CollectionUtils.longArrayContain(categoryIds, categoryId)) {
                         map.put(blog.getId(), categoriesIds);
                         break;
                     }
@@ -249,13 +249,13 @@ public abstract class BlogFilterAbstract<T> implements BlogFilter<T> {
         } else {// 只限定了label
             for (Blog blog : blogs) {
 
-                int[] categoriesIds = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), ch);
-                int[] labels = StringUtils.intStringDistinctToArray(blog.getLabelIds(), ch);
+                Long[] categoriesIds = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), ch);
+                Long[] labels = StringUtils.longStringDistinctToArray(blog.getLabelIds(), ch);
 
                 //博文没有标签，直接检查下一篇
                 if (labels == null) continue;
-                for (int labelId : labels) {
-                    if (CollectionUtils.intArrayContain(labelIds, labelId)) {
+                for (Long labelId : labels) {
+                    if (CollectionUtils.longArrayContain(labelIds, labelId)) {
                         map.put(blog.getId(), categoriesIds);
                         break;
                     }

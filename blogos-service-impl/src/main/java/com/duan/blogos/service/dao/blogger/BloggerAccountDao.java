@@ -28,7 +28,7 @@ public interface BloggerAccountDao extends BaseDao<BloggerAccount> {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    BloggerAccount getAccountById(int bloggerId);
+    BloggerAccount getAccountById(Long bloggerId);
 
     /**
      * 获取id
@@ -37,5 +37,5 @@ public interface BloggerAccountDao extends BaseDao<BloggerAccount> {
      * @return id数组
      */
     // UPDATE: 2018/5/1 更新 调整活跃用户获取策略后删除
-    List<Integer> listId(int count);
+    List<Long> listId(int count);
 }

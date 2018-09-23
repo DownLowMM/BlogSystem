@@ -34,18 +34,17 @@ public class BloggerCommentController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResultModel add(HttpServletRequest request,
-                           @PathVariable Integer bloggerId,
-                           @RequestParam("blogId") Integer blogId,
+                           @PathVariable Long bloggerId,
+                           @RequestParam("blogId") Long blogId,
                            @RequestParam("content") String content,
-                           @RequestParam("listenerId") Integer listenerId) {
-        handleBloggerSignInCheck(request, bloggerId);
+                           @RequestParam("listenerId") Long listenerId) {
         handleBlogExistCheck(blogId);
         handleBloggerExist(request, listenerId);
 
         if (StringUtils.isBlank(content) || !commentValidateService.checkCommentContent(content))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        int id = commentService.insertComment(blogId, bloggerId, listenerId, RIGHTFUL.getCode(), content);
+        Long id = commentService.insertComment(blogId, bloggerId, listenerId, RIGHTFUL.getCode(), content);
         if (id < 0) handlerOperateFail();
 
         return new ResultModel<>(id);
@@ -56,10 +55,9 @@ public class BloggerCommentController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{commentId}", method = RequestMethod.DELETE)
     public ResultModel delete(HttpServletRequest request,
-                              @RequestParam("blogId") Integer blogId,
-                              @PathVariable Integer bloggerId,
-                              @PathVariable Integer commentId) {
-        handleBloggerSignInCheck(request, bloggerId);
+                              @RequestParam("blogId") Long blogId,
+                              @PathVariable Long bloggerId,
+                              @PathVariable Long commentId) {
         handleBlogExistCheck(blogId);
 
         if (!commentService.deleteComment(commentId, blogId))
@@ -68,7 +66,7 @@ public class BloggerCommentController extends BaseBloggerController {
         return new ResultModel<>("");
     }
 
-    private void handleBloggerExist(HttpServletRequest request, Integer bloggerId) {
+    private void handleBloggerExist(HttpServletRequest request, Long bloggerId) {
         if (!bloggerValidateService.checkAccountExist(bloggerId)) {
             throw ResultUtil.failException(CodeMessage.BLOGGER_UNKNOWN_BLOGGER);
         }

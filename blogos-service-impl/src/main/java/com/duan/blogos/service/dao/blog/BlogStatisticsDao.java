@@ -18,7 +18,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 操作影响行数
      */
-    int deleteByUnique(int blogId);
+    int deleteByUnique(Long blogId);
 
     /**
      * 查询博文的统计信息
@@ -26,7 +26,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 对应博文id
      * @return 查询结果
      */
-    BlogStatistics getStatistics(int blogId);
+    BlogStatistics getStatistics(Long blogId);
 
     /**
      * 评论次数加一
@@ -34,7 +34,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateCommentCountPlus(int blogId);
+    int updateCommentCountPlus(Long blogId);
 
     /**
      * 博文浏览次数加一
@@ -42,7 +42,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateViewCountPlus(int blogId);
+    int updateViewCountPlus(Long blogId);
 
     /**
      * 博主回复该博文评论的次数加一
@@ -50,7 +50,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateReplyCommentCountPlus(int blogId);
+    int updateReplyCommentCountPlus(Long blogId);
 
     /**
      * 博文被收藏次数加一
@@ -58,7 +58,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateCollectCountPlus(int blogId);
+    int updateCollectCountPlus(Long blogId);
 
     /**
      * 博文举报次数加一
@@ -66,7 +66,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateComplainCountPlus(int blogId);
+    int updateComplainCountPlus(Long blogId);
 
     /**
      * 博文被分享次数加一
@@ -74,7 +74,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateShareCountPlus(int blogId);
+    int updateShareCountPlus(Long blogId);
 
     /**
      * 赞赏次数加一
@@ -82,7 +82,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateAdmireCountPlus(int blogId);
+    int updateAdmireCountPlus(Long blogId);
 
     /**
      * 喜欢次数加一
@@ -90,7 +90,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateLikeCountPlus(int blogId);
+    int updateLikeCountPlus(Long blogId);
 
     /**
      * 评论次数减一
@@ -98,7 +98,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateCommentCountMinus(int blogId);
+    int updateCommentCountMinus(Long blogId);
 
     /**
      * 博文浏览次数减一
@@ -106,7 +106,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateViewCountMinus(int blogId);
+    int updateViewCountMinus(Long blogId);
 
     /**
      * 博主回复该博文评论的次数减一
@@ -114,7 +114,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateReplyCommentCountMinus(int blogId);
+    int updateReplyCommentCountMinus(Long blogId);
 
     /**
      * 博文被收藏次数减一
@@ -122,7 +122,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateCollectCountMinus(int blogId);
+    int updateCollectCountMinus(Long blogId);
 
     /**
      * 博文举报次数减一
@@ -130,7 +130,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateComplainCountMinus(int blogId);
+    int updateComplainCountMinus(Long blogId);
 
     /**
      * 博文被分享次数减一
@@ -138,7 +138,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateShareCountMinus(int blogId);
+    int updateShareCountMinus(Long blogId);
 
     /**
      * 赞赏次数减一
@@ -146,7 +146,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateAdmireCountMinus(int blogId);
+    int updateAdmireCountMinus(Long blogId);
 
     /**
      * 喜欢次数减一
@@ -154,7 +154,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 执行结果
      */
-    int updateLikeCountMinus(int blogId);
+    int updateLikeCountMinus(Long blogId);
 
 
     /**
@@ -163,7 +163,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    Integer getCommentCount(int blogId);
+    Integer getCommentCount(Long blogId);
 
     /**
      * 查询博文浏览次数
@@ -171,7 +171,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    Integer getViewCount(int blogId);
+    Integer getViewCount(Long blogId);
 
     /**
      * 查询博主回复该博文评论的次数
@@ -179,7 +179,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    Integer getReplyCommentCount(int blogId);
+    Integer getReplyCommentCount(Long blogId);
 
     /**
      * 查询博文被收藏次数
@@ -187,7 +187,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    Integer getCollectCount(int blogId);
+    Integer getCollectCount(Long blogId);
 
     /**
      * 查询博文举报次数
@@ -195,7 +195,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    Integer getComplainCount(int blogId);
+    Integer getComplainCount(Long blogId);
 
     /**
      * 查询博文被分享次数
@@ -203,7 +203,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    Integer getShareCount(int blogId);
+    Integer getShareCount(Long blogId);
 
     /**
      * 查询赞赏次数
@@ -211,7 +211,7 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    Integer getAdmireCount(int blogId);
+    Integer getAdmireCount(Long blogId);
 
     /**
      * 查询喜欢次数
@@ -219,5 +219,5 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @param blogId 博文id
      * @return 查询结果
      */
-    Integer getLikeCount(int blogId);
+    Integer getLikeCount(Long blogId);
 }

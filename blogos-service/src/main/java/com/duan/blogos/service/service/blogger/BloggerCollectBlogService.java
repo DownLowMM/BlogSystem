@@ -25,7 +25,7 @@ public interface BloggerCollectBlogService {
      * @param sortRule  排序规则，为null则不做约束
      * @return 查询结果
      */
-    ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(int bloggerId, int categoryId,
+    ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(Long bloggerId, Long categoryId,
                                                                 int offset, int rows, BlogSortRule sortRule);
 
     /**
@@ -37,7 +37,7 @@ public interface BloggerCollectBlogService {
      * @param newCategory 新的收藏到类别
      * @return 更新成功返回true
      */
-    boolean updateCollect(int bloggerId, int blogId, String newReason, int newCategory);
+    boolean updateCollect(Long bloggerId, Long blogId, String newReason, Long newCategory);
 
     /**
      * 获得博文收藏状态
@@ -46,7 +46,7 @@ public interface BloggerCollectBlogService {
      * @param blogId    博文id
      * @return 已收藏为 true
      */
-    boolean getCollectState(int bloggerId, int blogId);
+    boolean getCollectState(Long bloggerId, Long blogId);
 
     /**
      * 统计博主收藏量
@@ -54,5 +54,5 @@ public interface BloggerCollectBlogService {
      * @param bloggerId 博文id
      * @return 查询结果
      */
-    int countByBloggerId(int bloggerId);
+    int countByBloggerId(Long bloggerId);
 }

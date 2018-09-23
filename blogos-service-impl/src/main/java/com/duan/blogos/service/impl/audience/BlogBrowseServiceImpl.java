@@ -84,14 +84,14 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     private BloggerProfileDao profileDao;
 
     @Override
-    public ResultModel<BlogMainContentDTO> getBlogMainContent(int blogId) {
+    public ResultModel<BlogMainContentDTO> getBlogMainContent(Long blogId) {
 
         //查询数据
         Blog blog = blogDao.getBlogById(blogId);
         if (blog == null) return null;
         String nsp = dbProperties.getStringFiledSplitCharacterForNumber();
-        int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), nsp);
-        int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), nsp);
+        Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), nsp);
+        Long[] lids = StringUtils.longStringDistinctToArray(blog.getLabelIds(), nsp);
         List<BlogCategory> categories = cids == null ? null : categoryDao.listCategoryById(cids);
         List<BlogLabel> labels = lids == null ? null : labelDao.listLabelById(lids);
 
@@ -103,7 +103,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     }
 
     @Override
-    public ResultModel<PageResult<BlogCommentDTO>> listBlogComment(int blogId, Integer pageSize, Integer pageNum) {
+    public ResultModel<PageResult<BlogCommentDTO>> listBlogComment(Long blogId, Integer pageSize, Integer pageNum) {
         pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
         pageSize = pageSize == null || pageSize < 0 ? defaultProperties.getCommentCount() : pageSize;
 
@@ -117,7 +117,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
         for (BlogComment comment : comments) {
 
             //评论者数据
-            int sid = comment.getSpokesmanId();
+            Long sid = comment.getSpokesmanId();
             BloggerAccount smAccount = accountDao.getAccountById(sid);
             BloggerProfile smProfile = getProfile(sid);
             BloggerDTO smDTO = dataFillingManager.bloggerAccountToDTO(smAccount, smProfile,
@@ -134,7 +134,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
         return new ResultModel<>(new PageResult<>(pageInfo.getTotal(), result));
     }
 
-    private BloggerPicture getAvatar(Integer id) {
+    private BloggerPicture getAvatar(Long id) {
         BloggerPicture avatar;
         if (id != null) {
             avatar = pictureDao.getPictureById(id);
@@ -152,7 +152,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
 
 
     //获得博主资料
-    private BloggerProfile getProfile(Integer bloggerId) {
+    private BloggerProfile getProfile(Long bloggerId) {
         if (bloggerId == null) return null;
         return profileDao.getProfileByBloggerId(bloggerId);
     }

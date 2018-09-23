@@ -40,7 +40,7 @@
         LIMIT #{offset}, #{rows}
     </select>
 
-    <select id="getLinkForCheckExist" resultType="java.lang.Integer">
+    <select id="getLinkForCheckExist" resultType="java.lang.Long">
         SELECT id
         FROM blogger_link
         WHERE id = #{value}

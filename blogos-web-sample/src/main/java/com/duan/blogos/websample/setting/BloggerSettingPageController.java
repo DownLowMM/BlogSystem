@@ -52,7 +52,7 @@ public class BloggerSettingPageController {
         mv.setViewName("/blogger/setting");
 
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
-        int bloggerId;
+        Long bloggerId;
         if (account == null) {
             request.setAttribute("code", CodeMessage.BLOGGER_UNKNOWN_BLOGGER.getCode());
             mv.setViewName("/blogger/register");

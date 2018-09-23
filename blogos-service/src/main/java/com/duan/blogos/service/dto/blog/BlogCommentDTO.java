@@ -15,13 +15,11 @@ import java.sql.Timestamp;
 @Data
 public class BlogCommentDTO implements Serializable {
 
-    private static final long serialVersionUID = 7217522025154588809L;
-
     // 评论id
-    private int id;
+    private Long id;
 
     // 博文id
-    private int blogId;
+    private Long blogId;
 
     // 评论者
     private BloggerDTO spokesman;

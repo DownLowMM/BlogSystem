@@ -142,7 +142,7 @@ public class BlogLuceneIndexManager {
      *
      * @param blogId 博文id
      */
-    public boolean delete(int blogId) {
+    public boolean delete(Long blogId) {
 
         try (IndexWriter writer = getWriter()) {
 
@@ -164,7 +164,7 @@ public class BlogLuceneIndexManager {
      * @param count 返回数量
      * @return 符合的博文id
      */
-    public int[] search(String word, int count) throws IOException, ParseException {
+    public Long[] search(String word, int count) throws IOException, ParseException {
         if (StringUtils.isEmpty(word) || count <= 0) return null;
 
         String path = fileProperties.getLuceneIndexDir();
@@ -184,15 +184,15 @@ public class BlogLuceneIndexManager {
         //检索
         TopDocs top = is.search(booleanQuery.build(), count);
 
-        Integer[] result = new Integer[count];
+        Long[] result = new Long[count];
         int sum = 0;
         for (ScoreDoc doc : top.scoreDocs) {
             Document document = is.doc(doc.doc);
-            result[sum++] = Integer.parseInt(document.get(INDEX_BLOG_ID));
+            result[sum++] = Long.valueOf(document.get(INDEX_BLOG_ID));
         }
         if (sum == 0) return null;
 
-        int[] rs = new int[sum];
+        Long[] rs = new Long[sum];
         for (int i = 0; i < sum; i++) {
             rs[i] = result[i];
         }

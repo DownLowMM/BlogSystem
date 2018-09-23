@@ -30,7 +30,7 @@ public class EmailServiceImpl implements EmailService {
     private BloggerAccountDao accountDao;
 
     @Override
-    public boolean sendFeedback(int bloggerId, String subject, String content, String contact) {
+    public boolean sendFeedback(Long bloggerId, String subject, String content, String contact) {
 
         JavaMailSenderImpl mailSender = mailManager.getMailSender(
                 websiteProperties.getSenderMail(),

@@ -35,17 +35,17 @@ public class BlogValidateServiceImpl implements BlogValidateService {
     private BlogStatisticsDao statisticsDao;
 
     @Override
-    public boolean checkBlogExist(int blogId) {
+    public boolean checkBlogExist(Long blogId) {
         return blogId > 0 && bloggerBlogService.getBlogForCheckExist(blogId);
     }
 
     @Override
-    public boolean checkLabelsExist(int labelId) {
+    public boolean checkLabelsExist(Long labelId) {
         return labelDao.getLabel(labelId) != null;
     }
 
     @Override
-    public boolean isCreatorOfBlog(int bloggerId, int blogId) {
+    public boolean isCreatorOfBlog(Long bloggerId, Long blogId) {
         Blog blog = blogDao.getBlogById(blogId);
         return blog != null && blog.getBloggerId().equals(bloggerId);
     }
@@ -68,7 +68,7 @@ public class BlogValidateServiceImpl implements BlogValidateService {
     }
 
     @Override
-    public boolean isCreatorOfBlogStatistic(int bloggerId, int blogId) {
+    public boolean isCreatorOfBlogStatistic(Long bloggerId, Long blogId) {
 
         if (!isCreatorOfBlog(bloggerId, blogId)) return false;
 
@@ -79,7 +79,7 @@ public class BlogValidateServiceImpl implements BlogValidateService {
     }
 
     @Override
-    public boolean checkBlogStatisticExist(int blogId) {
+    public boolean checkBlogStatisticExist(Long blogId) {
         Integer count = statisticsDao.getViewCount(blogId);
         if (count == null) return false;
 

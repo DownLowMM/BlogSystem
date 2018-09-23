@@ -37,8 +37,8 @@ public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogList
      * @param analysisImg 解析博文中的图片引用
      * @return 新纪录id
      */
-    int insertBlog(int bloggerId, int[] categories, int[] labels, BlogStatusEnum status,
-                   String title, String content, String contentMd, String summary, String[] keyWords, boolean analysisImg);
+    Long insertBlog(Long bloggerId, Long[] categories, Long[] labels, BlogStatusEnum status,
+                    String title, String content, String contentMd, String summary, String[] keyWords, boolean analysisImg);
 
     /**
      * 1 更新博文
@@ -57,7 +57,7 @@ public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogList
      * @param newKeyWords   新关键字，，不修改传null
      * @return 更新失败为false
      */
-    boolean updateBlog(int bloggerId, int blogId, int[] newCategories, int[] newLabels, BlogStatusEnum newStatus,
+    boolean updateBlog(Long bloggerId, Long blogId, Long[] newCategories, Long[] newLabels, BlogStatusEnum newStatus,
                        String newTitle, String newContent, String newContentMd, String newSummary, String[] newKeyWords);
 
     /**
@@ -70,7 +70,7 @@ public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogList
      * @param blogId    博文id
      * @return 删除的记录
      */
-    boolean deleteBlog(int bloggerId, int blogId);
+    boolean deleteBlog(Long bloggerId, Long blogId);
 
     /**
      * 批量删除博文
@@ -79,7 +79,7 @@ public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogList
      * @param blogIds   博文id
      * @return 操作失败为false
      */
-    boolean deleteBlogPatch(int bloggerId, int[] blogIds);
+    boolean deleteBlogPatch(Long bloggerId, Long[] blogIds);
 
     /**
      * 检查博文是否存在
@@ -87,7 +87,7 @@ public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogList
      * @param blogId 博文id
      * @return 存在返回true，否则false
      */
-    boolean getBlogForCheckExist(int blogId);
+    boolean getBlogForCheckExist(Long blogId);
 
     /**
      * 获得指定博主的指定博文
@@ -96,7 +96,7 @@ public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogList
      * @param blogId    博文id
      * @return 查询结果
      */
-    ResultModel<BlogDTO> getBlog(int bloggerId, int blogId);
+    ResultModel<BlogDTO> getBlog(Long bloggerId, Long blogId);
 
     /**
      * 通过博主id和博文名获得博文id
@@ -105,7 +105,7 @@ public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogList
      * @param blogName  博文标题
      * @return 存在返回id，否则-1
      */
-    int getBlogId(int bloggerId, String blogName);
+    Long getBlogId(Long bloggerId, String blogName);
 
     /**
      * 通过上传的 zip 文件批量导入博文
@@ -114,7 +114,7 @@ public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogList
      * @param bloggerId 博主id
      * @return 成功导入的博文标题和id
      */
-    List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, int bloggerId);
+    List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, Long bloggerId);
 
     /**
      * 生成用于 [导出所有博文] 功能的 zip 文件
@@ -123,5 +123,5 @@ public interface BloggerBlogService extends BlogFilter<ResultModel<List<BlogList
      * @param format    格式
      * @return zip 文件全路径
      */
-    String getAllBlogForDownload(int bloggerId, BlogFormatEnum format);
+    String getAllBlogForDownload(Long bloggerId, BlogFormatEnum format);
 }

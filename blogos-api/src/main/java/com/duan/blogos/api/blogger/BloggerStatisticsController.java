@@ -25,7 +25,7 @@ public class BloggerStatisticsController extends BaseBloggerController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<BloggerStatisticsDTO> get(HttpServletRequest request,
-                                                 @PathVariable Integer bloggerId) {
+                                                 @PathVariable Long bloggerId) {
 
         handleAccountCheck(bloggerId);
 

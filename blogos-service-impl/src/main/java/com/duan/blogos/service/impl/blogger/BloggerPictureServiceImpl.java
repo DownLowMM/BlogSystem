@@ -54,7 +54,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
 
     @Override
-    public int insertPicture(int bloggerId, String path, String bewrite, BloggerPictureCategoryEnum category, String title) {
+    public Long insertPicture(Long bloggerId, String path, String bewrite, BloggerPictureCategoryEnum category, String title) {
         BloggerPicture picture = new BloggerPicture();
         picture.setBewrite(bewrite);
         picture.setBloggerId(bloggerId);
@@ -62,14 +62,14 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         picture.setPath(path);
         picture.setTitle(title);
         int effect = pictureDao.insert(picture);
-        if (effect <= 0) return -1;
+        if (effect <= 0) return null;
 
         return picture.getId();
     }
 
     @Override
-    public int insertPicture(MultipartFile file, int bloggerId, String bewrite, BloggerPictureCategoryEnum category,
-                             String title) {
+    public Long insertPicture(MultipartFile file, Long bloggerId, String bewrite, BloggerPictureCategoryEnum category,
+                              String title) {
         // TODO
 
         int cate = category.getCode();
@@ -80,12 +80,12 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
             path = imageManager.saveImageToDisk(file, bloggerId, cate);
         } catch (IOException e) {
             e.printStackTrace();
-            return -1;
+            return null;
         }
-        if (path == null) return -1;
+        if (path == null) return null;
 
         // 如果是图片管理员上传默认图片，需要移动其文件夹
-        int pictureManagerId = websiteProperties.getManagerId();
+        Long pictureManagerId = websiteProperties.getManagerId();
         if (pictureManagerId == bloggerId && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate)) {
             // 如果设备上已经有该唯一图片，将原来的图片移到私有文件夹，同时修改数据库
             removeDefaultPictureIfNecessary(bloggerId, category);
@@ -98,7 +98,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-    public int insertPicture(byte[] bs, int bloggerId, String name, String bewrite, BloggerPictureCategoryEnum category, String title) {
+    public Long insertPicture(byte[] bs, Long bloggerId, String name, String bewrite, BloggerPictureCategoryEnum category, String title) {
 
         int cate = category.getCode();
         String path;
@@ -108,13 +108,13 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
             path = imageManager.saveImageToDisk(bs, name, bloggerId, cate);
         } catch (IOException e) {
             e.printStackTrace();
-            return -1;
+            return null;
         }
-        if (path == null) return -1;
+        if (path == null) return null;
 
         // 如果是图片管理员上传默认图片，需要移动其文件夹
-        int pictureManagerId = websiteProperties.getManagerId();
-        if (pictureManagerId == bloggerId && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate)) {
+        Long pictureManagerId = websiteProperties.getManagerId();
+        if (pictureManagerId.equals(bloggerId) && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate)) {
             // 如果设备上已经有该唯一图片，将原来的图片移到私有文件夹，同时修改数据库
             removeDefaultPictureIfNecessary(bloggerId, category);
         }
@@ -130,7 +130,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
      * 移到默认图片到私有图片文件夹，同时修改数据库记录
      * @param bloggerId 博主id
      */
-    private void removeDefaultPictureIfNecessary(int bloggerId, BloggerPictureCategoryEnum defaultCate) {
+    private void removeDefaultPictureIfNecessary(Long bloggerId, BloggerPictureCategoryEnum defaultCate) {
         BloggerPicture unique = pictureDao.getBloggerUniquePicture(bloggerId, defaultCate.getCode());
 
         if (unique != null) {
@@ -154,14 +154,14 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-    public boolean deletePicture(int bloggerId, int pictureId, boolean deleteOnDisk) {
+    public boolean deletePicture(Long bloggerId, Long pictureId, boolean deleteOnDisk) {
 
         BloggerPictureDTO picture = getPicture(pictureId);
 
         // 对默认图片，图片管理员只能以更新（上传）的方式删除图片，因为这些图片必须时刻存在
-        int pictureManagerId = websiteProperties.getManagerId();
+        Long pictureManagerId = websiteProperties.getManagerId();
         int cate = picture.getCategory();
-        if (bloggerId == pictureManagerId && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate))
+        if (bloggerId.equals(pictureManagerId) && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate))
             return false;
 
         //删除数据库记录
@@ -181,13 +181,13 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-    public BloggerPictureDTO getPicture(int pictureId) {
+    public BloggerPictureDTO getPicture(Long pictureId) {
         BloggerPicture picture = pictureDao.getPictureById(pictureId);
         return dataFillingManager.bloggerPicture2DTO(picture);
     }
 
     @Override
-    public BloggerPictureDTO getPicture(int pictureId, int bloggerId) {
+    public BloggerPictureDTO getPicture(Long pictureId, Long bloggerId) {
         BloggerPicture picture = pictureDao.getPictureById(pictureId);
         if (picture == null || !picture.getBloggerId().equals(bloggerId)) return null;
 
@@ -210,7 +210,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-    public ResultModel<List<BloggerPictureDTO>> listBloggerPicture(int bloggerId, BloggerPictureCategoryEnum category,
+    public ResultModel<List<BloggerPictureDTO>> listBloggerPicture(Long bloggerId, BloggerPictureCategoryEnum category,
                                                                    int offset, int rows) {
 
         offset = offset < 0 ? 0 : offset;
@@ -236,19 +236,19 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-    public boolean updatePicture(int pictureId, BloggerPictureCategoryEnum category, String bewrite, String title) {
+    public boolean updatePicture(Long pictureId, BloggerPictureCategoryEnum category, String bewrite, String title) {
 
         BloggerPicture oldPicture = pictureDao.getPictureById(pictureId);
 
         // 修改设备上图片路径，如果需要的话
         String newPath = null;
         if (category != null && category.getCode() != oldPicture.getCategory()) { // 修改了类别
-            int bloggerId = oldPicture.getBloggerId();
+            Long bloggerId = oldPicture.getBloggerId();
             try {
 
-                int pictureManagerId = websiteProperties.getManagerId();
+                Long pictureManagerId = websiteProperties.getManagerId();
                 // 如果为图片管理员在操作
-                if (pictureManagerId == bloggerId) {
+                if (pictureManagerId.equals(bloggerId)) {
 
                     // 以下两种情况将更新失败，对于默认图片，且图片管理员在操作的情况下，要修改类别或删除图片，只能
                     // 以 普通 -> 默认 的修改方向替换图片，因为这些图片必须时刻存在
@@ -297,7 +297,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-    public void cleanBlogPicture(int bloggerId) {
+    public void cleanBlogPicture(Long bloggerId) {
     }
 
 }

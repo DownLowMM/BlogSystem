@@ -21,7 +21,7 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * @param id 图片id
      * @return 查询结果
      */
-    BloggerPicture getPictureById(int id);
+    BloggerPicture getPictureById(Long id);
 
     /**
      * 根据图片类别获得博主图片
@@ -30,7 +30,7 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * @param category  类别
      * @return 查询结果
      */
-    BloggerPicture getPictureByCategory(@Param("bloggerId") int bloggerId, @Param("category") int category);
+    BloggerPicture getPictureByCategory(@Param("bloggerId") Long bloggerId, @Param("category") Long category);
 
     /**
      * 获取博主唯一的图片，如图片管理员管理的默认图片，博主的头像。
@@ -39,8 +39,8 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * @param category  类别
      * @return 查询结果
      */
-    BloggerPicture getBloggerUniquePicture(@Param("bloggerId") int bloggerId,
-                                           @Param("category") int category);
+    BloggerPicture getBloggerUniquePicture(@Param("bloggerId") Long bloggerId,
+                                           @Param("category") Integer category);
 
     /**
      * 查询博主的所有图片
@@ -50,7 +50,7 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * @param rows      行数
      * @return 查询结果
      */
-    List<BloggerPicture> listPictureByBloggerId(@Param("bloggerId") int bloggerId,
+    List<BloggerPicture> listPictureByBloggerId(@Param("bloggerId") Long bloggerId,
                                                 @Param("offset") int offset,
                                                 @Param("rows") int rows);
 
@@ -63,8 +63,8 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * @param rows      行数
      * @return 查询结果
      */
-    List<BloggerPicture> listPictureByBloggerAndCategory(@Param("bloggerId") int bloggerId,
-                                                         @Param("category") int category,
+    List<BloggerPicture> listPictureByBloggerAndCategory(@Param("bloggerId") Long bloggerId,
+                                                         @Param("category") Integer category,
                                                          @Param("offset") int offset,
                                                          @Param("rows") int rows);
 
@@ -74,7 +74,7 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * @param pictureId 图片id
      * @return 操作影响的行数
      */
-    int updateUseCountPlus(int pictureId);
+    int updateUseCountPlus(Long pictureId);
 
     /**
      * 将图片被引用次数加一
@@ -82,7 +82,7 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * @param pictureId 图片id
      * @return 操作影响的行数
      */
-    int updateUseCountMinus(int pictureId);
+    int updateUseCountMinus(Long pictureId);
 
     /**
      * 获得图片被引用次数
@@ -90,7 +90,7 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * @param pictureId 图片id
      * @return 操作影响的行数
      */
-    int getUseCount(int pictureId);
+    int getUseCount(Long pictureId);
 
     /**
      * 根据博主id获得其所有图片
@@ -98,5 +98,5 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    List<BloggerPicture> getPictureByBloggerId(int bloggerId);
+    List<BloggerPicture> getPictureByBloggerId(Long bloggerId);
 }

@@ -36,8 +36,8 @@ public class EditBlogPageController {
 
     @RequestMapping
     public ModelAndView mainPage(HttpServletRequest request,
-                                 @RequestParam(value = "bid", required = false) Integer bloggerId,
-                                 @RequestParam(value = "blogId", required = false) Integer blogId) {
+                                 @RequestParam(value = "bid", required = false) Long bloggerId,
+                                 @RequestParam(value = "blogId", required = false) Long blogId) {
         ModelAndView mv = new ModelAndView();
 
         if (bloggerId == null || !validateService.checkBloggerSignIn(bloggerId)) {

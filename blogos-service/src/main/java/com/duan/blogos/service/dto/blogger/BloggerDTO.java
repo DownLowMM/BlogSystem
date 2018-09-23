@@ -14,10 +14,8 @@ import java.sql.Timestamp;
 @Data
 public class BloggerDTO implements Serializable {
 
-    private static final long serialVersionUID = 4552057430001933904L;
-
     //id
-    private int id;
+    private Long id;
 
     //个人资料
     private BloggerProfileDTO profile;

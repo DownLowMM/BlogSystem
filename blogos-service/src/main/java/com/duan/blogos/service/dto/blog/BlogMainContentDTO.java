@@ -14,10 +14,8 @@ import java.sql.Timestamp;
 @Data
 public class BlogMainContentDTO implements Serializable {
 
-    private static final long serialVersionUID = -9215772012725472707L;
-
     //博文id
-    private int id;
+    private Long id;
 
     //博文所属类别
     private BlogCategoryDTO[] categories;
@@ -44,9 +42,9 @@ public class BlogMainContentDTO implements Serializable {
     private Timestamp nearestModifyDate;
 
     //文章状态
-    private int status;
+    private Integer status;
 
     //总字数
-    private int wordCount;
+    private Integer wordCount;
 
 }

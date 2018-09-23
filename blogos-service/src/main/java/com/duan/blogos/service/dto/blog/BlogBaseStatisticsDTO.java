@@ -14,10 +14,10 @@ import java.sql.Timestamp;
 public class BlogBaseStatisticsDTO implements Serializable {
 
     // 表id
-    private Integer id;
+    private Long id;
 
     //对应博文id
-    private Integer blogId;
+    private Long blogId;
 
     //评论次数
     private Integer commentCount;

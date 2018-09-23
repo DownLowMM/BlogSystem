@@ -75,13 +75,13 @@ public class BloggerLikeBlogServiceImpl implements BloggerLikeBlogService {
     private StringConstructorManager constructorManager;
 
     @Override
-    public boolean getLikeState(int bloggerId, int blogId) {
+    public boolean getLikeState(Long bloggerId, Long blogId) {
         BlogLike like = likeDao.getLike(bloggerId, blogId);
         return like != null;
     }
 
     @Override
-    public ResultModel<List<FavouriteBlogListItemDTO>> listLikeBlog(int bloggerId, int offset, int rows, BlogSortRule sortRule) {
+    public ResultModel<List<FavouriteBlogListItemDTO>> listLikeBlog(Long bloggerId, int offset, int rows, BlogSortRule sortRule) {
 
         offset = offset < 0 ? 0 : offset;
         rows = rows < 0 ? defaultProperties.getCollectCount() : rows;
@@ -92,9 +92,9 @@ public class BloggerLikeBlogServiceImpl implements BloggerLikeBlogService {
         //排序
         List<BlogStatistics> temp = new ArrayList<>();
         //方便排序后的重组
-        Map<Integer, BlogLike> blogLikeMap = new HashMap<>();
+        Map<Long, BlogLike> blogLikeMap = new HashMap<>();
         for (BlogLike like : likes) {
-            int blogId = like.getBlogId();
+            Long blogId = like.getBlogId();
             BlogStatistics statistics = statisticsDao.getStatistics(blogId);
             temp.add(statistics);
             blogLikeMap.put(blogId, like);
@@ -105,21 +105,21 @@ public class BloggerLikeBlogServiceImpl implements BloggerLikeBlogService {
         //构造结果
         List<FavouriteBlogListItemDTO> result = new ArrayList<>();
         for (BlogStatistics statistics : temp) {
-            int blogId = statistics.getBlogId();
+            Long blogId = statistics.getBlogId();
 
             // BlogListItemDTO
             Blog blog = blogDao.getBlogById(blogId);
             String ch = dbProperties.getStringFiledSplitCharacterForNumber();
 
             // category
-            int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), ch);
+            Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), ch);
             List<BlogCategory> categories = null;
             if (!CollectionUtils.isEmpty(cids)) {
                 categories = categoryDao.listCategoryById(cids);
             }
 
             // label
-            int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), ch);
+            Long[] lids = StringUtils.longStringDistinctToArray(blog.getLabelIds(), ch);
             List<BlogLabel> labels = null;
             if (!CollectionUtils.isEmpty(lids)) {
                 labels = labelDao.listLabelById(lids);
@@ -131,7 +131,7 @@ public class BloggerLikeBlogServiceImpl implements BloggerLikeBlogService {
                     blog, null);
 
             // BloggerDTO
-            int authorId = blog.getBloggerId();
+            Long authorId = blog.getBloggerId();
             BloggerAccount account = accountDao.getAccountById(authorId);
             BloggerProfile profile = profileDao.getProfileByBloggerId(authorId);
             BloggerPicture avatar = profile.getAvatarId() == null ? null :
@@ -142,7 +142,7 @@ public class BloggerLikeBlogServiceImpl implements BloggerLikeBlogService {
                 avatar = new BloggerPicture();
                 avatar.setCategory(BloggerPictureCategoryEnum.PUBLIC.getCode());
                 avatar.setBloggerId(authorId);
-                avatar.setId(-1);
+                avatar.setId(null);
             }
 
             String url = constructorManager.constructPictureUrl(avatar, BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR);
@@ -160,7 +160,7 @@ public class BloggerLikeBlogServiceImpl implements BloggerLikeBlogService {
     }
 
     @Override
-    public int countByBloggerId(int bloggerId) {
+    public int countByBloggerId(Long bloggerId) {
         return likeDao.countLikeByLikerId(bloggerId);
     }
 }

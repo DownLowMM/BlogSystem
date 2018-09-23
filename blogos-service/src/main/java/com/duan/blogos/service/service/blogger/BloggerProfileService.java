@@ -22,7 +22,7 @@ public interface BloggerProfileService {
      * @param intro     一句话简介
      * @return 新纪录id
      */
-    int insertBloggerProfile(int bloggerId, int avatarId, String phone, String email, String aboutMe, String intro);
+    Long insertBloggerProfile(Long bloggerId, Long avatarId, String phone, String email, String aboutMe, String intro);
 
     /**
      * 更新博主信息
@@ -35,7 +35,7 @@ public interface BloggerProfileService {
      * @param newIntro   新的一句话简介，不改变传 null
      * @return 更新失败为false
      */
-    boolean updateBloggerProfile(int bloggerId, int avatarId, String newPhone, String newEmail, String newAboutMe, String newIntro);
+    boolean updateBloggerProfile(Long bloggerId, Long avatarId, String newPhone, String newEmail, String newAboutMe, String newIntro);
 
     /**
      * 删除博主信息
@@ -43,7 +43,7 @@ public interface BloggerProfileService {
      * @param bloggerId 博主id
      * @return 删除成功为true
      */
-    boolean deleteBloggerProfile(int bloggerId);
+    boolean deleteBloggerProfile(Long bloggerId);
 
     /**
      * 查询博主信息
@@ -51,7 +51,7 @@ public interface BloggerProfileService {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    BloggerProfileDTO getBloggerProfile(int bloggerId);
+    BloggerProfileDTO getBloggerProfile(Long bloggerId);
 
     /**
      * 通过电话号码获得资料

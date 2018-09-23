@@ -33,7 +33,7 @@ public interface BloggerPictureService {
      * @param title     名字
      * @return 新纪录id
      */
-    int insertPicture(int bloggerId, String path, String bewrite, BloggerPictureCategoryEnum category, String title);
+    Long insertPicture(Long bloggerId, String path, String bewrite, BloggerPictureCategoryEnum category, String title);
 
     /**
      * 向数据库中新增图片记录，同时将图片保存到设备
@@ -45,7 +45,7 @@ public interface BloggerPictureService {
      * @param title     标题
      * @return 新纪录id
      */
-    int insertPicture(MultipartFile file, int bloggerId, String bewrite, BloggerPictureCategoryEnum category, String title);
+    Long insertPicture(MultipartFile file, Long bloggerId, String bewrite, BloggerPictureCategoryEnum category, String title);
 
     /**
      * 向数据库中新增图片记录，同时将图片保存到设备
@@ -58,7 +58,7 @@ public interface BloggerPictureService {
      * @param title     标题
      * @return 新纪录id
      */
-    int insertPicture(byte[] bs, int bloggerId, String name, String bewrite, BloggerPictureCategoryEnum category, String title);
+    Long insertPicture(byte[] bs, Long bloggerId, String name, String bewrite, BloggerPictureCategoryEnum category, String title);
 
     /**
      * 删除图片记录
@@ -68,7 +68,7 @@ public interface BloggerPictureService {
      * @param deleteOnDisk 是否同时从存储设备中删除
      * @return 删除成功返回true
      */
-    boolean deletePicture(int bloggerId, int pictureId, boolean deleteOnDisk);
+    boolean deletePicture(Long bloggerId, Long pictureId, boolean deleteOnDisk);
 
     /**
      * 获得图片
@@ -76,7 +76,7 @@ public interface BloggerPictureService {
      * @param pictureId 图片id
      * @return 查询结果
      */
-    BloggerPictureDTO getPicture(int pictureId);
+    BloggerPictureDTO getPicture(Long pictureId);
 
     /**
      * 获得图片
@@ -85,7 +85,7 @@ public interface BloggerPictureService {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    BloggerPictureDTO getPicture(int pictureId, int bloggerId);
+    BloggerPictureDTO getPicture(Long pictureId, Long bloggerId);
 
     /**
      * 根据类别获得图片，这些图片是应用默认的图片，一个类别只应该有一张默认图片
@@ -104,7 +104,7 @@ public interface BloggerPictureService {
      * @param rows      结果集行数
      * @return 查询结果
      */
-    ResultModel<List<BloggerPictureDTO>> listBloggerPicture(int bloggerId, BloggerPictureCategoryEnum category, int offset, int rows);
+    ResultModel<List<BloggerPictureDTO>> listBloggerPicture(Long bloggerId, BloggerPictureCategoryEnum category, int offset, int rows);
 
     /**
      * 更新图片信息，当修改了图片类别时需要同步更新设备上的图片保存位置
@@ -115,7 +115,7 @@ public interface BloggerPictureService {
      * @param title     标题
      * @return
      */
-    boolean updatePicture(int pictureId, BloggerPictureCategoryEnum category, String bewrite, String title);
+    boolean updatePicture(Long pictureId, BloggerPictureCategoryEnum category, String bewrite, String title);
 
     /**
      * 清理指定博主的博文图片，这里根据图片表的useCount的值检索BLOG_PICTURE类别的图片，如果其值为0，可以删除，该清理过程
@@ -127,6 +127,6 @@ public interface BloggerPictureService {
      * @param bloggerId 博主id
      */
     // UPDATE: 2018/2/3 更新 初始版本不予实现
-    void cleanBlogPicture(int bloggerId);
+    void cleanBlogPicture(Long bloggerId);
 
 }

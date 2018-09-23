@@ -23,7 +23,7 @@ public class BlogCommentController extends BaseBlogController {
      * 获得博文评论列表
      */
     @GetMapping
-    public ResultModel<PageResult<BlogCommentDTO>> get(@PathVariable Integer blogId,
+    public ResultModel<PageResult<BlogCommentDTO>> get(@PathVariable Long blogId,
                                                        @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                        @RequestParam(value = "pageNum", required = false) Integer pageNum) {
         handleBlogExistCheck(blogId);

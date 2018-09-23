@@ -21,7 +21,7 @@ public interface BloggerLabelService {
      * @param title     标签名
      * @return 新纪录id
      */
-    int insertLabel(int bloggerId, String title);
+    Long insertLabel(Long bloggerId, String title);
 
     /**
      * 修改标签
@@ -31,7 +31,7 @@ public interface BloggerLabelService {
      * @param newTitle  新标签名
      * @return 更新失败为false
      */
-    boolean updateLabel(int labelId, int bloggerId, String newTitle);
+    boolean updateLabel(Long labelId, Long bloggerId, String newTitle);
 
     /**
      * 删除标签，只有标签是当前博主创建时才能删除
@@ -40,7 +40,7 @@ public interface BloggerLabelService {
      * @param labelId   标签id
      * @return 删除成功返回true
      */
-    boolean deleteLabel(int bloggerId, int labelId);
+    boolean deleteLabel(Long bloggerId, Long labelId);
 
     /**
      * 获得博主创建的所有标签
@@ -57,7 +57,7 @@ public interface BloggerLabelService {
      * @param labelId 标签id
      * @return 查询结果
      */
-    BlogLabelDTO getLabel(int labelId);
+    BlogLabelDTO getLabel(Long labelId);
 
     /**
      * 获取指定博主创建的所有标签
@@ -67,5 +67,5 @@ public interface BloggerLabelService {
      * @param rows      行数
      * @return 查询结果
      */
-    ResultModel<List<BlogLabelDTO>> listLabelByBlogger(int bloggerId, int offset, int rows);
+    ResultModel<List<BlogLabelDTO>> listLabelByBlogger(Long bloggerId, int offset, int rows);
 }

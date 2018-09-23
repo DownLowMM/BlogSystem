@@ -27,10 +27,9 @@ public class BloggerSettingController extends BaseBloggerController {
      */
     @RequestMapping(value = "/item=mainPageNavPos", method = RequestMethod.PUT)
     public ResultModel update(HttpServletRequest request,
-                              @PathVariable Integer bloggerId,
+                              @PathVariable Long bloggerId,
                               @RequestParam("mainPageNavPos") Integer mainPageNavPos) {
 
-        handleBloggerSignInCheck(request, bloggerId);
         handleMainPageNavPosCheck(request, mainPageNavPos);
 
         boolean result = settingService.updateMainPageNavPos(bloggerId, mainPageNavPos);

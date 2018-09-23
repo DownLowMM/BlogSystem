@@ -60,7 +60,7 @@ public class FavouriteBlogPageController {
 
         // 登陆博主 id
         String token = ""; // TODO redis + token 维护会话
-        int loginBloggerId = onlineService.getLoginBloggerId(token);
+        Long loginBloggerId = onlineService.getLoginBloggerId(token);
         ResultModel<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBloggerId);
         mv.addObject("loginBgStat", loginBgStat.getData());
 

@@ -22,7 +22,7 @@ public interface BlogLabelDao extends BaseDao<BlogLabel> {
      * @param ids id
      * @return 查询结果
      */
-    List<BlogLabel> listLabelById(@Param("ids") int[] ids);
+    List<BlogLabel> listLabelById(@Param("ids") Long[] ids);
 
     /**
      * 根据标签id获得标签
@@ -30,7 +30,7 @@ public interface BlogLabelDao extends BaseDao<BlogLabel> {
      * @param labelId 标签id
      * @return 查询结果
      */
-    BlogLabel getLabel(int labelId);
+    BlogLabel getLabel(Long labelId);
 
     /**
      * 无限制的获取标签
@@ -49,7 +49,7 @@ public interface BlogLabelDao extends BaseDao<BlogLabel> {
      * @param rows      行数
      * @return 查询结果
      */
-    List<BlogLabel> listLabelByBloggerId(@Param("bloggerId") int bloggerId,
+    List<BlogLabel> listLabelByBloggerId(@Param("bloggerId") Long bloggerId,
                                          @Param("offset") int offset,
                                          @Param("rows") int rows);
 
@@ -59,5 +59,5 @@ public interface BlogLabelDao extends BaseDao<BlogLabel> {
      * @param bloggerId 博主id
      * @return 数量
      */
-    Integer countByBloggerId(int bloggerId);
+    Integer countByBloggerId(Long bloggerId);
 }

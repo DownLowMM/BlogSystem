@@ -40,7 +40,7 @@ public class WebSiteStatisticsServiceImpl implements WebSiteStatisticsService {
     public List<BloggerBriefDTO> listActiveBlogger(int count) {
         count = count <= 0 ? websiteProperties.getActiveBloggerCount() : count;
 
-        int[] ids = websiteManager.getActiveBloggerIds(count);
+        Long[] ids = websiteManager.getActiveBloggerIds(count);
         BloggerDTO[] bloggerDTOS = statisticsService.listBloggerDTO(ids);
         if (CollectionUtils.isEmpty(bloggerDTOS)) return null;
 

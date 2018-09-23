@@ -15,10 +15,8 @@ import java.sql.Timestamp;
 @Data
 public class BlogStatisticsDTO implements Serializable {
 
-    private static final long serialVersionUID = 1258582482361980014L;
-
     //博文id
-    private int id;
+    private Long id;
 
     //统计信息
     private BlogBaseStatisticsDTO statistics;
@@ -30,7 +28,7 @@ public class BlogStatisticsDTO implements Serializable {
     private BlogLabelDTO[] labels;
 
     //状态
-    private int state;
+    private Integer state;
 
     //博文标题
     private String title;
@@ -48,7 +46,7 @@ public class BlogStatisticsDTO implements Serializable {
     private Timestamp nearestModifyDate;
 
     //字数
-    private int wordCount;
+    private Integer wordCount;
 
     //喜欢该篇文章的人
     private BloggerDTO[] likes;

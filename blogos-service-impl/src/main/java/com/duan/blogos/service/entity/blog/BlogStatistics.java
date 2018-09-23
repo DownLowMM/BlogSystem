@@ -21,10 +21,10 @@ public class BlogStatistics implements Serializable {
     private static final long serialVersionUID = 2806945822343341735L;
 
     // 表id
-    private Integer id;
+    private Long id;
 
     //对应博文id
-    private Integer blogId;
+    private Long blogId;
 
     //评论次数
     private Integer commentCount;

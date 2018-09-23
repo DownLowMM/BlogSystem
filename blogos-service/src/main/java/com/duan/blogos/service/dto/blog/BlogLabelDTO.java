@@ -14,10 +14,10 @@ import java.sql.Timestamp;
 public class BlogLabelDTO implements Serializable {
 
     //id
-    private Integer id;
+    private Long id;
 
     //所属博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //标题
     private String title;

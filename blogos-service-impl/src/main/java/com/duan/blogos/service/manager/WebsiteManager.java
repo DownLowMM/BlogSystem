@@ -21,11 +21,11 @@ public class WebsiteManager {
      * @param count 获取个数
      * @return id 集合
      */
-    public int[] getActiveBloggerIds(int count) {
+    public Long[] getActiveBloggerIds(int count) {
 
         // UPDATE: 2018/5/1 更新 完善策略
-        Integer[] array = accountDao.listId(count).toArray(new Integer[]{});
-        int[] res = new int[array.length];
+        Long[] array = accountDao.listId(count).toArray(new Long[]{});
+        Long[] res = new Long[array.length];
         for (int i = 0; i < array.length; i++) {
             res[i] = array[i];
         }

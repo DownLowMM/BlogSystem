@@ -23,14 +23,14 @@ public class BloggerSettingServiceImpl implements BloggerSettingService {
     private DataFillingManager dataFillingManager;
 
     @Override
-    public BloggerSettingDTO getSetting(int bloggerId) {
+    public BloggerSettingDTO getSetting(Long bloggerId) {
         BloggerSetting setting = settingDao.getSetting(bloggerId);
 
         return dataFillingManager.bloggerSetting2DTO(setting);
     }
 
     @Override
-    public boolean updateMainPageNavPos(int bloggerId, int pos) {
+    public boolean updateMainPageNavPos(Long bloggerId, int pos) {
         int effect = settingDao.updateMainPageNavPos(bloggerId, pos);
         if (effect <= 0) return false;
 

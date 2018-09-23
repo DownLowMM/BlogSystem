@@ -16,7 +16,7 @@ public interface BloggerSettingService {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    BloggerSettingDTO getSetting(int bloggerId);
+    BloggerSettingDTO getSetting(Long bloggerId);
 
     /**
      * 更新博主主页个人信息栏位置
@@ -25,6 +25,6 @@ public interface BloggerSettingService {
      * @param bloggerId 博主id
      * @return 更新成功为true
      */
-    boolean updateMainPageNavPos(int bloggerId, int pos);
+    boolean updateMainPageNavPos(Long bloggerId, int pos);
 
 }

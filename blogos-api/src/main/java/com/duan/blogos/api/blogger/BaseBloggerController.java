@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created on 2017/12/28.
- * 该家族的大多数操作都需要博主登录
+ * 需要博主登录
  *
  * @author DuanJiaNing
  */
@@ -42,7 +42,7 @@ public class BaseBloggerController extends BaseCheckController {
      * @param bloggerId 博主id
      * @param pictureId 图片id
      */
-    protected void handlePictureExistCheck(HttpServletRequest request, Integer bloggerId, Integer pictureId) {
+    protected void handlePictureExistCheck(HttpServletRequest request, Long bloggerId, Long pictureId) {
         if (pictureId != null && !bloggerValidateService.checkBloggerPictureExist(bloggerId, pictureId))
             throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_PICTURE);
     }

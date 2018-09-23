@@ -51,7 +51,7 @@ public class LabelController extends BaseCheckController {
      * 获取指定标签
      */
     @RequestMapping(value = "/{labelId}", method = RequestMethod.GET)
-    public ResultModel<BlogLabelDTO> getLabel(HttpServletRequest request, @PathVariable("labelId") Integer labelId) {
+    public ResultModel<BlogLabelDTO> getLabel(HttpServletRequest request, @PathVariable("labelId") Long labelId) {
 
         BlogLabelDTO label = bloggerLabelService.getLabel(labelId);
         if (label == null) handlerEmptyResult();

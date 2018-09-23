@@ -43,7 +43,7 @@ public class ImageManager {
     /**
      * 将图片保存到博主的对应文件夹下
      */
-    public String saveImageToDisk(byte[] bs, String name, int bloggerId, int category) throws IOException {
+    public String saveImageToDisk(byte[] bs, String name, Long bloggerId, int category) throws IOException {
 
         String type = ImageUtils.getImageMimeType(name);
         if (type == null) return null;
@@ -76,7 +76,7 @@ public class ImageManager {
      * @param category  图片类别
      * @return 路径
      */
-    public String saveImageToDisk(MultipartFile file, int bloggerId, int category) throws IOException {
+    public String saveImageToDisk(MultipartFile file, Long bloggerId, int category) throws IOException {
         //后缀一定要为图片类型
         String type = ImageUtils.getImageType(file);
         if (type == null) return null;
@@ -138,7 +138,7 @@ public class ImageManager {
      * @param category  目标博主的类别
      * @return 新的图片保存路径
      */
-    public String moveImage(BloggerPicture picture, int bloggerId, BloggerPictureCategoryEnum category) throws IOException {
+    public String moveImage(BloggerPicture picture, Long bloggerId, BloggerPictureCategoryEnum category) throws IOException {
 
         BloggerAccount account = accountDao.getAccountById(bloggerId);
         String dirPath = constructorManager.constructImageDirPath(account.getUsername(), category.name());
@@ -162,7 +162,7 @@ public class ImageManager {
      * @param category  类别
      * @return 移动了返回true
      */
-    public boolean moveImageAndUpdateDbIfNecessary(int bloggerId, int pictureId, BloggerPictureCategoryEnum category)
+    public boolean moveImageAndUpdateDbIfNecessary(Long bloggerId, Long pictureId, BloggerPictureCategoryEnum category)
             throws IOException {
         if (pictureId <= 0 || category == null) return false;
 
@@ -184,9 +184,9 @@ public class ImageManager {
      * @param oldPictureId 旧图片id
      * @return 操作成功返回true
      */
-    public boolean moveImageAndUpdateDbAndUseCountIfNecessary(int bloggerId, int newPictureId, int oldPictureId) throws IOException {
+    public boolean moveImageAndUpdateDbAndUseCountIfNecessary(Long bloggerId, Long newPictureId, Long oldPictureId) throws IOException {
 
-        if (newPictureId == oldPictureId) return false;
+        if (newPictureId.equals(oldPictureId)) return false;
 
         // 将新图片指向图片修改为公开并移动目录（需要的话）
         if (newPictureId > 0) {
@@ -201,7 +201,7 @@ public class ImageManager {
         }
 
         //旧图片useCount--
-        if (oldPictureId > 0) {
+        if (oldPictureId != null && oldPictureId > 0) {
             pictureDao.updateUseCountMinus(oldPictureId);
         }
 
@@ -215,11 +215,11 @@ public class ImageManager {
      * @param pictureId 图片id
      * @return 操作成功返回true
      */
-    public boolean imageInsertHandle(int bloggerId, int pictureId) {
+    public boolean imageInsertHandle(Long bloggerId, Long pictureId) {
         if (pictureId < 0) return false;
 
         try {
-            return moveImageAndUpdateDbAndUseCountIfNecessary(bloggerId, pictureId, -1);
+            return moveImageAndUpdateDbAndUseCountIfNecessary(bloggerId, pictureId, null);
         } catch (IOException e) {
             e.printStackTrace();
             throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
@@ -234,12 +234,12 @@ public class ImageManager {
      * @param oldPictureId 旧图片id
      * @return 操作成功返回true
      */
-    public boolean imageUpdateHandle(int bloggerId, int newPictureId, Integer oldPictureId) {
+    public boolean imageUpdateHandle(Long bloggerId, Long newPictureId, Long oldPictureId) {
 
-        if (newPictureId > 0 && !Integer.valueOf(newPictureId).equals(oldPictureId)) {
+        if (newPictureId > 0 && !newPictureId.equals(oldPictureId)) {
             try {
                 return moveImageAndUpdateDbAndUseCountIfNecessary(bloggerId, newPictureId,
-                        Optional.ofNullable(oldPictureId).orElse(-1));
+                        Optional.ofNullable(oldPictureId).orElse(null));
             } catch (IOException e) {
                 e.printStackTrace();
                 throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);

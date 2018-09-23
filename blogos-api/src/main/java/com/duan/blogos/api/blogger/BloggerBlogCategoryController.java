@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created on 2018/1/11.
@@ -37,7 +36,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<List<BloggerCategoryDTO>> list(HttpServletRequest request,
-                                                      @PathVariable Integer bloggerId,
+                                                      @PathVariable Long bloggerId,
                                                       @RequestParam(value = "offset", required = false) Integer offset,
                                                       @RequestParam(value = "rows", required = false) Integer rows) {
         handleAccountCheck(bloggerId);
@@ -55,8 +54,8 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{categoryId}", method = RequestMethod.GET)
     public ResultModel<BloggerCategoryDTO> get(HttpServletRequest request,
-                                               @PathVariable Integer bloggerId,
-                                               @PathVariable Integer categoryId) {
+                                               @PathVariable Long bloggerId,
+                                               @PathVariable Long categoryId) {
         handleAccountCheck(bloggerId);
         handleCategoryExistCheck(request, bloggerId, categoryId);
 
@@ -72,19 +71,18 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResultModel add(HttpServletRequest request,
-                           @PathVariable Integer bloggerId,
-                           @RequestParam(value = "iconId", required = false) Integer iconId,
+                           @PathVariable Long bloggerId,
+                           @RequestParam(value = "iconId", required = false) Long iconId,
                            @RequestParam("title") String title,
                            @RequestParam(value = "bewrite", required = false) String bewrite) {
 
         // 检查博主是否登录
-        handleBloggerSignInCheck(request, bloggerId);
         handlePictureExistCheck(request, bloggerId, iconId);
 
         if (StringUtils.isEmpty(title))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        int id = bloggerCategoryService.insertBlogCategory(bloggerId, iconId == null ? -1 : iconId, title, bewrite);
+        Long id = bloggerCategoryService.insertBlogCategory(bloggerId, iconId == null ? -1 : iconId, title, bewrite);
         if (id < 0) handlerOperateFail();
 
         return new ResultModel<>(id);
@@ -95,26 +93,24 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{categoryId}", method = RequestMethod.PUT)
     public ResultModel update(HttpServletRequest request,
-                              @PathVariable Integer bloggerId,
-                              @PathVariable Integer categoryId,
-                              @RequestParam(value = "iconId", required = false) Integer newIconId,
+                              @PathVariable Long bloggerId,
+                              @PathVariable Long categoryId,
+                              @RequestParam(value = "iconId", required = false) Long newIconId,
                               @RequestParam(value = "title", required = false) String newTitle,
                               @RequestParam(value = "bewrite", required = false) String newBewrite) {
 
         handleParamAllNullForUpdate(request, newIconId, newTitle, newBewrite);
-        handleBloggerSignInCheck(request, bloggerId);
         handleCategoryExistCheck(request, bloggerId, categoryId);
         handlePictureExistCheck(request, bloggerId, newIconId);
 
-        if (!bloggerCategoryService.updateBlogCategory(bloggerId, categoryId, Optional.ofNullable(newIconId).orElse(-1),
-                newTitle, newBewrite))
+        if (!bloggerCategoryService.updateBlogCategory(bloggerId, categoryId, newIconId, newTitle, newBewrite))
             handlerOperateFail();
 
         return new ResultModel<>("");
     }
 
     // 检查指定博主是否有指定的博文类别
-    private void handleCategoryExistCheck(HttpServletRequest request, int bloggerId, int categoryId) {
+    private void handleCategoryExistCheck(HttpServletRequest request, Long bloggerId, Long categoryId) {
         if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, categoryId))
             throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_CATEGORY);
     }
@@ -125,14 +121,13 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{categoryId}", method = RequestMethod.DELETE)
     public ResultModel delete(HttpServletRequest request,
-                              @PathVariable Integer bloggerId,
-                              @PathVariable Integer categoryId,
-                              @RequestParam(value = "newCategoryId", required = false) Integer newCategoryId) {
+                              @PathVariable Long bloggerId,
+                              @PathVariable Long categoryId,
+                              @RequestParam(value = "newCategoryId", required = false) Long newCategoryId) {
 
-        handleBloggerSignInCheck(request, bloggerId);
         handleCategoryExistCheck(request, bloggerId, categoryId);
 
-        int cate = -1;
+        Long cate = null;
         if (newCategoryId != null) {
 
             //检查删除类别和原博文移动到类别是否相同

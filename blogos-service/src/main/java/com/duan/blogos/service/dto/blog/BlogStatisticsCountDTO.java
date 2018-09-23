@@ -12,36 +12,34 @@ import java.io.Serializable;
 @Data
 public class BlogStatisticsCountDTO implements Serializable {
 
-    private static final long serialVersionUID = -6010225954839747692L;
-
     // 表id
-    private int id;
+    private Long id;
 
     //对应博文id
-    private int blogId;
+    private Long blogId;
 
     //评论次数
-    private int commentCount;
+    private Integer commentCount;
 
     //博文浏览次数
-    private int viewCount;
+    private Integer viewCount;
 
     //博主回复该博文评论的次数
-    private int replyCommentCount;
+    private Integer replyCommentCount;
 
     //博文被收藏次数
-    private int collectCount;
+    private Integer collectCount;
 
     //博文举报次数
-    private int complainCount;
+    private Integer complainCount;
 
     //博文被分享次数
-    private int shareCount;
+    private Integer shareCount;
 
     //赞赏次数
-    private int admireCount;
+    private Integer admireCount;
 
     //喜欢次数
-    private int likeCount;
+    private Integer likeCount;
 
 }

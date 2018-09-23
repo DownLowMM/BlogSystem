@@ -31,7 +31,7 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
     private DataFillingManager dataFillingManager;
 
     @Override
-    public int insertBloggerProfile(int bloggerId, int avatarId, String phone, String email, String aboutMe, String intro) {
+    public Long insertBloggerProfile(Long bloggerId, Long avatarId, String phone, String email, String aboutMe, String intro) {
 
         BloggerProfile profile = new BloggerProfile();
         profile.setAboutMe(aboutMe);
@@ -41,7 +41,7 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
         profile.setIntro(intro);
         profile.setPhone(phone);
         int effect = profileDao.insert(profile);
-        if (effect <= 0) return -1;
+        if (effect <= 0) return null;
 
         if (avatarId > 0)
             imageManager.imageInsertHandle(bloggerId, avatarId);
@@ -50,12 +50,12 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
     }
 
     @Override
-    public boolean updateBloggerProfile(int bloggerId, int avatarId, String newPhone, String newEmail,
+    public boolean updateBloggerProfile(Long bloggerId, Long avatarId, String newPhone, String newEmail,
                                         String newAboutMe, String newIntro) {
 
         BloggerProfile profile = profileDao.getProfileByBloggerId(bloggerId);
         if (profile == null) return false;
-        Integer oldAvatarId = profile.getAvatarId();
+        Long oldAvatarId = profile.getAvatarId();
 
         profile.setAvatarId(avatarId == -1 ? null : avatarId);
         profile.setPhone(newPhone);
@@ -72,14 +72,14 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
     }
 
     @Override
-    public boolean deleteBloggerProfile(int bloggerId) {
+    public boolean deleteBloggerProfile(Long bloggerId) {
 
         BloggerProfile profile = profileDao.getProfileByBloggerId(bloggerId);
 
         int effect = profileDao.delete(bloggerId);
         if (effect <= 0) return false;
 
-        Integer id;
+        Long id;
         if ((id = profile.getAvatarId()) != null)
             pictureDao.updateUseCountMinus(id);
 
@@ -87,7 +87,7 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
     }
 
     @Override
-    public BloggerProfileDTO getBloggerProfile(int bloggerId) {
+    public BloggerProfileDTO getBloggerProfile(Long bloggerId) {
         BloggerProfile profile = profileDao.getProfileByBloggerId(bloggerId);
 
         return dataFillingManager.bloggerProfile2DTO(profile);

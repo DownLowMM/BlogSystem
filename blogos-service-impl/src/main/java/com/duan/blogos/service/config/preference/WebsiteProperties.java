@@ -17,7 +17,7 @@ public class WebsiteProperties {
     /**
      * # 拥有唯一图片管理权限的博主的id
      */
-    private Integer managerId;
+    private Long managerId;
 
     /**
      * # 网站管理者的邮箱（反馈邮件发送到的邮箱）

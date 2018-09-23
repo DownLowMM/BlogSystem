@@ -13,7 +13,7 @@ public interface BlogValidateService {
      * @param blogId 博文id
      * @return 博文存在返回true
      */
-    boolean checkBlogExist(int blogId);
+    boolean checkBlogExist(Long blogId);
 
     /**
      * 检查标签是否存在
@@ -21,7 +21,7 @@ public interface BlogValidateService {
      * @param labelId 标签id
      * @return 存在返回true
      */
-    boolean checkLabelsExist(int labelId);
+    boolean checkLabelsExist(Long labelId);
 
     /**
      * 检查博主是否为当前博文的创作者
@@ -30,7 +30,7 @@ public interface BlogValidateService {
      * @param blogId    博文id
      * @return 是返回true
      */
-    boolean isCreatorOfBlog(int bloggerId, int blogId);
+    boolean isCreatorOfBlog(Long bloggerId, Long blogId);
 
     /**
      * 检验博文是否合法
@@ -58,7 +58,7 @@ public interface BlogValidateService {
      * @param blogId    博文id
      * @return 有返回true
      */
-    boolean isCreatorOfBlogStatistic(int bloggerId, int blogId);
+    boolean isCreatorOfBlogStatistic(Long bloggerId, Long blogId);
 
     /**
      * 检查博文的统计信息是否存在
@@ -66,6 +66,6 @@ public interface BlogValidateService {
      * @param blogId 博文id
      * @return 存在返回true
      */
-    boolean checkBlogStatisticExist(int blogId);
+    boolean checkBlogStatisticExist(Long blogId);
 
 }

@@ -224,7 +224,7 @@ public class DataFillingManager {
         return dto;
     }
 
-    public FavouriteBlogListItemDTO collectBlogListItemToDTO(int bloggerId, BlogCollect collect,
+    public FavouriteBlogListItemDTO collectBlogListItemToDTO(Long bloggerId, BlogCollect collect,
                                                              com.duan.blogos.service.dto.blog.BlogListItemDTO blog, BloggerDTO author) {
         if (collect == null) {
             return null;
@@ -239,7 +239,7 @@ public class DataFillingManager {
         return dto;
     }
 
-    public FavouriteBlogListItemDTO likeBlogListItemToDTO(int bloggerId, BlogLike like,
+    public FavouriteBlogListItemDTO likeBlogListItemToDTO(Long bloggerId, BlogLike like,
                                                           com.duan.blogos.service.dto.blog.BlogListItemDTO blog, BloggerDTO liker) {
         if (like == null) {
             return null;
@@ -405,7 +405,7 @@ public class DataFillingManager {
         }
 
         BloggerAccountDTO dto = new BloggerAccountDTO();
-        dto.setId(String.valueOf(account.getId()));
+        dto.setId(account.getId());
         dto.setUsername(account.getUsername());
         dto.setPassword(account.getPassword());
         dto.setRegisterDate(account.getRegisterDate());

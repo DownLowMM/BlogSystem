@@ -38,7 +38,7 @@ public class BloggerCollectBlogController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<List<FavouriteBlogListItemDTO>> list(HttpServletRequest request,
-                                                            @PathVariable("bloggerId") Integer bloggerId,
+                                                            @PathVariable("bloggerId") Long bloggerId,
                                                             @RequestParam(value = "offset", required = false) Integer offset,
                                                             @RequestParam(value = "rows", required = false) Integer rows,
                                                             @RequestParam(value = "sort", required = false) String sort,
@@ -57,7 +57,7 @@ public class BloggerCollectBlogController extends BaseBloggerController {
 
         // 查询数据
         ResultModel<List<FavouriteBlogListItemDTO>> result = bloggerCollectBlogService.listCollectBlog(bloggerId,
-                -1, offset == null ? 0 : offset, rows == null ? -1 : rows,
+                null, offset == null ? 0 : offset, rows == null ? -1 : rows,
                 BlogSortRule.valueOf(sor, ord));
         if (result == null) handlerEmptyResult();
 
@@ -69,17 +69,15 @@ public class BloggerCollectBlogController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{blogId}", method = RequestMethod.PUT)
     public ResultModel update(HttpServletRequest request,
-                              @PathVariable("blogId") Integer blogId,
-                              @PathVariable("bloggerId") Integer bloggerId,
+                              @PathVariable("blogId") Long blogId,
+                              @PathVariable("bloggerId") Long bloggerId,
                               @RequestParam(value = "reason", required = false) String newReason) {
-
-        handleBloggerSignInCheck(request, bloggerId);
 
         if (StringUtils.isEmpty(newReason)) {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
-        boolean result = bloggerCollectBlogService.updateCollect(bloggerId, blogId, newReason, -1);
+        boolean result = bloggerCollectBlogService.updateCollect(bloggerId, blogId, newReason, null);
         if (!result) handlerOperateFail();
 
         return new ResultModel<>("");
@@ -91,7 +89,7 @@ public class BloggerCollectBlogController extends BaseBloggerController {
      */
     @RequestMapping("/count")
     public ResultModel count(HttpServletRequest request,
-                             @PathVariable("bloggerId") Integer bloggerId) {
+                             @PathVariable("bloggerId") Long bloggerId) {
 
         handleAccountCheck(bloggerId);
 

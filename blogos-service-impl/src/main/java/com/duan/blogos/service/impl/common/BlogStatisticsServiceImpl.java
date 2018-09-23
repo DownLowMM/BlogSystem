@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * Created on 2017/12/19.
@@ -58,12 +57,12 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
     private BloggerStatisticsService statisticsService;
 
     @Override
-    public ResultModel<BlogStatisticsDTO> getBlogStatistics(int blogId) {
+    public ResultModel<BlogStatisticsDTO> getBlogStatistics(Long blogId) {
 
         Blog blog = blogDao.getBlogById(blogId);
         if (blog == null) return null;
 
-        int bloggerId = blog.getBloggerId();
+        Long bloggerId = blog.getBloggerId();
 
         // 统计信息
         BlogStatistics statistics = statisticsDao.getStatistics(blogId);
@@ -72,14 +71,14 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
         // 类别
         BlogCategory[] categories = null;
         String sn = dbProperties.getStringFiledSplitCharacterForNumber();
-        int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), sn);
+        Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), sn);
         if (!CollectionUtils.isEmpty(cids)) {
             categories = categoryDao.listCategoryById(cids).toArray(new BlogCategory[cids.length]);
         }
 
         // 标签
         BlogLabel[] labels = null;
-        int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), sn);
+        Long[] lids = StringUtils.longStringDistinctToArray(blog.getLabelIds(), sn);
         if (!CollectionUtils.isEmpty(lids)) {
             labels = labelDao.listLabelById(lids).toArray(new BlogLabel[lids.length]);
         }
@@ -89,7 +88,7 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
         BloggerDTO[] likes = null;
         List<BlogLike> likeList = likeDao.listAllLikeByBlogId(blogId);
         if (!CollectionUtils.isEmpty(likeList)) {
-            int[] ids = new int[likeList.size()];
+            Long[] ids = new Long[likeList.size()];
             for (BlogLike like : likeList) {
                 ids[c++] = like.getLikerId();
             }
@@ -101,7 +100,7 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
         c = 0;
         List<BlogCollect> collectList = collectDao.listAllCollectByBlogId(blogId);
         if (!CollectionUtils.isEmpty(collectList)) {
-            int[] ids = new int[collectList.size()];
+            Long[] ids = new Long[collectList.size()];
             for (BlogCollect collect : collectList) {
                 ids[c++] = collect.getCollectorId();
             }
@@ -113,15 +112,18 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
         c = 0;
         List<BlogComment> commentList = commentDao.listAllCommentByBlogId(blogId);
         if (!CollectionUtils.isEmpty(commentList)) {
-            int[] ids = new int[commentList.size()];
+            Long[] ids = new Long[commentList.size()];
             for (BlogComment comment : commentList) {
                 // 评论者注销，但其评论将保存（匿名）
-                Integer id = comment.getSpokesmanId();
+                Long id = comment.getSpokesmanId();
                 if (id != null)
                     ids[c++] = id;
             }
+
             // ids 需要去重
-            commenter = statisticsService.listBloggerDTO(IntStream.of(Arrays.copyOf(ids, c)).distinct().toArray());
+
+            Long[] ls = Arrays.stream(ids).distinct().toArray(Long[]::new);
+            commenter = statisticsService.listBloggerDTO(ls);
         }
 
         BlogStatisticsDTO dto = dataFillingManager.blogStatisticsToDTO(blog, statistics, categories, labels,
@@ -132,7 +134,7 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
 
 
     @Override
-    public ResultModel<BlogStatisticsCountDTO> getBlogStatisticsCount(int blogId) {
+    public ResultModel<BlogStatisticsCountDTO> getBlogStatisticsCount(Long blogId) {
 
         BlogStatistics statistics = statisticsDao.getStatistics(blogId);
         if (statistics == null) return null;
@@ -142,7 +144,7 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
     }
 
     @Override
-    public boolean updateBlogViewCountPlus(int blogId) {
+    public boolean updateBlogViewCountPlus(Long blogId) {
         int effect = statisticsDao.updateViewCountPlus(blogId);
 
         if (effect > 0) return true;

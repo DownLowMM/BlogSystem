@@ -14,16 +14,14 @@ import java.sql.Timestamp;
 @Data
 public class BloggerCategoryDTO implements Serializable {
 
-    private static final long serialVersionUID = -7413640669767387180L;
-
     //id
-    private int id;
+    private Long id;
 
     //类别所属博主id
-    private int bloggerId;
+    private Long bloggerId;
 
     // 类别对应的博文数量
-    private int count;
+    private Integer count;
 
     //类别标题
     private String title;

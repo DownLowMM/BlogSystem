@@ -17,13 +17,13 @@ public class BlogLike implements Serializable {
     private static final long serialVersionUID = 7850020610771820655L;
 
     //记录id
-    private Integer id;
+    private Long id;
 
     //博文id
-    private Integer blogId;
+    private Long blogId;
 
     //给出喜欢的人的id
-    private Integer likerId;
+    private Long likerId;
 
     //喜欢时间
     private Timestamp likeDate;

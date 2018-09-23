@@ -16,13 +16,13 @@ public class BloggerLink implements Serializable {
     private static final long serialVersionUID = -6606102132213390615L;
 
     // id
-    private Integer id;
+    private Long id;
 
     //博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //图片id
-    private Integer iconId;
+    private Long iconId;
 
     //标题
     private String title;

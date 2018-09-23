@@ -21,7 +21,7 @@ public interface BlogOperateService {
      * @param sharerId 分享者id
      * @return 博文被分享的次数
      */
-    int insertShare(int blogId, int sharerId);
+    Integer insertShare(Long blogId, Long sharerId);
 
     /**
      * 新增投诉记录，同时博文投诉次数加一
@@ -31,7 +31,7 @@ public interface BlogOperateService {
      * @param content    投诉内容
      * @return 新纪录id
      */
-    int insertComplain(int blogId, int complainId, String content);
+    Long insertComplain(Long blogId, Long complainId, String content);
 
     /**
      * 新增博文收藏记录，同时博文收藏次数加一
@@ -42,7 +42,7 @@ public interface BlogOperateService {
      * @param categoryId  收藏到收藏者自己的哪一个类别
      * @return 新纪录id
      */
-    int insertCollect(int blogId, int collectorId, String reason, int categoryId);
+    Long insertCollect(Long blogId, Long collectorId, String reason, Long categoryId);
 
     /**
      * 取消文章收藏，同时文章收藏数减一
@@ -51,7 +51,7 @@ public interface BlogOperateService {
      * @param blogId    收藏的博文id
      * @return 删除成功返回true
      */
-    boolean deleteCollect(int bloggerId, int blogId);
+    boolean deleteCollect(Long bloggerId, Long blogId);
 
     /**
      * 新增喜欢记录，同时文章喜欢数加一
@@ -60,7 +60,7 @@ public interface BlogOperateService {
      * @param likerId 给出喜欢的人的id，为游客时传-1
      * @return 博文喜欢数
      */
-    int insertLike(int blogId, int likerId);
+    Integer insertLike(Long blogId, Long likerId);
 
     /**
      * 取消喜欢，同时博文喜欢数减一
@@ -69,6 +69,6 @@ public interface BlogOperateService {
      * @param blogId  博文id
      * @return 删除成功返回true
      */
-    boolean deleteLike(int likerId, int blogId);
+    boolean deleteLike(Long likerId, Long blogId);
 
 }

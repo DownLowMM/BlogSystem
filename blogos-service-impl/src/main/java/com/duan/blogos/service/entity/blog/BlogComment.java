@@ -17,16 +17,16 @@ public class BlogComment implements Serializable {
     private static final long serialVersionUID = -7031768607524908823L;
 
     //id
-    private Integer id;
+    private Long id;
 
     //博文id
-    private Integer blogId;
+    private Long blogId;
 
     //评论者id
-    private Integer spokesmanId;
+    private Long spokesmanId;
 
     //被评论者id
-    private Integer listenerId;
+    private Long listenerId;
 
     //评论内容
     private String content;

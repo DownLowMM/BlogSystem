@@ -32,25 +32,25 @@ public class BloggerValidateServiceImpl implements BloggerValidateService {
     private WebsiteProperties websiteProperties;
 
     @Override
-    public boolean checkAccountExist(int id) {
+    public boolean checkAccountExist(Long id) {
         return accountDao.getAccountById(id) != null;
     }
 
     @Override
-    public boolean checkBloggerBlogCategoryExist(int bloggerId, int categoryId) {
+    public boolean checkBloggerBlogCategoryExist(Long bloggerId, Long categoryId) {
         return categoryDao.getCategory(bloggerId, categoryId) != null;
     }
 
     @Override
-    public boolean checkBloggerPictureLegal(int bloggerId, int category) {
-        int pictureManagerId = websiteProperties.getManagerId();
+    public boolean checkBloggerPictureLegal(Long bloggerId, Integer category) {
+        Long pictureManagerId = websiteProperties.getManagerId();
 
         // 图片管理者可以操作任何类别图片,非图片管理者不能操作系统默认图片
-        return bloggerId == pictureManagerId || !BloggerPictureCategoryEnum.isDefaultPictureCategory(category);
+        return bloggerId.equals(pictureManagerId) || !BloggerPictureCategoryEnum.isDefaultPictureCategory(category);
     }
 
     @Override
-    public boolean checkBloggerSignIn(Integer bloggerId) {
+    public boolean checkBloggerSignIn(Long bloggerId) {
 
         // TODO redis 实现
 
@@ -63,9 +63,9 @@ public class BloggerValidateServiceImpl implements BloggerValidateService {
     }
 
     @Override
-    public boolean checkBloggerPictureExist(int bloggerId, int pictureId) {
+    public boolean checkBloggerPictureExist(Long bloggerId, Long pictureId) {
         BloggerPicture picture = pictureDao.getPictureById(pictureId);
-        if (picture != null && Integer.valueOf(bloggerId).equals(picture.getBloggerId()))
+        if (picture != null && bloggerId.equals(picture.getBloggerId()))
             return true;
 
         return false;

@@ -75,7 +75,7 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
     private StringConstructorManager constructorManager;
 
     @Override
-    public ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(int bloggerId, int categoryId, int offset, int rows, BlogSortRule sortRule) {
+    public ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(Long bloggerId, Long categoryId, int offset, int rows, BlogSortRule sortRule) {
 
         offset =offset < 0 ? 0 : offset;
         rows = rows < 0 ? defaultProperties.getCollectCount() : rows;
@@ -86,9 +86,9 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
         //排序
         List<BlogStatistics> temp = new ArrayList<>();
         //方便排序后的重组
-        Map<Integer, BlogCollect> blogCollectMap = new HashMap<>();
+        Map<Long, BlogCollect> blogCollectMap = new HashMap<>();
         for (BlogCollect collect : collects) {
-            int blogId = collect.getBlogId();
+            Long blogId = collect.getBlogId();
             BlogStatistics statistics = statisticsDao.getStatistics(blogId);
             temp.add(statistics);
             blogCollectMap.put(blogId, collect);
@@ -99,33 +99,33 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
         //构造结果
         List<FavouriteBlogListItemDTO> result = new ArrayList<>();
         for (BlogStatistics statistics : temp) {
-            int blogId = statistics.getBlogId();
+            Long blogId = statistics.getBlogId();
 
             // BlogListItemDTO
             Blog blog = blogDao.getBlogById(blogId);
             String ch = dbProperties.getStringFiledSplitCharacterForNumber();
 
             // category
-            int[] cids = StringUtils.intStringDistinctToArray(blog.getCategoryIds(), ch);
+            Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), ch);
             List<BlogCategory> categories = null;
             if (!CollectionUtils.isEmpty(cids)) {
                 categories = categoryDao.listCategoryById(cids);
             }
 
             // label
-            int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), ch);
+            Long[] lids = StringUtils.longStringDistinctToArray(blog.getLabelIds(), ch);
             List<BlogLabel> labels = null;
             if (!CollectionUtils.isEmpty(lids)) {
                 labels = labelDao.listLabelById(lids);
             }
 
             BlogListItemDTO listItemDTO = fillingManager.blogListItemToDTO(statistics,
-                    CollectionUtils.isEmpty(categories) ? null : categories.toArray(new BlogCategory[categories.size()]),
-                    CollectionUtils.isEmpty(labels) ? null : labels.toArray(new BlogLabel[labels.size()]),
+                    CollectionUtils.isEmpty(categories) ? null : categories.toArray(new BlogCategory[0]),
+                    CollectionUtils.isEmpty(labels) ? null : labels.toArray(new BlogLabel[0]),
                     blog, null);
 
             // BloggerDTO
-            int authorId = blog.getBloggerId();
+            Long authorId = blog.getBloggerId();
             BloggerAccount account = accountDao.getAccountById(authorId);
             BloggerProfile profile = profileDao.getProfileByBloggerId(authorId);
             BloggerPicture avatar = profile.getAvatarId() == null ? null :
@@ -136,7 +136,7 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
                 avatar = new BloggerPicture();
                 avatar.setCategory(BloggerPictureCategoryEnum.PUBLIC.getCode());
                 avatar.setBloggerId(authorId);
-                avatar.setId(-1);
+                avatar.setId(null);
             }
 
             String url = constructorManager.constructPictureUrl(avatar, BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR);
@@ -154,19 +154,19 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
     }
 
     @Override
-    public boolean updateCollect(int bloggerId, int blogId, String newReason, int newCategory) {
+    public boolean updateCollect(Long bloggerId, Long blogId, String newReason, Long newCategory) {
         int effect = collectDao.updateByUnique(bloggerId, blogId, newReason, null);
         return effect > 0;
     }
 
     @Override
-    public boolean getCollectState(int bloggerId, int blogId) {
+    public boolean getCollectState(Long bloggerId, Long blogId) {
         BlogCollect collect = collectDao.getCollect(bloggerId, blogId);
         return collect != null;
     }
 
     @Override
-    public int countByBloggerId(int bloggerId) {
+    public int countByBloggerId(Long bloggerId) {
         return collectDao.countByCollectorId(bloggerId);
     }
 }

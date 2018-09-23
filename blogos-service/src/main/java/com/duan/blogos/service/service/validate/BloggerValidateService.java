@@ -13,7 +13,7 @@ public interface BloggerValidateService {
      * @param id 博主id
      * @return 存在返回true
      */
-    boolean checkAccountExist(int id);
+    boolean checkAccountExist(Long id);
 
     /**
      * 检查博文类别是否存在
@@ -22,16 +22,16 @@ public interface BloggerValidateService {
      * @param categoryId 类别id
      * @return 存在时返回true
      */
-    boolean checkBloggerBlogCategoryExist(int bloggerId, int categoryId);
+    boolean checkBloggerBlogCategoryExist(Long bloggerId, Long categoryId);
 
     /**
      * 检查博主是否有权限操纵（新增，更新，删除）某些类别图片
      *
      * @param bloggerId 博主id
-     * @param category  图片类别
+     * @param categoryId  图片类别
      * @return 可以操纵返回true
      */
-    boolean checkBloggerPictureLegal(int bloggerId, int category);
+    boolean checkBloggerPictureLegal(Long bloggerId, Integer categoryId);
 
     /**
      * 检查当前博主是否登录
@@ -40,7 +40,7 @@ public interface BloggerValidateService {
      * @return 登录返回true
      */
     // TODO redis 中操作
-    boolean checkBloggerSignIn(Integer bloggerId);
+    boolean checkBloggerSignIn(Long bloggerId);
 
     /**
      * 检查博主是否有指定图片
@@ -49,7 +49,7 @@ public interface BloggerValidateService {
      * @param pictureId 图片id
      * @return 有返回true
      */
-    boolean checkBloggerPictureExist(int bloggerId, int pictureId);
+    boolean checkBloggerPictureExist(Long bloggerId, Long pictureId);
 
     /**
      * 注册时检查用户名合法性

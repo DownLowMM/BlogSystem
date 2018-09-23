@@ -23,15 +23,15 @@ public interface BloggerAccountService {
      * @param password 密码
      * @return 博主id
      */
-    int insertAccount(String userName, String password);
+    Long insertAccount(String userName, String password);
 
     /**
      * 根据博主id获取博主账户
      *
-     * @param bloggerId 博主id
+     * @param uid 博主id
      * @return 查询结果
      */
-    BloggerAccountDTO getAccount(int bloggerId);
+    BloggerAccountDTO getAccount(Long uid);
 
     /**
      * 根据博主名字获取博主账户
@@ -44,29 +44,29 @@ public interface BloggerAccountService {
     /**
      * 删除账号
      *
-     * @param bloggerId 博主id
+     * @param uid 博主id
      * @return 上传成功返回true
      */
-    boolean deleteAccount(int bloggerId);
+    boolean deleteAccount(Long uid);
 
     /**
      * 更新用户名
      *
-     * @param bloggerId   博主id
+     * @param uid   博主id
      * @param newUserName 新的用户名
      * @return 更新成功返回true
      */
-    boolean updateAccountUserName(int bloggerId, String newUserName);
+    boolean updateAccountUserName(Long uid, String newUserName);
 
     /**
      * 更新密码
      *
-     * @param bloggerId   博主id
+     * @param uid   博主id
      * @param oldPassword 旧密码
      * @param newPassword 新的密码
      * @return 更新成功返回true
      */
-    boolean updateAccountPassword(int bloggerId, String oldPassword, String newPassword);
+    boolean updateAccountPassword(Long uid, String oldPassword, String newPassword);
 
     /**
      * 根据博主电话号码获得账户

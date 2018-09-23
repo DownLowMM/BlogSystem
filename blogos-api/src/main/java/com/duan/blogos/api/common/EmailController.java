@@ -29,12 +29,9 @@ public class EmailController extends BaseCheckController {
      */
     @RequestMapping(value = "/feedback", method = RequestMethod.POST)
     public ResultModel sendFeedback(HttpServletRequest request,
-                                    @RequestParam(value = "bloggerId", required = false) Integer bloggerId,
+                                    @RequestParam(value = "bloggerId", required = false) Long bloggerId,
                                     @RequestParam("content") String content,
                                     @RequestParam(value = "contact", required = false) String contact) {
-        if (bloggerId != null) {
-            handleBloggerSignInCheck(request, bloggerId);
-        }
 
         String subject = new RequestContext(request).getMessage("common.feedbackTitle");
         if (!emailService.sendFeedback(bloggerId == null ? -1 : bloggerId, subject, content, contact))

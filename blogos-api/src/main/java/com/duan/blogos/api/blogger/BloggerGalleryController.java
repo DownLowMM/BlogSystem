@@ -41,9 +41,8 @@ public class BloggerGalleryController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{pictureId}", method = RequestMethod.GET)
     public ResultModel<BloggerPictureDTO> get(HttpServletRequest request,
-                                              @PathVariable("bloggerId") Integer bloggerId,
-                                              @PathVariable("pictureId") Integer pictureId) {
-        handleBloggerSignInCheck(request, bloggerId);
+                                              @PathVariable("bloggerId") Long bloggerId,
+                                              @PathVariable("pictureId") Long pictureId) {
 
         RequestContext context = new RequestContext(request);
         if (pictureId <= 0)
@@ -60,11 +59,10 @@ public class BloggerGalleryController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<List<BloggerPictureDTO>> list(HttpServletRequest request,
-                                                     @PathVariable("bloggerId") Integer bloggerId,
+                                                     @PathVariable("bloggerId") Long bloggerId,
                                                      @RequestParam(value = "category", required = false) Integer category,
                                                      @RequestParam(value = "offset", required = false) Integer offset,
                                                      @RequestParam(value = "rows", required = false) Integer rows) {
-        handleBloggerSignInCheck(request, bloggerId);
         RequestContext context = new RequestContext(request);
 
         int cate;
@@ -94,13 +92,12 @@ public class BloggerGalleryController extends BaseBloggerController {
      */
     @RequestMapping(value = "/{pictureId}", method = RequestMethod.PUT)
     public ResultModel update(HttpServletRequest request,
-                              @PathVariable("bloggerId") Integer bloggerId,
-                              @PathVariable("pictureId") Integer pictureId,
+                              @PathVariable("bloggerId") Long bloggerId,
+                              @PathVariable("pictureId") Long pictureId,
                               @RequestParam(value = "category", required = false) Integer newCategory,
                               @RequestParam(value = "bewrite", required = false) String newBeWrite,
                               @RequestParam(value = "title", required = false) String newTitle) {
 
-        handleBloggerSignInCheck(request, bloggerId);
         RequestContext context = new RequestContext(request);
 
         // 检查博主是否有指定图片
@@ -139,9 +136,8 @@ public class BloggerGalleryController extends BaseBloggerController {
     @RequestMapping(value = "/{pictureId}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResultModel delete(HttpServletRequest request,
-                              @PathVariable("bloggerId") Integer bloggerId,
-                              @PathVariable("pictureId") Integer pictureId) {
-        handleBloggerSignInCheck(request, bloggerId);
+                              @PathVariable("bloggerId") Long bloggerId,
+                              @PathVariable("pictureId") Long pictureId) {
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId, bloggerId);
         if (picture == null) {

@@ -46,19 +46,19 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
     private DataFillingManager dataFillingManager;
 
     @Override
-    public int insertLabel(int bloggerId, String title) {
+    public Long insertLabel(Long bloggerId, String title) {
 
         BlogLabel label = new BlogLabel();
         label.setBloggerId(bloggerId);
         label.setTitle(title);
         int effect = labelDao.insert(label);
-        if (effect <= 0) return -1;
+        if (effect <= 0) return null;
 
         return label.getId();
     }
 
     @Override
-    public boolean updateLabel(int labelId, int bloggerId, String newTitle) {
+    public boolean updateLabel(Long labelId, Long bloggerId, String newTitle) {
 
         //检查标签存在及标签创建者是否为当前博主
         BlogLabel label = labelDao.getLabel(labelId);
@@ -74,7 +74,7 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
     }
 
     @Override
-    public boolean deleteLabel(int bloggerId, int labelId) {
+    public boolean deleteLabel(Long bloggerId, Long labelId) {
 
         //检查标签存在及标签创建者是否为当前博主
         BlogLabel label = labelDao.getLabel(labelId);
@@ -88,12 +88,12 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
         List<Blog> blogs = blogDao.listAllLabelByBloggerId(bloggerId);
         String ch = dbProperties.getStringFiledSplitCharacterForNumber();
         for (Blog blog : blogs) {
-            int[] lids = StringUtils.intStringDistinctToArray(blog.getLabelIds(), ch);
+            Long[] lids = StringUtils.longStringDistinctToArray(blog.getLabelIds(), ch);
             if (CollectionUtils.isEmpty(lids)) continue;
 
-            if (CollectionUtils.intArrayContain(lids, labelId)) {
-                int[] ids = ArrayUtils.removeFromArray(lids, labelId);
-                blog.setLabelIds(StringUtils.intArrayToString(ids, ch));
+            if (CollectionUtils.longArrayContain(lids, labelId)) {
+                Long[] ids = ArrayUtils.removeFromArray(lids, labelId);
+                blog.setLabelIds(StringUtils.longArrayToString(ids, ch));
                 if (blogDao.update(blog) <= 0)
                     throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
             }
@@ -113,13 +113,13 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
     }
 
     @Override
-    public BlogLabelDTO getLabel(int labelId) {
+    public BlogLabelDTO getLabel(Long labelId) {
         BlogLabel label = labelDao.getLabel(labelId);
         return dataFillingManager.blogLabel2DTO(label);
     }
 
     @Override
-    public ResultModel<List<BlogLabelDTO>> listLabelByBlogger(int bloggerId, int offset, int rows) {
+    public ResultModel<List<BlogLabelDTO>> listLabelByBlogger(Long bloggerId, int offset, int rows) {
         offset = offset < 0 ? 0 : offset;
         rows = rows < 0 ? defaultProperties.getLabelCount() : rows;
 

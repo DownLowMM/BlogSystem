@@ -18,7 +18,7 @@ public interface BloggerProfileDao extends BaseDao<BloggerProfile> {
      * @param bloggerId 博主id
      * @return 查询结果
      */
-    BloggerProfile getProfileByBloggerId(int bloggerId);
+    BloggerProfile getProfileByBloggerId(Long bloggerId);
 
     /**
      * 根据电话查询博主资料

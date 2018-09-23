@@ -22,7 +22,7 @@ public interface BloggerLinkService {
      * @param rows      行数
      * @return 查询结果
      */
-    ResultModel<List<BloggerLinkDTO>> listBloggerLink(int bloggerId, int offset, int rows);
+    ResultModel<List<BloggerLinkDTO>> listBloggerLink(Long bloggerId, int offset, int rows);
 
     /**
      * 新增友情链接
@@ -34,7 +34,7 @@ public interface BloggerLinkService {
      * @param bewrite   描述
      * @return 新纪录id
      */
-    int insertBloggerLink(int bloggerId, int iconId, String title, String url, String bewrite);
+    Long insertBloggerLink(Long bloggerId, Long iconId, String title, String url, String bewrite);
 
     /**
      * 删除链接
@@ -42,7 +42,7 @@ public interface BloggerLinkService {
      * @param linkId 链接id
      * @return 删除成功为true
      */
-    boolean deleteBloggerLink(int linkId);
+    boolean deleteBloggerLink(Long linkId);
 
     /**
      * 更新链接
@@ -54,7 +54,7 @@ public interface BloggerLinkService {
      * @param newBewrite 新的描述，不改变传 null
      * @return 更新失败为false
      */
-    boolean updateBloggerLink(int linkId, int newIconId, String newTitle,
+    boolean updateBloggerLink(Long linkId, Long newIconId, String newTitle,
                               String newUrl, String newBewrite);
 
     /**
@@ -63,5 +63,5 @@ public interface BloggerLinkService {
      * @param linkId 链接id
      * @return 存在为true
      */
-    boolean getLinkForCheckExist(int linkId);
+    boolean getLinkForCheckExist(Long linkId);
 }

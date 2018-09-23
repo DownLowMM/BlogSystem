@@ -23,7 +23,7 @@ public interface BlogBrowseService {
      * @param blogId 博文id
      * @return 查询结果
      */
-    ResultModel<BlogMainContentDTO> getBlogMainContent(int blogId);
+    ResultModel<BlogMainContentDTO> getBlogMainContent(Long blogId);
 
     /**
      * 获得博文评论列表，这里获取的是审核通过的评论
@@ -31,6 +31,6 @@ public interface BlogBrowseService {
      * @param blogId 博文id
      * @return 查询结果
      */
-    ResultModel<PageResult<BlogCommentDTO>> listBlogComment(int blogId, Integer pageSize, Integer pageNum);
+    ResultModel<PageResult<BlogCommentDTO>> listBlogComment(Long blogId, Integer pageSize, Integer pageNum);
 
 }

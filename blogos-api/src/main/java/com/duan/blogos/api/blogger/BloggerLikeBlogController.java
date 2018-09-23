@@ -37,7 +37,7 @@ public class BloggerLikeBlogController extends BaseBloggerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResultModel<List<FavouriteBlogListItemDTO>> list(HttpServletRequest request,
-                                                            @PathVariable("bloggerId") Integer bloggerId,
+                                                            @PathVariable("bloggerId") Long bloggerId,
                                                             @RequestParam(value = "offset", required = false) Integer offset,
                                                             @RequestParam(value = "rows", required = false) Integer rows,
                                                             @RequestParam(value = "sort", required = false) String sort,
@@ -69,7 +69,7 @@ public class BloggerLikeBlogController extends BaseBloggerController {
      */
     @RequestMapping("/count")
     public ResultModel count(HttpServletRequest request,
-                             @PathVariable("bloggerId") Integer bloggerId) {
+                             @PathVariable("bloggerId") Long bloggerId) {
 
         handleAccountCheck(bloggerId);
 

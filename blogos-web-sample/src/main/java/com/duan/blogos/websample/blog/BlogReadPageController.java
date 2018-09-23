@@ -66,7 +66,7 @@ public class BlogReadPageController {
             return mv;
         }
 
-        int blogId = blogService.getBlogId(account.getId(), blogName);
+        Long blogId = blogService.getBlogId(account.getId(), blogName);
         if (blogId == -1) {
             mv.setViewName("error/error");
             mv.addObject("code", 5);
@@ -86,7 +86,7 @@ public class BlogReadPageController {
 
         // 登陆博主 id
         String token = ""; // TODO redis + token 维护会话
-        int loginBloggerId = onlineService.getLoginBloggerId(token);
+        Long loginBloggerId = onlineService.getLoginBloggerId(token);
 
         ResultModel<BloggerStatisticsDTO> loginBgStat = bloggerStatisticsService.getBloggerStatistics(loginBloggerId);
         mv.addObject("loginBgStat", loginBgStat.getData());

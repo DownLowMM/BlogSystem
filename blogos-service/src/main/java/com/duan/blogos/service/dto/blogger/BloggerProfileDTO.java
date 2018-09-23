@@ -13,13 +13,13 @@ import java.io.Serializable;
 public class BloggerProfileDTO implements Serializable {
 
     //id
-    private Integer id;
+    private Long id;
 
     //博主id
-    private Integer bloggerId;
+    private Long bloggerId;
 
     //博主头像
-    private Integer avatarId;
+    private Long avatarId;
 
     //电话
     private String phone;

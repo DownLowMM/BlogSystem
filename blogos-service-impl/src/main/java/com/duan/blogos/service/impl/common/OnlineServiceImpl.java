@@ -42,13 +42,13 @@ public class OnlineServiceImpl implements OnlineService {
     private int tokenExpireDay;
 
     @Override
-    public long getLoginBloggerId(String token) {
+    public Long getLoginBloggerId(String token) {
 
         try {
             return TokenUtil.decode(token);
         } catch (Exception e) {
             e.printStackTrace();
-            return -1;
+            return null;
         }
     }
 
@@ -73,7 +73,7 @@ public class OnlineServiceImpl implements OnlineService {
         }
 
 
-        Long uid = Long.valueOf(acc.getId());
+        Long uid = acc.getId();
         ValueOperations valueOperations = redisTemplate.opsForValue();
 
         // tokenKey

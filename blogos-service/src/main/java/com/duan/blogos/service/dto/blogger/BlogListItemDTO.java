@@ -15,16 +15,14 @@ import java.sql.Timestamp;
 @Data
 public class BlogListItemDTO implements Serializable {
 
-    private static final long serialVersionUID = 2159619552751683259L;
-
     //博文id
-    private int id;
+    private Long id;
 
     //博文所属类别
     private BlogCategoryDTO[] categories;
 
     //状态
-    private int state;
+    private Integer state;
 
     //博文标题
     private String title;
@@ -39,21 +37,21 @@ public class BlogListItemDTO implements Serializable {
     private Timestamp nearestModifyDate;
 
     //评论次数
-    private int commentCount;
+    private Integer commentCount;
 
     //博文浏览次数
-    private int viewCount;
+    private Integer viewCount;
 
     //博文被收藏次数
-    private int collectCount;
+    private Integer collectCount;
 
     //喜欢次数
-    private int likeCount;
+    private Integer likeCount;
 
     //字数
-    private int wordCount;
+    private Integer wordCount;
 
     //投诉次数
-    private int complainCount;
+    private Integer complainCount;
 
 }

@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 public class BloggerAccount implements Serializable {
 
     //id
-    private Integer id;
+    private Long id;
 
     //用户名
     private String username;
