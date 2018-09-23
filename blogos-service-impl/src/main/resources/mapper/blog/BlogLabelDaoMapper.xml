@@ -31,7 +31,6 @@
         SELECT *
         FROM blog_label
         WHERE blogger_id = #{bloggerId}
-        LIMIT #{offset}, #{rows}
     </select>
 
     <select id="countByBloggerId" resultType="java.lang.Integer">

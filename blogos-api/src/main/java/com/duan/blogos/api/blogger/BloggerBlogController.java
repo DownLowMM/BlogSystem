@@ -1,8 +1,9 @@
 package com.duan.blogos.api.blogger;
 
+import com.duan.blogos.annonation.TokenNotRequired;
+import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.common.Order;
-import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
 import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
@@ -12,6 +13,8 @@ import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
+import com.duan.common.spring.verify.Rule;
+import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +29,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import static com.duan.blogos.service.common.Rule.VIEW_COUNT;
 
 /**
  * Created on 2018/1/15.
@@ -42,7 +46,7 @@ import java.util.stream.Stream;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger/{bloggerId}/blog")
+@RequestMapping("/blogger/blog")
 public class BloggerBlogController extends BaseBloggerController {
 
     @Autowired
@@ -51,16 +55,20 @@ public class BloggerBlogController extends BaseBloggerController {
     /**
      * 新增博文
      */
-    @RequestMapping(method = RequestMethod.POST)
-    public ResultModel add(HttpServletRequest request,
-                           @PathVariable Long bloggerId,
-                           @RequestParam(value = "cids", required = false) String categoryIds,
-                           @RequestParam(value = "lids", required = false) String labelIds,
-                           @RequestParam("title") String title,
-                           @RequestParam("content") String content,
-                           @RequestParam("contentMd") String contentMd,
-                           @RequestParam("summary") String summary,
-                           @RequestParam(value = "keywords", required = false) String keyWords) {
+    @PostMapping
+    public ResultModel add(
+            @Uid Long bloggerId,
+            @RequestParam(value = "cids", required = false) String categoryIds,
+            @RequestParam(value = "lids", required = false) String labelIds,
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam("title") String title,
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam("content") String content,
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam("contentMd") String contentMd,
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam("summary") String summary,
+            @RequestParam(value = "keywords", required = false) String keyWords) {
 
         // 检查不能为null的参数是否为null
         if (StringUtils.isBlank(title) || StringUtils.isBlank(content) || StringUtils.isBlank(summary))
@@ -70,19 +78,19 @@ public class BloggerBlogController extends BaseBloggerController {
         content = StringUtils.unicodeToString(content);
         contentMd = StringUtils.unicodeToString(contentMd);
 
-        handleBlogContentCheck(request, title, content, contentMd, summary, keyWords);
-
+        handleBlogContentCheck(title, content, contentMd, summary, keyWords);
 
         String sp = ",";
         Long[] cids = StringUtils.longStringDistinctToArray(categoryIds, sp);
         Long[] lids = StringUtils.longStringDistinctToArray(labelIds, sp);
 
         //检查博文类别和标签
-        handleCategoryAndLabelCheck(request, bloggerId, cids, lids);
+        handleCategoryAndLabelCheck(bloggerId, cids, lids);
 
         String[] kw = StringUtils.stringArrayToArray(keyWords, sp);
         // UPDATE: 2018/1/16 更新 博文审核 图片引用
-        Long id = bloggerBlogService.insertBlog(bloggerId, cids, lids, BlogStatusEnum.PUBLIC, title, content, contentMd, summary, kw, false);
+        Long id = bloggerBlogService.insertBlog(bloggerId, cids, lids, BlogStatusEnum.PUBLIC, title, content, contentMd,
+                summary, kw, false);
         if (id == null) handlerOperateFail();
 
         return new ResultModel<>(id);
@@ -91,35 +99,36 @@ public class BloggerBlogController extends BaseBloggerController {
     /**
      * 检索博文
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<List<BlogListItemDTO>> list(HttpServletRequest request,
-                                                   @PathVariable Long bloggerId,
-                                                   @RequestParam(value = "cids", required = false) String categoryIds,
-                                                   @RequestParam(value = "lids", required = false) String labelIds,
-                                                   @RequestParam(value = "kword", required = false) String keyWord,
-                                                   @RequestParam(value = "offset", required = false) Integer offset,
-                                                   @RequestParam(value = "rows", required = false) Integer rows,
-                                                   @RequestParam(value = "sort", required = false) String sort,
-                                                   @RequestParam(value = "order", required = false) String order,
-                                                   @RequestParam(value = "status", required = false) Integer status) {
+    @GetMapping
+    @TokenNotRequired
+    public ResultModel<List<BlogListItemDTO>> list(
+            @RequestParam Long bloggerId,
+            @RequestParam(value = "cids", required = false) String categoryIds,
+            @RequestParam(value = "lids", required = false) String labelIds,
+            @RequestParam(value = "kword", required = false) String keyWord,
+            @RequestParam(value = "offset", required = false) Integer offset,
+            @RequestParam(value = "rows", required = false) Integer rows,
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "order", required = false) String order,
+            @RequestParam(value = "status", required = false) Integer status) {
 
         //检查排序规则
-        String sor = sort == null ? Rule.VIEW_COUNT.name() : sort.toUpperCase();
+        String sor = sort == null ? VIEW_COUNT.name() : sort.toUpperCase();
         String ord = order == null ? Order.DESC.name() : order.toUpperCase();
-        handleSortRuleCheck(request, sor, ord);
+        handleSortRuleCheck(sor, ord);
 
         String sp = ",";
         Long[] cids = StringUtils.longStringDistinctToArray(categoryIds, sp);
         Long[] lids = StringUtils.longStringDistinctToArray(labelIds, sp);
         //检查博文类别和标签
-        handleCategoryAndLabelCheck(request, bloggerId, cids, lids);
+        handleCategoryAndLabelCheck(bloggerId, cids, lids);
 
         BlogStatusEnum stat = null;
         if (status != null) stat = BlogStatusEnum.valueOf(status);
-        if (stat == null) stat = BlogStatusEnum.PUBLIC; // status传参错误
+        if (stat == null) stat = BlogStatusEnum.PUBLIC; // status 传参错误
 
         //执行数据查询
-        BlogSortRule rule = new BlogSortRule(Rule.valueOf(sor), Order.valueOf(ord));
+        BlogSortRule rule = new BlogSortRule(com.duan.blogos.service.common.Rule.valueOf(sor), Order.valueOf(ord));
 
         ResultModel<List<BlogListItemDTO>> listResultModel = bloggerBlogService.listFilterAll(cids, lids, keyWord, bloggerId,
                 offset == null ? 0 : offset, rows == null ? -1 : rows, rule, stat);
@@ -131,10 +140,11 @@ public class BloggerBlogController extends BaseBloggerController {
     /**
      * 获取指定博文
      */
-    @RequestMapping(value = "/{blogId}", method = RequestMethod.GET)
-    public ResultModel<BlogDTO> get(HttpServletRequest request,
-                                    @PathVariable Long bloggerId,
-                                    @PathVariable Long blogId) {
+    @GetMapping("/{blogId}")
+    @TokenNotRequired
+    public ResultModel<BlogDTO> get(
+            @RequestParam Long bloggerId,
+            @PathVariable Long blogId) {
 
         ResultModel<BlogDTO> blog = bloggerBlogService.getBlog(bloggerId, blogId);
         if (blog == null) handlerEmptyResult();
@@ -150,18 +160,18 @@ public class BloggerBlogController extends BaseBloggerController {
     /**
      * 更新博文
      */
-    @RequestMapping(value = "/{blogId}", method = RequestMethod.PUT)
-    public ResultModel update(HttpServletRequest request,
-                              @PathVariable Long bloggerId,
-                              @PathVariable Long blogId,
-                              @RequestParam(value = "title", required = false) String newTitle,
-                              @RequestParam(value = "content", required = false) String newContent,
-                              @RequestParam(value = "contentMd", required = false) String newContentMd,
-                              @RequestParam(value = "summary", required = false) String newSummary,
-                              @RequestParam(value = "cids", required = false) String newCategoryIds,
-                              @RequestParam(value = "lids", required = false) String newLabelIds,
-                              @RequestParam(value = "kword", required = false) String newKeyWord,
-                              @RequestParam(value = "status", required = false) Integer newStatus) {
+    @PutMapping("/{blogId}")
+    public ResultModel update(
+            @Uid Long bloggerId,
+            @PathVariable Long blogId,
+            @RequestParam(value = "title", required = false) String newTitle,
+            @RequestParam(value = "content", required = false) String newContent,
+            @RequestParam(value = "contentMd", required = false) String newContentMd,
+            @RequestParam(value = "summary", required = false) String newSummary,
+            @RequestParam(value = "cids", required = false) String newCategoryIds,
+            @RequestParam(value = "lids", required = false) String newLabelIds,
+            @RequestParam(value = "kword", required = false) String newKeyWord,
+            @RequestParam(value = "status", required = false) Integer newStatus) {
 
         // 所有参数都为null，则不更新。
         if (Stream.of(newTitle, newContent, newSummary, newCategoryIds, newLabelIds, newKeyWord, newStatus)
@@ -172,20 +182,20 @@ public class BloggerBlogController extends BaseBloggerController {
         if (newStatus != null && !blogValidateService.isBlogStatusAllow(newStatus))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        handleBlogExistAndCreatorCheck(request, bloggerId, blogId);
+        handleBlogExistAndCreatorCheck(bloggerId, blogId);
 
         // 将 Unicode 解码
         newContent = StringUtils.unicodeToString(newContent);
         newContentMd = StringUtils.unicodeToString(newContentMd);
 
-        handleBlogContentCheck(request, newTitle, newContent, newContentMd, newSummary, newKeyWord);
+        handleBlogContentCheck(newTitle, newContent, newContentMd, newSummary, newKeyWord);
 
         String sp = ",";
         Long[] cids = newCategoryIds == null ? null : StringUtils.longStringDistinctToArray(newCategoryIds, sp);
         Long[] lids = newLabelIds == null ? null : StringUtils.longStringDistinctToArray(newLabelIds, sp);
 
         //检查博文类别和标签
-        handleCategoryAndLabelCheck(request, bloggerId, cids, lids);
+        handleCategoryAndLabelCheck(bloggerId, cids, lids);
 
         String[] kw = newKeyWord == null ? null : StringUtils.stringArrayToArray(newKeyWord, sp);
         BlogStatusEnum stat = newStatus == null ? null : BlogStatusEnum.valueOf(newStatus);
@@ -200,12 +210,12 @@ public class BloggerBlogController extends BaseBloggerController {
     /**
      * 删除博文
      */
-    @RequestMapping(value = "/{blogId}", method = RequestMethod.DELETE)
-    public ResultModel delete(HttpServletRequest request,
-                              @PathVariable Long bloggerId,
-                              @PathVariable Long blogId) {
+    @DeleteMapping("/{blogId}")
+    public ResultModel delete(
+            @Uid Long bloggerId,
+            @PathVariable Long blogId) {
 
-        handleBlogExistAndCreatorCheck(request, bloggerId, blogId);
+        handleBlogExistAndCreatorCheck(bloggerId, blogId);
 
         if (!bloggerBlogService.deleteBlog(bloggerId, blogId))
             handlerOperateFail();
@@ -216,17 +226,17 @@ public class BloggerBlogController extends BaseBloggerController {
     /**
      * 批量删除博文
      */
-    @RequestMapping(value = "/patch", method = RequestMethod.DELETE)
-    public ResultModel deletePatch(HttpServletRequest request,
-                                   @PathVariable Long bloggerId,
-                                   @RequestParam("ids") String ids) {
+    @DeleteMapping("/patch")
+    public ResultModel deletePatch(
+            @Uid Long bloggerId,
+            @RequestParam("ids") String ids) {
 
         Long[] blogIds = StringUtils.longStringDistinctToArray(ids, ",");
         if (CollectionUtils.isEmpty(blogIds))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         for (Long id : blogIds) {
-            handleBlogExistAndCreatorCheck(request, bloggerId, id);
+            handleBlogExistAndCreatorCheck(bloggerId, id);
         }
 
         if (!bloggerBlogService.deleteBlogPatch(bloggerId, blogIds))
@@ -240,10 +250,10 @@ public class BloggerBlogController extends BaseBloggerController {
      * <p>
      * 返回成功导入博文的博文名和id
      */
-    @RequestMapping(value = "/patch", method = RequestMethod.POST)
-    public ResultModel<List<BlogTitleIdDTO>> patchImportBlog(HttpServletRequest request,
-                                                             @PathVariable Long bloggerId,
-                                                             @RequestParam("zipFile") MultipartFile file) {
+    @PostMapping("/patch")
+    public ResultModel<List<BlogTitleIdDTO>> patchImportBlog(
+            @Uid Long bloggerId,
+            @RequestParam("zipFile") MultipartFile file) {
 
         // 检查是否为 zip 文件
         if (file.isEmpty() || !file.getOriginalFilename().endsWith(".zip"))
@@ -260,9 +270,9 @@ public class BloggerBlogController extends BaseBloggerController {
     /**
      * 下载博文
      */
-    @RequestMapping(value = "/download-type={type}", method = RequestMethod.GET)
-    public void download(HttpServletRequest request, HttpServletResponse response,
-                         @PathVariable Long bloggerId,
+    @GetMapping("/download-type={type}")
+    public void download(HttpServletResponse response,
+                         @Uid Long bloggerId,
                          @PathVariable String type) {
 
         // 检查请求的文件类别
@@ -275,7 +285,7 @@ public class BloggerBlogController extends BaseBloggerController {
         if (StringUtils.isEmpty(zipFilePath)) handlerOperateFail();
 
         // 输出文件流
-        outFile(zipFilePath, request, response);
+        outFile(zipFilePath, response);
 
         // 删除临时 zip 文件
         File file = new File(zipFilePath);
@@ -284,7 +294,7 @@ public class BloggerBlogController extends BaseBloggerController {
     }
 
     // 输出文件流
-    private void outFile(String zipFilePath, HttpServletRequest request, HttpServletResponse response) {
+    private void outFile(String zipFilePath, HttpServletResponse response) {
 
         try (ServletOutputStream os = response.getOutputStream()) {
             File zipFile = new File(zipFilePath);
@@ -308,13 +318,13 @@ public class BloggerBlogController extends BaseBloggerController {
     }
 
     // 检查博文是否存在，且博文是否属于指定博主
-    private void handleBlogExistAndCreatorCheck(HttpServletRequest request, Long bloggerId, Long blogId) {
+    private void handleBlogExistAndCreatorCheck(Long bloggerId, Long blogId) {
         if (!blogValidateService.isCreatorOfBlog(bloggerId, blogId))
             throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
     }
 
     // 检查类别和标签
-    private void handleCategoryAndLabelCheck(HttpServletRequest request, Long bloggerId, Long[] cids, Long[] lids) {
+    private void handleCategoryAndLabelCheck(Long bloggerId, Long[] cids, Long[] lids) {
 
         if (!CollectionUtils.isEmpty(cids)) {
             for (Long id : cids) {
@@ -333,7 +343,7 @@ public class BloggerBlogController extends BaseBloggerController {
     }
 
     //博文内容审核
-    private void handleBlogContentCheck(HttpServletRequest request, String title, String content, String contentMd, String summary,
+    private void handleBlogContentCheck(String title, String content, String contentMd, String summary,
                                         String keyWords) {
         if (!blogValidateService.verifyBlog(title, content, contentMd, summary, keyWords))
             throw ResultUtil.failException(CodeMessage.BLOG_ILLEGAL);
@@ -341,9 +351,9 @@ public class BloggerBlogController extends BaseBloggerController {
     }
 
     // 检查排序规则
-    private void handleSortRuleCheck(HttpServletRequest request, String sort, String order) {
+    private void handleSortRuleCheck(String sort, String order) {
 
-        if (sort != null && !Rule.contains(sort)) {
+        if (sort != null && !com.duan.blogos.service.common.Rule.contains(sort)) {
             throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);
         }
 

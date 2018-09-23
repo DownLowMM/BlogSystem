@@ -2,6 +2,7 @@ package com.duan.blogos.service.service.blogger;
 
 
 import com.duan.blogos.service.dto.blog.BlogLabelDTO;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 
 import java.util.List;
@@ -63,9 +64,7 @@ public interface BloggerLabelService {
      * 获取指定博主创建的所有标签
      *
      * @param bloggerId 博主id
-     * @param offset    结果集偏移量
-     * @param rows      行数
      * @return 查询结果
      */
-    ResultModel<List<BlogLabelDTO>> listLabelByBlogger(Long bloggerId, int offset, int rows);
+    ResultModel<PageResult<BlogLabelDTO>> listLabelByBlogger(Long bloggerId, Integer pageNum, Integer pageSize);
 }

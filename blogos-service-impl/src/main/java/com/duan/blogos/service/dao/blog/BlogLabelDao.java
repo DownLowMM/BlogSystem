@@ -45,13 +45,9 @@ public interface BlogLabelDao extends BaseDao<BlogLabel> {
      * 获取指定博主创建的所有标签
      *
      * @param bloggerId 博主id
-     * @param offset    结果集偏移
-     * @param rows      行数
      * @return 查询结果
      */
-    List<BlogLabel> listLabelByBloggerId(@Param("bloggerId") Long bloggerId,
-                                         @Param("offset") int offset,
-                                         @Param("rows") int rows);
+    List<BlogLabel> listLabelByBloggerId(@Param("bloggerId") Long bloggerId);
 
     /**
      * 统计指定博主创建的标签数量

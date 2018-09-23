@@ -10,11 +10,14 @@ import com.duan.blogos.service.entity.blog.BlogLabel;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.DataFillingManager;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import com.duan.common.util.ArrayUtils;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -119,14 +122,18 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
     }
 
     @Override
-    public ResultModel<List<BlogLabelDTO>> listLabelByBlogger(Long bloggerId, int offset, int rows) {
-        offset = offset < 0 ? 0 : offset;
-        rows = rows < 0 ? defaultProperties.getLabelCount() : rows;
+    public ResultModel<PageResult<BlogLabelDTO>> listLabelByBlogger(Long bloggerId, Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
+        pageSize = pageSize == null || pageSize < 1 ? defaultProperties.getLabelCount() : pageSize;
 
-        List<BlogLabel> result = labelDao.listLabelByBloggerId(bloggerId, offset, rows);
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<BlogLabel> pageInfo = new PageInfo<>(labelDao.listLabelByBloggerId(bloggerId));
+
+        List<BlogLabel> result = pageInfo.getList();
         if (CollectionUtils.isEmpty(result)) return null;
 
         List<BlogLabelDTO> dtos = result.stream().map(dataFillingManager::blogLabel2DTO).collect(Collectors.toList());
-        return new ResultModel<>(dtos);
+
+        return new ResultModel<>(new PageResult<>(pageInfo.getTotal(), dtos));
     }
 }
