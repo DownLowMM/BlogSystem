@@ -1,7 +1,5 @@
 package com.duan.blogos.api.blogger;
 
-import com.duan.base.util.common.CollectionUtils;
-import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
@@ -14,6 +12,8 @@ import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
+import com.duan.common.util.CollectionUtils;
+import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -257,7 +257,7 @@ public class BloggerBlogController extends BaseBloggerController {
         if (file.isEmpty() || !file.getOriginalFilename().endsWith(".zip"))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        com.duan.base.util.file.MultipartFile fi = null;// TODO 转化
+        com.duan.common.util.MultipartFile fi = null;// TODO 转化
         List<BlogTitleIdDTO> blogsTitles = bloggerBlogService.insertBlogPatch(fi, bloggerId);
         if (CollectionUtils.isEmpty(blogsTitles))
             handlerOperateFail();

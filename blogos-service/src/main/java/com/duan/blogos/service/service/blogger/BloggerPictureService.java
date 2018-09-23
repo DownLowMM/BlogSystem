@@ -1,9 +1,9 @@
 package com.duan.blogos.service.service.blogger;
 
-import com.duan.base.util.file.MultipartFile;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.restful.ResultModel;
+import com.duan.common.util.MultipartFile;
 
 import java.util.List;
 

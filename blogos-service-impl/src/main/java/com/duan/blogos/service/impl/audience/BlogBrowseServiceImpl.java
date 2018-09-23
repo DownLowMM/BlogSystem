@@ -1,8 +1,6 @@
 package com.duan.blogos.service.impl.audience;
 
 
-import com.duan.base.util.common.CollectionUtils;
-import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
@@ -28,6 +26,8 @@ import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
+import com.duan.common.util.CollectionUtils;
+import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

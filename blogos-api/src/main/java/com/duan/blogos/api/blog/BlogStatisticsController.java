@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blog;
 
+import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.exception.CodeMessage;
@@ -7,10 +8,7 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,10 +32,9 @@ public class BlogStatisticsController extends BaseBlogController {
     /**
      * 获得博文统计信息
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<BlogStatisticsDTO> get(HttpServletRequest request,
-                                              @PathVariable Integer blogId) {
-        handleBlogStatisticsExistCheck(request, blogId);
+    @GetMapping
+    public ResultModel<BlogStatisticsDTO> get(@Uid Long uid, @PathVariable Integer blogId) {
+        handleBlogStatisticsExistCheck(blogId);
 
         ResultModel<BlogStatisticsDTO> result = statisticsService.getBlogStatistics(blogId);
         if (result == null) handlerEmptyResult();
@@ -51,7 +48,7 @@ public class BlogStatisticsController extends BaseBlogController {
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public ResultModel<BlogStatisticsCountDTO> getCount(HttpServletRequest request,
                                                         @PathVariable Integer blogId) {
-        handleBlogStatisticsExistCheck(request, blogId);
+        handleBlogStatisticsExistCheck(blogId);
 
         ResultModel<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
         if (statistics == null) handlerEmptyResult();
@@ -60,7 +57,7 @@ public class BlogStatisticsController extends BaseBlogController {
     }
 
     // 检查博文的统计信息是否存在
-    private void handleBlogStatisticsExistCheck(HttpServletRequest request, int blogId) {
+    private void handleBlogStatisticsExistCheck(int blogId) {
         if (!blogValidateService.checkBlogStatisticExist(blogId))
             throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
     }

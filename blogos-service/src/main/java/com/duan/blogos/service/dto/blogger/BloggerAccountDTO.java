@@ -13,8 +13,8 @@ import java.sql.Timestamp;
 @Data
 public class BloggerAccountDTO implements Serializable {
 
-    //id
-    private Integer id;
+    //id 和前端 json 交换数据时 long 会丢失精度，用 String
+    private String id;
 
     //用户名
     private String username;

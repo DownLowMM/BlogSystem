@@ -1,6 +1,8 @@
 server:
   port: 7070
 
+app:
+  name: blogos
 
 # 直接依赖 blog-service-impl 项目，而不是 rpc 的方式，因此需要将配置移到这里
 spring:
@@ -59,8 +61,8 @@ mybatis:
 redis:
   key:
     expire: 2592000
-  token:
-    expire-day: 30
+    token:
+      expire-day: 30
 
 jisu:
   appkey: 5171de6ae9fd57a6

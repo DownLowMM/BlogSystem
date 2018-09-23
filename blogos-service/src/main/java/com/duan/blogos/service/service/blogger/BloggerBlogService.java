@@ -1,6 +1,5 @@
 package com.duan.blogos.service.service.blogger;
 
-import com.duan.base.util.file.MultipartFile;
 import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
 import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
@@ -8,6 +7,7 @@ import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilter;
+import com.duan.common.util.MultipartFile;
 
 import java.util.List;
 

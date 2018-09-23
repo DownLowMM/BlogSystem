@@ -1,6 +1,5 @@
 package com.duan.blogos.service.impl.audience;
 
-import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.dao.blog.BlogCollectDao;
 import com.duan.blogos.service.dao.blog.BlogComplainDao;
 import com.duan.blogos.service.dao.blog.BlogLikeDao;
@@ -9,6 +8,7 @@ import com.duan.blogos.service.entity.blog.BlogCollect;
 import com.duan.blogos.service.entity.blog.BlogComplain;
 import com.duan.blogos.service.entity.blog.BlogLike;
 import com.duan.blogos.service.service.audience.BlogOperateService;
+import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

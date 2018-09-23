@@ -1,7 +1,7 @@
 package com.duan.blogos.service.enums;
 
 
-import com.duan.base.util.common.StringUtils;
+import com.duan.common.util.StringUtils;
 
 /**
  * Created on 2018/4/5.

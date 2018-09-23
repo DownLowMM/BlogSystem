@@ -1,7 +1,5 @@
 package com.duan.blogos.service.impl;
 
-import com.duan.base.util.common.CollectionUtils;
-import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
@@ -15,6 +13,8 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.manager.comparator.BlogListItemComparatorFactory;
 import com.duan.blogos.service.service.BlogFilter;
+import com.duan.common.util.CollectionUtils;
+import com.duan.common.util.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

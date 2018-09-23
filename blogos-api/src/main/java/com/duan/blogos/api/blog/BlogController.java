@@ -1,7 +1,5 @@
 package com.duan.blogos.api.blog;
 
-import com.duan.base.util.common.CollectionUtils;
-import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
@@ -13,6 +11,8 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.blogos.service.service.audience.BlogRetrievalService;
+import com.duan.common.util.CollectionUtils;
+import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

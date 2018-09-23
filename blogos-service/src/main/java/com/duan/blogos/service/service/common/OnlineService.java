@@ -13,7 +13,7 @@ public interface OnlineService {
     /**
      * 获得登录博主id，未登录返回-1
      */
-    int getLoginBloggerId(String token);
+    long getLoginBloggerId(String token);
 
     /**
      * 登入
@@ -23,5 +23,5 @@ public interface OnlineService {
     /**
      * 登出
      */
-    ResultModel logout(BloggerAccountDTO account);
+    ResultModel logout(Long uid);
 }

@@ -1,12 +1,13 @@
 package com.duan.blogos.service.manager;
 
-import com.duan.base.util.common.CollectionUtils;
-import com.duan.base.util.common.StringUtils;
 import com.duan.blogos.service.dto.blog.*;
 import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
 import com.duan.blogos.service.dto.blogger.*;
 import com.duan.blogos.service.entity.blog.*;
 import com.duan.blogos.service.entity.blogger.*;
+import com.duan.common.util.ArrayUtils;
+import com.duan.common.util.CollectionUtils;
+import com.duan.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,6 +22,9 @@ import java.util.List;
 public class DataFillingManager {
 
     public BlogStatisticsCountDTO blogStatisticsCountToDTO(BlogStatistics statistics) {
+        if (statistics == null) {
+            return null;
+        }
 
         BlogStatisticsCountDTO dto = new BlogStatisticsCountDTO();
         dto.setAdmireCount(statistics.getAdmireCount());
@@ -37,6 +41,10 @@ public class DataFillingManager {
     }
 
     public BlogCommentDTO blogCommentToDTO(BlogComment comment, BloggerDTO spokesman) {
+        if (comment == null) {
+            return null;
+        }
+
         BlogCommentDTO dto = new BlogCommentDTO();
         dto.setBlogId(comment.getBlogId());
         dto.setContent(comment.getContent());
@@ -48,6 +56,10 @@ public class DataFillingManager {
     }
 
     public BloggerDTO bloggerAccountToDTO(BloggerAccount account, BloggerProfile profile, BloggerPicture avatar) {
+        if (account == null) {
+            return null;
+        }
+
         BloggerDTO dto = new BloggerDTO();
         dto.setId(account.getId());
         dto.setRegisterDate(account.getRegisterDate());
@@ -62,6 +74,10 @@ public class DataFillingManager {
                                                                               BlogCategory[] categories,
                                                                               BlogLabel[] labels,
                                                                               Blog blog, String blogImg) {
+        if (statistics == null || blog == null) {
+            return null;
+        }
+
         com.duan.blogos.service.dto.blog.BlogListItemDTO dto = new com.duan.blogos.service.dto.blog.BlogListItemDTO();
         dto.setCategories(blogCategory2DTO(categories));
         dto.setLabels(blogLabel2DTO(labels));
@@ -79,6 +95,10 @@ public class DataFillingManager {
     }
 
     public BloggerLinkDTO bloggerLinkToDTO(BloggerLink link, BloggerPicture icon) {
+        if (link == null || icon == null) {
+            return null;
+        }
+
         BloggerLinkDTO dto = new BloggerLinkDTO();
         dto.setBewrite(link.getBewrite());
         dto.setBloggerId(link.getBloggerId());
@@ -102,10 +122,13 @@ public class DataFillingManager {
 
     public BlogMainContentDTO blogMainContentToDTO(Blog blog, List<BlogCategory> categories, List<BlogLabel> labels,
                                                    String splitChar) {
+        if (blog == null) {
+            return null;
+        }
 
         BlogMainContentDTO dto = new BlogMainContentDTO();
-        dto.setCategories(categories == null ? null : blogCategory2DTO(categories));
-        dto.setLabels(labels == null ? null : blogLabel2DTO(labels));
+        dto.setCategories(blogCategory2DTO(categories));
+        dto.setLabels(blogLabel2DTO(labels));
         dto.setId(blog.getId());
         dto.setKeyWords(StringUtils.stringArrayToArray(blog.getKeyWords(), splitChar));
         dto.setNearestModifyDate(blog.getNearestModifyDate());
@@ -120,6 +143,10 @@ public class DataFillingManager {
     }
 
     public BloggerCategoryDTO blogCategoryToDTO(BlogCategory category, BloggerPicture icon, int count) {
+        if (category == null) {
+            return null;
+        }
+
         BloggerCategoryDTO dto = new BloggerCategoryDTO();
         dto.setBloggerId(category.getBloggerId());
         dto.setCreateDate(category.getCreateDate());
@@ -133,8 +160,12 @@ public class DataFillingManager {
 
     public BlogListItemDTO bloggerBlogListItemToDTO(Blog blog, BlogStatistics statistics,
                                                     List<BlogCategory> categories) {
+        if (blog == null || statistics == null) {
+            return null;
+        }
+
         BlogListItemDTO dto = new BlogListItemDTO();
-        dto.setCategories(CollectionUtils.isEmpty(categories) ? null : blogCategory2DTO(categories));
+        dto.setCategories(blogCategory2DTO(categories));
         dto.setCollectCount(statistics.getCollectCount());
         dto.setCommentCount(statistics.getCommentCount());
         dto.setComplainCount(statistics.getComplainCount());
@@ -153,6 +184,10 @@ public class DataFillingManager {
     public BlogStatisticsDTO blogStatisticsToDTO(Blog blog, BlogStatistics statistics, BlogCategory[] categories,
                                                  BlogLabel[] labels, BloggerDTO[] likes, BloggerDTO[] collects,
                                                  BloggerDTO[] commenter, String splitChar) {
+        if (blog == null || statistics == null) {
+            return null;
+        }
+
         BlogStatisticsDTO dto = new BlogStatisticsDTO();
         dto.setCategories(blogCategory2DTO(categories));
         dto.setCollects(collects);
@@ -189,7 +224,11 @@ public class DataFillingManager {
         return dto;
     }
 
-    public FavouriteBlogListItemDTO collectBlogListItemToDTO(int bloggerId, BlogCollect collect, com.duan.blogos.service.dto.blog.BlogListItemDTO blog, BloggerDTO author) {
+    public FavouriteBlogListItemDTO collectBlogListItemToDTO(int bloggerId, BlogCollect collect,
+                                                             com.duan.blogos.service.dto.blog.BlogListItemDTO blog, BloggerDTO author) {
+        if (collect == null) {
+            return null;
+        }
         FavouriteBlogListItemDTO dto = new FavouriteBlogListItemDTO();
         dto.setAuthor(author);
         dto.setBlog(blog);
@@ -200,7 +239,12 @@ public class DataFillingManager {
         return dto;
     }
 
-    public FavouriteBlogListItemDTO likeBlogListItemToDTO(int bloggerId, BlogLike like, com.duan.blogos.service.dto.blog.BlogListItemDTO blog, BloggerDTO liker) {
+    public FavouriteBlogListItemDTO likeBlogListItemToDTO(int bloggerId, BlogLike like,
+                                                          com.duan.blogos.service.dto.blog.BlogListItemDTO blog, BloggerDTO liker) {
+        if (like == null) {
+            return null;
+        }
+
         FavouriteBlogListItemDTO dto = new FavouriteBlogListItemDTO();
         dto.setAuthor(liker);
         dto.setBlog(blog);
@@ -220,6 +264,10 @@ public class DataFillingManager {
 // ------------------------------------------------------------------------------------------------
 
     public BlogLabelDTO blogLabel2DTO(BlogLabel label) {
+        if (label == null) {
+            return null;
+        }
+
         BlogLabelDTO d = new BlogLabelDTO();
         d.setId(label.getId());
         d.setBloggerId(label.getBloggerId());
@@ -230,6 +278,10 @@ public class DataFillingManager {
     }
 
     public BlogCategoryDTO blogCategory2DTO(BlogCategory category) {
+        if (category == null) {
+            return null;
+        }
+
         BlogCategoryDTO d = new BlogCategoryDTO();
         d.setId(category.getId());
         d.setBloggerId(category.getBloggerId());
@@ -241,6 +293,10 @@ public class DataFillingManager {
     }
 
     public BlogLabelDTO[] blogLabel2DTO(List<BlogLabel> labels) {
+        if (CollectionUtils.isEmpty(labels)) {
+            return null;
+        }
+
         BlogLabelDTO[] dtos = new BlogLabelDTO[labels.size()];
         for (int i = 0; i < labels.size(); i++) {
             dtos[i] = blogLabel2DTO(labels.get(i));
@@ -250,6 +306,10 @@ public class DataFillingManager {
     }
 
     public BlogCategoryDTO[] blogCategory2DTO(List<BlogCategory> categories) {
+        if (CollectionUtils.isEmpty(categories)) {
+            return null;
+        }
+
         BlogCategoryDTO[] dtos = new BlogCategoryDTO[categories.size()];
         for (int i = 0; i < categories.size(); i++) {
             dtos[i] = blogCategory2DTO(categories.get(i));
@@ -259,6 +319,9 @@ public class DataFillingManager {
     }
 
     public BloggerPictureDTO bloggerPicture2DTO(BloggerPicture avatar) {
+        if (avatar == null) {
+            return null;
+        }
 
         BloggerPictureDTO pictureDTO = new BloggerPictureDTO();
         pictureDTO.setId(avatar.getId());
@@ -273,6 +336,9 @@ public class DataFillingManager {
     }
 
     public BloggerProfileDTO bloggerProfile2DTO(BloggerProfile profile) {
+        if (profile == null) {
+            return null;
+        }
 
         BloggerProfileDTO profileDTO = new BloggerProfileDTO();
         profileDTO.setId(profile.getId());
@@ -287,6 +353,9 @@ public class DataFillingManager {
     }
 
     public BlogCategoryDTO[] blogCategory2DTO(BlogCategory[] categories) {
+        if (ArrayUtils.isEmpty(categories)) {
+            return null;
+        }
 
         BlogCategoryDTO[] cs = new BlogCategoryDTO[categories.length];
         for (int i = 0; i < categories.length; i++) {
@@ -297,6 +366,10 @@ public class DataFillingManager {
     }
 
     public BlogLabelDTO[] blogLabel2DTO(BlogLabel[] labels) {
+        if (ArrayUtils.isEmpty(labels)) {
+            return null;
+        }
+
         BlogLabelDTO[] bl = new BlogLabelDTO[labels.length];
         for (int i = 0; i < labels.length; i++) {
             bl[i] = blogLabel2DTO(labels[i]);
@@ -306,6 +379,10 @@ public class DataFillingManager {
     }
 
     public BlogBaseStatisticsDTO blogStatistics2DTO(BlogStatistics statistics) {
+        if (statistics == null) {
+            return null;
+        }
+
         BlogBaseStatisticsDTO dto = new BlogBaseStatisticsDTO();
         dto.setId(statistics.getId());
         dto.setBlogId(statistics.getBlogId());
@@ -323,8 +400,12 @@ public class DataFillingManager {
     }
 
     public BloggerAccountDTO bloggerAccount2DTO(BloggerAccount account) {
+        if (account == null) {
+            return null;
+        }
+
         BloggerAccountDTO dto = new BloggerAccountDTO();
-        dto.setId(account.getId());
+        dto.setId(String.valueOf(account.getId()));
         dto.setUsername(account.getUsername());
         dto.setPassword(account.getPassword());
         dto.setRegisterDate(account.getRegisterDate());
@@ -333,6 +414,10 @@ public class DataFillingManager {
     }
 
     public BlogDTO blog2DTO(Blog blog) {
+        if (blog == null) {
+            return null;
+        }
+
         BlogDTO dto = new BlogDTO();
 
         dto.setId(blog.getId());
@@ -353,6 +438,10 @@ public class DataFillingManager {
     }
 
     public BloggerSettingDTO bloggerSetting2DTO(BloggerSetting setting) {
+        if (setting == null) {
+            return null;
+        }
+
         BloggerSettingDTO dto = new BloggerSettingDTO();
 
         dto.setId(setting.getId());

@@ -51,5 +51,15 @@ public class ResultModel<T> implements Serializable {
         this.code = code;
     }
 
+    public static ResultModel success() {
+        return new ResultModel(new Object());
+    }
+
+    public static ResultModel fail() {
+        ResultModel model = new ResultModel(new Object());
+        model.setCode(FAIL);
+
+        return model;
+    }
 
 }
