@@ -124,7 +124,7 @@ public class ImageController extends BaseCheckController {
 
             id = bloggerPictureService.insertPicture(fileTrans(file), bloggerId, bewrite, BloggerPictureCategoryEnum.valueOf(cate),
                     title);
-            if (id <= 0) handlerOperateFail();
+            if (id == null) handlerOperateFail();
         } else {
             throw ResultUtil.failException(CodeMessage.COMMON_PICTURE_FORMAT_ERROR);
         }

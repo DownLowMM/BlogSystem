@@ -64,7 +64,7 @@ public class BloggerOperateController extends BaseBloggerController {
         //执行
         // UPDATE: 2018/1/19 更新 收藏到自己的某一类别不开发，只收藏到一个类别中
         Long id = operateService.insertCollect(blogId, bloggerId, reason, null);
-        if (id <= 0) handlerOperateFail();
+        if (id == null) handlerOperateFail();
 
         return new ResultModel<>(id);
     }
@@ -84,7 +84,7 @@ public class BloggerOperateController extends BaseBloggerController {
 
         //执行
         Long id = operateService.insertComplain(blogId, bloggerId, content);
-        if (id <= 0) handlerOperateFail();
+        if (id == null) handlerOperateFail();
 
         return new ResultModel<>(id);
     }

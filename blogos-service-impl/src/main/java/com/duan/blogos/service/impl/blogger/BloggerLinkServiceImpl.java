@@ -85,7 +85,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
         BloggerLink link = new BloggerLink();
         link.setBewrite(bewrite);
         link.setBloggerId(bloggerId);
-        link.setIconId(iconId < 0 ? null : iconId);
+        link.setIconId(iconId);
         link.setTitle(title);
         link.setUrl(url);
         int effect = linkDao.insert(link);
@@ -104,7 +104,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
         BloggerLink link = linkDao.getLink(linkId);
         Long oldIconId = link.getIconId();
         link.setBewrite(newBewrite);
-        link.setIconId(newIconId < 0 ? null : newIconId);
+        link.setIconId(newIconId);
         link.setTitle(newTitle);
         link.setUrl(newUrl);
         link.setId(linkId);

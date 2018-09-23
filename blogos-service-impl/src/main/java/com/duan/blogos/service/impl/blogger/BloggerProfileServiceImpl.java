@@ -36,14 +36,14 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
         BloggerProfile profile = new BloggerProfile();
         profile.setAboutMe(aboutMe);
         profile.setBloggerId(bloggerId);
-        profile.setAvatarId(avatarId < 0 ? null : avatarId);
+        profile.setAvatarId(avatarId);
         profile.setEmail(email);
         profile.setIntro(intro);
         profile.setPhone(phone);
         int effect = profileDao.insert(profile);
         if (effect <= 0) return null;
 
-        if (avatarId > 0)
+        if (avatarId != null)
             imageManager.imageInsertHandle(bloggerId, avatarId);
 
         return profile.getId();
@@ -65,7 +65,7 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
         int effect = profileDao.update(profile);
         if (effect <= 0) return false;
 
-        if (avatarId > 0)
+        if (avatarId != null)
             imageManager.imageUpdateHandle(bloggerId, avatarId, oldAvatarId);
 
         return true;

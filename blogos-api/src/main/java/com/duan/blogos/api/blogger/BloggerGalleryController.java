@@ -45,7 +45,7 @@ public class BloggerGalleryController extends BaseBloggerController {
                                               @PathVariable("pictureId") Long pictureId) {
 
         RequestContext context = new RequestContext(request);
-        if (pictureId <= 0)
+        if (pictureId == null)
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId, bloggerId);

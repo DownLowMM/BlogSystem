@@ -61,7 +61,7 @@ public class BloggerLabelController extends BaseBloggerController {
         handleTitleCheck(title, request);
 
         Long id = bloggerLabelService.insertLabel(bloggerId, title);
-        if (id < 0) handlerOperateFail();
+        if (id == null) handlerOperateFail();
 
         return new ResultModel<>(id);
     }

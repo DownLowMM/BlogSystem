@@ -45,7 +45,7 @@ public class BloggerCommentController extends BaseBloggerController {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         Long id = commentService.insertComment(blogId, bloggerId, listenerId, RIGHTFUL.getCode(), content);
-        if (id < 0) handlerOperateFail();
+        if (id == null) handlerOperateFail();
 
         return new ResultModel<>(id);
     }

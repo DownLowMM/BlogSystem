@@ -83,7 +83,7 @@ public class BloggerBlogController extends BaseBloggerController {
         String[] kw = StringUtils.stringArrayToArray(keyWords, sp);
         // UPDATE: 2018/1/16 更新 博文审核 图片引用
         Long id = bloggerBlogService.insertBlog(bloggerId, cids, lids, BlogStatusEnum.PUBLIC, title, content, contentMd, summary, kw, false);
-        if (id <= 0) handlerOperateFail();
+        if (id == null) handlerOperateFail();
 
         return new ResultModel<>(id);
     }

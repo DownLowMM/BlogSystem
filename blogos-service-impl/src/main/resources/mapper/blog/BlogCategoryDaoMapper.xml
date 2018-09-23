@@ -19,7 +19,6 @@
         SELECT *
         FROM blog_category
         WHERE blogger_id = #{bloggerId}
-        LIMIT #{offset}, #{rows}
     </select>
 
     <select id="getCategory" resultType="BlogCategory">

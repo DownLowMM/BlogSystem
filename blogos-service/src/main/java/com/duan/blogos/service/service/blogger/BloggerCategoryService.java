@@ -2,9 +2,8 @@ package com.duan.blogos.service.service.blogger;
 
 
 import com.duan.blogos.service.dto.blogger.BloggerCategoryDTO;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
-
-import java.util.List;
 
 /**
  * Created on 2017/12/18.
@@ -18,11 +17,9 @@ public interface BloggerCategoryService {
      * 获取博主创建的博文类别，按时间倒序排序
      *
      * @param bloggerId 博主id
-     * @param offset    结果集起始位置
-     * @param rows      行数
      * @return 查询结果
      */
-    ResultModel<List<BloggerCategoryDTO>> listBlogCategory(Long bloggerId, int offset, int rows);
+    ResultModel<PageResult<BloggerCategoryDTO>> listBlogCategory(Long bloggerId, Integer pageNum, Integer pageSize);
 
     /**
      * 修改类别

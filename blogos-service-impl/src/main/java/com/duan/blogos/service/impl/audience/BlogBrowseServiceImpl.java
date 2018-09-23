@@ -105,7 +105,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     @Override
     public ResultModel<PageResult<BlogCommentDTO>> listBlogComment(Long blogId, Integer pageSize, Integer pageNum) {
         pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
-        pageSize = pageSize == null || pageSize < 0 ? defaultProperties.getCommentCount() : pageSize;
+        pageSize = pageSize == null || pageSize < 1 ? defaultProperties.getCommentCount() : pageSize;
 
         List<BlogCommentDTO> result = new ArrayList<>();
 

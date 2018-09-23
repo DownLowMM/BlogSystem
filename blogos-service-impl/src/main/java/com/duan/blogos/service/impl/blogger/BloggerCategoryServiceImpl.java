@@ -16,11 +16,14 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import com.duan.common.util.ArrayUtils;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,12 +71,15 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     private BlogDao blogDao;
 
     @Override
-    public ResultModel<List<BloggerCategoryDTO>> listBlogCategory(Long bloggerId, int offset, int rows) {
+    public ResultModel<PageResult<BloggerCategoryDTO>> listBlogCategory(Long bloggerId, Integer pageNum, Integer pageSize) {
 
-        offset = offset < 0 ? 0 : offset;
-        rows = rows < 0 ? defaultProperties.getCategoryCount() : rows;
+        pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
+        pageSize = pageSize == null || pageSize < 1 ? defaultProperties.getCategoryCount() : pageSize;
 
-        List<BlogCategory> categories = categoryDao.listCategoryByBloggerId(bloggerId, offset, rows);
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<BlogCategory> pageInfo = new PageInfo<>(categoryDao.listCategoryByBloggerId(bloggerId));
+
+        List<BlogCategory> categories = pageInfo.getList();
         if (CollectionUtils.isEmpty(categories)) return null;
 
         List<BloggerCategoryDTO> result = new ArrayList<>();
@@ -81,7 +87,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
             result.add(getBloggerCategoryDTO(bloggerId, category));
         }
 
-        return new ResultModel<>(result);
+        return new ResultModel<>(new PageResult<>(pageInfo.getTotal(), result));
     }
 
     @Override
@@ -92,7 +98,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
         Long oldIconId = category.getIconId();
         if (!StringUtils.isEmpty(newTitle)) category.setTitle(newTitle);
         if (!StringUtils.isEmpty(newBewrite)) category.setBewrite(newBewrite);
-        if (newIconId > 0) category.setIconId(newIconId);
+        if (newIconId != null) category.setIconId(newIconId);
         category.setId(categoryId);
         int effect = categoryDao.update(category);
         if (effect <= 0) return false;
@@ -108,7 +114,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
 
         BlogCategory category = new BlogCategory();
         category.setBewrite(bewrite);
-        if (iconId > 0) category.setIconId(iconId);
+        if (iconId != null) category.setIconId(iconId);
         category.setBloggerId(bloggerId);
         category.setTitle(title);
         int effect = categoryDao.insert(category);
@@ -142,7 +148,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
         String sp = dbProperties.getStringFiledSplitCharacterForNumber();
 
         // 移除类别即可
-        if (newCategoryId <= 0) {
+        if (newCategoryId == null) {
             blogs.forEach(blog -> {
 
                 Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), sp);

@@ -50,7 +50,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setSubject(subject);
 
             // 邮件体
-            BloggerAccount account = bloggerId > 0 ? accountDao.getAccountById(bloggerId) : null;
+            BloggerAccount account = bloggerId != null ? accountDao.getAccountById(bloggerId) : null;
             helper.setText(account != null ?
                     "from:\n\tusername: " + account.getUsername() + "\n\tid: " + account.getId() + "\n\n" + content + "\n\n\tcontact: " + contact :
                     content + "\n\n\tcontact: " + contact);

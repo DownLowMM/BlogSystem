@@ -58,10 +58,8 @@ public class RestController {
     @ResponseBody
     protected final ResultModel handleException(Throwable e) {
         e.printStackTrace();
-        BlogOSException exception = ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
-        return new ResultModel(exception);
+        return new ResultModel(new BlogOSException(e.getMessage(), CodeMessage.COMMON_UNKNOWN_ERROR.getCode()));
     }
-
 
     /**
      * 统一处理“请求参数缺失”错误

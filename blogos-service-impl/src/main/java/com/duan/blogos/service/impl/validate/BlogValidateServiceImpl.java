@@ -36,7 +36,7 @@ public class BlogValidateServiceImpl implements BlogValidateService {
 
     @Override
     public boolean checkBlogExist(Long blogId) {
-        return blogId > 0 && bloggerBlogService.getBlogForCheckExist(blogId);
+        return blogId != null && bloggerBlogService.getBlogForCheckExist(blogId);
     }
 
     @Override

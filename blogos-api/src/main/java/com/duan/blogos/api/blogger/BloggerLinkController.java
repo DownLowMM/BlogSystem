@@ -59,14 +59,14 @@ public class BloggerLinkController extends BaseBloggerController {
                            @RequestParam("title") String title,
                            @RequestParam("url") String url,
                            @RequestParam(value = "bewrite", required = false) String bewrite) {
-        handlePictureExistCheck(request, bloggerId, iconId);
+        handlePictureExistCheck(bloggerId, iconId);
 
         //检查title和url规范
         if (StringUtils.isEmpty(title) || !StringUtils.isURL(url))
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         Long id = bloggerLinkService.insertBloggerLink(bloggerId, iconId == null ? -1 : iconId, title, url, bewrite);
-        if (id <= 0) handlerOperateFail();
+        if (id == null) handlerOperateFail();
 
         return new ResultModel<>(id);
     }
@@ -89,7 +89,7 @@ public class BloggerLinkController extends BaseBloggerController {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
-        handlePictureExistCheck(request, bloggerId, newIconId);
+        handlePictureExistCheck(bloggerId, newIconId);
         checkLinkExist(linkId, context);
 
         //检查url规范

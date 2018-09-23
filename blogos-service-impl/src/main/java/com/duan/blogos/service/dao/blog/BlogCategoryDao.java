@@ -27,13 +27,9 @@ public interface BlogCategoryDao extends BaseDao<BlogCategory> {
      * 查询博主创建的所有博文类别
      *
      * @param bloggerId 博主id
-     * @param offset    结果集偏移
-     * @param rows      行数
      * @return 查询结果
      */
-    List<BlogCategory> listCategoryByBloggerId(@Param("bloggerId") Long bloggerId,
-                                               @Param("offset") int offset,
-                                               @Param("rows") int rows);
+    List<BlogCategory> listCategoryByBloggerId(@Param("bloggerId") Long bloggerId);
 
     /**
      * 在限定博主的情况下获取指定id的博文类别

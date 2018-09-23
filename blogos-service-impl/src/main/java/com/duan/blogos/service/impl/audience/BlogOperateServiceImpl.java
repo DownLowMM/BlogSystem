@@ -46,7 +46,7 @@ public class BlogOperateServiceImpl implements BlogOperateService {
 
         BlogCollect collect = new BlogCollect();
         collect.setBlogId(blogId);
-        collect.setCategoryId(categoryId < 0 ? null : categoryId);
+        collect.setCategoryId(categoryId);
         collect.setCollectorId(collectorId);
         collect.setReason(StringUtils.isEmpty(reason) ? null : reason);
         collectDao.insert(collect);

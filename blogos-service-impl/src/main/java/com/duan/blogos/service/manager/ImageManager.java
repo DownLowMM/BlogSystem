@@ -189,7 +189,7 @@ public class ImageManager {
         if (newPictureId.equals(oldPictureId)) return false;
 
         // 将新图片指向图片修改为公开并移动目录（需要的话）
-        if (newPictureId > 0) {
+        if (newPictureId != null) {
             // UPDATE: 2018/1/28 更新 是否“公开”图片由 Service 决定，而不是方法最终调用处
             BloggerPicture picture = pictureDao.getPictureById(newPictureId);
             // 私有图片才有必要对齐进行“公开”处理
@@ -201,7 +201,7 @@ public class ImageManager {
         }
 
         //旧图片useCount--
-        if (oldPictureId != null && oldPictureId > 0) {
+        if (oldPictureId != null) {
             pictureDao.updateUseCountMinus(oldPictureId);
         }
 
@@ -216,7 +216,7 @@ public class ImageManager {
      * @return 操作成功返回true
      */
     public boolean imageInsertHandle(Long bloggerId, Long pictureId) {
-        if (pictureId < 0) return false;
+        if (pictureId == null) return false;
 
         try {
             return moveImageAndUpdateDbAndUseCountIfNecessary(bloggerId, pictureId, null);
@@ -236,7 +236,7 @@ public class ImageManager {
      */
     public boolean imageUpdateHandle(Long bloggerId, Long newPictureId, Long oldPictureId) {
 
-        if (newPictureId > 0 && !newPictureId.equals(oldPictureId)) {
+        if (newPictureId != null && !newPictureId.equals(oldPictureId)) {
             try {
                 return moveImageAndUpdateDbAndUseCountIfNecessary(bloggerId, newPictureId,
                         Optional.ofNullable(oldPictureId).orElse(null));

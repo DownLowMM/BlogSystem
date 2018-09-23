@@ -61,12 +61,12 @@ public class BloggerProfileController extends BaseBloggerController {
                            @RequestParam(value = "email", required = false) String email,
                            @RequestParam(value = "aboutMe", required = false) String aboutMe,
                            @RequestParam(value = "intro", required = false) String intro) {
-        handlePictureExistCheck(request, bloggerId, avatarId);
+        handlePictureExistCheck(bloggerId, avatarId);
 
         handleParamsCheck(phone, email, request);
-        Long id = bloggerProfileService.insertBloggerProfile(bloggerId, avatarId == null || avatarId <= 0 ? -1 : avatarId,
+        Long id = bloggerProfileService.insertBloggerProfile(bloggerId, avatarId,
                 phone, email, aboutMe, intro);
-        if (id <= 0) handlerOperateFail();
+        if (id == null) handlerOperateFail();
 
         return new ResultModel<>(id);
     }
@@ -87,11 +87,10 @@ public class BloggerProfileController extends BaseBloggerController {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
-        handlePictureExistCheck(request, bloggerId, avatarId);
+        handlePictureExistCheck(bloggerId, avatarId);
 
         handleParamsCheck(phone, email, request);
-        Long av = avatarId == null || avatarId <= 0 ? -1 : avatarId;
-        boolean result = bloggerProfileService.updateBloggerProfile(bloggerId, av, phone, email, aboutMe, intro);
+        boolean result = bloggerProfileService.updateBloggerProfile(bloggerId, avatarId, phone, email, aboutMe, intro);
         if (!result) handlerOperateFail();
 
         return new ResultModel<>("");
@@ -124,7 +123,7 @@ public class BloggerProfileController extends BaseBloggerController {
         String base = base64urlData.replaceFirst("^data:image/(png|jpg);base64,", "");
         byte[] bs = Base64.getDecoder().decode(base);
         Long id = bloggerPictureService.insertPicture(bs, bloggerId, "once-avatar-" + bloggerId + ".png", "", BloggerPictureCategoryEnum.PUBLIC, "");
-        if (id <= 0) handlerOperateFail();
+        if (id == null) handlerOperateFail();
 
         boolean res = bloggerProfileService.updateBloggerProfile(bloggerId, id, null, null, null, null);
         if (!res) handlerOperateFail();
