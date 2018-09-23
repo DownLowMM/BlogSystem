@@ -19,14 +19,17 @@ public class ResultModel<T> implements Serializable {
      * 结果状态为成功
      */
     public static final int SUCCESS = 200;
+
     /**
      * 结果状态为失败
      */
     public static final int FAIL = 500;
-    private static final long serialVersionUID = -4101051436094606437L;
     public int code = SUCCESS;
     private String msg = "success";
     private T data;
+
+    public ResultModel() {
+    }
 
     /**
      * 返回成功的构造函数
@@ -52,13 +55,11 @@ public class ResultModel<T> implements Serializable {
     }
 
     public static ResultModel success() {
-        return new ResultModel(new Object());
+        return new ResultModel();
     }
 
     public static ResultModel fail() {
-        ResultModel model = new ResultModel(new Object());
-        model.setCode(FAIL);
-
+        ResultModel model = new ResultModel("fail", FAIL);
         return model;
     }
 

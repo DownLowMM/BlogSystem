@@ -7,9 +7,8 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.util.TokenUtil;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.CurrentUserThreadLocal;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.duan.blogos.util.SpringUtil;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -21,11 +20,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author DuanJiaNing
  */
-@Component
 public class TokenInterceptor extends HandlerInterceptorAdapter {
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate = (RedisTemplate) SpringUtil.getBean("redisTemplate");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

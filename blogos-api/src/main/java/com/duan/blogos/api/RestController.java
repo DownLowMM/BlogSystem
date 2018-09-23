@@ -47,6 +47,7 @@ public class RestController {
     @ResponseBody
     // 注解无法继承，所以子类不允许覆盖这些方法
     protected final ResultModel handleException(BlogOSException e) {
+        e.printStackTrace();
         return new ResultModel(e);
     }
 
@@ -56,6 +57,7 @@ public class RestController {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     protected final ResultModel handleException(Throwable e) {
+        e.printStackTrace();
         BlogOSException exception = ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         return new ResultModel(exception);
     }
@@ -67,6 +69,7 @@ public class RestController {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseBody
     protected final ResultModel handlerException(MissingServletRequestParameterException e) {
+        e.printStackTrace();
         BlogOSException exception = ResultUtil.failException(CodeMessage.COMMON_MISSING_REQUEST_PARAMETER, e);
         return new ResultModel(exception);
     }
@@ -77,6 +80,7 @@ public class RestController {
     @ExceptionHandler(TypeMismatchException.class)
     @ResponseBody
     protected final ResultModel handlerException(TypeMismatchException e) {
+        e.printStackTrace();
         return new ResultModel(ResultUtil.failException(CodeMessage.COMMON_PARAMETER_TYPE_MISMATCH, e));
     }
 

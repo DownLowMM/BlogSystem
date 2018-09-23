@@ -2,7 +2,6 @@ package com.duan.blogos.config.interceptor;
 
 
 import com.duan.blogos.util.CurrentUserThreadLocal;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +14,6 @@ import java.net.UnknownHostException;
  *
  * @author DuanJiaNing
  */
-@Component
 public class IpInterceptor extends HandlerInterceptorAdapter {
 
     /**

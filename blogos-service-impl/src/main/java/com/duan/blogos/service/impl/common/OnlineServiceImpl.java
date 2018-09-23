@@ -31,6 +31,7 @@ public class OnlineServiceImpl implements OnlineService {
     private BloggerAccountService accountService;
     @Autowired
     private RedisTemplate redisTemplate;
+
     @Value("${app.name}")
     private String appName;
 
@@ -63,7 +64,7 @@ public class OnlineServiceImpl implements OnlineService {
 
         // 密码错误
         try {
-            if (!acc.getPassword().equals(new BigInteger(StringUtils.toSha(account.getUsername())).toString())) {
+            if (!acc.getPassword().equals(new BigInteger(StringUtils.toSha(account.getPassword())).toString())) {
                 throw ResultUtil.failException(CodeMessage.BLOGGER_PASSWORD_INCORRECT);
             }
         } catch (NoSuchAlgorithmException e) {
@@ -77,10 +78,10 @@ public class OnlineServiceImpl implements OnlineService {
 
         // tokenKey
         String tokenKey = TokenUtil.getTokenKey(uid);
-        valueOperations.set(tokenKey, uid, tokenExpireDay, TimeUnit.DAYS);
+        valueOperations.set(tokenKey, TokenUtil.getToken(uid), tokenExpireDay, TimeUnit.DAYS);
 
         // online record
-        valueOperations.set(appName + ":" + ONLINE_PREFIX + uid, uid, expireTime, TimeUnit.MINUTES);
+        valueOperations.set(appName + ":" + ONLINE_PREFIX + uid, String.valueOf(uid), expireTime, TimeUnit.MINUTES);
 
         return ResultModel.success();
     }
