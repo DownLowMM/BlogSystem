@@ -39,7 +39,7 @@ public class BloggerCommentController extends BaseBloggerController {
                            @RequestParam("content") String content,
                            @RequestParam("listenerId") Integer listenerId) {
         handleBloggerSignInCheck(request, bloggerId);
-        handleBlogExistCheck(request, blogId);
+        handleBlogExistCheck(blogId);
         handleBloggerExist(request, listenerId);
 
         if (StringUtils.isBlank(content) || !commentValidateService.checkCommentContent(content))
@@ -60,7 +60,7 @@ public class BloggerCommentController extends BaseBloggerController {
                               @PathVariable Integer bloggerId,
                               @PathVariable Integer commentId) {
         handleBloggerSignInCheck(request, bloggerId);
-        handleBlogExistCheck(request, blogId);
+        handleBlogExistCheck(blogId);
 
         if (!commentService.deleteComment(commentId, blogId))
             handlerOperateFail();

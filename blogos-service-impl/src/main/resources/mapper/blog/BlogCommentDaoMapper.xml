@@ -9,7 +9,6 @@
         FROM blog_comment
         WHERE blog_id = #{blogId} AND state = #{status}
         ORDER BY release_date
-        LIMIT #{offset}, #{rows}
     </select>
 
     <select id="listAllCommentByBlogId" resultType="BlogComment">

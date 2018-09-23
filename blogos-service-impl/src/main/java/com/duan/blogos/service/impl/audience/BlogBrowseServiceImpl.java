@@ -24,10 +24,13 @@ import com.duan.blogos.service.entity.blogger.BloggerProfile;
 import com.duan.blogos.service.enums.BlogCommentStatusEnum;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +62,7 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     @Autowired
     private DbProperties dbProperties;
 
+    @Autowired
     private WebsiteProperties websiteProperties;
 
     @Autowired
@@ -99,14 +103,17 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     }
 
     @Override
-    public ResultModel<List<BlogCommentDTO>> listBlogComment(int blogId, int offset, int rows) {
-        offset = offset < 0 ? 0 : offset;
-        rows = rows < 0 ? defaultProperties.getCommentCount() : rows;
+    public ResultModel<PageResult<BlogCommentDTO>> listBlogComment(int blogId, Integer pageSize, Integer pageNum) {
+        pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
+        pageSize = pageSize == null || pageSize < 0 ? defaultProperties.getCommentCount() : pageSize;
 
         List<BlogCommentDTO> result = new ArrayList<>();
 
-        List<BlogComment> comments = commentDao.listCommentByBlogId(blogId, offset, rows,
-                BlogCommentStatusEnum.RIGHTFUL.getCode());
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<BlogComment> pageInfo = new PageInfo<>(commentDao.listCommentByBlogId(blogId,
+                BlogCommentStatusEnum.RIGHTFUL.getCode()));
+
+        List<BlogComment> comments = pageInfo.getList();
         for (BlogComment comment : comments) {
 
             //评论者数据
@@ -120,7 +127,11 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
             result.add(dto);
         }
 
-        return CollectionUtils.isEmpty(result) ? null : new ResultModel<>(result);
+        if (CollectionUtils.isEmpty(result)) {
+            return null;
+        }
+
+        return new ResultModel<>(new PageResult<>(pageInfo.getTotal(), result));
     }
 
     private BloggerPicture getAvatar(Integer id) {

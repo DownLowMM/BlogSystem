@@ -20,13 +20,9 @@ public interface BlogCommentDao extends BaseDao<BlogComment> {
      *
      * @param blogId 博文id
      * @param status 博文状态
-     * @param offset 偏移位置
-     * @param rows   行数
      * @return 查询结果
      */
     List<BlogComment> listCommentByBlogId(@Param("blogId") int blogId,
-                                          @Param("offset") int offset,
-                                          @Param("rows") int rows,
                                           @Param("status") int status);
 
     /**

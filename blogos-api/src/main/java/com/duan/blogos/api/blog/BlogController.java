@@ -87,7 +87,7 @@ public class BlogController extends BaseBlogController {
     @RequestMapping(value = "/{blogId}", method = RequestMethod.GET)
     public ResultModel<BlogMainContentDTO> get(HttpServletRequest request,
                                                @PathVariable Integer blogId) {
-        handleBlogExistCheck(request, blogId);
+        handleBlogExistCheck(blogId);
 
         ResultModel<BlogMainContentDTO> mainContent = blogBrowseService.getBlogMainContent(blogId);
         if (mainContent == null) handlerEmptyResult();

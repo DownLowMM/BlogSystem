@@ -50,7 +50,7 @@ public class BaseCheckController extends RestController {
     /**
      * 检查博文是否存在,不存在直接抛出异常
      */
-    protected void handleBlogExistCheck(HttpServletRequest request, Integer blogId) {
+    protected void handleBlogExistCheck(Integer blogId) {
         if (blogId == null || blogId <= 0 || !blogValidateService.checkBlogExist(blogId)) {
             throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
         }

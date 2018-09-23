@@ -110,6 +110,11 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         }
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Class<?> clasz = handlerMethod.getBeanType();
+        if (clasz.isAnnotationPresent(TokenNotRequired.class)) {
+            return false;
+        }
+
         TokenNotRequired checkToken = handlerMethod.getMethod().getAnnotation(TokenNotRequired.class);
         if (checkToken != null) {
             return false;

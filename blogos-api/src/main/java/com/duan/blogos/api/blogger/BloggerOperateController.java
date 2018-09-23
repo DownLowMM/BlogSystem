@@ -38,7 +38,7 @@ public class BloggerOperateController extends BaseBloggerController {
                                  @PathVariable Integer blogId,
                                  @PathVariable Integer bloggerId) {
         handleBloggerSignInCheck(request, bloggerId);
-        handleBlogExistCheck(request, blogId);
+        handleBlogExistCheck(blogId);
 
         //执行
         int count = operateService.insertShare(blogId, bloggerId);
@@ -56,7 +56,7 @@ public class BloggerOperateController extends BaseBloggerController {
                                    @RequestParam(value = "reason", required = false) String reason) {
 
         handleBloggerSignInCheck(request, bloggerId);
-        handleBlogExistCheck(request, blogId);
+        handleBlogExistCheck(blogId);
 
         // 如果博文属于当前博主，收藏失败d
         if (blogValidateService.isCreatorOfBlog(bloggerId, blogId)) {
@@ -83,7 +83,7 @@ public class BloggerOperateController extends BaseBloggerController {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         handleBloggerSignInCheck(request, bloggerId);
-        handleBlogExistCheck(request, blogId);
+        handleBlogExistCheck(blogId);
 
         //执行
         int id = operateService.insertComplain(blogId, bloggerId, content);
@@ -101,7 +101,7 @@ public class BloggerOperateController extends BaseBloggerController {
                                 @PathVariable Integer bloggerId) {
 
         handleBloggerSignInCheck(request, bloggerId);
-        handleBlogExistCheck(request, blogId);
+        handleBlogExistCheck(blogId);
 
         //执行
         int count = operateService.insertLike(blogId, bloggerId);
@@ -118,7 +118,7 @@ public class BloggerOperateController extends BaseBloggerController {
                                      @PathVariable Integer bloggerId) {
 
         handleBloggerSignInCheck(request, bloggerId);
-        handleBlogExistCheck(request, blogId);
+        handleBlogExistCheck(blogId);
 
         //执行
         boolean result = operateService.deleteCollect(bloggerId, blogId);
@@ -136,7 +136,7 @@ public class BloggerOperateController extends BaseBloggerController {
                                   @PathVariable Integer blogId,
                                   @PathVariable Integer bloggerId) {
         handleBloggerSignInCheck(request, bloggerId);
-        handleBlogExistCheck(request, blogId);
+        handleBlogExistCheck(blogId);
 
         //执行
         boolean result = operateService.deleteLike(bloggerId, blogId);
