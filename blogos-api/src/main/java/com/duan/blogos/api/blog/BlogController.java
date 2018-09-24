@@ -8,16 +8,16 @@ import com.duan.blogos.service.dto.blog.BlogMainContentDTO;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
+import com.duan.blogos.service.service.BlogFilterService;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
-import com.duan.blogos.service.service.audience.BlogRetrievalService;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * Created on 2018/2/4.
@@ -32,7 +32,7 @@ import java.util.List;
 public class BlogController extends BaseBlogController {
 
     @Autowired
-    private BlogRetrievalService retrievalService;
+    private BlogFilterService blogFilterService;
 
     @Autowired
     private BlogBrowseService blogBrowseService;
@@ -40,17 +40,16 @@ public class BlogController extends BaseBlogController {
     /**
      * 检索指定博主的博文列表
      */
-    // TODO
     @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<List<BlogListItemDTO>> list(HttpServletRequest request,
-                                                   @RequestParam("bloggerId") Long bloggerId,
-                                                   @RequestParam(value = "cids", required = false) String categoryIds,
-                                                   @RequestParam(value = "lids", required = false) String labelIds,
-                                                   @RequestParam(value = "kword", required = false) String keyWord,
-                                                   @RequestParam(value = "offset", required = false) Integer offset,
-                                                   @RequestParam(value = "rows", required = false) Integer rows,
-                                                   @RequestParam(value = "sort", required = false) String sort,
-                                                   @RequestParam(value = "order", required = false) String order) {
+    public ResultModel<PageResult<BlogListItemDTO>> list(HttpServletRequest request,
+                                                         @RequestParam("bloggerId") Long bloggerId,
+                                                         @RequestParam(value = "cids", required = false) String categoryIds,
+                                                         @RequestParam(value = "lids", required = false) String labelIds,
+                                                         @RequestParam(value = "kword", required = false) String keyWord,
+                                                         @RequestParam(value = "pageNum", required = false) Integer pageNum,
+                                                         @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                                         @RequestParam(value = "sort", required = false) String sort,
+                                                         @RequestParam(value = "order", required = false) String order) {
         handleAccountCheck(bloggerId);
 
         //检查数据合法性
@@ -66,20 +65,7 @@ public class BlogController extends BaseBlogController {
 
         //执行数据查询
         BlogSortRule rule = new BlogSortRule(Rule.valueOf(sor), Order.valueOf(ord));
-        ResultModel<List<BlogListItemDTO>> listResultModel = retrievalService.listFilterAll(cids, lids, keyWord, bloggerId,
-                offset == null ? 0 : offset, rows == null ? 0 : rows, rule, BlogStatusEnum.PUBLIC);
-
-        if (listResultModel == null) handlerEmptyResult();
-
-        return listResultModel;
-    }
-
-    /**
-     * 获得检索结果数量，只有在发起一次检索后才能获得正确的值
-     */
-    @RequestMapping(value = "/count", method = RequestMethod.GET)
-    public ResultModel getCount() {
-        return new ResultModel<>(retrievalService.getFilterCount());
+        return blogFilterService.listFilterAll(cids, lids, keyWord, bloggerId, pageNum, pageSize, rule, BlogStatusEnum.PUBLIC);
     }
 
     /**

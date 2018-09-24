@@ -22,7 +22,8 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.restful.PageResult;
-import com.duan.blogos.service.service.BlogFilter;
+import com.duan.blogos.service.restful.ResultModel;
+import com.duan.blogos.service.service.BlogFilterService;
 import com.duan.common.util.ArrayUtils;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
@@ -44,7 +45,7 @@ import java.util.regex.Pattern;
  * @author DuanJiaNing
  */
 @Component
-public class BlogFilterServiceImpl implements BlogFilter<PageResult<BlogListItemDTO>> {
+public class BlogFilterServiceServiceImpl implements BlogFilterService {
 
     @Autowired
     private DefaultProperties defaultProperties;
@@ -77,9 +78,9 @@ public class BlogFilterServiceImpl implements BlogFilter<PageResult<BlogListItem
     private BlogLabelRelaDao labelRelaDao;
 
     @Override
-    public PageResult<BlogListItemDTO> listFilterAll(Long[] categoryIds, Long[] labelIds, String keyWord,
-                                                     Long bloggerId, Integer pageNum, Integer pageSize, BlogSortRule sortRule,
-                                                     BlogStatusEnum status) {
+    public ResultModel<PageResult<BlogListItemDTO>> listFilterAll(Long[] categoryIds, Long[] labelIds, String keyWord,
+                                                                  Long bloggerId, Integer pageNum, Integer pageSize, BlogSortRule sortRule,
+                                                                  BlogStatusEnum status) {
 
         pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
         pageSize = pageSize == null || pageSize < 1 ? defaultProperties.getBlogCount() : pageSize;
@@ -106,9 +107,9 @@ public class BlogFilterServiceImpl implements BlogFilter<PageResult<BlogListItem
      * @param status      博文状态
      * @return 经过筛选、排序的结果集
      */
-    protected PageResult<BlogListItemDTO> filterByLucene(String keyWord, Long[] categoryIds, Long[] labelIds,
-                                                         Long bloggerId, Integer pageNum, Integer pageSize, BlogSortRule sortRule,
-                                                         BlogStatusEnum status) {
+    protected ResultModel<PageResult<BlogListItemDTO>> filterByLucene(String keyWord, Long[] categoryIds, Long[] labelIds,
+                                                                      Long bloggerId, Integer pageNum, Integer pageSize, BlogSortRule sortRule,
+                                                                      BlogStatusEnum status) {
 
         // ------------------------关键字筛选
         Long[] ids;
@@ -126,17 +127,20 @@ public class BlogFilterServiceImpl implements BlogFilter<PageResult<BlogListItem
         blogIds.addAll(Arrays.asList(ids));
         if (CollectionUtils.isEmpty(blogIds)) return null;
 
-        return constructResult(blogIds, bloggerId, status, sortRule, pageNum, pageSize);
+        PageResult<BlogListItemDTO> res = constructResult(blogIds, bloggerId, status, sortRule, pageNum, pageSize);
+        return new ResultModel<>(res);
     }
 
     @Override
-    public PageResult<BlogListItemDTO> listFilterByLabelAndCategory(Long[] categoryIds, Long[] labelIds,
-                                                                    Long bloggerId, Integer pageNum, Integer pageSize,
-                                                                    BlogSortRule sortRule, BlogStatusEnum status) {
+    public ResultModel<PageResult<BlogListItemDTO>> listFilterByLabelAndCategory(Long[] categoryIds, Long[] labelIds,
+                                                                                 Long bloggerId, Integer pageNum, Integer pageSize,
+                                                                                 BlogSortRule sortRule, BlogStatusEnum status) {
 
         Set<Long> blogIds = filterByCategoryAndLabels(categoryIds, labelIds, bloggerId);
         if (CollectionUtils.isEmpty(blogIds)) return null;
-        return constructResult(blogIds, bloggerId, status, sortRule, pageNum, pageSize);
+
+        PageResult<BlogListItemDTO> res = constructResult(blogIds, bloggerId, status, sortRule, pageNum, pageSize);
+        return new ResultModel<>(res);
 
     }
 

@@ -4,6 +4,8 @@ package com.duan.blogos.service.impl.audience;
 import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
+import com.duan.blogos.service.dao.BlogCategoryRelaDao;
+import com.duan.blogos.service.dao.BlogLabelRelaDao;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blog.BlogCommentDao;
 import com.duan.blogos.service.dao.blog.BlogDao;
@@ -14,6 +16,8 @@ import com.duan.blogos.service.dao.blogger.BloggerProfileDao;
 import com.duan.blogos.service.dto.blog.BlogCommentDTO;
 import com.duan.blogos.service.dto.blog.BlogMainContentDTO;
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
+import com.duan.blogos.service.entity.BlogCategoryRela;
+import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.entity.blog.BlogCategory;
 import com.duan.blogos.service.entity.blog.BlogComment;
@@ -28,7 +32,6 @@ import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
 import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,17 +86,26 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
     @Autowired
     private BloggerProfileDao profileDao;
 
+    @Autowired
+    private BlogCategoryRelaDao categoryRelaDao;
+
+    @Autowired
+    private BlogLabelRelaDao labelRelaDao;
+
     @Override
     public ResultModel<BlogMainContentDTO> getBlogMainContent(Long blogId) {
 
         //查询数据
         Blog blog = blogDao.getBlogById(blogId);
         if (blog == null) return null;
-        String nsp = dbProperties.getStringFiledSplitCharacterForNumber();
-        Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), nsp);
-        Long[] lids = StringUtils.longStringDistinctToArray(blog.getLabelIds(), nsp);
-        List<BlogCategory> categories = cids == null ? null : categoryDao.listCategoryById(cids);
-        List<BlogLabel> labels = lids == null ? null : labelDao.listLabelById(lids);
+        List<BlogCategoryRela> cads = categoryRelaDao.listAllByBlogId(blog.getId());
+
+        List<BlogCategory> categories = CollectionUtils.isEmpty(cads) ? null :
+                categoryDao.listCategoryById(cads.stream().map(BlogCategoryRela::getCategoryId).toArray(Long[]::new));
+
+        List<BlogLabelRela> las = labelRelaDao.listAllByBlogId(blog.getId());
+        List<BlogLabel> labels = CollectionUtils.isEmpty(las) ? null :
+                labelDao.listLabelById(las.stream().map(BlogLabelRela::getLabelId).toArray(Long[]::new));
 
         //填充数据
         BlogMainContentDTO dto = dataFillingManager.blogMainContentToDTO(blog, categories, labels,

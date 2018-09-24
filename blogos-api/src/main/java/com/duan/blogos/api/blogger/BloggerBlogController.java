@@ -5,12 +5,15 @@ import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.dto.blog.BlogDTO;
+import com.duan.blogos.service.dto.blog.BlogListItemDTO;
 import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
+import com.duan.blogos.service.service.BlogFilterService;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
@@ -50,6 +53,9 @@ public class BloggerBlogController extends BaseBloggerController {
 
     @Autowired
     private BloggerBlogService bloggerBlogService;
+
+    @Autowired
+    private BlogFilterService blogFilterService;
 
     /**
      * 新增博文
@@ -96,13 +102,13 @@ public class BloggerBlogController extends BaseBloggerController {
      */
     @GetMapping
     @TokenNotRequired
-    public ResultModel<List<BlogListItemDTO>> list(
+    public ResultModel<PageResult<BlogListItemDTO>> list(
             @RequestParam Long bloggerId,
             @RequestParam(value = "cids", required = false) String categoryIds,
             @RequestParam(value = "lids", required = false) String labelIds,
             @RequestParam(value = "kword", required = false) String keyWord,
-            @RequestParam(value = "offset", required = false) Integer offset,
-            @RequestParam(value = "rows", required = false) Integer rows,
+            @RequestParam(value = "pageNum", required = false) Integer pageNum,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @RequestParam(value = "sort", required = false) String sort,
             @RequestParam(value = "order", required = false) String order,
             @RequestParam(value = "status", required = false) Integer status) {
@@ -125,11 +131,9 @@ public class BloggerBlogController extends BaseBloggerController {
         //执行数据查询
         BlogSortRule rule = new BlogSortRule(com.duan.blogos.service.common.Rule.valueOf(sor), Order.valueOf(ord));
 
-        ResultModel<List<BlogListItemDTO>> listResultModel = bloggerBlogService.listFilterAll(cids, lids, keyWord, bloggerId,
-                offset == null ? 0 : offset, rows == null ? -1 : rows, rule, stat);
-        if (listResultModel == null) handlerEmptyResult();
+        return blogFilterService.listFilterAll(cids, lids, keyWord, bloggerId,
+                pageNum, pageSize, rule, stat);
 
-        return listResultModel;
     }
 
     /**
