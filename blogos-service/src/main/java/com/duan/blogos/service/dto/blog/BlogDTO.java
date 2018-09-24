@@ -1,5 +1,7 @@
 package com.duan.blogos.service.dto.blog;
 
+import com.duan.blogos.service.dto.BlogCategoryRelaDTO;
+import com.duan.blogos.service.dto.BlogLabelRelaDTO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,10 +22,10 @@ public class BlogDTO implements Serializable {
     private Long bloggerId;
 
     //博文所属类别id
-    private String categoryIds;
+    private BlogCategoryRelaDTO[] categoryIds;
 
     //博文包含的标签
-    private String labelIds;
+    private BlogLabelRelaDTO[] labelIds;
 
     //文章状态
     private Integer state;

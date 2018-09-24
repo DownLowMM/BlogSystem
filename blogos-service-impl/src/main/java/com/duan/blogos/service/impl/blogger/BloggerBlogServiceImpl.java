@@ -7,15 +7,12 @@ import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
-import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
 import com.duan.blogos.service.entity.blog.Blog;
-import com.duan.blogos.service.entity.blog.BlogCategory;
 import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
-import com.duan.blogos.service.impl.BlogFilterAbstract;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.restful.ResultModel;
@@ -34,7 +31,10 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -51,7 +51,7 @@ import static com.duan.blogos.service.enums.BlogStatusEnum.PUBLIC;
  * @author DuanJiaNing
  */
 @Service
-public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<BlogListItemDTO>>> implements BloggerBlogService {
+public class BloggerBlogServiceImpl implements BloggerBlogService {
 
     @Autowired
     private BlogStatisticsDao statisticsDao;
@@ -301,25 +301,6 @@ public class BloggerBlogServiceImpl extends BlogFilterAbstract<ResultModel<List<
         }
 
         throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG, new SQLException());
-    }
-
-    @Override
-    protected ResultModel<List<BlogListItemDTO>> constructResult(Map<Long, Blog> blogHashMap,
-                                                                 List<BlogStatistics> statistics,
-                                                                 Map<Long, Long[]> blogIdMapCategoryIds,
-                                                                 Map<Long, String> blogImgs) {
-        // 重组结果
-        List<BlogListItemDTO> result = new ArrayList<>();
-        for (BlogStatistics s : statistics) {
-            Long blogId = s.getBlogId();
-            Long[] ids = blogIdMapCategoryIds.get(blogId);
-            List<BlogCategory> categories = CollectionUtils.isEmpty(ids) ? null : categoryDao.listCategoryById(ids);
-            Blog blog = blogHashMap.get(blogId);
-            BlogListItemDTO dto = dataFillingManager.bloggerBlogListItemToDTO(blog, s, categories);
-            result.add(dto);
-        }
-
-        return new ResultModel<>(result);
     }
 
     @Override

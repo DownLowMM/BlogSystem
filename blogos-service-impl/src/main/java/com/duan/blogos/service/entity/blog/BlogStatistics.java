@@ -18,8 +18,6 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class BlogStatistics implements Serializable {
 
-    private static final long serialVersionUID = 2806945822343341735L;
-
     // 表id
     private Long id;
 
@@ -52,5 +50,8 @@ public class BlogStatistics implements Serializable {
 
     //发布日期
     private Timestamp releaseDate;
+
+    //字数
+    private Long WordCount;
 
 }

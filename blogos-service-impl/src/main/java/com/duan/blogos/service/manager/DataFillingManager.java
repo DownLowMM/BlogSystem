@@ -1,7 +1,6 @@
 package com.duan.blogos.service.manager;
 
 import com.duan.blogos.service.dto.blog.*;
-import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
 import com.duan.blogos.service.dto.blogger.*;
 import com.duan.blogos.service.entity.blog.*;
 import com.duan.blogos.service.entity.blogger.*;
@@ -37,6 +36,7 @@ public class DataFillingManager {
         dto.setReplyCommentCount(statistics.getReplyCommentCount());
         dto.setShareCount(statistics.getShareCount());
         dto.setViewCount(statistics.getViewCount());
+        dto.setWordCount(statistics.getWordCount());
         return dto;
     }
 
@@ -70,25 +70,25 @@ public class DataFillingManager {
         return dto;
     }
 
-    public com.duan.blogos.service.dto.blog.BlogListItemDTO blogListItemToDTO(BlogStatistics statistics,
-                                                                              BlogCategory[] categories,
-                                                                              BlogLabel[] labels,
-                                                                              Blog blog, String blogImg) {
-        if (statistics == null || blog == null) {
+    public BlogListItemDTO blogListItemToDTO(BlogStatistics statistics,
+                                             BlogCategory[] categories,
+                                             BlogLabel[] labels,
+                                             Blog blog, String blogImg) {
+        if (blog == null) {
             return null;
         }
 
-        com.duan.blogos.service.dto.blog.BlogListItemDTO dto = new com.duan.blogos.service.dto.blog.BlogListItemDTO();
+        BlogListItemDTO dto = new BlogListItemDTO();
+        dto.setState(blog.getState());
+        dto.setNearestModifyDate(blog.getNearestModifyDate());
+        dto.setStatistics(blogStatisticsCountToDTO(statistics));
         dto.setCategories(blogCategory2DTO(categories));
         dto.setLabels(blogLabel2DTO(labels));
-        dto.setCollectCount(statistics.getCollectCount());
-        dto.setCommentCount(statistics.getCommentCount());
+
         dto.setId(blog.getId());
-        dto.setLikeCount(statistics.getLikeCount());
         dto.setReleaseDate(blog.getReleaseDate());
         dto.setSummary(blog.getSummary());
         dto.setTitle(blog.getTitle());
-        dto.setViewCount(statistics.getViewCount());
         dto.setImg(blogImg);
         return dto;
 
@@ -225,7 +225,7 @@ public class DataFillingManager {
     }
 
     public FavouriteBlogListItemDTO collectBlogListItemToDTO(Long bloggerId, BlogCollect collect,
-                                                             com.duan.blogos.service.dto.blog.BlogListItemDTO blog, BloggerDTO author) {
+                                                             BlogListItemDTO blog, BloggerDTO author) {
         if (collect == null) {
             return null;
         }
@@ -240,7 +240,7 @@ public class DataFillingManager {
     }
 
     public FavouriteBlogListItemDTO likeBlogListItemToDTO(Long bloggerId, BlogLike like,
-                                                          com.duan.blogos.service.dto.blog.BlogListItemDTO blog, BloggerDTO liker) {
+                                                          BlogListItemDTO blog, BloggerDTO liker) {
         if (like == null) {
             return null;
         }

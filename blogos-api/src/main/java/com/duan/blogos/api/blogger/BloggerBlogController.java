@@ -6,7 +6,6 @@ import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
-import com.duan.blogos.service.dto.blogger.BlogListItemDTO;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
@@ -69,10 +68,6 @@ public class BloggerBlogController extends BaseBloggerController {
             @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam("summary") String summary,
             @RequestParam(value = "keywords", required = false) String keyWords) {
-
-        // 检查不能为null的参数是否为null
-        if (StringUtils.isBlank(title) || StringUtils.isBlank(content) || StringUtils.isBlank(summary))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         // 将 Unicode 解码
         content = StringUtils.unicodeToString(content);

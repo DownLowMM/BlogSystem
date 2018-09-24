@@ -24,28 +24,25 @@ public class BlogListItemDTO implements Serializable {
     //博文标签
     private BlogLabelDTO[] labels;
 
+    //状态
+    private Integer state;
+
     //博文标题
     private String title;
-
-    //博文图片
-    private String img;
 
     //博文摘要
     private String summary;
 
+    //博文图片
+    private String img;
+
     //首次发布日期
     private Timestamp releaseDate;
 
-    //评论次数
-    private Integer commentCount;
+    //最近修改日期
+    private Timestamp nearestModifyDate;
 
-    //博文浏览次数
-    private Integer viewCount;
-
-    //博文被收藏次数
-    private Integer collectCount;
-
-    //喜欢次数
-    private Integer likeCount;
+    // 统计数据
+    private BlogStatisticsCountDTO statistics;
 
 }

@@ -11,17 +11,19 @@ public enum Order {
     /**
      * 升序
      */
-    ASC("升序"),
+    ASC("升序", "asc"),
 
     /**
      * 降序
      */
-    DESC("降序");
+    DESC("降序", "desc");
 
     private final String title;
+    private final String code;
 
-    Order(String title) {
+    Order(String title, String code) {
         this.title = title;
+        this.code = code;
     }
 
     public static boolean contains(String name) {
@@ -36,4 +38,7 @@ public enum Order {
         return title;
     }
 
+    public String getCode() {
+        return code;
+    }
 }

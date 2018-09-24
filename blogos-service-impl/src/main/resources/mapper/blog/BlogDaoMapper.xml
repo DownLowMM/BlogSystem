@@ -7,13 +7,15 @@
     <select id="listBlog" resultType="Blog">
         SELECT *
         FROM blog b
-        WHERE state = #{status} AND b.id = #{bloggerId}
+        WHERE state = #{status}
+          AND b.id = #{bloggerId}
     </select>
 
     <select id="listBlogWithLimit" resultType="Blog">
         SELECT *
         FROM blog b
-        WHERE state = #{status} AND b.id = #{bloggerId}
+        WHERE state = #{status}
+          AND b.id = #{bloggerId}
         LIMIT #{offset}, #{rows}
     </select>
 
@@ -69,52 +71,40 @@
     </update>
 
     <delete id="delete">
-        DELETE FROM blog
+        DELETE
+        FROM blog
         WHERE id = #{id}
     </delete>
 
     <insert id="insert" parameterType="Blog" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO blog (
-        blogger_id,
-        category_ids,
-        label_ids,
-        state,
-        title,
-        content,
-        content_md,
-        summary,
-        release_date,
-        nearest_modify_date,
-        key_words,
-        word_count
-        ) VALUE (
-        #{bloggerId},
-        #{categoryIds},
-        #{labelIds},
-        ifnull(#{state}, 0), # state 0 为正在审核
-        #{title},
-        #{content},
-        #{contentMd},
-        #{summary},
-        NOW(),
-        NOW(),
-        #{keyWords},
-        ifnull(#{wordCount}, 0)
-        )
+        INSERT INTO blog (blogger_id,
+                          category_ids,
+                          label_ids,
+                          state,
+                          title,
+                          content,
+                          content_md,
+                          summary,
+                          release_date,
+                          nearest_modify_date,
+                          key_words,
+                          word_count)
+        VALUE (#{bloggerId}, #{categoryIds}, #{labelIds}, ifnull(#{state}, 0), # state 0 为正在审核
+               #{title}, #{content}, #{contentMd}, #{summary}, NOW(), NOW(), #{keyWords}, ifnull(#{wordCount}, 0))
     </insert>
 
     <select id="listAllCategoryAndLabel" resultType="Blog">
-        SELECT
-            b.id,
-            b.category_ids,
-            b.label_ids
+        SELECT b.id, b.category_ids, b.label_ids
         FROM blog b
-        WHERE b.blogger_id = #{bloggerId} AND b.state = #{status};
+        WHERE b.blogger_id = #{bloggerId}
+          AND b.state = #{status};
     </select>
 
     <select id="listBlogByBlogIds" resultType="Blog" parameterType="list">
         SELECT *
-        FROM blog b WHERE b.id IN
+        FROM blog b
+        left join blog_statistics s on b.id = s.blog_id
+        WHERE b.id IN
         <foreach collection="ids"
                  item="id"
                  open="("
@@ -122,13 +112,17 @@
                  close=")">
             #{id}
         </foreach>
-        AND b.state=#{status} LIMIT #{offset},#{rows}
+        AND b.state=#{status}
+        <if test="sortRule != null">
+            order by #{sortRule.rule.code} #{sortRule.order.code}
+        </if>
     </select>
 
     <select id="getBlogIdByUniqueKey" resultType="java.lang.Integer">
         SELECT b.id
         FROM blog b
-        WHERE b.blogger_id = #{bloggerId} AND b.title = #{title}
+        WHERE b.blogger_id = #{bloggerId}
+          AND b.title = #{title}
     </select>
 
     <select id="getBlogById" resultType="Blog">
@@ -144,17 +138,13 @@
     </select>
 
     <select id="listAllCategoryByBloggerId" resultType="Blog">
-        SELECT
-            b.id,
-            b.category_ids
+        SELECT b.id, b.category_ids
         FROM blog b
         WHERE b.blogger_id = #{value}
     </select>
 
     <select id="listAllLabelByBloggerId" resultType="Blog">
-        SELECT
-            b.id,
-            b.label_ids
+        SELECT b.id, b.label_ids
         FROM blog b
         WHERE b.blogger_id = #{value}
     </select>
@@ -162,21 +152,23 @@
     <select id="countBlogByCategory" resultType="java.lang.Integer">
         SELECT count(*)
         FROM blog b
-        WHERE b.blogger_id = #{bloggerId} AND b.state = #{state} AND locate(#{categoryId}, b.category_ids) > 0
+        WHERE b.blogger_id = #{bloggerId}
+          AND b.state = #{state}
+          AND locate(#{categoryId}, b.category_ids) > 0
     </select>
 
     <select id="countBlogByBloggerId" resultType="java.lang.Integer">
         SELECT count(*)
         FROM blog
-        WHERE blogger_id = #{bloggerId} AND state = #{state}
+        WHERE blogger_id = #{bloggerId}
+          AND state = #{state}
     </select>
 
     <select id="listAllWordCountByBloggerId" resultType="Blog">
-        SELECT
-            id,
-            word_count
+        SELECT id, word_count
         FROM blog
-        WHERE blogger_id = #{bloggerId} AND state = #{state}
+        WHERE blogger_id = #{bloggerId}
+          AND state = #{state}
     </select>
 
     <select id="listAllByFormat" resultType="Blog">

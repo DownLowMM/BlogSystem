@@ -18,13 +18,11 @@ public interface BlogFilter<T> {
      * @param labelIds    限定在博主的哪些标签之下，不做限定时传null
      * @param keyWord     关键字,不做限定时传null
      * @param bloggerId   博主id
-     * @param offset      结果集起始位置
-     * @param rows        行数
      * @param sortRule    排序规则，为null则不做约束
      * @param status      博文状态
      * @return 查询结果
      */
-    T listFilterAll(Long[] categoryIds, Long[] labelIds, String keyWord, Long bloggerId, int offset, int rows,
+    T listFilterAll(Long[] categoryIds, Long[] labelIds, String keyWord, Long bloggerId, Integer pageNum, Integer pageSize,
                     BlogSortRule sortRule, BlogStatusEnum status);
 
     /**
@@ -33,20 +31,11 @@ public interface BlogFilter<T> {
      * @param labelIds    限定在博主的哪些标签之下
      * @param categoryIds 限定在博主的哪些类别之下
      * @param bloggerId   博主id
-     * @param offset      结果集起始位置
-     * @param rows        行数
      * @param sortRule    排序规则，为null则不做约束
      * @param status      博文状态
      * @return 查询结果
      */
-    T listFilterByLabelAndCategory(Long[] categoryIds, Long[] labelIds, Long bloggerId, int offset, int rows,
+    T listFilterByLabelAndCategory(Long[] categoryIds, Long[] labelIds, Long bloggerId, Integer pageNum, Integer pageSize,
                                    BlogSortRule sortRule, BlogStatusEnum status);
-
-    /**
-     * 获得一次检索后的结果集总条数
-     *
-     * @return 数量
-     */
-    int getFilterCount();
 
 }

@@ -20,12 +20,6 @@ public class Blog implements Serializable {
     //博文所属博主id
     private Long bloggerId;
 
-    //博文所属类别id
-    private String categoryIds;
-
-    //博文包含的标签
-    private String labelIds;
-
     //文章状态
     private Integer state;
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.duan.blogos.service.dao.BlogCategoryRelaDao">
+
+    <update id="update" parameterType="BlogCategoryRela">
+        UPDATE blog_category_rela
+        <set>
+            <if test="blogId != null">
+                blog_id=#{blogId},
+            </if>
+            <if test="categoryId != null">
+                category_id=#{categoryId},
+            </if>
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <select id="listAllByBloggerIdInCategoryIds" resultType="BlogCategoryRela">
+        select id, blog_id, category_id, insert_time
+        from blog_category_rela
+        left join blog b on b.blogger_id = #{bloggerId}
+        where b.id = blog_id
+        and category_id in
+        <foreach collection="categoryIds" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        group by category_id
+    </select>
+
+    <select id="listAllByBlogId" resultType="BlogCategoryRela">
+        select id, blog_id, category_id, insert_time
+        from blog_category_rela
+        where blog_id = #{value}
+    </select>
+
+    <insert id="insert" parameterType="BlogCategoryRela" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog_category_rela (blog_id, category_id, insert_time)
+        VALUE (#{blogId}, #{categoryId}, NOW())
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM blog_category_rela
+        WHERE id = #{value}
+    </delete>
+
+</mapper>

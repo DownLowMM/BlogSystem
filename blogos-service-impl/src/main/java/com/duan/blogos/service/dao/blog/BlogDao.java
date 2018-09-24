@@ -1,5 +1,6 @@
 package com.duan.blogos.service.dao.blog;
 
+import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.dao.BaseDao;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.enums.BlogStatusEnum;
@@ -66,10 +67,8 @@ public interface BlogDao extends BaseDao<Blog> {
      * @param status 博文状态
      * @return 查询结果
      */
-    List<Blog> listBlogByBlogIds(@Param("ids") List<Long> ids,
-                                 @Param("status") int status,
-                                 @Param("offset") int offset,
-                                 @Param("rows") int rows);
+    List<Blog> listBlogByBlogIds(@Param("ids") List<Long> ids, @Param("status") int status,
+                                 @Param("sortRule") BlogSortRule sortRule);
 
     /**
      * 查询博文id
