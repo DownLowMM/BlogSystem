@@ -24,4 +24,19 @@ public interface BlogCategoryRelaDao extends BaseDao<BlogCategoryRela> {
      * 博文的所有类别
      */
     List<BlogCategoryRela> listAllByBlogId(Long blogId);
+
+    /**
+     * 批量插入
+     */
+    int insertBatch(@Param("relas") List<BlogCategoryRela> relas);
+
+    /**
+     * 删除博文的所有类别信息
+     */
+    int deleteByBlogId(Long blogId);
+
+    /**
+     * 查询博主指定类别下的所有博文
+     */
+    List<BlogCategoryRela> listAllByBloggerIdAndCategoryId(@Param("bloggerId") Long bloggerId, @Param("categoryId") Long categoryId);
 }

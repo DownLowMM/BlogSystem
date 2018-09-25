@@ -1,7 +1,7 @@
 package com.duan.blogos.websample.blog;
 
+import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogMainContentDTO;
-import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.exception.CodeMessage;
@@ -78,7 +78,7 @@ public class BlogReadPageController {
         statisticsService.updateBlogViewCountPlus(blogId);
 
         ResultModel<BlogMainContentDTO> mainContent = blogBrowseService.getBlogMainContent(blogId);
-        ResultModel<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
+        ResultModel<BlogBaseStatisticsDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
 
         mv.addObject("blogOwnerBloggerId", account.getId());
         mv.addObject("main", mainContent.getData());

@@ -22,7 +22,7 @@ public interface BlogLabelDao extends BaseDao<BlogLabel> {
      * @param ids id
      * @return 查询结果
      */
-    List<BlogLabel> listLabelById(@Param("ids") Long[] ids);
+    List<BlogLabel> listLabelById(@Param("ids") List<Long> ids);
 
     /**
      * 根据标签id获得标签

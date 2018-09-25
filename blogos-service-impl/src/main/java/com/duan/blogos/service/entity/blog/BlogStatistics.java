@@ -52,6 +52,6 @@ public class BlogStatistics implements Serializable {
     private Timestamp releaseDate;
 
     //字数
-    private Long WordCount;
+    private Integer wordCount;
 
 }

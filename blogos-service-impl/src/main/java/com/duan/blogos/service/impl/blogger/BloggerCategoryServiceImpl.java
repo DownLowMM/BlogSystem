@@ -1,16 +1,15 @@
 package com.duan.blogos.service.impl.blogger;
 
-import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
+import com.duan.blogos.service.dao.BlogCategoryRelaDao;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blog.BlogDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dto.blogger.BloggerCategoryDTO;
-import com.duan.blogos.service.entity.blog.Blog;
+import com.duan.blogos.service.entity.BlogCategoryRela;
 import com.duan.blogos.service.entity.blog.BlogCategory;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
-import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.manager.DataFillingManager;
@@ -19,7 +18,6 @@ import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
-import com.duan.common.util.ArrayUtils;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -49,9 +47,6 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     private DataFillingManager fillingManager;
 
     @Autowired
-    private DbProperties dbProperties;
-
-    @Autowired
     private StringConstructorManager constructorManager;
 
     @Autowired
@@ -69,6 +64,9 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
 
     @Autowired
     private BlogDao blogDao;
+
+    @Autowired
+    private BlogCategoryRelaDao categoryRelaDao;
 
     @Override
     public ResultModel<PageResult<BloggerCategoryDTO>> listBlogCategory(Long bloggerId, Integer pageNum, Integer pageSize) {
@@ -138,44 +136,27 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
             pictureDao.updateUseCountMinus(iconId);
         }
 
-        // 删除数据库类别记录
+        // 替换类别
+        if (newCategoryId != null) {
+
+            List<BlogCategoryRela> res = categoryRelaDao.listAllByBloggerIdAndCategoryId(bloggerId, categoryId);
+            if (!CollectionUtils.isEmpty(res)) {
+                List<BlogCategoryRela> relas = new ArrayList<>();
+                res.forEach(re -> {
+                    BlogCategoryRela rela = new BlogCategoryRela();
+                    rela.setBlogId(re.getBlogId());
+                    rela.setCategoryId(newCategoryId);
+                    relas.add(rela);
+                });
+                categoryRelaDao.insertBatch(relas);
+            }
+
+        }
+
+        // 删除数据库类别记录 外键会把 BlogCategoryRelaDao 中的数据删除
         int effectDelete = categoryDao.delete(categoryId);
         if (effectDelete <= 0)
             throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
-
-        // 修改博文类别
-        List<Blog> blogs = blogDao.listAllCategoryByBloggerId(bloggerId);
-        String sp = dbProperties.getStringFiledSplitCharacterForNumber();
-
-        // 移除类别即可
-        if (newCategoryId == null) {
-            blogs.forEach(blog -> {
-
-                Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), sp);
-                if (CollectionUtils.longArrayContain(cids, categoryId)) {
-                    Long[] ar = ArrayUtils.removeFromArray(cids, categoryId);
-                    blog.setCategoryIds(StringUtils.longArrayToString(ar, sp));
-                    int effectUpdate = blogDao.update(blog);
-                    if (effectUpdate <= 0)
-                        throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
-                }
-
-            });
-
-        } else { // 替换类别
-            blogs.forEach(blog -> {
-
-                Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), sp);
-                if (CollectionUtils.longArrayContain(cids, categoryId)) {
-                    ArrayUtils.replace(cids, categoryId, newCategoryId);
-                    blog.setCategoryIds(StringUtils.longArrayToString(cids, sp));
-                    int effectUpdate = blogDao.update(blog);
-                    if (effectUpdate <= 0)
-                        throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
-                }
-            });
-
-        }
 
         return true;
     }
@@ -202,7 +183,8 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
         if (icon != null)
             icon.setPath(constructorManager.constructPictureUrl(icon, DEFAULT_BLOGGER_BLOG_CATEGORY_ICON));
 
-        int count = blogDao.countBlogByCategory(bloggerId, category.getId(), BlogStatusEnum.PUBLIC.getCode());
+        List<BlogCategoryRela> relas = categoryRelaDao.listAllByBloggerIdAndCategoryId(bloggerId, category.getId());
+        int count = CollectionUtils.isEmpty(relas) ? 0 : relas.size();
         return fillingManager.blogCategoryToDTO(category, icon, count);
     }
 

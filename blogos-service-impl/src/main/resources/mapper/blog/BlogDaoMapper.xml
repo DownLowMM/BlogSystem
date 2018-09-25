@@ -78,8 +78,6 @@
 
     <insert id="insert" parameterType="Blog" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO blog (blogger_id,
-                          category_ids,
-                          label_ids,
                           state,
                           title,
                           content,
@@ -89,16 +87,9 @@
                           nearest_modify_date,
                           key_words,
                           word_count)
-        VALUE (#{bloggerId}, #{categoryIds}, #{labelIds}, ifnull(#{state}, 0), # state 0 为正在审核
+        VALUE (#{bloggerId}, ifnull(#{state}, 0), # state 0 为正在审核
                #{title}, #{content}, #{contentMd}, #{summary}, NOW(), NOW(), #{keyWords}, ifnull(#{wordCount}, 0))
     </insert>
-
-    <select id="listAllCategoryAndLabel" resultType="Blog">
-        SELECT b.id, b.category_ids, b.label_ids
-        FROM blog b
-        WHERE b.blogger_id = #{bloggerId}
-          AND b.state = #{status};
-    </select>
 
     <select id="listBlogByBlogIds" resultType="Blog" parameterType="list">
         SELECT *
@@ -118,7 +109,7 @@
         </if>
     </select>
 
-    <select id="getBlogIdByUniqueKey" resultType="java.lang.Integer">
+    <select id="getBlogIdByUniqueKey" resultType="java.lang.Long">
         SELECT b.id
         FROM blog b
         WHERE b.blogger_id = #{bloggerId}
@@ -137,24 +128,10 @@
         WHERE b.id = #{value}
     </select>
 
-    <select id="listAllCategoryByBloggerId" resultType="Blog">
-        SELECT b.id, b.category_ids
-        FROM blog b
-        WHERE b.blogger_id = #{value}
-    </select>
-
     <select id="listAllLabelByBloggerId" resultType="Blog">
-        SELECT b.id, b.label_ids
+        SELECT b.id
         FROM blog b
         WHERE b.blogger_id = #{value}
-    </select>
-
-    <select id="countBlogByCategory" resultType="java.lang.Integer">
-        SELECT count(*)
-        FROM blog b
-        WHERE b.blogger_id = #{bloggerId}
-          AND b.state = #{state}
-          AND locate(#{categoryId}, b.category_ids) > 0
     </select>
 
     <select id="countBlogByBloggerId" resultType="java.lang.Integer">
@@ -174,8 +151,6 @@
     <select id="listAllByFormat" resultType="Blog">
         SELECT
         blogger_id,
-        category_ids,
-        label_ids,
         state,
         title,
         <choose>

@@ -3,6 +3,8 @@ package com.duan.blogos.service.impl.blogger;
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
+import com.duan.blogos.service.dao.BlogCategoryRelaDao;
+import com.duan.blogos.service.dao.BlogLabelRelaDao;
 import com.duan.blogos.service.dao.blog.*;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
@@ -74,10 +76,16 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
     @Autowired
     private StringConstructorManager constructorManager;
 
+    @Autowired
+    private BlogCategoryRelaDao categoryRelaDao;
+
+    @Autowired
+    private BlogLabelRelaDao labelRelaDao;
+
     @Override
     public ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(Long bloggerId, Long categoryId, int offset, int rows, BlogSortRule sortRule) {
 
-        offset =offset < 0 ? 0 : offset;
+        offset = offset < 0 ? 0 : offset;
         rows = rows < 0 ? defaultProperties.getCollectCount() : rows;
 
         List<BlogCollect> collects = collectDao.listCollectBlog(bloggerId, categoryId, offset, rows);

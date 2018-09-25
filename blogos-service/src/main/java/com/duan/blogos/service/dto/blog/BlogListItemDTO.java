@@ -43,6 +43,6 @@ public class BlogListItemDTO implements Serializable {
     private Timestamp nearestModifyDate;
 
     // 统计数据
-    private BlogStatisticsCountDTO statistics;
+    private BlogBaseStatisticsDTO statistics;
 
 }

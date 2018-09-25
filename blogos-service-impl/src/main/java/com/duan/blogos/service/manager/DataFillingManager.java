@@ -1,7 +1,11 @@
 package com.duan.blogos.service.manager;
 
+import com.duan.blogos.service.dto.BlogCategoryRelaDTO;
+import com.duan.blogos.service.dto.BlogLabelRelaDTO;
 import com.duan.blogos.service.dto.blog.*;
 import com.duan.blogos.service.dto.blogger.*;
+import com.duan.blogos.service.entity.BlogCategoryRela;
+import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.*;
 import com.duan.blogos.service.entity.blogger.*;
 import com.duan.common.util.ArrayUtils;
@@ -20,12 +24,12 @@ import java.util.List;
 @Component
 public class DataFillingManager {
 
-    public BlogStatisticsCountDTO blogStatisticsCountToDTO(BlogStatistics statistics) {
+    public BlogBaseStatisticsDTO blogStatisticsCountToDTO(BlogStatistics statistics) {
         if (statistics == null) {
             return null;
         }
 
-        BlogStatisticsCountDTO dto = new BlogStatisticsCountDTO();
+        BlogBaseStatisticsDTO dto = new BlogBaseStatisticsDTO();
         dto.setAdmireCount(statistics.getAdmireCount());
         dto.setBlogId(statistics.getBlogId());
         dto.setCollectCount(statistics.getCollectCount());
@@ -136,7 +140,7 @@ public class DataFillingManager {
         dto.setStatus(blog.getState());
         dto.setSummary(blog.getSummary());
         dto.setTitle(blog.getTitle());
-        dto.setWordCount(blog.getWordCount());
+        // dto.setWordCount(blog.getWordCount());
         dto.setContent(blog.getContent());
 
         return dto;
@@ -158,32 +162,12 @@ public class DataFillingManager {
         return dto;
     }
 
-    public BlogListItemDTO bloggerBlogListItemToDTO(Blog blog, BlogStatistics statistics,
-                                                    List<BlogCategory> categories) {
-        if (blog == null || statistics == null) {
-            return null;
-        }
-
-        BlogListItemDTO dto = new BlogListItemDTO();
-        dto.setCategories(blogCategory2DTO(categories));
-        dto.setCollectCount(statistics.getCollectCount());
-        dto.setCommentCount(statistics.getCommentCount());
-        dto.setComplainCount(statistics.getComplainCount());
-        dto.setId(blog.getId());
-        dto.setLikeCount(statistics.getLikeCount());
-        dto.setNearestModifyDate(blog.getNearestModifyDate());
-        dto.setReleaseDate(blog.getReleaseDate());
-        dto.setState(blog.getState());
-        dto.setSummary(blog.getSummary());
-        dto.setTitle(blog.getTitle());
-        dto.setViewCount(statistics.getViewCount());
-        dto.setWordCount(blog.getWordCount());
-        return dto;
-    }
-
-    public BlogStatisticsDTO blogStatisticsToDTO(Blog blog, BlogStatistics statistics, BlogCategory[] categories,
-                                                 BlogLabel[] labels, BloggerDTO[] likes, BloggerDTO[] collects,
-                                                 BloggerDTO[] commenter, String splitChar) {
+    public BlogStatisticsDTO blogStatisticsToDTO(Blog blog, BlogStatistics statistics,
+                                                 List<BlogCategory> categories,
+                                                 List<BlogLabel> labels,
+                                                 List<BloggerDTO> likes,
+                                                 List<BloggerDTO> collects,
+                                                 List<BloggerDTO> commenter, String splitChar) {
         if (blog == null || statistics == null) {
             return null;
         }
@@ -199,10 +183,10 @@ public class DataFillingManager {
         dto.setNearestModifyDate(blog.getNearestModifyDate());
         dto.setReleaseDate(blog.getReleaseDate());
         dto.setState(blog.getState());
-        dto.setStatistics(blogStatistics2DTO(statistics));
+        dto.setStatistics(blogStatistics2BaseDTO(statistics));
         dto.setSummary(blog.getSummary());
         dto.setTitle(blog.getTitle());
-        dto.setWordCount(blog.getWordCount());
+        dto.setWordCount(statistics.getWordCount());
 
         return dto;
     }
@@ -378,7 +362,7 @@ public class DataFillingManager {
         return bl;
     }
 
-    public BlogBaseStatisticsDTO blogStatistics2DTO(BlogStatistics statistics) {
+    public BlogBaseStatisticsDTO blogStatistics2BaseDTO(BlogStatistics statistics) {
         if (statistics == null) {
             return null;
         }
@@ -394,6 +378,7 @@ public class DataFillingManager {
         dto.setShareCount(statistics.getShareCount());
         dto.setAdmireCount(statistics.getAdmireCount());
         dto.setLikeCount(statistics.getLikeCount());
+        dto.setWordCount(statistics.getWordCount());
         dto.setReleaseDate(statistics.getReleaseDate());
 
         return dto;
@@ -413,7 +398,7 @@ public class DataFillingManager {
         return dto;
     }
 
-    public BlogDTO blog2DTO(Blog blog) {
+    public BlogDTO blog2DTO(Blog blog, List<BlogCategoryRela> relas, List<BlogLabelRela> labelRelas) {
         if (blog == null) {
             return null;
         }
@@ -422,8 +407,8 @@ public class DataFillingManager {
 
         dto.setId(blog.getId());
         dto.setBloggerId(blog.getBloggerId());
-        dto.setCategoryIds(blog.getCategoryIds());
-        dto.setLabelIds(blog.getLabelIds());
+        dto.setCategoryIds(blogCategoryRelas2DTO(relas));
+        dto.setLabelIds(blogLabelRelas2DTO(labelRelas));
         dto.setState(blog.getState());
         dto.setTitle(blog.getTitle());
         dto.setContent(blog.getContent());
@@ -432,7 +417,54 @@ public class DataFillingManager {
         dto.setReleaseDate(blog.getReleaseDate());
         dto.setNearestModifyDate(blog.getNearestModifyDate());
         dto.setKeyWords(blog.getKeyWords());
-        dto.setWordCount(blog.getWordCount());
+
+        return dto;
+    }
+
+    public BlogLabelRelaDTO[] blogLabelRelas2DTO(List<BlogLabelRela> labelRelas) {
+        if (CollectionUtils.isEmpty(labelRelas)) {
+            return null;
+        }
+
+        BlogLabelRelaDTO[] res = new BlogLabelRelaDTO[labelRelas.size()];
+        for (int i = 0; i < labelRelas.size(); i++) {
+            res[i] = blogLabelRela2DTO(labelRelas.get(i));
+        }
+
+        return res;
+    }
+
+    public BlogLabelRelaDTO blogLabelRela2DTO(BlogLabelRela blogLabelRela) {
+
+        BlogLabelRelaDTO dto = new BlogLabelRelaDTO();
+        dto.setId(blogLabelRela.getId());
+        dto.setBlogId(blogLabelRela.getBlogId());
+        dto.setLabelId(blogLabelRela.getLabelId());
+        dto.setInsertTime(blogLabelRela.getInsertTime());
+
+        return dto;
+    }
+
+    public BlogCategoryRelaDTO[] blogCategoryRelas2DTO(List<BlogCategoryRela> relas) {
+        if (CollectionUtils.isEmpty(relas)) {
+            return null;
+        }
+
+        BlogCategoryRelaDTO[] res = new BlogCategoryRelaDTO[relas.size()];
+        for (int i = 0; i < relas.size(); i++) {
+            res[i] = blogCategoryRela2DTO(relas.get(i));
+        }
+
+        return res;
+    }
+
+    public BlogCategoryRelaDTO blogCategoryRela2DTO(BlogCategoryRela blogCategoryRela) {
+
+        BlogCategoryRelaDTO dto = new BlogCategoryRelaDTO();
+        dto.setId(blogCategoryRela.getId());
+        dto.setBlogId(blogCategoryRela.getBlogId());
+        dto.setCategoryId(blogCategoryRela.getCategoryId());
+        dto.setInsertTime(blogCategoryRela.getInsertTime());
 
         return dto;
     }

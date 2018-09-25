@@ -1,6 +1,6 @@
 package com.duan.blogos.api.blog;
 
-import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
+import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
@@ -46,10 +46,10 @@ public class BlogStatisticsController extends BaseBlogController {
      * 获取统计信息（简版，只获取各项信息的次数）
      */
     @GetMapping("/count")
-    public ResultModel<BlogStatisticsCountDTO> getCount(@PathVariable Long blogId) {
+    public ResultModel<BlogBaseStatisticsDTO> getCount(@PathVariable Long blogId) {
         handleBlogStatisticsExistCheck(blogId);
 
-        ResultModel<BlogStatisticsCountDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
+        ResultModel<BlogBaseStatisticsDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
         if (statistics == null) handlerEmptyResult();
 
         return statistics;

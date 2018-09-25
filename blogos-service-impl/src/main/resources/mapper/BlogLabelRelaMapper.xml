@@ -42,10 +42,24 @@
         VALUE (#{blogId}, #{labelId}, NOW())
     </insert>
 
+    <insert id="insertBatch">
+        INSERT INTO blog_label_rela (blog_id, label_id, insert_time)
+        VALUES
+        <foreach collection="relas" item="rela" separator=",">
+            (#{blogId}, #{labelId}, NOW())
+        </foreach>
+    </insert>
+
     <delete id="delete">
         DELETE
         FROM blog_label_rela
         WHERE id = #{value}
+    </delete>
+
+    <delete id="deleteByBlogId">
+        DELETE
+        FROM blog_label_rela
+        WHERE blog_id = #{value}
     </delete>
 
 </mapper>

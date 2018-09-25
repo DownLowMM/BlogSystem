@@ -52,15 +52,6 @@ public interface BlogDao extends BaseDao<Blog> {
     List<Blog> listAll();
 
     /**
-     * 查询博主创建的所有类别和标签
-     *
-     * @param bloggerId 博主id
-     * @param status    博文状态
-     * @return 查询结果
-     */
-    List<Blog> listAllCategoryAndLabel(@Param("bloggerId") Long bloggerId, @Param("status") int status);
-
-    /**
      * 根据博文id查询博文
      *
      * @param ids    博文id
@@ -97,14 +88,6 @@ public interface BlogDao extends BaseDao<Blog> {
     Integer getBlogIdById(Long blogId);
 
     /**
-     * 查询出指定博主的所有博文包含着的类别
-     *
-     * @param bloggerId 博主id
-     * @return 只查询了博文类别和博文id的集合
-     */
-    List<Blog> listAllCategoryByBloggerId(Long bloggerId);
-
-    /**
      * 查询出指定博主的所有博文包含的标签
      *
      * @param bloggerId 博主id
@@ -120,17 +103,6 @@ public interface BlogDao extends BaseDao<Blog> {
      */
     List<Blog> listAllWordCountByBloggerId(@Param("bloggerId") Long bloggerId,
                                            @Param("state") int state);
-
-    /**
-     * 统计指定类别的博文数量
-     *
-     * @param bloggerId  博主id
-     * @param categoryId 类别id
-     * @return 数量
-     */
-    Integer countBlogByCategory(@Param("bloggerId") Long bloggerId,
-                                @Param("categoryId") Long categoryId,
-                                @Param("state") int state);
 
     /**
      * 统计指定博主的博文数量

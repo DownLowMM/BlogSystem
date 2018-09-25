@@ -5,6 +5,8 @@ import com.duan.blogos.service.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.restful.ResultModel;
 
+import java.util.List;
+
 /**
  * Created on 2018/1/17.
  * 博主统计信息服务
@@ -27,6 +29,6 @@ public interface BloggerStatisticsService {
      * @param ids 博主 id
      * @return 数组
      */
-    BloggerDTO[] listBloggerDTO(Long... ids);
+    List<BloggerDTO> listBloggerDTO(List<Long> ids);
 
 }

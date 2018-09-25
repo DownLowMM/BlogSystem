@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created on 2017/12/19.
@@ -49,12 +50,12 @@ public class BlogStatisticsDTO implements Serializable {
     private Integer wordCount;
 
     //喜欢该篇文章的人
-    private BloggerDTO[] likes;
+    private List<BloggerDTO> likes;
 
     //收藏了该篇文章的人
-    private BloggerDTO[] collects;
+    private List<BloggerDTO> collects;
 
     //评论了该篇文章的人
-    private BloggerDTO[] commenter;
+    private List<BloggerDTO> commenter;
 
 }

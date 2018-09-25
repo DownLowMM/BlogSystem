@@ -21,7 +21,7 @@ import com.duan.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,10 +71,11 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
     @Override
     public ResultModel<BloggerStatisticsDTO> getBloggerStatistics(Long bloggerId) {
 
+        // UPDATE: 2018/9/25 从 blog_statistics 表中查询
         int blogCount = blogDao.countBlogByBloggerId(bloggerId, BlogStatusEnum.PUBLIC.getCode());
 
         List<Blog> blogs = blogDao.listAllWordCountByBloggerId(bloggerId, BlogStatusEnum.PUBLIC.getCode());
-        int wordCountSum = blogs.stream().mapToInt(Blog::getWordCount).sum();
+        int wordCountSum = blogs.stream().mapToInt(blog -> blog.getContent().length()).sum();
         int likeCount = blogs.stream().mapToLong(Blog::getId).mapToInt(statisticsDao::getLikeCount).sum();
 
         int likeGiveCount = likeDao.countLikeByLikerId(bloggerId);
@@ -96,11 +97,10 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
 
     // 获得博主dto
     @Override
-    public BloggerDTO[] listBloggerDTO(Long... ids) {
+    public List<BloggerDTO> listBloggerDTO(List<Long> ids) {
         if (CollectionUtils.isEmpty(ids)) return null;
 
-        BloggerDTO[] dtos = new BloggerDTO[ids.length];
-        int c = 0;
+        List<BloggerDTO> dtos = new ArrayList<>();
         for (Long id : ids) {
             BloggerAccount account = accountDao.getAccountById(id);
             BloggerProfile profile = profileDao.getProfileByBloggerId(id);
@@ -122,10 +122,10 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
             }
 
             BloggerDTO dto = dataFillingManager.bloggerAccountToDTO(account, profile, avatar);
-            dtos[c++] = dto;
+            dtos.add(dto);
         }
 
-        return Arrays.copyOf(dtos, c);
+        return dtos;
     }
 
 

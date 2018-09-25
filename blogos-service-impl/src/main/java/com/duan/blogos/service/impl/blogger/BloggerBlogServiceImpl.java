@@ -2,26 +2,29 @@ package com.duan.blogos.service.impl.blogger;
 
 import com.duan.blogos.service.config.preference.FileProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
+import com.duan.blogos.service.dao.BlogCategoryRelaDao;
+import com.duan.blogos.service.dao.BlogLabelRelaDao;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
+import com.duan.blogos.service.dao.blog.BlogDao;
 import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
+import com.duan.blogos.service.entity.BlogCategoryRela;
+import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
-import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.FileUtils;
-import com.duan.common.util.MultipartFile;
-import com.duan.common.util.StringUtils;
+import com.duan.common.util.*;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
@@ -77,34 +80,44 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
     @Autowired
     private BloggerCategoryService categoryService;
 
+    @Autowired
+    private BlogCategoryRelaDao categoryRelaDao;
+
+    @Autowired
+    private BlogLabelRelaDao labelRelaDao;
+
+    @Autowired
+    private BlogDao blogDao;
+
+    @Autowired
+    private BlogLuceneIndexManager luceneIndexManager;
+
     @Override
     public Long insertBlog(Long bloggerId, Long[] categories, Long[] labels,
                            BlogStatusEnum status, String title, String content, String contentMd,
                            String summary, String[] keyWords, boolean analysisImg) {
 
-        // 1 插入数据到bolg表
-        String ch = dbProperties.getStringFiledSplitCharacterForNumber();
-        String chs = dbProperties.getStringFiledSplitCharacterForString();
+        // 插入数据到bolg表
         Blog blog = new Blog();
         blog.setBloggerId(bloggerId);
-        blog.setCategoryIds(StringUtils.longArrayToString(categories, ch));
-        blog.setLabelIds(StringUtils.longArrayToString(labels, ch));
         blog.setState(status.getCode());
         blog.setTitle(title);
         blog.setContent(content);
         blog.setContentMd(contentMd);
         blog.setSummary(summary);
-        blog.setKeyWords(StringUtils.arrayToString(keyWords, chs));
-        blog.setWordCount(content.length());
+        blog.setKeyWords(StringUtils.arrayToString(keyWords, websiteProperties.getConditionSplitCharacter()));
 
         int effect = blogDao.insert(blog);
         if (effect <= 0) return null;
 
         Long blogId = blog.getId();
 
-        // 2 插入数据到blog_statistics表（生成博文信息记录）
+        insertCategoryAndLabels(blogId, categories, labels);
+
+        // 插入数据到blog_statistics表（生成博文信息记录）
         BlogStatistics statistics = new BlogStatistics();
         statistics.setBlogId(blogId);
+        statistics.setWordCount(content.length());
         effect = statisticsDao.insert(statistics);
         if (effect <= 0)
             throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
@@ -119,7 +132,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
             }
         }
 
-        // 4 lucene创建索引
+        // lucene创建索引
         try {
             luceneIndexManager.add(blog);
         } catch (IOException e) {
@@ -128,6 +141,33 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
         }
 
         return blogId;
+    }
+
+    private void insertCategoryAndLabels(Long blogId, Long[] categories, Long[] labels) {
+        // 标签和类别
+        if (!ArrayUtils.isEmpty(categories)) {
+            List<BlogCategoryRela> relas = new ArrayList<>();
+            for (Long ca : categories) {
+                BlogCategoryRela rela = new BlogCategoryRela();
+                rela.setBlogId(blogId);
+                rela.setCategoryId(ca);
+                relas.add(rela);
+            }
+
+            categoryRelaDao.insertBatch(relas);
+        }
+
+        if (!ArrayUtils.isEmpty(labels)) {
+            List<BlogLabelRela> relas = new ArrayList<>();
+            for (Long ca : labels) {
+                BlogLabelRela rela = new BlogLabelRela();
+                rela.setBlogId(blogId);
+                rela.setLabelId(ca);
+                relas.add(rela);
+            }
+
+            labelRelaDao.insertBatch(relas);
+        }
     }
 
     // 解析博文中引用的相册图片
@@ -201,23 +241,36 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
         }*/
 
         // 2 更新博文
-        String ch = dbProperties.getStringFiledSplitCharacterForNumber();
-        String chs = dbProperties.getStringFiledSplitCharacterForString();
         Blog blog = new Blog();
         blog.setId(blogId);
-        if (newCategories != null) blog.setCategoryIds(StringUtils.longArrayToString(newCategories, ch));
-        if (newLabels != null) blog.setLabelIds(StringUtils.longArrayToString(newLabels, ch));
         // 博文未通过审核时不能修改状态
         if (newStatus != null && !oldBlog.getState().equals(BlogStatusEnum.VERIFY.getCode()))
             blog.setState(newStatus.getCode());
         if (newTitle != null) blog.setTitle(newTitle);
-        if (newContent != null) blog.setContent(newContent);
+        if (newContent != null) {
+            blog.setContent(newContent);
+            BlogStatistics sta = new BlogStatistics();
+            // UPDATE: 2018/9/25 newContent 中一些特殊字符不计入字数
+            sta.setWordCount(newContent.length());
+            statisticsDao.update(sta);
+        }
         if (newSummary != null) blog.setSummary(newSummary);
         if (newContentMd != null) blog.setContentMd(newContentMd);
-        if (newKeyWords != null) blog.setKeyWords(StringUtils.arrayToString(newKeyWords, chs));
+        if (newKeyWords != null) blog.setKeyWords(StringUtils.arrayToString(newKeyWords,
+                websiteProperties.getConditionSplitCharacter()));
         int effect = blogDao.update(blog);
         if (effect <= 0)
             throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
+
+        if (ArrayUtils.isEmpty(newCategories)) {
+            categoryRelaDao.deleteByBlogId(blogId);
+            insertCategoryAndLabels(blogId, newCategories, null);
+        }
+
+        if (ArrayUtils.isEmpty(newLabels)) {
+            labelRelaDao.deleteByBlogId(blogId);
+            insertCategoryAndLabels(blogId, null, newLabels);
+        }
 
         // 3 更新lucene
         try {
@@ -236,14 +289,19 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
         Blog blog = blogDao.getBlogById(blogId);
         if (blog == null) return false;
 
-        // 1 删除博文记录
-        int effect = blogDao.delete(blogId);
-        if (effect <= 0) return false;
+        Blog ub = new Blog();
+        ub.setState(BlogStatusEnum.DELETED.getCode());
+        ub.setId(blogId);
+        blogDao.update(ub);
 
+        // int effect = blogDao.delete(blogId);
+        // if (effect <= 0) return false;
+
+        // 1 删除博文记录，外键会将统计信息一块删除
         // 2 删除统计信息
-        int effectS = statisticsDao.deleteByUnique(blogId);
+        // int effectS = statisticsDao.deleteByUnique(blogId);
         // MAYBUG 断点调试时effectS始终为0，但最终事务提交时记录却会正确删除，？？？ 因而注释下面的判断
-        //if (effectS <= 0) throw new UnknownException(blog");
+        // if (effectS <= 0) throw new UnknownException(blog");
 
         // 3 图片引用useCount--
         Long[] ids = parseContentForImageIds(blog.getContent(), bloggerId);
@@ -276,27 +334,12 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
     public ResultModel<BlogDTO> getBlog(Long bloggerId, Long blogId) {
 
         Blog blog = blogDao.getBlogById(blogId);
-
-        String ch = dbProperties.getStringFiledSplitCharacterForNumber();
-        String chs = dbProperties.getStringFiledSplitCharacterForString();
-        String whs = websiteProperties.getUrlConditionSplitCharacter();
-
         if (blog != null && blog.getBloggerId().equals(bloggerId)) {
 
-            String cids = blog.getCategoryIds();
-            String lids = blog.getLabelIds();
-            String keyWords = blog.getKeyWords();
+            List<BlogCategoryRela> relas = categoryRelaDao.listAllByBlogId(blogId);
+            List<BlogLabelRela> labelRelas = labelRelaDao.listAllByBlogId(blogId);
 
-            if (!StringUtils.isEmpty(cids))
-                blog.setCategoryIds(cids.replace(ch, whs));
-
-            if (!StringUtils.isEmpty(lids))
-                blog.setLabelIds(lids.replace(ch, whs));
-
-            if (!StringUtils.isBlank(keyWords))
-                blog.setKeyWords(keyWords.replace(chs, whs));
-
-            return new ResultModel<>(dataFillingManager.blog2DTO(blog));
+            return new ResultModel<>(dataFillingManager.blog2DTO(blog, relas, labelRelas));
 
         }
 

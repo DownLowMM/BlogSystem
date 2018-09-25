@@ -1,7 +1,7 @@
 package com.duan.blogos.service.service.common;
 
 
-import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
+import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.restful.ResultModel;
 
@@ -26,7 +26,7 @@ public interface BlogStatisticsService {
      * @param blogId 博文id
      * @return 查询结果
      */
-    ResultModel<BlogStatisticsCountDTO> getBlogStatisticsCount(Long blogId);
+    ResultModel<BlogBaseStatisticsDTO> getBlogStatisticsCount(Long blogId);
 
     /**
      * 更新博文浏览次数（加一）

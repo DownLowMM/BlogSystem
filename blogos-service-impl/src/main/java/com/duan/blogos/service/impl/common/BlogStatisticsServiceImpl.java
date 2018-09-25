@@ -1,22 +1,26 @@
 package com.duan.blogos.service.impl.common;
 
 import com.duan.blogos.service.config.preference.DbProperties;
+import com.duan.blogos.service.dao.BlogCategoryRelaDao;
+import com.duan.blogos.service.dao.BlogLabelRelaDao;
 import com.duan.blogos.service.dao.blog.*;
-import com.duan.blogos.service.dto.blog.BlogStatisticsCountDTO;
+import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
+import com.duan.blogos.service.entity.BlogCategoryRela;
+import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.*;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
 import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Created on 2017/12/19.
@@ -54,6 +58,12 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
     private BlogCommentDao commentDao;
 
     @Autowired
+    private BlogCategoryRelaDao categoryRelaDao;
+
+    @Autowired
+    private BlogLabelRelaDao labelRelaDao;
+
+    @Autowired
     private BloggerStatisticsService statisticsService;
 
     @Override
@@ -62,68 +72,69 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
         Blog blog = blogDao.getBlogById(blogId);
         if (blog == null) return null;
 
-        Long bloggerId = blog.getBloggerId();
 
         // 统计信息
         BlogStatistics statistics = statisticsDao.getStatistics(blogId);
         if (statistics == null) return null;
 
-        // 类别
-        BlogCategory[] categories = null;
-        String sn = dbProperties.getStringFiledSplitCharacterForNumber();
-        Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), sn);
-        if (!CollectionUtils.isEmpty(cids)) {
-            categories = categoryDao.listCategoryById(cids).toArray(new BlogCategory[cids.length]);
-        }
-
-        // 标签
-        BlogLabel[] labels = null;
-        Long[] lids = StringUtils.longStringDistinctToArray(blog.getLabelIds(), sn);
-        if (!CollectionUtils.isEmpty(lids)) {
-            labels = labelDao.listLabelById(lids).toArray(new BlogLabel[lids.length]);
-        }
-
-        int c = 0;
         // 喜欢该篇文章的人
-        BloggerDTO[] likes = null;
+        List<BloggerDTO> likes = null;
         List<BlogLike> likeList = likeDao.listAllLikeByBlogId(blogId);
         if (!CollectionUtils.isEmpty(likeList)) {
-            Long[] ids = new Long[likeList.size()];
-            for (BlogLike like : likeList) {
-                ids[c++] = like.getLikerId();
-            }
+            List<Long> ids = likeList.stream()
+                    .map(BlogLike::getLikerId)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
             likes = statisticsService.listBloggerDTO(ids);
         }
 
         // 收藏了该篇文章的人
-        BloggerDTO[] collects = null;
-        c = 0;
+        List<BloggerDTO> collects = null;
         List<BlogCollect> collectList = collectDao.listAllCollectByBlogId(blogId);
         if (!CollectionUtils.isEmpty(collectList)) {
-            Long[] ids = new Long[collectList.size()];
-            for (BlogCollect collect : collectList) {
-                ids[c++] = collect.getCollectorId();
-            }
+            List<Long> ids = collectList.stream()
+                    .map(BlogCollect::getCollectorId)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
             collects = statisticsService.listBloggerDTO(ids);
         }
 
         // 评论过该篇文章的人
-        BloggerDTO[] commenter = null;
-        c = 0;
+        List<BloggerDTO> commenter = null;
         List<BlogComment> commentList = commentDao.listAllCommentByBlogId(blogId);
         if (!CollectionUtils.isEmpty(commentList)) {
-            Long[] ids = new Long[commentList.size()];
-            for (BlogComment comment : commentList) {
-                // 评论者注销，但其评论将保存（匿名）
-                Long id = comment.getSpokesmanId();
-                if (id != null)
-                    ids[c++] = id;
-            }
-
-            // ids 需要去重
-
-            Long[] ls = Arrays.stream(ids).distinct().toArray(Long[]::new);
+            List<Long> ls = commentList.stream()
+                    .map(BlogComment::getSpokesmanId)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
             commenter = statisticsService.listBloggerDTO(ls);
+        }
+
+        // 类别
+        List<BlogCategory> categories = null;
+        List<BlogCategoryRela> relas = categoryRelaDao.listAllByBlogId(blogId);
+        if (!CollectionUtils.isEmpty(relas)) {
+            List<Long> cids = relas.stream()
+                    .map(BlogCategoryRela::getCategoryId)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+            categories = categoryDao.listCategoryById(cids);
+        }
+
+        // 标签
+        List<BlogLabel> labels = null;
+        List<BlogLabelRela> lrelas = labelRelaDao.listAllByBlogId(blogId);
+        if (!CollectionUtils.isEmpty(lrelas)) {
+            List<Long> lids = lrelas.stream()
+                    .map(BlogLabelRela::getLabelId)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+            labels = labelDao.listLabelById(lids);
         }
 
         BlogStatisticsDTO dto = dataFillingManager.blogStatisticsToDTO(blog, statistics, categories, labels,
@@ -134,12 +145,12 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
 
 
     @Override
-    public ResultModel<BlogStatisticsCountDTO> getBlogStatisticsCount(Long blogId) {
+    public ResultModel<BlogBaseStatisticsDTO> getBlogStatisticsCount(Long blogId) {
 
         BlogStatistics statistics = statisticsDao.getStatistics(blogId);
         if (statistics == null) return null;
 
-        BlogStatisticsCountDTO dto = dataFillingManager.blogStatisticsCountToDTO(statistics);
+        BlogBaseStatisticsDTO dto = dataFillingManager.blogStatisticsCountToDTO(statistics);
         return new ResultModel<>(dto);
     }
 

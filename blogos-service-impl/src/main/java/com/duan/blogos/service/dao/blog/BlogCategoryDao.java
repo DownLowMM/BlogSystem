@@ -21,7 +21,7 @@ public interface BlogCategoryDao extends BaseDao<BlogCategory> {
      * @param ids 类别id
      * @return 查询结果
      */
-    List<BlogCategory> listCategoryById(@Param("ids") Long[] ids);
+    List<BlogCategory> listCategoryById(@Param("ids") List<Long> ids);
 
     /**
      * 查询博主创建的所有博文类别

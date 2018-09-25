@@ -128,7 +128,7 @@
         <property name="senderMailPassword" value="${sender-mail-password}"/>
         <property name="activeBloggerCount" value="${active-blogger-count}"/>
         <property name="addr" value="${addr}"/>
-        <property name="urlConditionSplitCharacter" value="${url-condition-split-character}"/>
+        <property name="conditionSplitCharacter" value="${url-condition-split-character}"/>
     </bean>
 
     <!-- ############################ shiro ############################ -->

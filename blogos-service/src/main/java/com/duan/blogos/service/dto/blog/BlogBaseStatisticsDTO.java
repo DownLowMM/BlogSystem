@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * Created on 2018/9/13.
+ * Created on 2017/12/25.
  *
  * @author DuanJiaNing
  */
@@ -43,8 +43,10 @@ public class BlogBaseStatisticsDTO implements Serializable {
     //喜欢次数
     private Integer likeCount;
 
+    //字数
+    private Integer wordCount;
+
     //发布日期
     private Timestamp releaseDate;
-
 
 }

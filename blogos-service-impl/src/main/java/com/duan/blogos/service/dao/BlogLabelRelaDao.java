@@ -24,4 +24,14 @@ public interface BlogLabelRelaDao extends BaseDao<BlogLabelRela> {
      * 博文的所有类别
      */
     List<BlogLabelRela> listAllByBlogId(Long blogId);
+
+    /**
+     * 批量插入
+     */
+    int insertBatch(@Param("relas") List<BlogLabelRela> relas);
+
+    /**
+     * 删除博文的所有标签
+     */
+    int deleteByBlogId(Long blogId);
 }

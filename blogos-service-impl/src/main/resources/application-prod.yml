@@ -77,7 +77,7 @@ preference:
     category-count: 10
     label-count: 10
     blog-category-id: 1
-    url-condition-split-character: \u002C
+    condition-split-character: \u002C
   website:
     manager-id: 1
     manager-email: duan_jia_ning@163.com
