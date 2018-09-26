@@ -94,7 +94,6 @@
     <select id="listBlogByBlogIds" resultType="Blog" parameterType="list">
         SELECT *
         FROM blog b
-        left join blog_statistics s on b.id = s.blog_id
         WHERE b.id IN
         <foreach collection="ids"
                  item="id"

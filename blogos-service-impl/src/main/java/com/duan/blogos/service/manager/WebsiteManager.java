@@ -4,6 +4,8 @@ import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Created on 2018/5/1.
  *
@@ -21,16 +23,10 @@ public class WebsiteManager {
      * @param count 获取个数
      * @return id 集合
      */
-    public Long[] getActiveBloggerIds(int count) {
+    public List<Long> getActiveBloggerIds(int count) {
 
         // UPDATE: 2018/5/1 更新 完善策略
-        Long[] array = accountDao.listId(count).toArray(new Long[]{});
-        Long[] res = new Long[array.length];
-        for (int i = 0; i < array.length; i++) {
-            res[i] = array[i];
-        }
-
-        return res;
+        return accountDao.listId(count);
     }
 
 }

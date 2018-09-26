@@ -39,6 +39,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.duan.blogos.service.enums.BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR;
 
@@ -101,11 +102,15 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
         List<BlogCategoryRela> cads = categoryRelaDao.listAllByBlogId(blog.getId());
 
         List<BlogCategory> categories = CollectionUtils.isEmpty(cads) ? null :
-                categoryDao.listCategoryById(cads.stream().map(BlogCategoryRela::getCategoryId).toArray(Long[]::new));
+                categoryDao.listCategoryById(cads.stream()
+                        .map(BlogCategoryRela::getCategoryId)
+                        .collect(Collectors.toList()));
 
         List<BlogLabelRela> las = labelRelaDao.listAllByBlogId(blog.getId());
         List<BlogLabel> labels = CollectionUtils.isEmpty(las) ? null :
-                labelDao.listLabelById(las.stream().map(BlogLabelRela::getLabelId).toArray(Long[]::new));
+                labelDao.listLabelById(las.stream()
+                        .map(BlogLabelRela::getLabelId)
+                        .collect(Collectors.toList()));
 
         //填充数据
         BlogMainContentDTO dto = dataFillingManager.blogMainContentToDTO(blog, categories, labels,

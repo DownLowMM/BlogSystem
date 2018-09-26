@@ -41,8 +41,8 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
     @TokenNotRequired
     public ResultModel<PageResult<BloggerCategoryDTO>> list(
             @RequestParam Long bloggerId,
-            @RequestParam(value = "pageNum", required = false) Integer pageNum,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+            @RequestParam(required = false) Integer pageNum,
+            @RequestParam(required = false) Integer pageSize) {
         handleAccountCheck(bloggerId);
 
         ResultModel<PageResult<BloggerCategoryDTO>> result = bloggerCategoryService.listBlogCategory(bloggerId,

@@ -17,8 +17,6 @@ import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created on 2018/2/4.
  * <p>
@@ -40,28 +38,27 @@ public class BlogController extends BaseBlogController {
     /**
      * 检索指定博主的博文列表
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<PageResult<BlogListItemDTO>> list(HttpServletRequest request,
-                                                         @RequestParam("bloggerId") Long bloggerId,
-                                                         @RequestParam(value = "cids", required = false) String categoryIds,
-                                                         @RequestParam(value = "lids", required = false) String labelIds,
-                                                         @RequestParam(value = "kword", required = false) String keyWord,
-                                                         @RequestParam(value = "pageNum", required = false) Integer pageNum,
-                                                         @RequestParam(value = "pageSize", required = false) Integer pageSize,
-                                                         @RequestParam(value = "sort", required = false) String sort,
-                                                         @RequestParam(value = "order", required = false) String order) {
+    @GetMapping
+    public ResultModel<PageResult<BlogListItemDTO>> list(@RequestParam Long bloggerId,
+                                                         @RequestParam(required = false) String categoryIds,
+                                                         @RequestParam(required = false) String labelIds,
+                                                         @RequestParam(required = false) String keyWord,
+                                                         @RequestParam(required = false) Integer pageNum,
+                                                         @RequestParam(required = false) Integer pageSize,
+                                                         @RequestParam(required = false) String sort,
+                                                         @RequestParam(required = false) String order) {
         handleAccountCheck(bloggerId);
 
         //检查数据合法性
         String sor = StringUtils.isBlank(sort) ? Rule.VIEW_COUNT.name() : sort.toUpperCase();
         String ord = StringUtils.isBlank(order) ? Order.DESC.name() : order.toUpperCase();
-        handleSortRuleCheck(request, sor, ord);
+        handleSortRuleCheck(sor, ord);
 
         String ch = ",";
         Long[] cids = StringUtils.longStringDistinctToArray(categoryIds, ch);
         Long[] lids = StringUtils.longStringDistinctToArray(labelIds, ch);
         //检查博文类别和标签
-        handleCategoryAndLabelCheck(request, bloggerId, cids, lids);
+        handleCategoryAndLabelCheck(bloggerId, cids, lids);
 
         //执行数据查询
         BlogSortRule rule = new BlogSortRule(Rule.valueOf(sor), Order.valueOf(ord));
@@ -71,9 +68,8 @@ public class BlogController extends BaseBlogController {
     /**
      * 获得博文主体内容
      */
-    @RequestMapping(value = "/{blogId}", method = RequestMethod.GET)
-    public ResultModel<BlogMainContentDTO> get(HttpServletRequest request,
-                                               @PathVariable Long blogId) {
+    @GetMapping("/{blogId}")
+    public ResultModel<BlogMainContentDTO> get(@PathVariable Long blogId) {
         handleBlogExistCheck(blogId);
 
         ResultModel<BlogMainContentDTO> mainContent = blogBrowseService.getBlogMainContent(blogId);
@@ -83,7 +79,7 @@ public class BlogController extends BaseBlogController {
     }
 
     // 检查类别和标签
-    private void handleCategoryAndLabelCheck(HttpServletRequest request, Long bloggerId, Long[] cids, Long[] lids) {
+    private void handleCategoryAndLabelCheck(Long bloggerId, Long[] cids, Long[] lids) {
 
         if (!CollectionUtils.isEmpty(cids)) {
             for (Long id : cids) {
@@ -102,7 +98,7 @@ public class BlogController extends BaseBlogController {
     }
 
     // 检查排序规则
-    private void handleSortRuleCheck(HttpServletRequest request, String sort, String order) {
+    private void handleSortRuleCheck(String sort, String order) {
 
         if (sort != null && !Rule.contains(sort)) {
             throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);

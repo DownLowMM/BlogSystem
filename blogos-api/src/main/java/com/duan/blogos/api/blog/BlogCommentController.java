@@ -24,8 +24,8 @@ public class BlogCommentController extends BaseBlogController {
      */
     @GetMapping
     public ResultModel<PageResult<BlogCommentDTO>> get(@PathVariable Long blogId,
-                                                       @RequestParam(value = "pageSize", required = false) Integer pageSize,
-                                                       @RequestParam(value = "pageNum", required = false) Integer pageNum) {
+                                                       @RequestParam(required = false) Integer pageSize,
+                                                       @RequestParam(required = false) Integer pageNum) {
         handleBlogExistCheck(blogId);
 
         ResultModel<PageResult<BlogCommentDTO>> resultModel = blogBrowseService.listBlogComment(blogId, pageSize, pageNum);

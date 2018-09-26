@@ -5,22 +5,16 @@ import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.dao.BlogCategoryRelaDao;
 import com.duan.blogos.service.dao.BlogLabelRelaDao;
-import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blog.BlogDao;
-import com.duan.blogos.service.dao.blog.BlogLabelDao;
-import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
 import com.duan.blogos.service.dto.blog.BlogListItemDTO;
 import com.duan.blogos.service.entity.BlogCategoryRela;
 import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.Blog;
-import com.duan.blogos.service.entity.blog.BlogCategory;
-import com.duan.blogos.service.entity.blog.BlogLabel;
-import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.manager.BlogDataManager;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilterService;
@@ -35,8 +29,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created on 2018/1/15.
@@ -57,25 +49,16 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
     protected BlogDao blogDao;
 
     @Autowired
-    private BlogCategoryDao categoryDao;
-
-    @Autowired
-    private BlogLabelDao labelDao;
-
-    @Autowired
-    private DataFillingManager dataFillingManager;
-
-    @Autowired
     protected BlogLuceneIndexManager luceneIndexManager;
-
-    @Autowired
-    private BlogStatisticsDao statisticsDao;
 
     @Autowired
     private BlogCategoryRelaDao categoryRelaDao;
 
     @Autowired
     private BlogLabelRelaDao labelRelaDao;
+
+    @Autowired
+    private BlogDataManager blogDataManager;
 
     @Override
     public ResultModel<PageResult<BlogListItemDTO>> listFilterAll(Long[] categoryIds, Long[] labelIds, String keyWord,
@@ -148,7 +131,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
 
         Set<Long> blogIds = new HashSet<>();
 
-        if (!ArrayUtils.isEmpty(categoryIds) && !ArrayUtils.isEmpty(labelIds)) {
+        if (ArrayUtils.isEmpty(categoryIds) && ArrayUtils.isEmpty(labelIds)) {
             List<Blog> res = blogDao.listAllIdByBloggerId(bloggerId);
             res.forEach(blog -> blogIds.add(blog.getId()));
         } else {
@@ -177,34 +160,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
 
         List<BlogListItemDTO> dtos = new ArrayList<>();
         for (Blog blog : pageInfo.getList()) {
-            Long blogId = blog.getId();
-
-            // 找一张图片
-            String content = blog.getContent();
-            Pattern pattern = Pattern.compile("<img src=\"(.*)\" .*>");
-            Matcher matcher = pattern.matcher(content);
-            String img = null;
-            if (matcher.find())
-                img = matcher.group(1);
-
-            BlogCategory[] array = null;
-            List<BlogCategoryRela> cts = categoryRelaDao.listAllByBlogId(blogId);
-            if (!CollectionUtils.isEmpty(cts)) {
-                array = cts.stream()
-                        .map(rela -> categoryDao.getCategory(bloggerId, rela.getCategoryId()))
-                        .toArray(BlogCategory[]::new);
-            }
-
-            BlogLabel[] a2 = null;
-            List<BlogLabelRela> lbs = labelRelaDao.listAllByBlogId(blogId);
-            if (!CollectionUtils.isEmpty(lbs)) {
-                a2 = lbs.stream()
-                        .map(rela -> labelDao.getLabel(rela.getLabelId()))
-                        .toArray(BlogLabel[]::new);
-            }
-
-            BlogStatistics statistics = statisticsDao.getStatistics(blogId);
-            dtos.add(dataFillingManager.blogListItemToDTO(statistics, array, a2, blog, img));
+            dtos.add(blogDataManager.getBlogListItemDTO(blog, bloggerId, true));
         }
 
         return new PageResult<>(pageInfo.getTotal(), dtos);

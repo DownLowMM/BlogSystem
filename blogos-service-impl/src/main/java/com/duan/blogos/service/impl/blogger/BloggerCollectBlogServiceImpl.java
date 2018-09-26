@@ -1,29 +1,30 @@
 package com.duan.blogos.service.impl.blogger;
 
 import com.duan.blogos.service.common.BlogSortRule;
-import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
-import com.duan.blogos.service.dao.BlogCategoryRelaDao;
-import com.duan.blogos.service.dao.BlogLabelRelaDao;
-import com.duan.blogos.service.dao.blog.*;
+import com.duan.blogos.service.dao.blog.BlogCollectDao;
+import com.duan.blogos.service.dao.blog.BlogDao;
+import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dao.blogger.BloggerProfileDao;
 import com.duan.blogos.service.dto.blog.BlogListItemDTO;
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.dto.blogger.FavouriteBlogListItemDTO;
-import com.duan.blogos.service.entity.blog.*;
+import com.duan.blogos.service.entity.blog.Blog;
+import com.duan.blogos.service.entity.blog.BlogCollect;
+import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.manager.BlogDataManager;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.manager.comparator.BlogListItemComparatorFactory;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCollectBlogService;
 import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,12 +48,6 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
     private BlogStatisticsDao statisticsDao;
 
     @Autowired
-    private BlogCategoryDao categoryDao;
-
-    @Autowired
-    private BlogLabelDao labelDao;
-
-    @Autowired
     private BlogDao blogDao;
 
     @Autowired
@@ -68,19 +63,13 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
     private DataFillingManager fillingManager;
 
     @Autowired
-    private DbProperties dbProperties;
-
-    @Autowired
     private DefaultProperties defaultProperties;
 
     @Autowired
     private StringConstructorManager constructorManager;
 
     @Autowired
-    private BlogCategoryRelaDao categoryRelaDao;
-
-    @Autowired
-    private BlogLabelRelaDao labelRelaDao;
+    private BlogDataManager blogDataManager;
 
     @Override
     public ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(Long bloggerId, Long categoryId, int offset, int rows, BlogSortRule sortRule) {
@@ -111,26 +100,7 @@ public class BloggerCollectBlogServiceImpl implements BloggerCollectBlogService 
 
             // BlogListItemDTO
             Blog blog = blogDao.getBlogById(blogId);
-            String ch = dbProperties.getStringFiledSplitCharacterForNumber();
-
-            // category
-            Long[] cids = StringUtils.longStringDistinctToArray(blog.getCategoryIds(), ch);
-            List<BlogCategory> categories = null;
-            if (!CollectionUtils.isEmpty(cids)) {
-                categories = categoryDao.listCategoryById(cids);
-            }
-
-            // label
-            Long[] lids = StringUtils.longStringDistinctToArray(blog.getLabelIds(), ch);
-            List<BlogLabel> labels = null;
-            if (!CollectionUtils.isEmpty(lids)) {
-                labels = labelDao.listLabelById(lids);
-            }
-
-            BlogListItemDTO listItemDTO = fillingManager.blogListItemToDTO(statistics,
-                    CollectionUtils.isEmpty(categories) ? null : categories.toArray(new BlogCategory[0]),
-                    CollectionUtils.isEmpty(labels) ? null : labels.toArray(new BlogLabel[0]),
-                    blog, null);
+            BlogListItemDTO listItemDTO = blogDataManager.getBlogListItemDTO(blog, bloggerId, false);
 
             // BloggerDTO
             Long authorId = blog.getBloggerId();
