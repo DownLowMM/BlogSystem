@@ -6,13 +6,10 @@ import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.dto.blog.BlogListItemDTO;
 import com.duan.blogos.service.dto.blog.BlogMainContentDTO;
 import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilterService;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
-import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -78,34 +75,4 @@ public class BlogController extends BaseBlogController {
         return mainContent;
     }
 
-    // 检查类别和标签
-    private void handleCategoryAndLabelCheck(Long bloggerId, Long[] cids, Long[] lids) {
-
-        if (!CollectionUtils.isEmpty(cids)) {
-            for (Long id : cids) {
-                if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, id))
-                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-            }
-        }
-
-        if (!CollectionUtils.isEmpty(lids)) {
-            for (Long id : lids) {
-                if (!blogValidateService.checkLabelsExist(id))
-                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-            }
-        }
-
-    }
-
-    // 检查排序规则
-    private void handleSortRuleCheck(String sort, String order) {
-
-        if (sort != null && !Rule.contains(sort)) {
-            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);
-        }
-
-        if (order != null && !Order.contains(order)) {
-            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
-        }
-    }
 }

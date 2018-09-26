@@ -2,8 +2,6 @@ package com.duan.blogos.api.blog;
 
 import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
-import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +52,5 @@ public class BlogStatisticsController extends BaseBlogController {
 
         return statistics;
     }
-
-    // 检查博文的统计信息是否存在
-    private void handleBlogStatisticsExistCheck(Long blogId) {
-        if (!blogValidateService.checkBlogStatisticExist(blogId))
-            throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
-    }
-
 
 }

@@ -3,10 +3,10 @@ server:
 
 preference:
   website:
-    session:
-      blogger-id: bloggerId
-      blogger-name: bloggerName
-      login-signal: bloggerLoginSignal
-      error-msg: errorMsg
-      owner-id: pageOwnerBloggerId
-      owner-name: pageOwnerBloggerName
+#    session:
+#      blogger-id: bloggerId
+#      blogger-name: bloggerName
+#      login-signal: bloggerLoginSignal
+#      error-msg: errorMsg
+#      owner-id: pageOwnerBloggerId
+#      owner-name: pageOwnerBloggerName

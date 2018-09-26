@@ -116,12 +116,6 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         return new ResultModel<>("");
     }
 
-    // 检查指定博主是否有指定的博文类别
-    private void handleCategoryExistCheck(Long bloggerId, Long categoryId) {
-        if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, categoryId))
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_CATEGORY);
-    }
-
     /**
      * 删除类别，类别被删除后该类别下的所有博文将被移动到指定类别，不指定将移动到默认类别。
      * 不能同时删除类别下的所有文章，删除博文通过博文api操控。

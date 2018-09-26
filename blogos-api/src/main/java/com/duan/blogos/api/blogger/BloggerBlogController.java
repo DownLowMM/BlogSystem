@@ -316,49 +316,4 @@ public class BloggerBlogController extends BaseBloggerController {
 
     }
 
-    // 检查博文是否存在，且博文是否属于指定博主
-    private void handleBlogExistAndCreatorCheck(Long bloggerId, Long blogId) {
-        if (!blogValidateService.isCreatorOfBlog(bloggerId, blogId))
-            throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
-    }
-
-    // 检查类别和标签
-    private void handleCategoryAndLabelCheck(Long bloggerId, Long[] cids, Long[] lids) {
-
-        if (!CollectionUtils.isEmpty(cids)) {
-            for (Long id : cids) {
-                if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, id))
-                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-            }
-        }
-
-        if (!CollectionUtils.isEmpty(lids)) {
-            for (Long id : lids) {
-                if (!blogValidateService.checkLabelsExist(id))
-                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-            }
-        }
-
-    }
-
-    //博文内容审核
-    private void handleBlogContentCheck(String title, String content, String contentMd, String summary,
-                                        String keyWords) {
-        if (!blogValidateService.verifyBlog(title, content, contentMd, summary, keyWords))
-            throw ResultUtil.failException(CodeMessage.BLOG_ILLEGAL);
-
-    }
-
-    // 检查排序规则
-    private void handleSortRuleCheck(String sort, String order) {
-
-        if (sort != null && !com.duan.blogos.service.common.Rule.contains(sort)) {
-            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);
-        }
-
-        if (order != null && !Order.contains(order)) {
-            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
-        }
-    }
-
 }

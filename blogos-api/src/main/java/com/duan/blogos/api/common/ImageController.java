@@ -57,7 +57,7 @@ public class ImageController extends BaseCheckController {
 
         // 检查default是否为默认类别
         if (category != null)
-            handleBlogCategoryDefaultCheck(request, category);
+            handleBlogCategoryDefaultCheck(category);
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(imageId, bloggerId);
 
@@ -86,7 +86,7 @@ public class ImageController extends BaseCheckController {
 
         // 检查默认图片类别是否为默认类别
         if (category != null)
-            handleBlogCategoryDefaultCheck(request, category);
+            handleBlogCategoryDefaultCheck(category);
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(imageId, bloggerId);
         BloggerPictureDTO backupPicture = bloggerPictureService.getDefaultPicture(
@@ -135,13 +135,6 @@ public class ImageController extends BaseCheckController {
     private com.duan.common.util.MultipartFile fileTrans(MultipartFile file) {
         return null;
     }
-
-    // 检查默认图片类别是否为默认类别
-    private void handleBlogCategoryDefaultCheck(HttpServletRequest request, int category) {
-        if (!BloggerPictureCategoryEnum.isDefaultPictureCategory(category))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-    }
-
 
     // 输出图片
     private void outPutPicture(BloggerPictureDTO picture, BloggerPictureDTO backupPicture,

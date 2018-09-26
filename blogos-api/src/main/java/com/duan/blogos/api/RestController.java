@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created on 2017/12/26.
  *
@@ -86,7 +84,7 @@ public class RestController {
      * 未指明操作
      */
     @RequestMapping
-    protected void defaultOperation(HttpServletRequest request) {
+    protected void defaultOperation() {
         throw ResultUtil.failException(CodeMessage.COMMON_UNSPECIFIED_OPERATION);
     }
 

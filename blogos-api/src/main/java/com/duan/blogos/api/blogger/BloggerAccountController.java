@@ -10,7 +10,6 @@ import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.common.OnlineService;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
-import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -142,12 +141,6 @@ public class BloggerAccountController extends BaseBloggerController {
         if (!result) handlerOperateFail();
 
         return new ResultModel<>("");
-    }
-
-    // 检查用户名合法性
-    private void handleNameCheck(String userName) {
-        if (StringUtils.isBlank(userName) || !bloggerValidateService.checkUserName(userName))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
 }

@@ -96,10 +96,10 @@ preference:
     active-blogger-count: 20 # 默认获取活跃博主数
     addr: 127.0.0.1:8080 # 站点域名
 
-    session:
-      blogger-id: bloggerId # 保存在session属性中的博主id对应的名字
-      blogger-name: bloggerName # 保存在session属性中的博主用户名对应的名字
-      login-signal: bloggerLoginSignal # 保存在session属性中的博主登录标识，有值（任意值）就表示已登录
-      error-msg: errorMsg # 保存在session属性中的错误信息对应的名字
-      owner-id: pageOwnerBloggerId # 页面所属博主id
-      owner-name: pageOwnerBloggerName # 页面所属博主name
+#    session:
+#      blogger-id: bloggerId # 保存在session属性中的博主id对应的名字
+#      blogger-name: bloggerName # 保存在session属性中的博主用户名对应的名字
+#      login-signal: bloggerLoginSignal # 保存在session属性中的博主登录标识，有值（任意值）就表示已登录
+#      error-msg: errorMsg # 保存在session属性中的错误信息对应的名字
+#      owner-id: pageOwnerBloggerId # 页面所属博主id
+#      owner-name: pageOwnerBloggerName # 页面所属博主name

@@ -7,12 +7,9 @@ import com.duan.blogos.service.exception.ResultUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.blogger.BloggerProfileService;
-import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 
 /**
@@ -40,8 +37,7 @@ public class BloggerProfileController extends BaseBloggerController {
      * 获取资料
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<BloggerProfileDTO> get(HttpServletRequest request,
-                                              @PathVariable Long bloggerId) {
+    public ResultModel<BloggerProfileDTO> get(@PathVariable Long bloggerId) {
         handleAccountCheck(bloggerId);
 
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(bloggerId);
@@ -54,8 +50,7 @@ public class BloggerProfileController extends BaseBloggerController {
      * 新增资料
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ResultModel add(HttpServletRequest request,
-                           @PathVariable Long bloggerId,
+    public ResultModel add(@PathVariable Long bloggerId,
                            @RequestParam(value = "avatarId", required = false) Long avatarId,
                            @RequestParam(value = "phone", required = false) String phone,
                            @RequestParam(value = "email", required = false) String email,
@@ -63,7 +58,7 @@ public class BloggerProfileController extends BaseBloggerController {
                            @RequestParam(value = "intro", required = false) String intro) {
         handlePictureExistCheck(bloggerId, avatarId);
 
-        handleParamsCheck(phone, email, request);
+        handlePhoneAndEmailCheck(phone, email);
         Long id = bloggerProfileService.insertBloggerProfile(bloggerId, avatarId,
                 phone, email, aboutMe, intro);
         if (id == null) handlerOperateFail();
@@ -75,8 +70,7 @@ public class BloggerProfileController extends BaseBloggerController {
      * 更新资料
      */
     @RequestMapping(method = RequestMethod.PUT)
-    public ResultModel update(HttpServletRequest request,
-                              @PathVariable Long bloggerId,
+    public ResultModel update(@PathVariable Long bloggerId,
                               @RequestParam(value = "avatarId", required = false) Long avatarId,
                               @RequestParam(value = "phone", required = false) String phone,
                               @RequestParam(value = "email", required = false) String email,
@@ -89,7 +83,7 @@ public class BloggerProfileController extends BaseBloggerController {
 
         handlePictureExistCheck(bloggerId, avatarId);
 
-        handleParamsCheck(phone, email, request);
+        handlePhoneAndEmailCheck(phone, email);
         boolean result = bloggerProfileService.updateBloggerProfile(bloggerId, avatarId, phone, email, aboutMe, intro);
         if (!result) handlerOperateFail();
 
@@ -101,8 +95,7 @@ public class BloggerProfileController extends BaseBloggerController {
      * 删除资料
      */
     @RequestMapping(method = RequestMethod.DELETE)
-    public ResultModel delete(HttpServletRequest request,
-                              @PathVariable Long bloggerId) {
+    public ResultModel delete(@PathVariable Long bloggerId) {
 
         boolean result = bloggerProfileService.deleteBloggerProfile(bloggerId);
         if (!result) handlerOperateFail();
@@ -114,10 +107,9 @@ public class BloggerProfileController extends BaseBloggerController {
      * 更新头像
      */
     @RequestMapping(value = "/avatar", method = RequestMethod.POST)
-    public ResultModel updateAvatar(HttpServletRequest request,
-                                    @PathVariable Long bloggerId,
+    public ResultModel updateAvatar(@PathVariable Long bloggerId,
                                     @RequestParam(value = "avatarBaseUrlData") String base64urlData) {
-        handleImageBase64Check(request, base64urlData);
+        handleImageBase64Check(base64urlData);
 
         // 保存图片
         String base = base64urlData.replaceFirst("^data:image/(png|jpg);base64,", "");
@@ -129,23 +121,6 @@ public class BloggerProfileController extends BaseBloggerController {
         if (!res) handlerOperateFail();
 
         return new ResultModel<>(id);
-    }
-
-    private void handleImageBase64Check(HttpServletRequest request, String base64urlData) {
-
-        if (!base64urlData.contains("data:image") || !base64urlData.contains("base64")) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
-        }
-
-    }
-
-    private void handleParamsCheck(String phone, String email, HttpServletRequest request) {
-        RequestContext context = new RequestContext(request);
-        if (phone != null && !StringUtils.isPhone(phone))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
-
-        if (email != null && !StringUtils.isEmail(email))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
     }
 
 }
