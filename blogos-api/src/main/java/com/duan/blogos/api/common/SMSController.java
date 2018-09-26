@@ -7,12 +7,10 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.SmsService;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created on 2018/2/18.
@@ -29,9 +27,8 @@ public class SMSController extends BaseCheckController {
     /**
      * 向指定号码发送短信
      */
-    @RequestMapping(method = RequestMethod.POST)
-    public ResultModel send(HttpServletRequest request,
-                            @RequestParam("phone") String phone,
+    @PostMapping
+    public ResultModel send(@RequestParam("phone") String phone,
                             @RequestParam("content") String content) {
 
         if (StringUtils.isBlank(phone) || StringUtils.isBlank(content)) {

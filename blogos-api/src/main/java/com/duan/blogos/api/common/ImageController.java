@@ -48,7 +48,7 @@ public class ImageController extends BaseCheckController {
     /**
      * 输出公开图片，这些图片无需验证登录，如果数据库不存在指定图片，则返回默认图片
      */
-    @RequestMapping(value = "/type=public/{imageId}", method = RequestMethod.GET)
+    @GetMapping("/type=public/{imageId}")
     public void getBlogPicture(HttpServletRequest request, HttpServletResponse response,
                                @PathVariable("bloggerId") Long bloggerId,
                                @PathVariable("imageId") Long imageId,
@@ -78,7 +78,7 @@ public class ImageController extends BaseCheckController {
     /**
      * 获取博主的私有图片（任意图片），这些图片需要验证登录
      */
-    @RequestMapping(value = "/type=private/{imageId}", method = RequestMethod.GET)
+    @GetMapping("/type=private/{imageId}")
     public void getBloggerPicture(HttpServletRequest request, HttpServletResponse response,
                                   @PathVariable("bloggerId") Long bloggerId,
                                   @PathVariable("imageId") Long imageId,
@@ -101,7 +101,7 @@ public class ImageController extends BaseCheckController {
     /**
      * 上传图片
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     @ResponseBody
     public ResultModel upload(MultipartHttpServletRequest request,
                               @PathVariable("bloggerId") Long bloggerId,

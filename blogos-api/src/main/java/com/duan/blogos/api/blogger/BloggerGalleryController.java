@@ -9,9 +9,7 @@ import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -39,12 +37,10 @@ public class BloggerGalleryController extends BaseBloggerController {
     /**
      * 根据id获取图片
      */
-    @RequestMapping(value = "/{pictureId}", method = RequestMethod.GET)
-    public ResultModel<BloggerPictureDTO> get(HttpServletRequest request,
-                                              @PathVariable("bloggerId") Long bloggerId,
+    @GetMapping("/{pictureId}")
+    public ResultModel<BloggerPictureDTO> get(@PathVariable("bloggerId") Long bloggerId,
                                               @PathVariable("pictureId") Long pictureId) {
 
-        RequestContext context = new RequestContext(request);
         if (pictureId == null)
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
@@ -57,13 +53,11 @@ public class BloggerGalleryController extends BaseBloggerController {
     /**
      * 获得多张图片
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<List<BloggerPictureDTO>> list(HttpServletRequest request,
-                                                     @PathVariable("bloggerId") Long bloggerId,
+    @GetMapping
+    public ResultModel<List<BloggerPictureDTO>> list(@PathVariable("bloggerId") Long bloggerId,
                                                      @RequestParam(value = "category", required = false) Integer category,
                                                      @RequestParam(value = "offset", required = false) Integer offset,
                                                      @RequestParam(value = "rows", required = false) Integer rows) {
-        RequestContext context = new RequestContext(request);
 
         int cate;
         if (category != null) {
@@ -90,15 +84,12 @@ public class BloggerGalleryController extends BaseBloggerController {
     /**
      * 更新图片信息
      */
-    @RequestMapping(value = "/{pictureId}", method = RequestMethod.PUT)
-    public ResultModel update(HttpServletRequest request,
-                              @PathVariable("bloggerId") Long bloggerId,
+    @PutMapping("/{pictureId}")
+    public ResultModel update(@PathVariable("bloggerId") Long bloggerId,
                               @PathVariable("pictureId") Long pictureId,
                               @RequestParam(value = "category", required = false) Integer newCategory,
                               @RequestParam(value = "bewrite", required = false) String newBeWrite,
                               @RequestParam(value = "title", required = false) String newTitle) {
-
-        RequestContext context = new RequestContext(request);
 
         // 检查博主是否有指定图片
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId);
@@ -133,10 +124,9 @@ public class BloggerGalleryController extends BaseBloggerController {
     /**
      * 从设备和数据库中删除图片
      */
-    @RequestMapping(value = "/{pictureId}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{pictureId}")
     @ResponseBody
-    public ResultModel delete(HttpServletRequest request,
-                              @PathVariable("bloggerId") Long bloggerId,
+    public ResultModel delete(@PathVariable("bloggerId") Long bloggerId,
                               @PathVariable("pictureId") Long pictureId) {
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId, bloggerId);

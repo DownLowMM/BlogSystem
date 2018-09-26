@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created on 2018/1/11.
  * 博主登录
@@ -44,8 +42,7 @@ public class BloggerLoginController extends BaseBloggerController {
 
     @TokenNotRequired
     @RequestMapping(value = "/way=phone", method = RequestMethod.POST)
-    public ResultModel loginWithPhoneNumber(HttpServletRequest request,
-                                            @RequestParam("phone") String phone) {
+    public ResultModel loginWithPhoneNumber(@RequestParam("phone") String phone) {
 
         // UPDATE: 2018/9/23 更新
         /*

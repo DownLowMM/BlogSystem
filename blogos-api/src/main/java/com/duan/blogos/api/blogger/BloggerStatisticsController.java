@@ -4,12 +4,10 @@ import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created on 2018/2/11.
@@ -23,9 +21,8 @@ public class BloggerStatisticsController extends BaseBloggerController {
     @Autowired
     private BloggerStatisticsService statisticsService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<BloggerStatisticsDTO> get(HttpServletRequest request,
-                                                 @PathVariable Long bloggerId) {
+    @GetMapping
+    public ResultModel<BloggerStatisticsDTO> get(@PathVariable Long bloggerId) {
 
         handleAccountCheck(bloggerId);
 

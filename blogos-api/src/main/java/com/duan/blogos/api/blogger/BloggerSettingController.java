@@ -5,8 +5,6 @@ import com.duan.blogos.service.service.blogger.BloggerSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created on 2017/12/29.
  * 博主个人设置api
@@ -23,9 +21,8 @@ public class BloggerSettingController extends BaseBloggerController {
     /**
      * 更新博主主页导航位置
      */
-    @RequestMapping(value = "/item=mainPageNavPos", method = RequestMethod.PUT)
-    public ResultModel update(HttpServletRequest request,
-                              @PathVariable Long bloggerId,
+    @PutMapping("/item=mainPageNavPos")
+    public ResultModel update(@PathVariable Long bloggerId,
                               @RequestParam("mainPageNavPos") Integer mainPageNavPos) {
 
         handleMainPageNavPosCheck(mainPageNavPos);

@@ -11,9 +11,7 @@ import com.duan.blogos.service.service.blogger.BloggerCollectBlogService;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -36,14 +34,12 @@ public class BloggerCollectBlogController extends BaseBloggerController {
     /**
      * 收藏博文清单
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<List<FavouriteBlogListItemDTO>> list(HttpServletRequest request,
-                                                            @PathVariable("bloggerId") Long bloggerId,
+    @GetMapping
+    public ResultModel<List<FavouriteBlogListItemDTO>> list(@PathVariable("bloggerId") Long bloggerId,
                                                             @RequestParam(value = "offset", required = false) Integer offset,
                                                             @RequestParam(value = "rows", required = false) Integer rows,
                                                             @RequestParam(value = "sort", required = false) String sort,
                                                             @RequestParam(value = "order", required = false) String order) {
-        final RequestContext context = new RequestContext(request);
         handleAccountCheck(bloggerId);
 
         //检查数据合法性
@@ -67,9 +63,8 @@ public class BloggerCollectBlogController extends BaseBloggerController {
     /**
      * 修改博文收藏
      */
-    @RequestMapping(value = "/{blogId}", method = RequestMethod.PUT)
-    public ResultModel update(HttpServletRequest request,
-                              @PathVariable("blogId") Long blogId,
+    @PutMapping("/{blogId}")
+    public ResultModel update(@PathVariable("blogId") Long blogId,
                               @PathVariable("bloggerId") Long bloggerId,
                               @RequestParam(value = "reason", required = false) String newReason) {
 
@@ -87,9 +82,8 @@ public class BloggerCollectBlogController extends BaseBloggerController {
     /**
      * 统计收藏收藏量
      */
-    @RequestMapping("/count")
-    public ResultModel count(HttpServletRequest request,
-                             @PathVariable("bloggerId") Long bloggerId) {
+    @GetMapping("/count")
+    public ResultModel count(@PathVariable("bloggerId") Long bloggerId) {
 
         handleAccountCheck(bloggerId);
 

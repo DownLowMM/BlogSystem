@@ -10,9 +10,7 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLikeBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -35,14 +33,12 @@ public class BloggerLikeBlogController extends BaseBloggerController {
     /**
      * 收藏博文清单
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<List<FavouriteBlogListItemDTO>> list(HttpServletRequest request,
-                                                            @PathVariable("bloggerId") Long bloggerId,
+    @GetMapping
+    public ResultModel<List<FavouriteBlogListItemDTO>> list(@PathVariable("bloggerId") Long bloggerId,
                                                             @RequestParam(value = "offset", required = false) Integer offset,
                                                             @RequestParam(value = "rows", required = false) Integer rows,
                                                             @RequestParam(value = "sort", required = false) String sort,
                                                             @RequestParam(value = "order", required = false) String order) {
-        final RequestContext context = new RequestContext(request);
         handleAccountCheck(bloggerId);
 
         //检查数据合法性
@@ -67,9 +63,8 @@ public class BloggerLikeBlogController extends BaseBloggerController {
     /**
      * 统计收藏收藏量
      */
-    @RequestMapping("/count")
-    public ResultModel count(HttpServletRequest request,
-                             @PathVariable("bloggerId") Long bloggerId) {
+    @GetMapping("/count")
+    public ResultModel count(@PathVariable("bloggerId") Long bloggerId) {
 
         handleAccountCheck(bloggerId);
 

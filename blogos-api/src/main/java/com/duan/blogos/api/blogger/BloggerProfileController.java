@@ -36,7 +36,7 @@ public class BloggerProfileController extends BaseBloggerController {
     /**
      * 获取资料
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResultModel<BloggerProfileDTO> get(@PathVariable Long bloggerId) {
         handleAccountCheck(bloggerId);
 
@@ -49,7 +49,7 @@ public class BloggerProfileController extends BaseBloggerController {
     /**
      * 新增资料
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResultModel add(@PathVariable Long bloggerId,
                            @RequestParam(value = "avatarId", required = false) Long avatarId,
                            @RequestParam(value = "phone", required = false) String phone,
@@ -69,7 +69,7 @@ public class BloggerProfileController extends BaseBloggerController {
     /**
      * 更新资料
      */
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     public ResultModel update(@PathVariable Long bloggerId,
                               @RequestParam(value = "avatarId", required = false) Long avatarId,
                               @RequestParam(value = "phone", required = false) String phone,
@@ -94,7 +94,7 @@ public class BloggerProfileController extends BaseBloggerController {
     /**
      * 删除资料
      */
-    @RequestMapping(method = RequestMethod.DELETE)
+    @DeleteMapping
     public ResultModel delete(@PathVariable Long bloggerId) {
 
         boolean result = bloggerProfileService.deleteBloggerProfile(bloggerId);
@@ -106,7 +106,7 @@ public class BloggerProfileController extends BaseBloggerController {
     /**
      * 更新头像
      */
-    @RequestMapping(value = "/avatar", method = RequestMethod.POST)
+    @PostMapping("/avatar")
     public ResultModel updateAvatar(@PathVariable Long bloggerId,
                                     @RequestParam(value = "avatarBaseUrlData") String base64urlData) {
         handleImageBase64Check(base64urlData);

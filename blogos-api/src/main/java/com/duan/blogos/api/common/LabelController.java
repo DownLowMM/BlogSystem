@@ -7,7 +7,6 @@ import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -33,9 +32,8 @@ public class LabelController extends BaseCheckController {
     /**
      * 查看所有标签
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<List<BlogLabelDTO>> get(HttpServletRequest request,
-                                               @RequestParam(value = "offset", required = false) Integer offset,
+    @GetMapping
+    public ResultModel<List<BlogLabelDTO>> get(@RequestParam(value = "offset", required = false) Integer offset,
                                                @RequestParam(value = "rows", required = false) Integer rows) {
 
         int os = offset == null || offset < 0 ? 0 : offset;
@@ -50,8 +48,8 @@ public class LabelController extends BaseCheckController {
     /**
      * 获取指定标签
      */
-    @RequestMapping(value = "/{labelId}", method = RequestMethod.GET)
-    public ResultModel<BlogLabelDTO> getLabel(HttpServletRequest request, @PathVariable("labelId") Long labelId) {
+    @GetMapping("/{labelId}")
+    public ResultModel<BlogLabelDTO> getLabel(@PathVariable("labelId") Long labelId) {
 
         BlogLabelDTO label = bloggerLabelService.getLabel(labelId);
         if (label == null) handlerEmptyResult();

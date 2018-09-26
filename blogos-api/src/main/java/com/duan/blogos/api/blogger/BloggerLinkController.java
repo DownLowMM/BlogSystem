@@ -8,9 +8,7 @@ import com.duan.blogos.service.service.blogger.BloggerLinkService;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -34,9 +32,8 @@ public class BloggerLinkController extends BaseBloggerController {
     /**
      * 获取链接
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultModel<List<BloggerLinkDTO>> get(HttpServletRequest request,
-                                                 @PathVariable Long bloggerId,
+    @GetMapping
+    public ResultModel<List<BloggerLinkDTO>> get(@PathVariable Long bloggerId,
                                                  @RequestParam(value = "offset", required = false) Integer offset,
                                                  @RequestParam(value = "rows", required = false) Integer rows) {
 
@@ -52,9 +49,8 @@ public class BloggerLinkController extends BaseBloggerController {
     /**
      * 新增链接
      */
-    @RequestMapping(method = RequestMethod.POST)
-    public ResultModel add(HttpServletRequest request,
-                           @PathVariable Long bloggerId,
+    @PostMapping
+    public ResultModel add(@PathVariable Long bloggerId,
                            @RequestParam(value = "iconId", required = false) Long iconId,
                            @RequestParam("title") String title,
                            @RequestParam("url") String url,
@@ -74,15 +70,13 @@ public class BloggerLinkController extends BaseBloggerController {
     /**
      * 更新链接
      */
-    @RequestMapping(value = "/{linkId}", method = RequestMethod.PUT)
-    public ResultModel update(HttpServletRequest request,
-                              @PathVariable Long bloggerId,
+    @PutMapping("/{linkId}")
+    public ResultModel update(@PathVariable Long bloggerId,
                               @PathVariable Long linkId,
                               @RequestParam(value = "iconId", required = false) Long newIconId,
                               @RequestParam(value = "title", required = false) String newTitle,
                               @RequestParam(value = "url", required = false) String newUrl,
                               @RequestParam(value = "bewrite", required = false) String newBewrite) {
-        RequestContext context = new RequestContext(request);
 
         //都为null则无需更新
         if (newIconId == null && newTitle == null && newUrl == null && newBewrite == null) {
@@ -90,7 +84,7 @@ public class BloggerLinkController extends BaseBloggerController {
         }
 
         handlePictureExistCheck(bloggerId, newIconId);
-        checkLinkExist(linkId, context);
+        checkLinkExist(linkId);
 
         //检查url规范
         if (newUrl != null && !StringUtils.isURL(newUrl)) {
@@ -106,12 +100,9 @@ public class BloggerLinkController extends BaseBloggerController {
     /**
      * 删除链接
      */
-    @RequestMapping(value = "/{linkId}", method = RequestMethod.DELETE)
-    public ResultModel delete(HttpServletRequest request,
-                              @PathVariable Long bloggerId,
+    @DeleteMapping("/{linkId}")
+    public ResultModel delete(@PathVariable Long bloggerId,
                               @PathVariable Long linkId) {
-        RequestContext context = new RequestContext(request);
-        checkLinkExist(linkId, context);
 
         boolean result = bloggerLinkService.deleteBloggerLink(linkId);
         if (!result) handlerOperateFail();
@@ -119,9 +110,8 @@ public class BloggerLinkController extends BaseBloggerController {
         return new ResultModel<>("");
     }
 
-
-    //检查链接是否存在
-    private void checkLinkExist(Long linkId, RequestContext context) {
+    // 检查链接是否存在
+    private void checkLinkExist(Long linkId) {
         if (linkId == null || linkId <= 0 || !bloggerLinkService.getLinkForCheckExist(linkId)) {
             throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_LINK);
         }

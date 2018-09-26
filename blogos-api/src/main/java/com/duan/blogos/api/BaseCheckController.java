@@ -163,5 +163,4 @@ public class BaseCheckController extends RestController {
             throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
-
 }

@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created on 2018/3/30.
  *
@@ -18,8 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 public class BlogStatisticsPageController {
 
     @RequestMapping
-    public ModelAndView page(HttpServletRequest request,
-                             @PathVariable String bloggerName,
+    public ModelAndView page(@PathVariable String bloggerName,
                              @ModelAttribute("blogId") Integer blogId) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/blogger/blog_statistics");

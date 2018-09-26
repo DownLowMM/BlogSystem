@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created on 2018/2/13.
  *
@@ -35,8 +33,7 @@ public class EditBlogPageController {
     private BloggerStatisticsService statisticsService;
 
     @RequestMapping
-    public ModelAndView mainPage(HttpServletRequest request,
-                                 @RequestParam(value = "bid", required = false) Long bloggerId,
+    public ModelAndView mainPage(@RequestParam(value = "bid", required = false) Long bloggerId,
                                  @RequestParam(value = "blogId", required = false) Long blogId) {
         ModelAndView mv = new ModelAndView();
 

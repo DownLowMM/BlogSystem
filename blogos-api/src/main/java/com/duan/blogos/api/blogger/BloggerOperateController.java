@@ -8,8 +8,6 @@ import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created on 2017/12/25.
  * 读者对博文可以进行的操作
@@ -33,9 +31,8 @@ public class BloggerOperateController extends BaseBloggerController {
     /**
      * 分享博文
      */
-    @RequestMapping(value = "/operate=share", method = RequestMethod.POST)
-    public ResultModel shareBlog(HttpServletRequest request,
-                                 @PathVariable Long blogId,
+    @PostMapping("/operate=share")
+    public ResultModel shareBlog(@PathVariable Long blogId,
                                  @PathVariable Long bloggerId) {
         handleBlogExistCheck(blogId);
 
@@ -48,9 +45,8 @@ public class BloggerOperateController extends BaseBloggerController {
     /**
      * 收藏博文
      */
-    @RequestMapping(value = "/operate=collect", method = RequestMethod.POST)
-    public ResultModel collectBlog(HttpServletRequest request,
-                                   @PathVariable Long blogId,
+    @PostMapping("/operate=collect")
+    public ResultModel collectBlog(@PathVariable Long blogId,
                                    @PathVariable Long bloggerId,
                                    @RequestParam(value = "reason", required = false) String reason) {
 
@@ -72,9 +68,8 @@ public class BloggerOperateController extends BaseBloggerController {
     /**
      * 投诉博文
      */
-    @RequestMapping(value = "/operate=complain", method = RequestMethod.POST)
-    public ResultModel complainBlog(HttpServletRequest request,
-                                    @PathVariable Long blogId,
+    @PostMapping("/operate=complain")
+    public ResultModel complainBlog(@PathVariable Long blogId,
                                     @PathVariable Long bloggerId,
                                     @RequestParam("content") String content) {
         if (StringUtils.isBlank(content))
@@ -92,9 +87,8 @@ public class BloggerOperateController extends BaseBloggerController {
     /**
      * 喜欢博文
      */
-    @RequestMapping(value = "/operate=like", method = RequestMethod.POST)
-    public ResultModel likeBlog(HttpServletRequest request,
-                                @PathVariable Long blogId,
+    @PostMapping("/operate=like")
+    public ResultModel likeBlog(@PathVariable Long blogId,
                                 @PathVariable Long bloggerId) {
 
         handleBlogExistCheck(blogId);
@@ -108,9 +102,8 @@ public class BloggerOperateController extends BaseBloggerController {
     /**
      * 取消收藏
      */
-    @RequestMapping(value = "/operate=collect", method = RequestMethod.DELETE)
-    public ResultModel removeCollect(HttpServletRequest request,
-                                     @PathVariable Long blogId,
+    @DeleteMapping("/operate=collect")
+    public ResultModel removeCollect(@PathVariable Long blogId,
                                      @PathVariable Long bloggerId) {
 
         handleBlogExistCheck(blogId);
@@ -126,9 +119,8 @@ public class BloggerOperateController extends BaseBloggerController {
     /**
      * 取消喜欢
      */
-    @RequestMapping(value = "/operate=like", method = RequestMethod.DELETE)
-    public ResultModel removeLike(HttpServletRequest request,
-                                  @PathVariable Long blogId,
+    @DeleteMapping("/operate=like")
+    public ResultModel removeLike(@PathVariable Long blogId,
                                   @PathVariable Long bloggerId) {
         handleBlogExistCheck(blogId);
 

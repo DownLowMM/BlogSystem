@@ -30,7 +30,7 @@ public class BloggerCommentController extends BaseBloggerController {
     /**
      * 新增评论
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResultModel add(@PathVariable Long bloggerId,
                            @RequestParam("blogId") Long blogId,
                            @RequestParam("content") String content,
@@ -50,7 +50,7 @@ public class BloggerCommentController extends BaseBloggerController {
     /**
      * 删除评论
      */
-    @RequestMapping(value = "/{commentId}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{commentId}")
     public ResultModel delete(@RequestParam("blogId") Long blogId,
                               @PathVariable Long bloggerId,
                               @PathVariable Long commentId) {

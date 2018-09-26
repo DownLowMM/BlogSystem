@@ -5,11 +5,10 @@ import com.duan.blogos.service.dto.blog.BlogSortRuleDTO;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogSortRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -27,8 +26,8 @@ public class SortRowController extends BaseCheckController {
     /**
      * 获得排序规则
      */
-    @RequestMapping(value = "/rule", method = RequestMethod.GET)
-    public ResultModel<List<BlogSortRuleDTO>> list(HttpServletRequest request) {
+    @GetMapping("/rule")
+    public ResultModel<List<BlogSortRuleDTO>> list() {
 
         ResultModel<List<BlogSortRuleDTO>> result = sortRuleService.listSortRule();
         if (result == null) handlerEmptyResult();
@@ -40,8 +39,8 @@ public class SortRowController extends BaseCheckController {
      * 1
      * 获得排序顺序
      */
-    @RequestMapping(value = "/order", method = RequestMethod.GET)
-    public ResultModel<List<BlogSortRuleDTO>> listOrder(HttpServletRequest request) {
+    @GetMapping("/order")
+    public ResultModel<List<BlogSortRuleDTO>> listOrder() {
 
         ResultModel<List<BlogSortRuleDTO>> result = sortRuleService.listSortOrder();
         if (result == null) handlerEmptyResult();
