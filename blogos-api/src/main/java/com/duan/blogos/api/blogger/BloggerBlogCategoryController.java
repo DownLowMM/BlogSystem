@@ -4,7 +4,7 @@ import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.service.dto.blogger.BloggerCategoryDTO;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
@@ -85,7 +85,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         handlePictureExistCheck(bloggerId, iconId);
 
         if (StringUtils.isEmpty(title))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         Long id = bloggerCategoryService.insertBlogCategory(bloggerId, iconId, title, bewrite);
         if (id == null) handlerOperateFail();
@@ -104,7 +104,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
                               @RequestParam(value = "bewrite", required = false) String newBewrite) {
 
         if (CheckUtil.isAllNull(newIconId, newTitle, newBewrite)) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         handleCategoryExistCheck(bloggerId, categoryId);
@@ -132,7 +132,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
 
             //检查删除类别和原博文移动到类别是否相同
             if (newCategoryId.equals(categoryId))
-                throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+                throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
             //检查新类别
             handleCategoryExistCheck(bloggerId, newCategoryId);

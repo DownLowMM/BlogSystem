@@ -2,7 +2,7 @@ package com.duan.blogos.api.common;
 
 import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.SmsService;
 import com.duan.common.util.StringUtils;
@@ -32,7 +32,7 @@ public class SMSController extends BaseCheckController {
                             @RequestParam("content") String content) {
 
         if (StringUtils.isBlank(phone) || StringUtils.isBlank(content)) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         return smsService.sendSmsTo(content, phone);

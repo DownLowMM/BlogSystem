@@ -1,7 +1,7 @@
 package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCommentService;
 import com.duan.blogos.service.service.validate.BlogCommentValidateService;
@@ -39,7 +39,7 @@ public class BloggerCommentController extends BaseBloggerController {
         handleAccountCheck(listenerId);
 
         if (StringUtils.isBlank(content) || !commentValidateService.checkCommentContent(content))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         Long id = commentService.insertComment(blogId, bloggerId, listenerId, RIGHTFUL.getCode(), content);
         if (id == null) handlerOperateFail();

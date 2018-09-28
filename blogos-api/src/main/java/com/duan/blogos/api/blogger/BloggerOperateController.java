@@ -1,7 +1,7 @@
 package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogOperateService;
 import com.duan.common.util.StringUtils;
@@ -73,7 +73,7 @@ public class BloggerOperateController extends BaseBloggerController {
                                     @PathVariable Long bloggerId,
                                     @RequestParam("content") String content) {
         if (StringUtils.isBlank(content))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         handleBlogExistCheck(blogId);
 

@@ -16,7 +16,7 @@ spring:
       max-file-size: 50Mb
       max-request-size: 128Mb
   messages:
-    basename: i18n/messages
+    basename: messages
     cache-seconds: 3600
   redis:
     host: 127.0.0.1

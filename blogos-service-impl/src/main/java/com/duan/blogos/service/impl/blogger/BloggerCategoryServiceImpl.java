@@ -11,7 +11,7 @@ import com.duan.blogos.service.entity.BlogCategoryRela;
 import com.duan.blogos.service.entity.blog.BlogCategory;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
@@ -156,7 +156,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
         // 删除数据库类别记录 外键会把 BlogCategoryRelaDao 中的数据删除
         int effectDelete = categoryDao.delete(categoryId);
         if (effectDelete <= 0)
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
 
         return true;
     }

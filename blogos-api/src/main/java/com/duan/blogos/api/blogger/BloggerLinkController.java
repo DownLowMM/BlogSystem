@@ -2,7 +2,7 @@ package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.service.dto.blogger.BloggerLinkDTO;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLinkService;
 import com.duan.common.util.StringUtils;
@@ -59,7 +59,7 @@ public class BloggerLinkController extends BaseBloggerController {
 
         //检查title和url规范
         if (StringUtils.isEmpty(title) || !StringUtils.isURL(url))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         Long id = bloggerLinkService.insertBloggerLink(bloggerId, iconId == null ? -1 : iconId, title, url, bewrite);
         if (id == null) handlerOperateFail();
@@ -80,7 +80,7 @@ public class BloggerLinkController extends BaseBloggerController {
 
         //都为null则无需更新
         if (newIconId == null && newTitle == null && newUrl == null && newBewrite == null) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         handlePictureExistCheck(bloggerId, newIconId);
@@ -88,7 +88,7 @@ public class BloggerLinkController extends BaseBloggerController {
 
         //检查url规范
         if (newUrl != null && !StringUtils.isURL(newUrl)) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         boolean result = bloggerLinkService.updateBloggerLink(linkId, newIconId == null ? -1 : newIconId, newTitle, newUrl, newBewrite);
@@ -113,7 +113,7 @@ public class BloggerLinkController extends BaseBloggerController {
     // 检查链接是否存在
     private void checkLinkExist(Long linkId) {
         if (linkId == null || linkId <= 0 || !bloggerLinkService.getLinkForCheckExist(linkId)) {
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_LINK);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_LINK);
         }
     }
 

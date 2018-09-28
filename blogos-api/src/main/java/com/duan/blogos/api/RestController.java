@@ -2,7 +2,7 @@ package com.duan.blogos.api;
 
 import com.duan.blogos.service.exception.BlogOSException;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -21,21 +21,21 @@ public class RestController {
      * 处理结果为空的情况
      */
     protected void handlerEmptyResult() {
-        throw ResultUtil.failException(CodeMessage.COMMON_EMPTY_RESULT);
+        throw ExceptionUtil.get(CodeMessage.COMMON_EMPTY_RESULT);
     }
 
     /**
      * 处理操作失败的情况
      */
     protected void handlerOperateFail() {
-        throw ResultUtil.failException(CodeMessage.COMMON_OPERATE_FAIL);
+        throw ExceptionUtil.get(CodeMessage.COMMON_OPERATE_FAIL);
     }
 
     /**
      * 处理操作失败的情况
      */
     protected void handlerOperateFail(Throwable e) {
-        throw ResultUtil.failException(CodeMessage.COMMON_OPERATE_FAIL, e);
+        throw ExceptionUtil.get(CodeMessage.COMMON_OPERATE_FAIL, e);
     }
 
     /**
@@ -66,7 +66,7 @@ public class RestController {
     @ResponseBody
     protected final ResultModel handlerException(MissingServletRequestParameterException e) {
         e.printStackTrace();
-        BlogOSException exception = ResultUtil.failException(CodeMessage.COMMON_MISSING_REQUEST_PARAMETER, e);
+        BlogOSException exception = ExceptionUtil.get(CodeMessage.COMMON_MISSING_REQUEST_PARAMETER, e);
         return new ResultModel(exception);
     }
 
@@ -77,7 +77,7 @@ public class RestController {
     @ResponseBody
     protected final ResultModel handlerException(TypeMismatchException e) {
         e.printStackTrace();
-        return new ResultModel(ResultUtil.failException(CodeMessage.COMMON_PARAMETER_TYPE_MISMATCH, e));
+        return new ResultModel(ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_TYPE_MISMATCH, e));
     }
 
     /**
@@ -85,7 +85,7 @@ public class RestController {
      */
     @RequestMapping
     protected void defaultOperation() {
-        throw ResultUtil.failException(CodeMessage.COMMON_UNSPECIFIED_OPERATION);
+        throw ExceptionUtil.get(CodeMessage.COMMON_UNSPECIFIED_OPERATION);
     }
 
 }

@@ -2,7 +2,7 @@ package com.duan.blogos.service.impl.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.SmsService;
 import okhttp3.FormBody;
@@ -38,7 +38,7 @@ public class SmsServiceImpl implements SmsService {
             url = smssendUrl + "?mobile=" + phone + "&content=" + URLEncoder.encode(content, "utf-8") + "&appkey="
                     + appkey;
         } catch (UnsupportedEncodingException e) {
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         OkHttpClient client = new OkHttpClient();
@@ -51,7 +51,7 @@ public class SmsServiceImpl implements SmsService {
         try {
             response = client.newCall(okRequest).execute();
         } catch (IOException e) {
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         if (response != null) {
@@ -66,12 +66,12 @@ public class SmsServiceImpl implements SmsService {
                 }
 
             } catch (IOException e) {
-                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+                throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
             }
 
         }
 
-        throw ResultUtil.failException(CodeMessage.COMMON_OPERATE_FAIL);
+        throw ExceptionUtil.get(CodeMessage.COMMON_OPERATE_FAIL);
     }
 
 }

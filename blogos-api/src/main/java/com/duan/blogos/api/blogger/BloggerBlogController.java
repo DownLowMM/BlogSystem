@@ -10,7 +10,7 @@ import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilterService;
@@ -175,11 +175,11 @@ public class BloggerBlogController extends BaseBloggerController {
         // 所有参数都为null，则不更新。
         if (Stream.of(newTitle, newContent, newSummary, newCategoryIds, newLabelIds, newKeyWord, newStatus)
                 .filter(Objects::nonNull).count() <= 0)
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         // 检查修改到的博文状态是否允许
         if (newStatus != null && !blogValidateService.isBlogStatusAllow(newStatus))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         handleBlogExistAndCreatorCheck(bloggerId, blogId);
 
@@ -232,7 +232,7 @@ public class BloggerBlogController extends BaseBloggerController {
 
         Long[] blogIds = StringUtils.longStringDistinctToArray(ids, ",");
         if (CollectionUtils.isEmpty(blogIds))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         for (Long id : blogIds) {
             handleBlogExistAndCreatorCheck(bloggerId, id);
@@ -256,7 +256,7 @@ public class BloggerBlogController extends BaseBloggerController {
 
         // 检查是否为 zip 文件
         if (file.isEmpty() || !file.getOriginalFilename().endsWith(".zip"))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         com.duan.common.util.MultipartFile fi = null;// TODO 转化
         List<BlogTitleIdDTO> blogsTitles = bloggerBlogService.insertBlogPatch(fi, bloggerId);
@@ -277,7 +277,7 @@ public class BloggerBlogController extends BaseBloggerController {
         // 检查请求的文件类别
         BlogFormatEnum format = BlogFormatEnum.get(type);
         if (format == null) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         String zipFilePath = bloggerBlogService.getAllBlogForDownload(bloggerId, format);

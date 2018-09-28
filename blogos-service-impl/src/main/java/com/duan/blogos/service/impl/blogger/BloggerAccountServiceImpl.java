@@ -18,7 +18,7 @@ import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
 import com.duan.blogos.service.entity.blogger.BloggerSetting;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
@@ -85,7 +85,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
             shaPwd = new BigInteger(StringUtils.toSha(password)).toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         BloggerAccount account = new BloggerAccount();
@@ -176,7 +176,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
             newSha = new BigInteger(StringUtils.toSha(newPassword)).toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         BloggerAccount account = accountDao.getAccountById(bloggerId);

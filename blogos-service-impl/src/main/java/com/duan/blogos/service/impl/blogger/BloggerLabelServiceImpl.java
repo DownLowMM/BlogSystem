@@ -84,7 +84,7 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
                 Long[] ids = ArrayUtils.removeFromArray(lids, labelId);
                 blog.setLabelIds(StringUtils.longArrayToString(ids, ch));
                 if (blogDao.update(blog) <= 0)
-                    throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
+                    throw ResultUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
             }
         }*/
 

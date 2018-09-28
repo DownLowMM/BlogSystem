@@ -4,7 +4,7 @@ import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.common.OnlineService;
@@ -47,7 +47,7 @@ public class BloggerAccountController extends BaseBloggerController {
 
         handleNameCheck(username);
         if (!bloggerValidateService.checkPassword(password)) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         Long id = accountService.insertAccount(username, password);
@@ -68,7 +68,7 @@ public class BloggerAccountController extends BaseBloggerController {
 
         BloggerAccountDTO account = accountService.getAccount(username);
         if (account != null) {
-            return new ResultModel(ResultUtil.failException(CodeMessage.COMMON_DUPLICATION_DATA));
+            return new ResultModel(ExceptionUtil.get(CodeMessage.COMMON_DUPLICATION_DATA));
         } else {
             return new ResultModel<>("");
         }
@@ -87,7 +87,7 @@ public class BloggerAccountController extends BaseBloggerController {
         BloggerAccountDTO account = accountService.getAccountByPhone(phone);
 
         if (account != null) {
-            return new ResultModel(ResultUtil.failException(CodeMessage.COMMON_DUPLICATION_DATA));
+            return new ResultModel(ExceptionUtil.get(CodeMessage.COMMON_DUPLICATION_DATA));
         } else {
             return new ResultModel<>("");
         }
@@ -120,7 +120,7 @@ public class BloggerAccountController extends BaseBloggerController {
                                       @RequestParam(value = "new") String newPassword) {
 
         if (!bloggerValidateService.checkPassword(newPassword)) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         boolean result = accountService.updateAccountPassword(uid, oldPassword, newPassword);

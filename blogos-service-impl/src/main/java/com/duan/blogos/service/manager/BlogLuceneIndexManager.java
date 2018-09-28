@@ -3,7 +3,7 @@ package com.duan.blogos.service.manager;
 import com.duan.blogos.service.config.preference.FileProperties;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.common.util.StringUtils;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;
@@ -151,7 +151,7 @@ public class BlogLuceneIndexManager {
             writer.commit();
 
         } catch (IOException e) {
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         return true;

@@ -3,7 +3,7 @@ package com.duan.blogos.api.blogger;
 import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.blogger.BloggerProfileService;
@@ -78,7 +78,7 @@ public class BloggerProfileController extends BaseBloggerController {
                               @RequestParam(value = "intro", required = false) String intro) {
 
         if (phone == null && email == null && aboutMe == null && intro == null) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         handlePictureExistCheck(bloggerId, avatarId);

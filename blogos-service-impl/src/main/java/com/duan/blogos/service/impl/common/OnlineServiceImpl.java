@@ -2,7 +2,7 @@ package com.duan.blogos.service.impl.common;
 
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.common.OnlineService;
@@ -59,17 +59,17 @@ public class OnlineServiceImpl implements OnlineService {
 
         // 用户不存在
         if (acc == null) {
-            throw ResultUtil.failException(CodeMessage.BLOGGER_UNKNOWN_BLOGGER);
+            throw ExceptionUtil.get(CodeMessage.BLOGGER_UNKNOWN_BLOGGER);
         }
 
         // 密码错误
         try {
             if (!acc.getPassword().equals(new BigInteger(StringUtils.toSha(account.getPassword())).toString())) {
-                throw ResultUtil.failException(CodeMessage.BLOGGER_PASSWORD_INCORRECT);
+                throw ExceptionUtil.get(CodeMessage.BLOGGER_PASSWORD_INCORRECT);
             }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            throw ResultUtil.failException(CodeMessage.BLOGGER_PASSWORD_INCORRECT);
+            throw ExceptionUtil.get(CodeMessage.BLOGGER_PASSWORD_INCORRECT);
         }
 
 

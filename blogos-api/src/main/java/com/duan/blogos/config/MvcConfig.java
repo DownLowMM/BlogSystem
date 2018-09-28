@@ -6,13 +6,17 @@ import com.duan.blogos.config.resolver.CurrentUserHandlerMethodArgumentResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -49,6 +53,22 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         return jackson2HttpMessageConverter;
     }
 
+    // 可能因为 blogos-service-impl 的原因 ResourceBundleMessageSource 在 MessageSourceAutoConfiguration
+    // 中无法进行自动配置，在这里进行配置
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        if (StringUtils.hasText("messages")) {
+            messageSource.setBasenames(StringUtils.commaDelimitedListToStringArray(
+                    StringUtils.trimAllWhitespace("messages")));
+        }
+
+        messageSource.setDefaultEncoding(Charset.forName("UTF-8").name());
+        messageSource.setFallbackToSystemLocale(true);
+        messageSource.setCacheSeconds(-1);
+        messageSource.setAlwaysUseMessageFormat(false);
+        return messageSource;
+    }
 
 
 }

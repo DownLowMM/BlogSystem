@@ -3,7 +3,7 @@ package com.duan.blogos.api.blogger;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
@@ -42,7 +42,7 @@ public class BloggerGalleryController extends BaseBloggerController {
                                               @PathVariable("pictureId") Long pictureId) {
 
         if (pictureId == null)
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId, bloggerId);
         if (picture == null) handlerEmptyResult();
@@ -64,13 +64,13 @@ public class BloggerGalleryController extends BaseBloggerController {
 
             //检查类别是否存在
             if (BloggerPictureCategoryEnum.valueOf(category) == null) {
-                throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+                throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
 
             //检查权限
             if (validateService.checkBloggerPictureLegal(bloggerId, category)) cate = category;
             else
-                throw ResultUtil.failException(CodeMessage.COMMON_UNAUTHORIZED);
+                throw ExceptionUtil.get(CodeMessage.COMMON_UNAUTHORIZED);
         } else cate = -1;
 
         ResultModel<List<BloggerPictureDTO>> result = bloggerPictureService.listBloggerPicture(bloggerId,
@@ -94,11 +94,11 @@ public class BloggerGalleryController extends BaseBloggerController {
         // 检查博主是否有指定图片
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId);
         if (picture == null || !bloggerId.equals(picture.getBloggerId())) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         if (newCategory == null && newBeWrite == null && newTitle == null) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
         // 更新图片类别只适用于图片管理员，普通博主没有修改类别的必要
@@ -106,12 +106,12 @@ public class BloggerGalleryController extends BaseBloggerController {
 
             //检查类别是否存在
             if (BloggerPictureCategoryEnum.valueOf(newCategory) == null) {
-                throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+                throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
 
             //检查权限
             if (!validateService.checkBloggerPictureLegal(bloggerId, newCategory))
-                throw ResultUtil.failException(CodeMessage.COMMON_UNAUTHORIZED);
+                throw ExceptionUtil.get(CodeMessage.COMMON_UNAUTHORIZED);
         }
 
         boolean result = bloggerPictureService.updatePicture(pictureId,
@@ -131,12 +131,12 @@ public class BloggerGalleryController extends BaseBloggerController {
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId, bloggerId);
         if (picture == null) {
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_PICTURE);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_PICTURE);
         }
 
         //检查权限
         if (!validateService.checkBloggerPictureLegal(bloggerId, picture.getCategory()))
-            throw ResultUtil.failException(CodeMessage.COMMON_UNAUTHORIZED);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNAUTHORIZED);
 
         boolean succ = bloggerPictureService.deletePicture(bloggerId, picture.getId(), true);
         if (!succ) handlerOperateFail();

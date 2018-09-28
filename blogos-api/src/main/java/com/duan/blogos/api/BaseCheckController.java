@@ -4,7 +4,7 @@ import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.service.validate.BlogValidateService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
 import com.duan.common.util.CollectionUtils;
@@ -29,7 +29,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleAccountCheck(Long bloggerId) {
         if (bloggerId == null || bloggerId <= 0 || !bloggerValidateService.checkAccountExist(bloggerId)) {
-            throw ResultUtil.failException(CodeMessage.BLOGGER_UNKNOWN_BLOGGER);
+            throw ExceptionUtil.get(CodeMessage.BLOGGER_UNKNOWN_BLOGGER);
         }
     }
 
@@ -38,7 +38,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleBlogExistCheck(Long blogId) {
         if (blogId == null || blogId <= 0 || !blogValidateService.checkBlogExist(blogId)) {
-            throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
+            throw ExceptionUtil.get(CodeMessage.BLOG_UNKNOWN_BLOG);
         }
     }
 
@@ -47,7 +47,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handlePictureExistCheck(Long bloggerId, Long pictureId) {
         if (pictureId != null && !bloggerValidateService.checkBloggerPictureExist(bloggerId, pictureId))
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_PICTURE);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_PICTURE);
     }
 
     /**
@@ -55,7 +55,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleNameCheck(String userName) {
         if (StringUtils.isBlank(userName) || !bloggerValidateService.checkUserName(userName))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
     /**
@@ -66,14 +66,14 @@ public class BaseCheckController extends RestController {
         if (!CollectionUtils.isEmpty(cids)) {
             for (Long id : cids) {
                 if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, id))
-                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+                    throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
         }
 
         if (!CollectionUtils.isEmpty(lids)) {
             for (Long id : lids) {
                 if (!blogValidateService.checkLabelsExist(id))
-                    throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+                    throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
         }
 
@@ -85,11 +85,11 @@ public class BaseCheckController extends RestController {
     protected void handleSortRuleCheck(String sort, String order) {
 
         if (sort != null && !Rule.contains(sort)) {
-            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);
+            throw ExceptionUtil.get(CodeMessage.BLOG_BLOG_SORT_RULE_UNDEFINED);
         }
 
         if (order != null && !Order.contains(order)) {
-            throw ResultUtil.failException(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
+            throw ExceptionUtil.get(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
         }
     }
 
@@ -98,7 +98,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleBlogStatisticsExistCheck(Long blogId) {
         if (!blogValidateService.checkBlogStatisticExist(blogId))
-            throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
+            throw ExceptionUtil.get(CodeMessage.BLOG_UNKNOWN_BLOG);
     }
 
     /**
@@ -106,7 +106,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleBlogExistAndCreatorCheck(Long bloggerId, Long blogId) {
         if (!blogValidateService.isCreatorOfBlog(bloggerId, blogId))
-            throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG);
+            throw ExceptionUtil.get(CodeMessage.BLOG_UNKNOWN_BLOG);
     }
 
     /**
@@ -114,7 +114,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleBlogContentCheck(String title, String content, String contentMd, String summary, String keyWords) {
         if (!blogValidateService.verifyBlog(title, content, contentMd, summary, keyWords))
-            throw ResultUtil.failException(CodeMessage.BLOG_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.BLOG_ILLEGAL);
     }
 
     /**
@@ -122,7 +122,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleCategoryExistCheck(Long bloggerId, Long categoryId) {
         if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, categoryId))
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_CATEGORY);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_CATEGORY);
     }
 
     /**
@@ -130,7 +130,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleImageBase64Check(String base64urlData) {
         if (!base64urlData.contains("data:image") || !base64urlData.contains("base64")) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
         }
 
     }
@@ -140,10 +140,10 @@ public class BaseCheckController extends RestController {
      */
     protected void handlePhoneAndEmailCheck(String phone, String email) {
         if (phone != null && !StringUtils.isPhone(phone))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
 
         if (email != null && !StringUtils.isEmail(email))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_FORMAT_ILLEGAL);
     }
 
     /**
@@ -151,7 +151,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleMainPageNavPosCheck(Integer mainPageNavPos) {
         if (mainPageNavPos == null || !bloggerValidateService.checkMainPageNavPos(mainPageNavPos)) {
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
     }
 
@@ -160,7 +160,7 @@ public class BaseCheckController extends RestController {
      */
     protected void handleBlogCategoryDefaultCheck(int category) {
         if (!BloggerPictureCategoryEnum.isDefaultPictureCategory(category))
-            throw ResultUtil.failException(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 
 }

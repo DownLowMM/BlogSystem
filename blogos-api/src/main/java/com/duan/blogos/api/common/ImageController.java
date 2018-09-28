@@ -4,7 +4,7 @@ import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
@@ -63,7 +63,7 @@ public class ImageController extends BaseCheckController {
 
         // 如果图片是私有的，不能访问
         if (picture != null && picture.getCategory().equals(BloggerPictureCategoryEnum.PRIVATE.getCode()))
-            throw ResultUtil.failException(CodeMessage.COMMON_UNAUTHORIZED);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNAUTHORIZED);
 
         BloggerPictureDTO backupPicture = bloggerPictureService.getDefaultPicture(
                 category == null ? BloggerPictureCategoryEnum.DEFAULT_PICTURE
@@ -119,14 +119,14 @@ public class ImageController extends BaseCheckController {
             // 普通用户没有指定图片类别的必要
             //检查博主权限
             if (!validateService.checkBloggerPictureLegal(bloggerId, cate)) {
-                throw ResultUtil.failException(CodeMessage.COMMON_UNAUTHORIZED);
+                throw ExceptionUtil.get(CodeMessage.COMMON_UNAUTHORIZED);
             }
 
             id = bloggerPictureService.insertPicture(fileTrans(file), bloggerId, bewrite, BloggerPictureCategoryEnum.valueOf(cate),
                     title);
             if (id == null) handlerOperateFail();
         } else {
-            throw ResultUtil.failException(CodeMessage.COMMON_PICTURE_FORMAT_ERROR);
+            throw ExceptionUtil.get(CodeMessage.COMMON_PICTURE_FORMAT_ERROR);
         }
 
         return new ResultModel<>(id);

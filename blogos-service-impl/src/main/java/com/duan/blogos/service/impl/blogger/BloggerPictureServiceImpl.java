@@ -7,7 +7,7 @@ import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
@@ -147,7 +147,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
                 e.printStackTrace();
                 // 移动文件出错，文件移动情况未知，麻烦大了
                 // MAYBUG 回滚数据库操作，但磁盘操作无法预料，也无法处理
-                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+                throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
             }
         }
 
@@ -174,7 +174,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
             boolean succ = imageManager.deleteImageFromDisk(path);
             // 删除失败时抛出异常，使数据库事务回滚
             if (!succ)
-                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new IOException());
+                throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, new IOException());
         }
 
         return true;
@@ -278,7 +278,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+                throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
             }
         }
 

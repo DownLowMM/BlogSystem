@@ -6,7 +6,7 @@ import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.common.util.FileUtils;
 import com.duan.common.util.ImageUtils;
 import com.duan.common.util.MultipartFile;
@@ -222,7 +222,7 @@ public class ImageManager {
             return moveImageAndUpdateDbAndUseCountIfNecessary(bloggerId, pictureId, null);
         } catch (IOException e) {
             e.printStackTrace();
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
     }
 
@@ -242,7 +242,7 @@ public class ImageManager {
                         Optional.ofNullable(oldPictureId).orElse(null));
             } catch (IOException e) {
                 e.printStackTrace();
-                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+                throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
             }
         }
 

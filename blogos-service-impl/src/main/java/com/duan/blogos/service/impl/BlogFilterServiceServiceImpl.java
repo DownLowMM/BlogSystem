@@ -12,7 +12,7 @@ import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.manager.BlogDataManager;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.restful.PageResult;
@@ -101,7 +101,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
             ids = luceneIndexManager.search(keyWord, 10000);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
         //关键字为首要条件
         if (CollectionUtils.isEmpty(ids)) return null;

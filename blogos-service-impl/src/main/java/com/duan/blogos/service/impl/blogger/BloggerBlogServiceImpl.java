@@ -17,7 +17,7 @@ import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ResultUtil;
+import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
@@ -120,7 +120,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
         statistics.setWordCount(content.length());
         effect = statisticsDao.insert(statistics);
         if (effect <= 0)
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
 
         if (analysisImg) {
             // 3 解析本地图片引用并使自增
@@ -137,7 +137,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
             luceneIndexManager.add(blog);
         } catch (IOException e) {
             e.printStackTrace();
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         return blogId;
@@ -260,7 +260,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
                 websiteProperties.getConditionSplitCharacter()));
         int effect = blogDao.update(blog);
         if (effect <= 0)
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
 
         if (ArrayUtils.isEmpty(newCategories)) {
             categoryRelaDao.deleteByBlogId(blogId);
@@ -277,7 +277,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
             luceneIndexManager.update(blog);
         } catch (IOException e) {
             e.printStackTrace();
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
 
         return true;
@@ -319,7 +319,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
 
         for (Long id : blogIds) {
             if (!deleteBlog(bloggerId, id))
-                throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
+                throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
         }
 
         return true;
@@ -343,7 +343,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
 
         }
 
-        throw ResultUtil.failException(CodeMessage.BLOG_UNKNOWN_BLOG, new SQLException());
+        throw ExceptionUtil.get(CodeMessage.BLOG_UNKNOWN_BLOG, new SQLException());
     }
 
     @Override
@@ -439,7 +439,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
             }
 
         } catch (IOException e) {
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         } finally {
             if (zipFile != null) try {
                 zipFile.close();
@@ -485,13 +485,13 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
                 }
             }
         } catch (IOException e) {
-            throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         } finally {
             if (zipOut != null) {
                 try {
                     zipOut.close();
                 } catch (IOException e) {
-                    throw ResultUtil.failException(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+                    throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
                 }
             }
         }
