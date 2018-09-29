@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger/account")
+@RequestMapping("/blogger")
 public class BloggerAccountController extends BaseBloggerController {
 
     @Autowired
@@ -37,7 +37,7 @@ public class BloggerAccountController extends BaseBloggerController {
     /**
      * 注册
      */
-    @PostMapping
+    @PostMapping("/register")
     @TokenNotRequired
     public ResultModel register(
             @ArgVerify(rule = Rule.NOT_BLANK)
@@ -59,7 +59,7 @@ public class BloggerAccountController extends BaseBloggerController {
     /**
      * 检查用户名是否存在
      */
-    @GetMapping("/check=username")
+    @GetMapping("/account/check=username")
     @TokenNotRequired
     public ResultModel checkUsernameUsed(
             @ArgVerify(rule = Rule.NOT_BLANK)
@@ -78,7 +78,7 @@ public class BloggerAccountController extends BaseBloggerController {
     /**
      * 检查电话号码是否存在
      */
-    @GetMapping("/check=phone")
+    @GetMapping("/account/check=phone")
     @TokenNotRequired
     public ResultModel checkProfileExist(
             @ArgVerify(rule = Rule.NOT_BLANK)
@@ -97,7 +97,7 @@ public class BloggerAccountController extends BaseBloggerController {
     /**
      * 修改用户名
      */
-    @PutMapping("/item=name")
+    @PutMapping("/account/item=name")
     public ResultModel modifyUsername(@Uid Long uid,
                                       @ArgVerify(rule = Rule.NOT_BLANK)
                                       @RequestParam(value = "username") String newUserName) {
@@ -112,7 +112,7 @@ public class BloggerAccountController extends BaseBloggerController {
     /**
      * 修改密码
      */
-    @PutMapping("/item=pwd")
+    @PutMapping("/account/item=pwd")
     public ResultModel modifyPassword(@Uid Long uid,
                                       @ArgVerify(rule = Rule.NOT_BLANK)
                                       @RequestParam(value = "old") String oldPassword,
@@ -132,7 +132,7 @@ public class BloggerAccountController extends BaseBloggerController {
     /**
      * 注销账号
      */
-    @DeleteMapping
+    @DeleteMapping("/account")
     public ResultModel delete(@Uid Long uid) {
 
         onlineService.logout(uid);

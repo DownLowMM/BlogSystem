@@ -30,11 +30,11 @@ public class BloggerLoginController extends BaseBloggerController {
     @PostMapping("/way=name")
     @TokenNotRequired
     public ResultModel loginWithUserName(@ArgVerify(rule = Rule.NOT_BLANK)
-                                         @RequestParam String userName,
+                                         @RequestParam String username,
                                          @ArgVerify(rule = Rule.NOT_BLANK)
                                          @RequestParam String password) {
         BloggerAccountDTO dto = new BloggerAccountDTO();
-        dto.setUsername(userName);
+        dto.setUsername(username);
         dto.setPassword(password);
 
         return onlineService.login(dto);

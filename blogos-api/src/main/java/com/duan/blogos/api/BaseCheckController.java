@@ -53,8 +53,8 @@ public class BaseCheckController extends RestController {
     /**
      * 检查用户名合法性
      */
-    protected void handleNameCheck(String userName) {
-        if (StringUtils.isBlank(userName) || !bloggerValidateService.checkUserName(userName))
+    protected void handleNameCheck(String username) {
+        if (StringUtils.isBlank(username) || !bloggerValidateService.checkUserName(username))
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
     }
 

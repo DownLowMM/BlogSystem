@@ -7,25 +7,24 @@ package com.duan.blogos.util;
  */
 public enum CodeMessage {
 
-    INVALID_REQUEST("invalid.request", 100),
+    /**
+     * token 缺失
+     */
+    TOKEN_REQUIRED(100),
 
-    INVALID_TOKEN("invalid.token", 101);
+    /**
+     * 无效 token
+     */
+    INVALID_TOKEN(101);
 
     private final int code;
-    private final String msg;
 
-    CodeMessage(String msg, int code) {
-        this.msg = msg;
+    CodeMessage(int code) {
         this.code = code;
     }
 
     public int getCode() {
         return code;
     }
-
-    public String getMsg() {
-        return msg;
-    }
-
 
 }

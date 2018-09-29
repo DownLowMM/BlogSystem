@@ -77,7 +77,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     private DataFillingManager dataFillingManager;
 
     @Override
-    public Long insertAccount(String userName, String password) {
+    public Long insertAccount(String username, String password) {
 
         String shaPwd;
         try {
@@ -89,7 +89,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
         }
 
         BloggerAccount account = new BloggerAccount();
-        account.setUsername(userName);
+        account.setUsername(username);
         account.setPassword(shaPwd);
         int effect = accountDao.insert(account);
         if (effect <= 0) return null;

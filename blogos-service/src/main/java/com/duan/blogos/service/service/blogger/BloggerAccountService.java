@@ -19,11 +19,11 @@ public interface BloggerAccountService {
     /**
      * 新增账户
      *
-     * @param userName 用户名
+     * @param username 用户名
      * @param password 密码
      * @return 博主id
      */
-    Long insertAccount(String userName, String password);
+    Long insertAccount(String username, String password);
 
     /**
      * 根据博主id获取博主账户
