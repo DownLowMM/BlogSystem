@@ -62,6 +62,9 @@ public class BaseCheckController extends RestController {
      * 检查博主是否拥有指定类别和标签
      */
     protected void handleCategoryAndLabelCheck(Long bloggerId, Long[] cids, Long[] lids) {
+        if (bloggerId == null) {
+            return;
+        }
 
         if (!CollectionUtils.isEmpty(cids)) {
             for (Long id : cids) {

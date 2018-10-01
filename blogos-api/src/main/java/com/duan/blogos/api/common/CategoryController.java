@@ -1,7 +1,8 @@
-package com.duan.blogos.api.blogger;
+package com.duan.blogos.api.common;
 
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
+import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.dto.blogger.BloggerCategoryDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
@@ -28,8 +29,8 @@ import org.springframework.web.bind.annotation.*;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger/category")
-public class BloggerBlogCategoryController extends BaseBloggerController {
+@RequestMapping("/category")
+public class CategoryController extends BaseController {
 
     @Autowired
     private BloggerCategoryService bloggerCategoryService;

@@ -18,7 +18,7 @@ public interface BlogLabelRelaDao extends BaseDao<BlogLabelRela> {
     /**
      * 找出指定博主的所有博文-类别对应关系
      */
-    List<BlogLabelRela> listAllByBloggerIdInLabelIds(@Param("bloggerId") Long bloggerId, @Param("labelIds") Long[] labelIds);
+    List<BlogLabelRela> listAllByBloggerIdInLabelIds(@Param("bloggerId") Long bloggerId, @Param("labelIds") List<Long> labelIds);
 
     /**
      * 博文的所有类别
@@ -34,4 +34,6 @@ public interface BlogLabelRelaDao extends BaseDao<BlogLabelRela> {
      * 删除博文的所有标签
      */
     int deleteByBlogId(Long blogId);
+
+    List<BlogLabelRela> listAllIdInLabelIds(List<Long> labelIds);
 }

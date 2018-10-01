@@ -89,7 +89,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     public boolean updateBlogCategory(Long bloggerId, Long categoryId, Long newIconId, String newTitle,
                                       String newBewrite) {
 
-        BlogCategory category = categoryDao.getCategory(bloggerId, categoryId);
+        BlogCategory category = categoryDao.getCategory(categoryId);
         Long oldIconId = category.getIconId();
         if (!StringUtils.isEmpty(newTitle)) category.setTitle(newTitle);
         if (!StringUtils.isEmpty(newBewrite)) category.setBewrite(newBewrite);
@@ -124,7 +124,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     @Override
     public boolean deleteCategoryAndMoveBlogsTo(Long bloggerId, Long categoryId, Long newCategoryId) {
 
-        BlogCategory category = categoryDao.getCategory(bloggerId, categoryId);
+        BlogCategory category = categoryDao.getCategory(categoryId);
         if (category == null) return false;
 
         // 图片引用次数--
@@ -160,7 +160,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
 
     @Override
     public BloggerCategoryDTO getCategory(Long bloggerId, Long categoryId) {
-        return getBloggerCategoryDTO(bloggerId, categoryDao.getCategory(bloggerId, categoryId));
+        return getBloggerCategoryDTO(bloggerId, categoryDao.getCategory(categoryId));
     }
 
     // 获得单个类别

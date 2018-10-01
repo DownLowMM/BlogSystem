@@ -1,5 +1,7 @@
-package com.duan.blogos.api.common;
+package com.duan.blogos.api.file;
 
+import com.duan.blogos.annonation.TokenNotRequired;
+import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
@@ -36,7 +38,7 @@ import java.io.IOException;
  * @author DuanJiaNing
  */
 @Controller
-@RequestMapping("/image/{bloggerId}")
+@RequestMapping("/image")
 public class ImageController extends BaseCheckController {
 
     @Autowired
@@ -48,18 +50,17 @@ public class ImageController extends BaseCheckController {
     /**
      * 输出公开图片，这些图片无需验证登录，如果数据库不存在指定图片，则返回默认图片
      */
-    @GetMapping("/type=public/{imageId}")
+    @TokenNotRequired
+    @GetMapping("/public/{imageId}")
     public void getBlogPicture(HttpServletRequest request, HttpServletResponse response,
-                               @PathVariable("bloggerId") Long bloggerId,
                                @PathVariable("imageId") Long imageId,
                                @RequestParam(value = "default", required = false) Integer category) {
-        handleAccountCheck(bloggerId);
 
         // 检查default是否为默认类别
         if (category != null)
             handleBlogCategoryDefaultCheck(category);
 
-        BloggerPictureDTO picture = bloggerPictureService.getPicture(imageId, bloggerId);
+        BloggerPictureDTO picture = bloggerPictureService.getPicture(imageId);
 
         // 如果图片是私有的，不能访问
         if (picture != null && picture.getCategory().equals(BloggerPictureCategoryEnum.PRIVATE.getCode()))
@@ -78,9 +79,9 @@ public class ImageController extends BaseCheckController {
     /**
      * 获取博主的私有图片（任意图片），这些图片需要验证登录
      */
-    @GetMapping("/type=private/{imageId}")
+    @GetMapping("/private/{imageId}")
     public void getBloggerPicture(HttpServletRequest request, HttpServletResponse response,
-                                  @PathVariable("bloggerId") Long bloggerId,
+                                  @Uid Long bloggerId,
                                   @PathVariable("imageId") Long imageId,
                                   @RequestParam(value = "default", required = false) Integer category) {
 
@@ -104,7 +105,7 @@ public class ImageController extends BaseCheckController {
     @PostMapping
     @ResponseBody
     public ResultModel upload(MultipartHttpServletRequest request,
-                              @PathVariable("bloggerId") Long bloggerId,
+                              @Uid Long bloggerId,
                               @RequestParam(value = "category", required = false) Integer category,
                               @RequestParam(value = "bewrite", required = false) String bewrite,
                               @RequestParam(value = "title", required = false) String title) {

@@ -1,5 +1,7 @@
 package com.duan.blogos.api.blog;
 
+import com.duan.blogos.annonation.TokenNotRequired;
+import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.restful.ResultModel;
@@ -20,9 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author DuanJiaNing
  */
+@TokenNotRequired
 @RestController
 @RequestMapping("/blog/{blogId}/statistics")
-public class BlogStatisticsController extends BaseBlogController {
+public class StatisticsController extends BaseController {
 
     @Autowired
     private BlogStatisticsService statisticsService;

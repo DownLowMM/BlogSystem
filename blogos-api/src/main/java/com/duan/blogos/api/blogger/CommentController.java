@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blogger;
 
+import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
@@ -19,7 +20,7 @@ import static com.duan.blogos.service.enums.BlogCommentStatusEnum.RIGHTFUL;
 
 @RestController
 @RequestMapping("/blogger/{bloggerId}/comment")
-public class BloggerCommentController extends BaseBloggerController {
+public class CommentController extends BaseController {
 
     @Autowired
     private BlogCommentValidateService commentValidateService;

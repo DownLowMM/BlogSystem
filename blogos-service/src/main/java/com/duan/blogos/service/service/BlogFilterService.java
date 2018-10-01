@@ -7,6 +7,8 @@ import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 
+import java.util.List;
+
 /**
  * Created on 2017/12/19.
  *
@@ -25,8 +27,8 @@ public interface BlogFilterService {
      * @param status      博文状态
      * @return 查询结果
      */
-    ResultModel<PageResult<BlogListItemDTO>> listFilterAll(Long[] categoryIds,
-                                                           Long[] labelIds,
+    ResultModel<PageResult<BlogListItemDTO>> listFilterAll(List<Long> categoryIds,
+                                                           List<Long> labelIds,
                                                            String keyWord,
                                                            Long bloggerId,
                                                            Integer pageNum,
@@ -44,8 +46,8 @@ public interface BlogFilterService {
      * @param status      博文状态
      * @return 查询结果
      */
-    ResultModel<PageResult<BlogListItemDTO>> listFilterByLabelAndCategory(Long[] categoryIds,
-                                                                          Long[] labelIds,
+    ResultModel<PageResult<BlogListItemDTO>> listFilterByLabelAndCategory(List<Long> categoryIds,
+                                                                          List<Long> labelIds,
                                                                           Long bloggerId,
                                                                           Integer pageNum,
                                                                           Integer pageSize,

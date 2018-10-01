@@ -19,7 +19,6 @@ import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilterService;
 import com.duan.blogos.service.util.ResultModelUtil;
-import com.duan.common.util.ArrayUtils;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -62,9 +61,10 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
     private BlogDataManager blogDataManager;
 
     @Override
-    public ResultModel<PageResult<BlogListItemDTO>> listFilterAll(Long[] categoryIds, Long[] labelIds, String keyWord,
-                                                                  Long bloggerId, Integer pageNum, Integer pageSize, BlogSortRule sortRule,
-                                                                  BlogStatusEnum status) {
+    public ResultModel<PageResult<BlogListItemDTO>> listFilterAll(
+            List<Long> categoryIds, List<Long> labelIds, String keyWord, Long bloggerId,
+            Integer pageNum, Integer pageSize,
+            BlogSortRule sortRule, BlogStatusEnum status) {
 
         pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
         pageSize = pageSize == null || pageSize < 1 ? defaultProperties.getBlogCount() : pageSize;
@@ -91,9 +91,10 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
      * @param status      博文状态
      * @return 经过筛选、排序的结果集
      */
-    protected ResultModel<PageResult<BlogListItemDTO>> filterByLucene(String keyWord, Long[] categoryIds, Long[] labelIds,
-                                                                      Long bloggerId, Integer pageNum, Integer pageSize, BlogSortRule sortRule,
-                                                                      BlogStatusEnum status) {
+    protected ResultModel<PageResult<BlogListItemDTO>> filterByLucene(
+            String keyWord, List<Long> categoryIds, List<Long> labelIds, Long bloggerId,
+            Integer pageNum, Integer pageSize,
+            BlogSortRule sortRule, BlogStatusEnum status) {
 
         // ------------------------关键字筛选
         Long[] ids;
@@ -111,39 +112,44 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
         blogIds.addAll(Arrays.asList(ids));
         if (CollectionUtils.isEmpty(blogIds)) return null;
 
-        PageResult<BlogListItemDTO> res = constructResult(blogIds, bloggerId, status, sortRule, pageNum, pageSize);
+        PageResult<BlogListItemDTO> res = constructResult(blogIds, status, sortRule, pageNum, pageSize);
         return new ResultModel<>(res);
     }
 
     @Override
-    public ResultModel<PageResult<BlogListItemDTO>> listFilterByLabelAndCategory(Long[] categoryIds, Long[] labelIds,
-                                                                                 Long bloggerId, Integer pageNum, Integer pageSize,
-                                                                                 BlogSortRule sortRule, BlogStatusEnum status) {
+    public ResultModel<PageResult<BlogListItemDTO>> listFilterByLabelAndCategory(
+            List<Long> categoryIds, List<Long> labelIds, Long bloggerId,
+            Integer pageNum, Integer pageSize,
+            BlogSortRule sortRule, BlogStatusEnum status) {
 
         Set<Long> blogIds = filterByCategoryAndLabels(categoryIds, labelIds, bloggerId);
         if (CollectionUtils.isEmpty(blogIds)) return null;
 
-        PageResult<BlogListItemDTO> res = constructResult(blogIds, bloggerId, status, sortRule, pageNum, pageSize);
+        PageResult<BlogListItemDTO> res = constructResult(blogIds, status, sortRule, pageNum, pageSize);
         return new ResultModel<>(res);
 
     }
 
-    private Set<Long> filterByCategoryAndLabels(Long[] categoryIds, Long[] labelIds, Long bloggerId) {
+    private Set<Long> filterByCategoryAndLabels(List<Long> categoryIds, List<Long> labelIds, Long bloggerId) {
 
         Set<Long> blogIds = new HashSet<>();
 
-        if (ArrayUtils.isEmpty(categoryIds) && ArrayUtils.isEmpty(labelIds)) {
-            List<Blog> res = blogDao.listAllIdByBloggerId(bloggerId);
+        if (CollectionUtils.isEmpty(categoryIds) && CollectionUtils.isEmpty(labelIds)) {
+            List<Blog> res = bloggerId != null ? blogDao.listAllIdByBloggerId(bloggerId) : blogDao.listAll();
             res.forEach(blog -> blogIds.add(blog.getId()));
         } else {
 
-            if (!ArrayUtils.isEmpty(categoryIds)) {
-                List<BlogCategoryRela> res = categoryRelaDao.listAllByBloggerIdInCategoryIds(bloggerId, categoryIds);
+            if (!CollectionUtils.isEmpty(categoryIds)) {
+                List<BlogCategoryRela> res = bloggerId != null ?
+                        categoryRelaDao.listAllByBloggerIdInCategoryIds(bloggerId, categoryIds) :
+                        categoryRelaDao.listAllInCategoryIds(categoryIds);
                 res.forEach(rela -> blogIds.add(rela.getBlogId()));
             }
 
-            if (!ArrayUtils.isEmpty(labelIds)) {
-                List<BlogLabelRela> res = labelRelaDao.listAllByBloggerIdInLabelIds(bloggerId, labelIds);
+            if (!CollectionUtils.isEmpty(labelIds)) {
+                List<BlogLabelRela> res = bloggerId != null ?
+                        labelRelaDao.listAllByBloggerIdInLabelIds(bloggerId, labelIds) :
+                        labelRelaDao.listAllIdInLabelIds(labelIds);
                 res.forEach(rela -> blogIds.add(rela.getBlogId()));
             }
         }
@@ -153,7 +159,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
 
 
     // 对筛选出的博文进行排序并重组结果集
-    private PageResult<BlogListItemDTO> constructResult(Set<Long> blogIds, Long bloggerId, BlogStatusEnum status,
+    private PageResult<BlogListItemDTO> constructResult(Set<Long> blogIds, BlogStatusEnum status,
                                                         BlogSortRule sortRule, Integer pageNum, Integer pageSize) {
 
         PageHelper.startPage(pageNum, pageSize);
@@ -161,7 +167,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
 
         List<BlogListItemDTO> dtos = new ArrayList<>();
         for (Blog blog : pageInfo.getList()) {
-            dtos.add(blogDataManager.getBlogListItemDTO(blog, bloggerId, true));
+            dtos.add(blogDataManager.getBlogListItemDTO(blog, true));
         }
 
         return ResultModelUtil.page(pageInfo, dtos);

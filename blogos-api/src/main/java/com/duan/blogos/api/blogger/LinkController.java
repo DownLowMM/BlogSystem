@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blogger;
 
+import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.dto.blogger.BloggerLinkDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/blogger/{bloggerId}/link")
-public class BloggerLinkController extends BaseBloggerController {
+public class LinkController extends BaseController {
 
     @Autowired
     private BloggerLinkService bloggerLinkService;

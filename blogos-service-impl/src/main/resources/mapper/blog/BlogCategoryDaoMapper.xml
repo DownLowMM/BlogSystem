@@ -24,7 +24,7 @@
     <select id="getCategory" resultType="BlogCategory">
         SELECT *
         FROM blog_category
-        WHERE id = #{categoryId} AND blogger_id = #{bloggerId}
+        WHERE id = #{value}
     </select>
 
     <select id="countByBloggerId" resultType="java.lang.Integer">

@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blogger;
 
+import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
@@ -25,7 +26,7 @@ import java.util.Base64;
  */
 @RestController
 @RequestMapping("/blogger/{bloggerId}/profile")
-public class BloggerProfileController extends BaseBloggerController {
+public class ProfileController extends BaseController {
 
     @Autowired
     private BloggerProfileService bloggerProfileService;

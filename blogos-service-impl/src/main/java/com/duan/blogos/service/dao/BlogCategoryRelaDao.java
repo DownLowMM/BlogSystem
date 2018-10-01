@@ -18,7 +18,7 @@ public interface BlogCategoryRelaDao extends BaseDao<BlogCategoryRela> {
      * 找出指定博主的所有博文-类别对应关系
      */
     List<BlogCategoryRela> listAllByBloggerIdInCategoryIds(@Param("bloggerId") Long bloggerId,
-                                                           @Param("categoryIds") Long[] categoryIds);
+                                                           @Param("categoryIds") List<Long> categoryIds);
 
     /**
      * 博文的所有类别
@@ -39,4 +39,6 @@ public interface BlogCategoryRelaDao extends BaseDao<BlogCategoryRela> {
      * 查询博主指定类别下的所有博文
      */
     List<BlogCategoryRela> listAllByBloggerIdAndCategoryId(@Param("bloggerId") Long bloggerId, @Param("categoryId") Long categoryId);
+
+    List<BlogCategoryRela> listAllInCategoryIds(List<Long> categoryIds);
 }

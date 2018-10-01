@@ -1,4 +1,4 @@
-package com.duan.blogos.api.common;
+package com.duan.blogos.api.util;
 
 import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.restful.ResultModel;

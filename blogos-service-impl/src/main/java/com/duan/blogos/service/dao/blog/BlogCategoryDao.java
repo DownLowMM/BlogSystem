@@ -34,12 +34,10 @@ public interface BlogCategoryDao extends BaseDao<BlogCategory> {
     /**
      * 在限定博主的情况下获取指定id的博文类别
      *
-     * @param bloggerId  博主id
      * @param categoryId 类别id
      * @return 查询结果
      */
-    BlogCategory getCategory(@Param("bloggerId") Long bloggerId,
-                             @Param("categoryId") Long categoryId);
+    BlogCategory getCategory(Long categoryId);
 
     /**
      * 统计指定博主创建的类别数量

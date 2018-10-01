@@ -2,12 +2,14 @@ package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
+import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.common.OnlineService;
+import com.duan.blogos.service.vo.LoginVO;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +18,59 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Created on 2018/1/17.
  * 博主账号api
- * <p>
- * 1 注册账号
- * 2 修改用户名
- * 3 修改密码
- * 4 注销账号
  *
  * @author DuanJiaNing
  */
 @RestController
 @RequestMapping("/blogger")
-public class BloggerAccountController extends BaseBloggerController {
+public class BloggerController extends BaseController {
 
     @Autowired
     private BloggerAccountService accountService;
 
     @Autowired
     private OnlineService onlineService;
+
+    @PostMapping("/login/way=name")
+    @TokenNotRequired
+    public ResultModel loginWithUserName(@ArgVerify(rule = Rule.NOT_BLANK)
+                                         @RequestParam String username,
+                                         @ArgVerify(rule = Rule.NOT_BLANK)
+                                         @RequestParam String password) {
+        LoginVO vo = new LoginVO();
+        vo.setUsername(username);
+        vo.setPassword(password);
+
+        return onlineService.login(vo);
+    }
+
+    @TokenNotRequired
+    @RequestMapping(value = "/login/way=phone", method = RequestMethod.POST)
+    public ResultModel loginWithPhoneNumber(@RequestParam("phone") String phone) {
+
+        // UPDATE: 2018/9/23 更新
+        /*
+        handlePhoneCheck(phone, request);
+
+        BloggerAccountDTO account = accountService.getAccountByPhone(phone);
+        if (account == null) return new ResultModel<>("", ResultModel.FAIL);
+
+        HttpSession session = request.getSession();
+        session.setAttribute(sessionProperties.getBloggerId(), account.getId());
+        session.setAttribute(sessionProperties.getBloggerName(), account.getUsername());
+        session.setAttribute(sessionProperties.getLoginSignal(), "login");
+*/
+        // 成功登录
+        return ResultModel.fail();
+    }
+
+    /**
+     * 登出
+     */
+    @GetMapping("/logout")
+    public ResultModel logout(@Uid Long uid) {
+        return onlineService.logout(uid);
+    }
 
     /**
      * 注册

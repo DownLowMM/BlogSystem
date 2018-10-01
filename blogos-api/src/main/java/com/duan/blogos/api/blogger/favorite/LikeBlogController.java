@@ -1,5 +1,6 @@
-package com.duan.blogos.api.blogger;
+package com.duan.blogos.api.blogger.favorite;
 
+import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
@@ -7,8 +8,7 @@ import com.duan.blogos.service.dto.blogger.FavouriteBlogListItemDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blogger.BloggerCollectBlogService;
-import com.duan.common.util.StringUtils;
+import com.duan.blogos.service.service.blogger.BloggerLikeBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +25,11 @@ import java.util.List;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger/{bloggerId}/collect")
-public class BloggerCollectBlogController extends BaseBloggerController {
+@RequestMapping("/blogger/{bloggerId}/like")
+public class LikeBlogController extends BaseController {
 
     @Autowired
-    private BloggerCollectBlogService bloggerCollectBlogService;
+    private BloggerLikeBlogService likeBlogService;
 
     /**
      * 收藏博文清单
@@ -52,30 +52,12 @@ public class BloggerCollectBlogController extends BaseBloggerController {
             throw ExceptionUtil.get(CodeMessage.BLOG_BLOG_SORT_ORDER_UNDEFINED);
 
         // 查询数据
-        ResultModel<List<FavouriteBlogListItemDTO>> result = bloggerCollectBlogService.listCollectBlog(bloggerId,
-                null, offset == null ? 0 : offset, rows == null ? -1 : rows,
+        ResultModel<List<FavouriteBlogListItemDTO>> result = likeBlogService.listLikeBlog(bloggerId,
+                offset == null ? 0 : offset, rows == null ? -1 : rows,
                 BlogSortRule.valueOf(sor, ord));
         if (result == null) handlerEmptyResult();
 
         return result;
-    }
-
-    /**
-     * 修改博文收藏
-     */
-    @PutMapping("/{blogId}")
-    public ResultModel update(@PathVariable("blogId") Long blogId,
-                              @PathVariable("bloggerId") Long bloggerId,
-                              @RequestParam(value = "reason", required = false) String newReason) {
-
-        if (StringUtils.isEmpty(newReason)) {
-            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-        }
-
-        boolean result = bloggerCollectBlogService.updateCollect(bloggerId, blogId, newReason, null);
-        if (!result) handlerOperateFail();
-
-        return new ResultModel<>("");
     }
 
 
@@ -87,6 +69,6 @@ public class BloggerCollectBlogController extends BaseBloggerController {
 
         handleAccountCheck(bloggerId);
 
-        return new ResultModel<>(bloggerCollectBlogService.countByBloggerId(bloggerId));
+        return new ResultModel<>(likeBlogService.countByBloggerId(bloggerId));
     }
 }

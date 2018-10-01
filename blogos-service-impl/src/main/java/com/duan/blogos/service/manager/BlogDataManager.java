@@ -46,7 +46,7 @@ public class BlogDataManager {
     @Autowired
     private BlogStatisticsDao statisticsDao;
 
-    public BlogListItemDTO getBlogListItemDTO(Blog blog, Long bloggerId, boolean findImg) {
+    public BlogListItemDTO getBlogListItemDTO(Blog blog, boolean findImg) {
         Long blogId = blog.getId();
 
         // 找一张图片
@@ -63,7 +63,7 @@ public class BlogDataManager {
         List<BlogCategoryRela> cts = categoryRelaDao.listAllByBlogId(blogId);
         if (!CollectionUtils.isEmpty(cts)) {
             array = cts.stream()
-                    .map(rela -> categoryDao.getCategory(bloggerId, rela.getCategoryId()))
+                    .map(rela -> categoryDao.getCategory(rela.getCategoryId()))
                     .toArray(BlogCategory[]::new);
         }
 

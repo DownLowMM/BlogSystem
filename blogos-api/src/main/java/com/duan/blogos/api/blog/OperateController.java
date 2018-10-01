@@ -1,5 +1,6 @@
-package com.duan.blogos.api.blogger;
+package com.duan.blogos.api.blog;
 
+import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
@@ -22,8 +23,8 @@ import org.springframework.web.bind.annotation.*;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger/{bloggerId}/{blogId}")
-public class BloggerOperateController extends BaseBloggerController {
+@RequestMapping("/blog/{blogId}")
+public class OperateController extends BaseController {
 
     @Autowired
     private BlogOperateService operateService;

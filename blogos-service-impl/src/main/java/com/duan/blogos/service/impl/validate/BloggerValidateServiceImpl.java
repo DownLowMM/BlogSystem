@@ -38,7 +38,7 @@ public class BloggerValidateServiceImpl implements BloggerValidateService {
 
     @Override
     public boolean checkBloggerBlogCategoryExist(Long bloggerId, Long categoryId) {
-        return categoryDao.getCategory(bloggerId, categoryId) != null;
+        return categoryDao.getCategory(categoryId) != null;
     }
 
     @Override
