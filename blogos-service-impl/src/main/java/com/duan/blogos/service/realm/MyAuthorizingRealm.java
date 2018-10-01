@@ -1,7 +1,7 @@
 package com.duan.blogos.service.realm;
 
-import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
-import com.duan.blogos.service.service.blogger.BloggerAccountService;
+import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
+import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MyAuthorizingRealm extends AuthorizingRealm {
 
     @Autowired
-    private BloggerAccountService accountService;
+    private BloggerAccountDao accountDao;
 
     /**
      * 权限验证
@@ -37,7 +37,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         //获取用户账号
         String username = token.getPrincipal().toString();
-        BloggerAccountDTO account = accountService.getAccount(username);
+        BloggerAccount account = accountDao.getAccountByName(username);
         if (account != null) {
 
             //将查询到的用户账号和密码存放到 authenticationInfo用于后面的权限判断。第三个参数随便放一个就行了。

@@ -13,27 +13,27 @@ import java.util.List;
 @Data
 public class PageResult<T> implements Serializable {
 
-    private Long total;
+    private Integer total;
     private List<T> list;
-    private Long totalPage;
-    private Long currentPage;
-    private Long pageSize;
+    private Integer totalPage;
+    private Integer currentPage;
+    private Integer pageSize;
 
     public PageResult() {
     }
 
-    public PageResult(long total, List<T> list) {
+    public PageResult(int total, List<T> list) {
         this.total = total;
         this.list = list;
     }
 
-    public PageResult(long total, List<T> list, long totalPage) {
+    public PageResult(int total, List<T> list, int totalPage) {
         this.total = total;
         this.list = list;
         this.totalPage = totalPage;
     }
 
-    public PageResult(long total, List<T> list, long totalPage, long currentPage) {
+    public PageResult(int total, List<T> list, int totalPage, int currentPage) {
         this.total = total;
         this.list = list;
         this.totalPage = totalPage;

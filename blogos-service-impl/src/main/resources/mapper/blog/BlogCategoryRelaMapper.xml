@@ -38,11 +38,11 @@
     </select>
 
     <select id="listAllByBloggerIdAndCategoryId" resultType="BlogCategoryRela">
-        select id, blog_id, category_id, insert_time
-        from blog_category_rela
-                 left join blog_category c on category_id = c.id
+        select cr.id, cr.blog_id, cr.category_id, cr.insert_time
+        from blog_category_rela cr
+                 left join blog_category c on cr.category_id = c.id
         where c.blogger_id = #{bloggerId}
-          and category_id = #{categoryId}
+          and cr.category_id = #{categoryId}
         group by blog_id
     </select>
 

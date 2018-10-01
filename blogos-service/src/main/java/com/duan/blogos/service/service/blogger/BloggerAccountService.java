@@ -26,14 +26,6 @@ public interface BloggerAccountService {
     Long insertAccount(String username, String password);
 
     /**
-     * 根据博主id获取博主账户
-     *
-     * @param uid 博主id
-     * @return 查询结果
-     */
-    BloggerAccountDTO getAccount(Long uid);
-
-    /**
      * 根据博主名字获取博主账户
      *
      * @param bloggerName 博主名字

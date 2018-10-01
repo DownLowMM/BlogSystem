@@ -113,7 +113,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         if (!bloggerCategoryService.updateBlogCategory(bloggerId, categoryId, newIconId, newTitle, newBewrite))
             handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     /**
@@ -143,7 +143,7 @@ public class BloggerBlogCategoryController extends BaseBloggerController {
         if (!bloggerCategoryService.deleteCategoryAndMoveBlogsTo(bloggerId, categoryId, cate))
             handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
 

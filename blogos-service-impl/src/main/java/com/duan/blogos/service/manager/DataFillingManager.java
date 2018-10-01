@@ -392,7 +392,6 @@ public class DataFillingManager {
         BloggerAccountDTO dto = new BloggerAccountDTO();
         dto.setId(account.getId());
         dto.setUsername(account.getUsername());
-        dto.setPassword(account.getPassword());
         dto.setRegisterDate(account.getRegisterDate());
 
         return dto;

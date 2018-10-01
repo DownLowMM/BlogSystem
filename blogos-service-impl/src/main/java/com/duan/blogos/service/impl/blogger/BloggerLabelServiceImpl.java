@@ -8,6 +8,7 @@ import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
+import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -120,6 +121,7 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
 
         List<BlogLabelDTO> dtos = result.stream().map(dataFillingManager::blogLabel2DTO).collect(Collectors.toList());
 
-        return new ResultModel<>(new PageResult<>(pageInfo.getTotal(), dtos));
+        return ResultModelUtil.pageResult(pageInfo, dtos);
+
     }
 }

@@ -58,6 +58,13 @@ public class ResultModel<T> implements Serializable {
         return new ResultModel();
     }
 
+    public static <T> ResultModel success(T data) {
+        ResultModel<T> model = new ResultModel<>();
+        model.setData(data);
+        model.setCode(SUCCESS);
+        return model;
+    }
+
     public static ResultModel fail() {
         ResultModel model = new ResultModel("fail", FAIL);
         return model;

@@ -2,9 +2,9 @@ package com.duan.blogos.api;
 
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.api.blogger.BaseBloggerController;
-import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.OnlineService;
+import com.duan.blogos.service.vo.LoginVO;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +33,11 @@ public class BloggerLoginController extends BaseBloggerController {
                                          @RequestParam String username,
                                          @ArgVerify(rule = Rule.NOT_BLANK)
                                          @RequestParam String password) {
-        BloggerAccountDTO dto = new BloggerAccountDTO();
-        dto.setUsername(username);
-        dto.setPassword(password);
+        LoginVO vo = new LoginVO();
+        vo.setUsername(username);
+        vo.setPassword(password);
 
-        return onlineService.login(dto);
+        return onlineService.login(vo);
     }
 
     @TokenNotRequired

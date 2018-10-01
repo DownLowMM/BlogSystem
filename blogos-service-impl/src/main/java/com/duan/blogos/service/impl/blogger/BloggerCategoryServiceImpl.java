@@ -4,7 +4,6 @@ import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.BlogCategoryRelaDao;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
-import com.duan.blogos.service.dao.blog.BlogDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dto.blogger.BloggerCategoryDTO;
 import com.duan.blogos.service.entity.BlogCategoryRela;
@@ -18,6 +17,7 @@ import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
+import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
 import com.github.pagehelper.PageHelper;
@@ -63,9 +63,6 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
     private BloggerPictureDao pictureDao;
 
     @Autowired
-    private BlogDao blogDao;
-
-    @Autowired
     private BlogCategoryRelaDao categoryRelaDao;
 
     @Override
@@ -85,7 +82,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
             result.add(getBloggerCategoryDTO(bloggerId, category));
         }
 
-        return new ResultModel<>(new PageResult<>(pageInfo.getTotal(), result));
+        return ResultModelUtil.pageResult(pageInfo, result);
     }
 
     @Override

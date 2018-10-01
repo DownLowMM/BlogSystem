@@ -31,6 +31,7 @@ import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.audience.BlogBrowseService;
+import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -148,7 +149,8 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
             return null;
         }
 
-        return new ResultModel<>(new PageResult<>(pageInfo.getTotal(), result));
+        return ResultModelUtil.pageResult(pageInfo, result);
+
     }
 
     private BloggerPicture getAvatar(Long id) {

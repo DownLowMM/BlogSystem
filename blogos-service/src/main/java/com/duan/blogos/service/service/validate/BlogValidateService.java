@@ -52,15 +52,6 @@ public interface BlogValidateService {
     boolean isBlogStatusAllow(int status);
 
     /**
-     * 检测博主是否有指定博文的统计信息记录
-     *
-     * @param bloggerId 博主id
-     * @param blogId    博文id
-     * @return 有返回true
-     */
-    boolean isCreatorOfBlogStatistic(Long bloggerId, Long blogId);
-
-    /**
      * 检查博文的统计信息是否存在
      *
      * @param blogId 博文id

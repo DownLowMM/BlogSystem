@@ -1,12 +1,14 @@
 package com.duan.blogos.service.impl.common;
 
-import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
+import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
+import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.common.OnlineService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.util.TokenUtil;
+import com.duan.blogos.service.vo.LoginVO;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,8 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class OnlineServiceImpl implements OnlineService {
 
     private static final String ONLINE_PREFIX = "online:uid:";
-    @Autowired
-    private BloggerAccountService accountService;
+
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -40,6 +41,9 @@ public class OnlineServiceImpl implements OnlineService {
 
     @Value("${redis.key.token.expire-day}")
     private int tokenExpireDay;
+
+    @Autowired
+    private BloggerAccountDao accountDao;
 
     @Override
     public Long getLoginBloggerId(String token) {
@@ -53,9 +57,9 @@ public class OnlineServiceImpl implements OnlineService {
     }
 
     @Override
-    public ResultModel login(BloggerAccountDTO account) {
+    public ResultModel login(LoginVO vo) {
 
-        BloggerAccountDTO acc = accountService.getAccount(account.getUsername());
+        BloggerAccount acc = accountDao.getAccountByName(vo.getUsername());
 
         // 用户不存在
         if (acc == null) {
@@ -64,7 +68,7 @@ public class OnlineServiceImpl implements OnlineService {
 
         // 密码错误
         try {
-            if (!acc.getPassword().equals(new BigInteger(StringUtils.toSha(account.getPassword())).toString())) {
+            if (!acc.getPassword().equals(new BigInteger(StringUtils.toSha(vo.getPassword())).toString())) {
                 throw ExceptionUtil.get(CodeMessage.BLOGGER_PASSWORD_INCORRECT);
             }
         } catch (NoSuchAlgorithmException e) {
@@ -78,12 +82,13 @@ public class OnlineServiceImpl implements OnlineService {
 
         // tokenKey
         String tokenKey = TokenUtil.getTokenKey(uid);
-        valueOperations.set(tokenKey, TokenUtil.getToken(uid), tokenExpireDay, TimeUnit.DAYS);
+        String token = TokenUtil.getToken(uid);
+        valueOperations.set(tokenKey, token, tokenExpireDay, TimeUnit.DAYS);
 
         // online record
         valueOperations.set(appName + ":" + ONLINE_PREFIX + uid, String.valueOf(uid), expireTime, TimeUnit.MINUTES);
 
-        return ResultModel.success();
+        return ResultModel.success(DataConverter.PO2DTO.getLoginResultDTO(acc, token));
     }
 
     @Override

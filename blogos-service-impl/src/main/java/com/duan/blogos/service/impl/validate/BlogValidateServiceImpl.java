@@ -4,7 +4,6 @@ import com.duan.blogos.service.dao.blog.BlogDao;
 import com.duan.blogos.service.dao.blog.BlogLabelDao;
 import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
 import com.duan.blogos.service.entity.blog.Blog;
-import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.validate.BlogValidateService;
@@ -65,17 +64,6 @@ public class BlogValidateServiceImpl implements BlogValidateService {
         }
 
         return contain > 0;
-    }
-
-    @Override
-    public boolean isCreatorOfBlogStatistic(Long bloggerId, Long blogId) {
-
-        if (!isCreatorOfBlog(bloggerId, blogId)) return false;
-
-        BlogStatistics statistics = statisticsDao.getStatistics(blogId);
-        if (statistics == null) return false;
-
-        return true;
     }
 
     @Override

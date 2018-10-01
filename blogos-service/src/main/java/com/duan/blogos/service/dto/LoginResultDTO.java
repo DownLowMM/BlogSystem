@@ -1,4 +1,4 @@
-package com.duan.blogos.service.dto.blogger;
+package com.duan.blogos.service.dto;
 
 import lombok.Data;
 
@@ -6,12 +6,12 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * Created on 2018/9/13.
+ * Created on 2018/10/1.
  *
  * @author DuanJiaNing
  */
 @Data
-public class BloggerAccountDTO implements Serializable {
+public class LoginResultDTO implements Serializable {
 
     //id
     private Long id;
@@ -24,5 +24,4 @@ public class BloggerAccountDTO implements Serializable {
 
     //注册时间
     private Timestamp registerDate;
-
 }

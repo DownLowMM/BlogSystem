@@ -18,6 +18,7 @@ import com.duan.blogos.service.manager.BlogLuceneIndexManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilterService;
+import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.ArrayUtils;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
@@ -163,7 +164,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
             dtos.add(blogDataManager.getBlogListItemDTO(blog, bloggerId, true));
         }
 
-        return new PageResult<>(pageInfo.getTotal(), dtos);
+        return ResultModelUtil.page(pageInfo, dtos);
 
     }
 

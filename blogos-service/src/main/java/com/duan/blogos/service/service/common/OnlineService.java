@@ -1,7 +1,7 @@
 package com.duan.blogos.service.service.common;
 
-import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.restful.ResultModel;
+import com.duan.blogos.service.vo.LoginVO;
 
 /**
  * Created on 2018/9/14.
@@ -18,7 +18,7 @@ public interface OnlineService {
     /**
      * 登入
      */
-    ResultModel login(BloggerAccountDTO account);
+    ResultModel login(LoginVO account);
 
     /**
      * 登出

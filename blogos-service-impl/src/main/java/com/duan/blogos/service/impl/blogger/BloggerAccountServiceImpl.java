@@ -106,12 +106,6 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     }
 
     @Override
-    public BloggerAccountDTO getAccount(Long bloggerId) {
-        BloggerAccount account = accountDao.getAccountById(bloggerId);
-        return dataFillingManager.bloggerAccount2DTO(account);
-    }
-
-    @Override
     public BloggerAccountDTO getAccount(String bloggerName) {
         BloggerAccount account = accountDao.getAccountByName(bloggerName);
         return dataFillingManager.bloggerAccount2DTO(account);
