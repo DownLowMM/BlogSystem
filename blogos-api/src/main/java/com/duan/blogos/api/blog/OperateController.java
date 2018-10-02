@@ -4,7 +4,7 @@ import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.audience.BlogOperateService;
+import com.duan.blogos.service.service.blog.OperateService;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class OperateController extends BaseController {
 
     @Autowired
-    private BlogOperateService operateService;
+    private OperateService operateService;
 
     /**
      * 分享博文

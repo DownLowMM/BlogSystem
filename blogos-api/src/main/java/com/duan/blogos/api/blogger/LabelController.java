@@ -1,4 +1,4 @@
-package com.duan.blogos.api.common;
+package com.duan.blogos.api.blogger;
 
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;

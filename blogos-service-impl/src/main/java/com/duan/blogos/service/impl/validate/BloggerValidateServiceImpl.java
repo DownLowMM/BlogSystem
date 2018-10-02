@@ -50,19 +50,6 @@ public class BloggerValidateServiceImpl implements BloggerValidateService {
     }
 
     @Override
-    public boolean checkBloggerSignIn(Long bloggerId) {
-
-        // TODO redis 实现
-
-        // 检查当前登录否
-//        HttpSession session = request.getSession();
-//        Object obj = session.getAttribute(propertiesManager.getSessionNameOfBloggerId());
-//        return bloggerId.equals(obj);
-
-        return true;
-    }
-
-    @Override
     public boolean checkBloggerPictureExist(Long bloggerId, Long pictureId) {
         BloggerPicture picture = pictureDao.getPictureById(pictureId);
         if (picture != null && bloggerId.equals(picture.getBloggerId()))

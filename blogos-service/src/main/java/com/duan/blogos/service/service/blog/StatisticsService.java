@@ -1,4 +1,4 @@
-package com.duan.blogos.service.service.common;
+package com.duan.blogos.service.service.blog;
 
 
 import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
@@ -10,7 +10,7 @@ import com.duan.blogos.service.restful.ResultModel;
  *
  * @author DuanJiaNing
  */
-public interface BlogStatisticsService {
+public interface StatisticsService {
 
     /**
      * 获取博文统计信息
@@ -28,12 +28,5 @@ public interface BlogStatisticsService {
      */
     ResultModel<BlogBaseStatisticsDTO> getBlogStatisticsCount(Long blogId);
 
-    /**
-     * 更新博文浏览次数（加一）
-     *
-     * @param blogId 博文id
-     * @return 更新成功为true
-     */
-    boolean updateBlogViewCountPlus(Long blogId);
 }
 

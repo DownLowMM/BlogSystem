@@ -1,4 +1,4 @@
-package com.duan.blogos.service.service.audience;
+package com.duan.blogos.service.service.blog;
 
 /**
  * Created on 2017/12/26.
@@ -12,7 +12,7 @@ package com.duan.blogos.service.service.audience;
  *
  * @author DuanJiaNing
  */
-public interface BlogOperateService {
+public interface OperateService {
 
     /**
      * 博文分享次数加一

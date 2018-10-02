@@ -6,7 +6,7 @@ import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.audience.BlogBrowseService;
+import com.duan.blogos.service.service.blog.BlogBrowseService;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.BlogStatisticsService;
 import com.duan.blogos.service.service.common.OnlineService;

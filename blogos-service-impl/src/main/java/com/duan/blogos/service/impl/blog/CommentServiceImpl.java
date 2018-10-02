@@ -1,27 +1,15 @@
-package com.duan.blogos.service.impl.audience;
+package com.duan.blogos.service.impl.blog;
 
 
-import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
-import com.duan.blogos.service.dao.BlogCategoryRelaDao;
-import com.duan.blogos.service.dao.BlogLabelRelaDao;
-import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blog.BlogCommentDao;
-import com.duan.blogos.service.dao.blog.BlogDao;
-import com.duan.blogos.service.dao.blog.BlogLabelDao;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dao.blogger.BloggerProfileDao;
 import com.duan.blogos.service.dto.blog.BlogCommentDTO;
-import com.duan.blogos.service.dto.blog.BlogMainContentDTO;
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
-import com.duan.blogos.service.entity.BlogCategoryRela;
-import com.duan.blogos.service.entity.BlogLabelRela;
-import com.duan.blogos.service.entity.blog.Blog;
-import com.duan.blogos.service.entity.blog.BlogCategory;
 import com.duan.blogos.service.entity.blog.BlogComment;
-import com.duan.blogos.service.entity.blog.BlogLabel;
 import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
@@ -30,7 +18,7 @@ import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.audience.BlogBrowseService;
+import com.duan.blogos.service.service.blog.CommentService;
 import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.CollectionUtils;
 import com.github.pagehelper.PageHelper;
@@ -40,7 +28,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.duan.blogos.service.enums.BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR;
 
@@ -50,22 +37,10 @@ import static com.duan.blogos.service.enums.BloggerPictureCategoryEnum.DEFAULT_B
  * @author DuanJiaNing
  */
 @Service
-public class BlogBrowseServiceImpl implements BlogBrowseService {
-
-    @Autowired
-    private BlogDao blogDao;
-
-    @Autowired
-    private BlogCategoryDao categoryDao;
-
-    @Autowired
-    private BlogLabelDao labelDao;
+public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private DefaultProperties defaultProperties;
-
-    @Autowired
-    private DbProperties dbProperties;
 
     @Autowired
     private WebsiteProperties websiteProperties;
@@ -87,38 +62,6 @@ public class BlogBrowseServiceImpl implements BlogBrowseService {
 
     @Autowired
     private BloggerProfileDao profileDao;
-
-    @Autowired
-    private BlogCategoryRelaDao categoryRelaDao;
-
-    @Autowired
-    private BlogLabelRelaDao labelRelaDao;
-
-    @Override
-    public ResultModel<BlogMainContentDTO> getBlogMainContent(Long blogId) {
-
-        //查询数据
-        Blog blog = blogDao.getBlogById(blogId);
-        if (blog == null) return null;
-        List<BlogCategoryRela> cads = categoryRelaDao.listAllByBlogId(blog.getId());
-
-        List<BlogCategory> categories = CollectionUtils.isEmpty(cads) ? null :
-                categoryDao.listCategoryById(cads.stream()
-                        .map(BlogCategoryRela::getCategoryId)
-                        .collect(Collectors.toList()));
-
-        List<BlogLabelRela> las = labelRelaDao.listAllByBlogId(blog.getId());
-        List<BlogLabel> labels = CollectionUtils.isEmpty(las) ? null :
-                labelDao.listLabelById(las.stream()
-                        .map(BlogLabelRela::getLabelId)
-                        .collect(Collectors.toList()));
-
-        //填充数据
-        BlogMainContentDTO dto = dataFillingManager.blogMainContentToDTO(blog, categories, labels,
-                dbProperties.getStringFiledSplitCharacterForString());
-
-        return new ResultModel<>(dto);
-    }
 
     @Override
     public ResultModel<PageResult<BlogCommentDTO>> listBlogComment(Long blogId, Integer pageSize, Integer pageNum) {

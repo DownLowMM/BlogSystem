@@ -12,8 +12,8 @@ import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.*;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.restful.ResultModel;
+import com.duan.blogos.service.service.blog.StatisticsService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
-import com.duan.blogos.service.service.common.BlogStatisticsService;
 import com.duan.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @author DuanJiaNing
  */
 @Service
-public class BlogStatisticsServiceImpl implements BlogStatisticsService {
+public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private DbProperties dbProperties;
@@ -154,11 +154,4 @@ public class BlogStatisticsServiceImpl implements BlogStatisticsService {
         return new ResultModel<>(dto);
     }
 
-    @Override
-    public boolean updateBlogViewCountPlus(Long blogId) {
-        int effect = statisticsDao.updateViewCountPlus(blogId);
-
-        if (effect > 0) return true;
-        else return false;
-    }
 }

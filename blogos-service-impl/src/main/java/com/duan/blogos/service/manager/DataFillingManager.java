@@ -124,28 +124,6 @@ public class DataFillingManager {
         return dto;
     }
 
-    public BlogMainContentDTO blogMainContentToDTO(Blog blog, List<BlogCategory> categories, List<BlogLabel> labels,
-                                                   String splitChar) {
-        if (blog == null) {
-            return null;
-        }
-
-        BlogMainContentDTO dto = new BlogMainContentDTO();
-        dto.setCategories(blogCategory2DTO(categories));
-        dto.setLabels(blogLabel2DTO(labels));
-        dto.setId(blog.getId());
-        dto.setKeyWords(StringUtils.stringArrayToArray(blog.getKeyWords(), splitChar));
-        dto.setNearestModifyDate(blog.getNearestModifyDate());
-        dto.setReleaseDate(blog.getReleaseDate());
-        dto.setStatus(blog.getState());
-        dto.setSummary(blog.getSummary());
-        dto.setTitle(blog.getTitle());
-        // dto.setWordCount(blog.getWordCount());
-        dto.setContent(blog.getContent());
-
-        return dto;
-    }
-
     public BloggerCategoryDTO blogCategoryToDTO(BlogCategory category, BloggerPicture icon, int count) {
         if (category == null) {
             return null;

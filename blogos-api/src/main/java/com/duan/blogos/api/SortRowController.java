@@ -1,6 +1,5 @@
-package com.duan.blogos.api.common;
+package com.duan.blogos.api;
 
-import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.dto.blog.BlogSortRuleDTO;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogSortRuleService;

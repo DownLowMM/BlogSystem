@@ -34,15 +34,6 @@ public interface BloggerValidateService {
     boolean checkBloggerPictureLegal(Long bloggerId, Integer categoryId);
 
     /**
-     * 检查当前博主是否登录
-     *
-     * @param bloggerId 博主id
-     * @return 登录返回true
-     */
-    // TODO redis 中操作
-    boolean checkBloggerSignIn(Long bloggerId);
-
-    /**
      * 检查博主是否有指定图片
      *
      * @param bloggerId 博主id

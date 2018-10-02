@@ -5,7 +5,7 @@ import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.common.BlogStatisticsService;
+import com.duan.blogos.service.service.blog.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StatisticsController extends BaseController {
 
     @Autowired
-    private BlogStatisticsService statisticsService;
+    private StatisticsService statisticsService;
 
     /**
      * 获得博文统计信息

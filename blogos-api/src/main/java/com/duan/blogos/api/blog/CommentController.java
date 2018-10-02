@@ -5,7 +5,7 @@ import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.dto.blog.BlogCommentDTO;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.audience.BlogBrowseService;
+import com.duan.blogos.service.service.blog.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController extends BaseCheckController {
 
     @Autowired
-    private BlogBrowseService blogBrowseService;
+    private CommentService commentService;
 
     /**
      * 获得博文评论列表
@@ -31,7 +31,7 @@ public class CommentController extends BaseCheckController {
                                                        @RequestParam(required = false) Integer pageNum) {
         handleBlogExistCheck(blogId);
 
-        ResultModel<PageResult<BlogCommentDTO>> resultModel = blogBrowseService.listBlogComment(blogId, pageSize, pageNum);
+        ResultModel<PageResult<BlogCommentDTO>> resultModel = commentService.listBlogComment(blogId, pageSize, pageNum);
         if (resultModel == null) handlerEmptyResult();
 
         return resultModel;

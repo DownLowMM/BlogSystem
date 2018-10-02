@@ -1,4 +1,4 @@
-package com.duan.blogos.service.impl.audience;
+package com.duan.blogos.service.impl.blog;
 
 import com.duan.blogos.service.dao.blog.BlogCollectDao;
 import com.duan.blogos.service.dao.blog.BlogComplainDao;
@@ -7,7 +7,7 @@ import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
 import com.duan.blogos.service.entity.blog.BlogCollect;
 import com.duan.blogos.service.entity.blog.BlogComplain;
 import com.duan.blogos.service.entity.blog.BlogLike;
-import com.duan.blogos.service.service.audience.BlogOperateService;
+import com.duan.blogos.service.service.blog.OperateService;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @author DuanJiaNing
  */
 @Service
-public class BlogOperateServiceImpl implements BlogOperateService {
+public class OperateServiceImpl implements OperateService {
 
     @Autowired
     private BlogStatisticsDao statisticsDao;
