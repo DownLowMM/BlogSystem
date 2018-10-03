@@ -38,12 +38,19 @@ public class BloggerCommentServiceImpl implements BloggerCommentService {
     }
 
     @Override
-    public boolean deleteComment(Long commentId, Long blogId) {
+    public boolean deleteComment(Long commentId, Long bloggerId) {
+
+        BlogComment comment = commentDao.getCommentById(commentId);
+
+        // 只有发布评论的人才能删除评论
+        if (comment == null || !comment.getSpokesmanId().equals(bloggerId)) {
+            return false;
+        }
 
         int effect = commentDao.delete(commentId);
 
         if (effect <= 0) return false;
-        else statisticsDao.updateCommentCountMinus(blogId);
+        else statisticsDao.updateCommentCountMinus(comment.getBlogId());
 
         return true;
     }

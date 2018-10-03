@@ -19,12 +19,6 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Created on 2018/1/11.
  * 博主博文类别
- * <p>
- * 1 查看所有类别
- * 2 查看指定类别
- * 3 增加类别
- * 4 修改类别
- * 5 删除类别
  *
  * @author DuanJiaNing
  */

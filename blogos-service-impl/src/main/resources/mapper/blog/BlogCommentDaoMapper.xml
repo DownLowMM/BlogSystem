@@ -17,6 +17,12 @@
         WHERE blog_id = #{value}
     </select>
 
+    <select id="getCommentById" resultType="BlogComment">
+        SELECT *
+        FROM blog_comment
+        WHERE id = #{value}
+    </select>
+
     <update id="update" parameterType="BlogComment">
         UPDATE blog_comment
         <set>

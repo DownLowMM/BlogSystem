@@ -32,4 +32,13 @@ public interface BlogCommentDao extends BaseDao<BlogComment> {
      * @return 查询结果
      */
     List<BlogComment> listAllCommentByBlogId(Long blogId);
+
+    /**
+     * 获取评论
+     *
+     * @param commentId 评论 id
+     * @return 查询结果
+     */
+    BlogComment getCommentById(Long commentId);
+
 }

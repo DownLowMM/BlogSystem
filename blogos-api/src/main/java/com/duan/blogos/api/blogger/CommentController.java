@@ -1,12 +1,14 @@
 package com.duan.blogos.api.blogger;
 
+import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCommentService;
 import com.duan.blogos.service.service.validate.BlogCommentValidateService;
-import com.duan.common.util.StringUtils;
+import com.duan.common.spring.verify.Rule;
+import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +19,8 @@ import static com.duan.blogos.service.enums.BlogCommentStatusEnum.RIGHTFUL;
  *
  * @author DuanJiaNing
  */
-
 @RestController
-@RequestMapping("/blogger/{bloggerId}/comment")
+@RequestMapping("/blogger/comment")
 public class CommentController extends BaseController {
 
     @Autowired
@@ -32,14 +33,15 @@ public class CommentController extends BaseController {
      * 新增评论
      */
     @PostMapping
-    public ResultModel add(@PathVariable Long bloggerId,
+    public ResultModel add(@Uid Long bloggerId,
                            @RequestParam("blogId") Long blogId,
+                           @ArgVerify(rule = Rule.NOT_BLANK)
                            @RequestParam("content") String content,
                            @RequestParam("listenerId") Long listenerId) {
         handleBlogExistCheck(blogId);
         handleAccountCheck(listenerId);
 
-        if (StringUtils.isBlank(content) || !commentValidateService.checkCommentContent(content))
+        if (!commentValidateService.checkCommentContent(content))
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         Long id = commentService.insertComment(blogId, bloggerId, listenerId, RIGHTFUL.getCode(), content);
@@ -52,12 +54,9 @@ public class CommentController extends BaseController {
      * 删除评论
      */
     @DeleteMapping("/{commentId}")
-    public ResultModel delete(@RequestParam("blogId") Long blogId,
-                              @PathVariable Long bloggerId,
+    public ResultModel delete(@Uid Long bloggerId,
                               @PathVariable Long commentId) {
-        handleBlogExistCheck(blogId);
-
-        if (!commentService.deleteComment(commentId, blogId))
+        if (!commentService.deleteComment(commentId, bloggerId))
             handlerOperateFail();
 
         return new ResultModel<>("");

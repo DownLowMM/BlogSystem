@@ -106,7 +106,7 @@ public class BloggerLikeBlogServiceImpl implements BloggerLikeBlogService {
 
             // BlogListItemDTO
             Blog blog = blogDao.getBlogById(blogId);
-            BlogListItemDTO listItemDTO = blogDataManager.getBlogListItemDTO(blog, bloggerId, false);
+            BlogListItemDTO listItemDTO = blogDataManager.getBlogListItemDTO(blog, false);
 
             // BloggerDTO
             Long authorId = blog.getBloggerId();

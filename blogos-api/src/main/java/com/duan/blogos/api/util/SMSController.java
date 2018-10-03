@@ -1,11 +1,10 @@
 package com.duan.blogos.api.util;
 
 import com.duan.blogos.api.BaseCheckController;
-import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.SmsService;
-import com.duan.common.util.StringUtils;
+import com.duan.common.spring.verify.Rule;
+import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +27,11 @@ public class SMSController extends BaseCheckController {
      * 向指定号码发送短信
      */
     @PostMapping
-    public ResultModel send(@RequestParam("phone") String phone,
-                            @RequestParam("content") String content) {
-
-        if (StringUtils.isBlank(phone) || StringUtils.isBlank(content)) {
-            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-        }
+    public ResultModel send(
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam("phone") String phone,
+            @ArgVerify(rule = Rule.NOT_BLANK)
+            @RequestParam("content") String content) {
 
         return smsService.sendSmsTo(content, phone);
     }

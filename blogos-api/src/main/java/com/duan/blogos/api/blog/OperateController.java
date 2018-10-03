@@ -1,11 +1,11 @@
 package com.duan.blogos.api.blog;
 
+import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
-import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blog.OperateService;
-import com.duan.common.util.StringUtils;
+import com.duan.common.spring.verify.Rule;
+import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +33,8 @@ public class OperateController extends BaseController {
      * 分享博文
      */
     @PostMapping("/operate=share")
-    public ResultModel shareBlog(@PathVariable Long blogId,
-                                 @PathVariable Long bloggerId) {
+    public ResultModel shareBlog(@Uid Long bloggerId,
+                                 @PathVariable Long blogId) {
         handleBlogExistCheck(blogId);
 
         //执行
@@ -48,7 +48,7 @@ public class OperateController extends BaseController {
      */
     @PostMapping("/operate=collect")
     public ResultModel collectBlog(@PathVariable Long blogId,
-                                   @PathVariable Long bloggerId,
+                                   @Uid Long bloggerId,
                                    @RequestParam(value = "reason", required = false) String reason) {
 
         handleBlogExistCheck(blogId);
@@ -71,11 +71,9 @@ public class OperateController extends BaseController {
      */
     @PostMapping("/operate=complain")
     public ResultModel complainBlog(@PathVariable Long blogId,
-                                    @PathVariable Long bloggerId,
+                                    @Uid Long bloggerId,
+                                    @ArgVerify(rule = Rule.NOT_BLANK)
                                     @RequestParam("content") String content) {
-        if (StringUtils.isBlank(content))
-            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-
         handleBlogExistCheck(blogId);
 
         //执行
@@ -90,7 +88,7 @@ public class OperateController extends BaseController {
      */
     @PostMapping("/operate=like")
     public ResultModel likeBlog(@PathVariable Long blogId,
-                                @PathVariable Long bloggerId) {
+                                @Uid Long bloggerId) {
 
         handleBlogExistCheck(blogId);
 
@@ -105,7 +103,7 @@ public class OperateController extends BaseController {
      */
     @DeleteMapping("/operate=collect")
     public ResultModel removeCollect(@PathVariable Long blogId,
-                                     @PathVariable Long bloggerId) {
+                                     @Uid Long bloggerId) {
 
         handleBlogExistCheck(blogId);
 
@@ -122,7 +120,7 @@ public class OperateController extends BaseController {
      */
     @DeleteMapping("/operate=like")
     public ResultModel removeLike(@PathVariable Long blogId,
-                                  @PathVariable Long bloggerId) {
+                                  @Uid Long bloggerId) {
         handleBlogExistCheck(blogId);
 
         //执行

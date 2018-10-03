@@ -93,13 +93,17 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
     }
 
     @Override
-    public ResultModel<List<BlogLabelDTO>> listLabel(int offset, int rows) {
+    public ResultModel<PageResult<BlogLabelDTO>> listLabel(Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
+        pageSize = pageSize == null || pageSize < 1 ? 10 : pageSize;
 
-        List<BlogLabel> result = labelDao.listLabel(offset, rows);
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<BlogLabel> pageInfo = new PageInfo<>(labelDao.listLabel());
+        List<BlogLabel> result = pageInfo.getList();
         if (CollectionUtils.isEmpty(result)) return null;
 
         List<BlogLabelDTO> dtos = result.stream().map(dataFillingManager::blogLabel2DTO).collect(Collectors.toList());
-        return new ResultModel<>(dtos);
+        return ResultModelUtil.pageResult(pageInfo, dtos);
     }
 
     @Override

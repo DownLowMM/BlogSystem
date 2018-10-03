@@ -23,9 +23,9 @@ public interface BloggerCommentService {
      * 删除评论
      *
      * @param commentId 评论id
-     * @param blogId    博文id
+     * @param bloggerId 博主 id
      * @return 删除成功返回true
      */
-    boolean deleteComment(Long commentId, Long blogId);
+    boolean deleteComment(Long commentId, Long bloggerId);
 
 }

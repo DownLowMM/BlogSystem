@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author DuanJiaNing
  */
 @TokenNotRequired
-@RestController
+@RestController("blogStatisticsController")
 @RequestMapping("/blog/{blogId}/statistics")
 public class StatisticsController extends BaseController {
 

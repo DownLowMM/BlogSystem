@@ -24,7 +24,6 @@
     <select id="listLabel" resultType="BlogLabel">
         SELECT *
         FROM blog_label
-        LIMIT #{offset}, #{rows}
     </select>
 
     <select id="listLabelByBloggerId" resultType="BlogLabel">

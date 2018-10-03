@@ -35,11 +35,9 @@ public interface BlogLabelDao extends BaseDao<BlogLabel> {
     /**
      * 无限制的获取标签
      *
-     * @param offset 结果集偏移
-     * @param rows   行数
      * @return 查询结果
      */
-    List<BlogLabel> listLabel(@Param("offset") int offset, @Param("rows") int rows);
+    List<BlogLabel> listLabel();
 
     /**
      * 获取指定博主创建的所有标签

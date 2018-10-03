@@ -12,8 +12,6 @@ import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * Created on 2018/1/12.
  * 博文标签API，标签的使用不限定博主，即只要标签存在，任何博主都可以使用
@@ -33,6 +31,33 @@ public class LabelController extends BaseController {
 
     @Autowired
     private BloggerLabelService bloggerLabelService;
+
+    /**
+     * 查看所有标签
+     */
+    @GetMapping("/all")
+    @TokenNotRequired
+    public ResultModel<PageResult<BlogLabelDTO>> get(@RequestParam(value = "pageNum", required = false) Integer pageNum,
+                                                     @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+
+        ResultModel<PageResult<BlogLabelDTO>> resultModel = bloggerLabelService.listLabel(pageNum, pageSize);
+        if (resultModel == null) handlerEmptyResult();
+
+        return resultModel;
+    }
+
+    /**
+     * 获取指定标签
+     */
+    @GetMapping("/{labelId}")
+    @TokenNotRequired
+    public ResultModel<BlogLabelDTO> getLabel(@PathVariable("labelId") Long labelId) {
+
+        BlogLabelDTO label = bloggerLabelService.getLabel(labelId);
+        if (label == null) handlerEmptyResult();
+
+        return new ResultModel<>(label);
+    }
 
     /**
      * 获取指定博主创建的标签
@@ -88,34 +113,6 @@ public class LabelController extends BaseController {
         if (!result) handlerOperateFail();
 
         return ResultModel.success();
-    }
-
-    /**
-     * 查看所有标签
-     */
-    @GetMapping
-    public ResultModel<List<BlogLabelDTO>> get(@RequestParam(value = "offset", required = false) Integer offset,
-                                               @RequestParam(value = "rows", required = false) Integer rows) {
-
-        int os = offset == null || offset < 0 ? 0 : offset;
-        int rs = rows == null || rows < 0 ? 10 : rows;
-        ResultModel<List<BlogLabelDTO>> resultModel = bloggerLabelService.listLabel(os, rs);
-        if (resultModel == null) handlerEmptyResult();
-
-        return resultModel;
-    }
-
-
-    /**
-     * 获取指定标签
-     */
-    @GetMapping("/{labelId}")
-    public ResultModel<BlogLabelDTO> getLabel(@PathVariable("labelId") Long labelId) {
-
-        BlogLabelDTO label = bloggerLabelService.getLabel(labelId);
-        if (label == null) handlerEmptyResult();
-
-        return new ResultModel<>(label);
     }
 
 }

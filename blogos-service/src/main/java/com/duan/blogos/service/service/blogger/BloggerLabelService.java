@@ -5,8 +5,6 @@ import com.duan.blogos.service.dto.blog.BlogLabelDTO;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 
-import java.util.List;
-
 /**
  * Created on 2017/12/18.
  * 标签服务
@@ -46,11 +44,9 @@ public interface BloggerLabelService {
     /**
      * 获得博主创建的所有标签
      *
-     * @param offset 结果集偏移量
-     * @param rows   行数
      * @return 查询结果
      */
-    ResultModel<List<BlogLabelDTO>> listLabel(int offset, int rows);
+    ResultModel<PageResult<BlogLabelDTO>> listLabel(Integer pageNum, Integer pageSize);
 
     /**
      * 获得指定标签

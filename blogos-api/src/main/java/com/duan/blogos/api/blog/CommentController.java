@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @author DuanJiaNing
  */
 @TokenNotRequired
-@RestController
+@RestController("blogCommentController")
 @RequestMapping("/blog/{blogId}/comment")
 public class CommentController extends BaseCheckController {
 
