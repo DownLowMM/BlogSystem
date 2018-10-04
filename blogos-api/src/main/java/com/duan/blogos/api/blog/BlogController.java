@@ -96,7 +96,7 @@ public class BlogController extends BaseController {
                 summary, kw, false);
         if (id == null) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     /**
@@ -205,7 +205,7 @@ public class BlogController extends BaseController {
         if (!bloggerBlogService.updateBlog(bloggerId, blogId, cids, lids, stat, title, content, contentMd, summary, kw))
             handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     /**
@@ -221,7 +221,7 @@ public class BlogController extends BaseController {
         if (!bloggerBlogService.deleteBlog(bloggerId, blogId))
             handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     /**
@@ -243,7 +243,7 @@ public class BlogController extends BaseController {
         if (!bloggerBlogService.deleteBlogPatch(bloggerId, blogIds))
             handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     /**
@@ -265,7 +265,7 @@ public class BlogController extends BaseController {
         if (CollectionUtils.isEmpty(blogsTitles))
             handlerOperateFail();
 
-        return new ResultModel<>(blogsTitles);
+        return ResultModel.success(blogsTitles);
     }
 
     /**

@@ -339,7 +339,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
             List<BlogCategoryRela> relas = categoryRelaDao.listAllByBlogId(blogId);
             List<BlogLabelRela> labelRelas = labelRelaDao.listAllByBlogId(blogId);
 
-            return new ResultModel<>(dataFillingManager.blog2DTO(blog, relas, labelRelas));
+            return ResultModel.success(dataFillingManager.blog2DTO(blog, relas, labelRelas));
 
         }
 

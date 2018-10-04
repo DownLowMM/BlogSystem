@@ -38,7 +38,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         // 判断请求是否有 token，非法 token
         if (token == null || illegalToken(token)) {
-            ResultModel resultModel = new ResultModel("token required", CodeMessage.TOKEN_REQUIRED.getCode());
+            ResultModel resultModel = ResultModel.fail("token required", CodeMessage.TOKEN_REQUIRED.getCode());
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().print(JSON.toJSONString(resultModel));
 
@@ -47,7 +47,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         // token 非法
         if (expiredToken(token)) {
-            ResultModel resultModel = new ResultModel("invalid token", CodeMessage.INVALID_TOKEN.getCode());
+            ResultModel resultModel = ResultModel.fail("invalid token", CodeMessage.INVALID_TOKEN.getCode());
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().print(JSON.toJSONString(resultModel));
 

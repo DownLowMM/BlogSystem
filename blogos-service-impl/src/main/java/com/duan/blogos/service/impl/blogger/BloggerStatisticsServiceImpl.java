@@ -91,7 +91,7 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
         BloggerStatisticsDTO dto = dataFillingManager.bloggerStatisticToDTO(blogCount, wordCountSum, likeCount,
                 likeGiveCount, categoryCount, labelCount, collectCount, collectedCount, linkCount);
 
-        return new ResultModel<>(dto);
+        return ResultModel.success(dto);
     }
 
     // 获得博主dto

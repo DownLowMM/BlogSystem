@@ -13,7 +13,7 @@ import java.sql.Timestamp;
  * @author DuanJiaNing
  */
 @Data
-public class FavouriteBlogListItemDTO implements Serializable {
+public class FavoriteBlogListItemDTO implements Serializable {
 
     // 记录id
     private Long id;

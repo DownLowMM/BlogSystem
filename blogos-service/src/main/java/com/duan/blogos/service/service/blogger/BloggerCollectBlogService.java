@@ -2,10 +2,9 @@ package com.duan.blogos.service.service.blogger;
 
 
 import com.duan.blogos.service.common.BlogSortRule;
-import com.duan.blogos.service.dto.blogger.FavouriteBlogListItemDTO;
+import com.duan.blogos.service.dto.blogger.FavoriteBlogListItemDTO;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
-
-import java.util.List;
 
 /**
  * Created on 2017/12/18.
@@ -20,13 +19,12 @@ public interface BloggerCollectBlogService {
      * 获得博主收藏的博文清单
      *
      * @param bloggerId 博主id
-     * @param offset    结果集起始位置
-     * @param rows      行数
      * @param sortRule  排序规则，为null则不做约束
      * @return 查询结果
      */
-    ResultModel<List<FavouriteBlogListItemDTO>> listCollectBlog(Long bloggerId, Long categoryId,
-                                                                int offset, int rows, BlogSortRule sortRule);
+    ResultModel<PageResult<FavoriteBlogListItemDTO>> listCollectBlog(Long bloggerId, Long categoryId,
+                                                                     Integer pageNum, Integer pageSize,
+                                                                     BlogSortRule sortRule);
 
     /**
      * 更新收藏信息
@@ -49,7 +47,7 @@ public interface BloggerCollectBlogService {
     boolean getCollectState(Long bloggerId, Long blogId);
 
     /**
-     * 统计博主收藏量
+     * 统计指定博主的博文收藏数
      *
      * @param bloggerId 博文id
      * @return 查询结果

@@ -59,10 +59,10 @@ public class SmsServiceImpl implements SmsService {
                 JSONObject obj = JSONObject.parseObject(response.body().string());
                 String status = obj.getString("status");
                 if (Integer.valueOf(status) == 0) {
-                    return new ResultModel<>("");
+                    return ResultModel.success();
                 } else {
                     // FIXME 极速短信API“签名不存在”错误
-                    return new ResultModel<>(obj.getString("msg"), ResultModel.FAIL);
+                    return ResultModel.fail(obj.getString("msg"), ResultModel.FAIL);
                 }
 
             } catch (IOException e) {

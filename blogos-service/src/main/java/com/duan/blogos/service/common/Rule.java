@@ -19,6 +19,11 @@ public enum Rule {
     VIEW_COUNT("浏览次数", "view_count"),
 
     /**
+     * 博文字数
+     */
+    WORD_COUNT("字数", "word_count"),
+
+    /**
      * 博文被收藏次数
      */
     COLLECT_COUNT("收藏次数", "collect_count"),

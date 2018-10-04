@@ -130,7 +130,7 @@ public class ImageController extends BaseCheckController {
             throw ExceptionUtil.get(CodeMessage.COMMON_PICTURE_FORMAT_ERROR);
         }
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     private com.duan.common.util.MultipartFile fileTrans(MultipartFile file) {

@@ -91,7 +91,7 @@ public class BloggerController extends BaseController {
         Long id = accountService.insertAccount(username, password);
         if (id == null) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     /**
@@ -106,9 +106,9 @@ public class BloggerController extends BaseController {
 
         BloggerAccountDTO account = accountService.getAccount(username);
         if (account != null) {
-            return new ResultModel(ExceptionUtil.get(CodeMessage.COMMON_DUPLICATION_DATA));
+            return ResultModel.fail("username has been occupied", CodeMessage.COMMON_DUPLICATION_DATA.getCode());
         } else {
-            return new ResultModel<>("");
+            return ResultModel.success();
         }
 
     }
@@ -125,9 +125,9 @@ public class BloggerController extends BaseController {
         BloggerAccountDTO account = accountService.getAccountByPhone(phone);
 
         if (account != null) {
-            return new ResultModel(ExceptionUtil.get(CodeMessage.COMMON_DUPLICATION_DATA));
+            return ResultModel.fail("phone number has been occupied", CodeMessage.COMMON_DUPLICATION_DATA.getCode());
         } else {
-            return new ResultModel<>("");
+            return ResultModel.success();
         }
 
     }
@@ -144,7 +144,7 @@ public class BloggerController extends BaseController {
         boolean result = accountService.updateAccountUserName(uid, newUserName);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     /**
@@ -164,7 +164,7 @@ public class BloggerController extends BaseController {
         boolean result = accountService.updateAccountPassword(uid, oldPassword, newPassword);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     /**
@@ -178,7 +178,7 @@ public class BloggerController extends BaseController {
         boolean result = accountService.deleteAccount(uid);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
 }

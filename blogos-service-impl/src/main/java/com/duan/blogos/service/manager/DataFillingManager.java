@@ -13,6 +13,7 @@ import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -178,33 +179,16 @@ public class DataFillingManager {
         return dto;
     }
 
-    public FavouriteBlogListItemDTO collectBlogListItemToDTO(Long bloggerId, BlogCollect collect,
-                                                             BlogListItemDTO blog, BloggerDTO author) {
-        if (collect == null) {
-            return null;
-        }
-        FavouriteBlogListItemDTO dto = new FavouriteBlogListItemDTO();
-        dto.setAuthor(author);
+    public FavoriteBlogListItemDTO favoriteBlogListItemToDTO(Long bloggerId, Long id, Timestamp favoriteDate,
+                                                             String reason, BlogListItemDTO blog, BloggerDTO favoriter) {
+
+        FavoriteBlogListItemDTO dto = new FavoriteBlogListItemDTO();
+        dto.setAuthor(favoriter);
         dto.setBlog(blog);
         dto.setBloggerId(bloggerId);
-        dto.setDate(collect.getCollectDate());
-        dto.setId(collect.getId());
-        dto.setReason(collect.getReason());
-        return dto;
-    }
-
-    public FavouriteBlogListItemDTO likeBlogListItemToDTO(Long bloggerId, BlogLike like,
-                                                          BlogListItemDTO blog, BloggerDTO liker) {
-        if (like == null) {
-            return null;
-        }
-
-        FavouriteBlogListItemDTO dto = new FavouriteBlogListItemDTO();
-        dto.setAuthor(liker);
-        dto.setBlog(blog);
-        dto.setBloggerId(bloggerId);
-        dto.setDate(like.getLikeDate());
-        dto.setId(like.getId());
+        dto.setDate(favoriteDate);
+        dto.setId(id);
+        dto.setReason(reason);
         return dto;
     }
 

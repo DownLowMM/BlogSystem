@@ -1,5 +1,6 @@
 package com.duan.blogos.service.dao.blog;
 
+import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.dao.BaseDao;
 import com.duan.blogos.service.entity.blog.BlogLike;
 import org.apache.ibatis.annotations.Param;
@@ -53,14 +54,11 @@ public interface BlogLikeDao extends BaseDao<BlogLike> {
      * 查询博文
      *
      * @param bloggerId 博主id
-     * @param offset    起始偏移
-     * @param rows      行数
      * @return 查询结果
      */
     List<BlogLike> listLikeBlog(
             @Param("bloggerId") Long bloggerId,
-            @Param("offset") int offset,
-            @Param("rows") int rows);
+            @Param("sortRule") BlogSortRule sortRule);
 
     /**
      * 查询指定博主喜欢的所有博文 id

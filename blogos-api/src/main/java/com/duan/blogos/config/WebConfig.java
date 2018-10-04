@@ -34,7 +34,7 @@ public class WebConfig extends WebMvcRegistrationsAdapter {
 
                         String str = String.format("Argument [%s] verify fail, because [%s]",
                                 result.parameter.getParameterName(), result.rule);
-                        return new ResultModel(str, CodeMessage.COMMON_PARAMETER_ILLEGAL.getCode());
+                        return ResultModel.fail(str, CodeMessage.COMMON_PARAMETER_ILLEGAL.getCode());
                     }
                 };
             }

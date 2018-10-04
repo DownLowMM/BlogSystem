@@ -21,7 +21,8 @@ public class ResultModelUtil {
         pageResult.setCurrentPage(pageInfo.getPageNum());
         pageResult.setPageSize(pageInfo.getPageSize());
 
-        return new ResultModel<>(pageResult);
+        //noinspection unchecked
+        return ResultModel.success(pageResult);
     }
 
 

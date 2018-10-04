@@ -113,7 +113,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
         if (CollectionUtils.isEmpty(blogIds)) return null;
 
         PageResult<BlogListItemDTO> res = constructResult(blogIds, status, sortRule, pageNum, pageSize);
-        return new ResultModel<>(res);
+        return ResultModel.success(res);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
         if (CollectionUtils.isEmpty(blogIds)) return null;
 
         PageResult<BlogListItemDTO> res = constructResult(blogIds, status, sortRule, pageNum, pageSize);
-        return new ResultModel<>(res);
+        return ResultModel.success(res);
 
     }
 

@@ -47,7 +47,7 @@ public class CommentController extends BaseController {
         Long id = commentService.insertComment(blogId, bloggerId, listenerId, RIGHTFUL.getCode(), content);
         if (id == null) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     /**
@@ -59,7 +59,7 @@ public class CommentController extends BaseController {
         if (!commentService.deleteComment(commentId, bloggerId))
             handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
 }

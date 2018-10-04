@@ -65,7 +65,7 @@ public class LinkController extends BaseController {
         Long id = bloggerLinkService.insertBloggerLink(bloggerId, iconId, title, url, bewrite);
         if (id == null) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     /**
@@ -95,7 +95,7 @@ public class LinkController extends BaseController {
         boolean result = bloggerLinkService.updateBloggerLink(linkId, iconId, title, url, bewrite);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     /**
@@ -107,7 +107,7 @@ public class LinkController extends BaseController {
         boolean result = bloggerLinkService.deleteBloggerLink(linkId);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     // 检查链接是否存在

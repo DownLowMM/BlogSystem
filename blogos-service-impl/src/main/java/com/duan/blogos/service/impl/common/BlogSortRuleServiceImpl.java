@@ -25,7 +25,7 @@ public class BlogSortRuleServiceImpl implements BlogSortRuleService {
         List<BlogSortRuleDTO> list = new ArrayList<>();
         Arrays.stream(Rule.values()).forEach(rule -> list.add(new BlogSortRuleDTO(rule.name().toLowerCase(), rule.title())));
 
-        return new ResultModel<>(list);
+        return ResultModel.success(list);
     }
 
     @Override
@@ -34,6 +34,6 @@ public class BlogSortRuleServiceImpl implements BlogSortRuleService {
         List<BlogSortRuleDTO> list = new ArrayList<>();
         Arrays.stream(Order.values()).forEach(order -> list.add(new BlogSortRuleDTO(order.name().toLowerCase(), order.title())));
 
-        return new ResultModel<>(list);
+        return ResultModel.success(list);
     }
 }

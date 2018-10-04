@@ -1,5 +1,6 @@
 package com.duan.blogos.service.dao.blog;
 
+import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.dao.BaseDao;
 import com.duan.blogos.service.entity.blog.BlogCollect;
 import org.apache.ibatis.annotations.Param;
@@ -29,14 +30,11 @@ public interface BlogCollectDao extends BaseDao<BlogCollect> {
      *
      * @param bloggerId 博主id
      * @param category  类别id
-     * @param offset    结果集偏移量
-     * @param rows      结果集数量
      * @return 查询结果
      */
     List<BlogCollect> listCollectBlog(@Param("bloggerId") Long bloggerId,
                                       @Param("category") Long category,
-                                      @Param("offset") int offset,
-                                      @Param("rows") int rows);
+                                      @Param("sortRule") BlogSortRule sortRule);
 
     /**
      * 根据博文id和博主id更新收藏

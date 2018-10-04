@@ -140,7 +140,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         BlogStatisticsDTO dto = dataFillingManager.blogStatisticsToDTO(blog, statistics, categories, labels,
                 likes, collects, commenter, dbProperties.getStringFiledSplitCharacterForString());
 
-        return new ResultModel<>(dto);
+        return ResultModel.success(dto);
     }
 
 
@@ -151,7 +151,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         if (statistics == null) return null;
 
         BlogBaseStatisticsDTO dto = dataFillingManager.blogStatisticsCountToDTO(statistics);
-        return new ResultModel<>(dto);
+        return ResultModel.success(dto);
     }
 
 }

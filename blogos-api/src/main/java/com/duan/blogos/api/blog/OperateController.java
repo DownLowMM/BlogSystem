@@ -40,7 +40,7 @@ public class OperateController extends BaseController {
         //执行
         int count = operateService.insertShare(blogId, bloggerId);
 
-        return new ResultModel<>(count);
+        return ResultModel.success(count);
     }
 
     /**
@@ -63,7 +63,7 @@ public class OperateController extends BaseController {
         Long id = operateService.insertCollect(blogId, bloggerId, reason, null);
         if (id == null) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     /**
@@ -80,7 +80,7 @@ public class OperateController extends BaseController {
         Long id = operateService.insertComplain(blogId, bloggerId, content);
         if (id == null) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     /**
@@ -95,7 +95,7 @@ public class OperateController extends BaseController {
         //执行
         int count = operateService.insertLike(blogId, bloggerId);
 
-        return new ResultModel<>(count);
+        return ResultModel.success(count);
     }
 
     /**
@@ -111,8 +111,7 @@ public class OperateController extends BaseController {
         boolean result = operateService.deleteCollect(bloggerId, blogId);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
-
+        return ResultModel.success();
     }
 
     /**
@@ -127,7 +126,7 @@ public class OperateController extends BaseController {
         boolean result = operateService.deleteLike(bloggerId, blogId);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
 }

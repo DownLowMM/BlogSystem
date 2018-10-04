@@ -18,13 +18,16 @@
     </update>
 
     <delete id="delete">
-        DELETE FROM blog_like
+        DELETE
+        FROM blog_like
         WHERE id = #{value}
     </delete>
 
     <delete id="deleteLikeByBloggerId">
-        DELETE FROM blog_like
-        WHERE blog_id = #{blogId} AND liker_id = #{bloggerId}
+        DELETE
+        FROM blog_like
+        WHERE blog_id = #{blogId}
+          AND liker_id = #{bloggerId}
     </delete>
 
     <select id="listAllLikeByBlogId" resultType="BlogLike">
@@ -42,14 +45,15 @@
     <select id="getLike" resultType="BlogLike">
         SELECT *
         FROM blog_like
-        WHERE blog_id = #{blogId} AND liker_id = #{bloggerId}
+        WHERE blog_id = #{blogId}
+          AND liker_id = #{bloggerId}
     </select>
 
     <select id="listLikeBlog" resultType="BlogLike">
         SELECT *
         FROM blog_like
         WHERE liker_id = #{bloggerId}
-        LIMIT #{offset}, #{rows}
+        order by ${sortRule.rule.code} ${sortRule.order.code}
     </select>
 
     <select id="listAllIdByBloggerId" resultType="BlogLike">
@@ -59,15 +63,8 @@
     </select>
 
     <insert id="insert" parameterType="BlogLike" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO blog_like (
-        blog_id,
-        liker_id,
-        like_date
-        ) VALUE (
-        #{blogId},
-        #{likerId},
-        NOW()
-        )
+        INSERT INTO blog_like (blog_id, liker_id, like_date)
+        VALUE (#{blogId}, #{likerId}, NOW())
     </insert>
 
 </mapper>

@@ -44,7 +44,8 @@ public class ProfileController extends BaseController {
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(bloggerId);
         if (profile == null) handlerEmptyResult();
 
-        return new ResultModel<>(profile);
+        return ResultModel.success(profile);
+
     }
 
     /**
@@ -64,7 +65,7 @@ public class ProfileController extends BaseController {
                 phone, email, aboutMe, intro);
         if (id == null) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     /**
@@ -88,7 +89,7 @@ public class ProfileController extends BaseController {
         boolean result = bloggerProfileService.updateBloggerProfile(bloggerId, avatarId, phone, email, aboutMe, intro);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
 
@@ -101,7 +102,7 @@ public class ProfileController extends BaseController {
         boolean result = bloggerProfileService.deleteBloggerProfile(bloggerId);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     /**
@@ -121,7 +122,7 @@ public class ProfileController extends BaseController {
         boolean res = bloggerProfileService.updateBloggerProfile(bloggerId, id, null, null, null, null);
         if (!res) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
 }

@@ -34,7 +34,7 @@ public class EmailController extends BaseCheckController {
         if (!emailService.sendFeedback(bloggerId == null ? -1 : bloggerId, subject, content, contact))
             handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
 }

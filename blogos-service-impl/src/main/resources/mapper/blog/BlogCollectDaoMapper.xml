@@ -37,20 +37,33 @@
     </update>
 
     <delete id="delete">
-        DELETE FROM blog_collect
+        DELETE
+        FROM blog_collect
         WHERE id = #{value}
     </delete>
 
     <delete id="deleteCollectByBloggerId">
-        DELETE FROM blog_collect
-        WHERE blog_id = #{blogId} AND collector_id = #{bloggerId}
+        DELETE
+        FROM blog_collect
+        WHERE blog_id = #{blogId}
+          AND collector_id = #{bloggerId}
     </delete>
 
     <select id="listCollectBlog" resultType="BlogCollect">
-        SELECT *
-        FROM blog_collect
-        WHERE collector_id = #{bloggerId} AND category_id = #{category}
-        LIMIT #{offset}, #{rows}
+        SELECT
+        b.id,
+        b.blog_id,
+        b.collector_id,
+        b.reason,
+        b.collect_date,
+        b.category_id
+        FROM blog_collect b
+        left join blog_statistics s on s.blog_id = b.blog_id
+        WHERE b.collector_id = #{bloggerId}
+        <if test="null != category">
+            AND b.category_id = #{category}
+        </if>
+        order by s.${sortRule.rule.code} ${sortRule.order.code}
     </select>
 
     <select id="listAllCollectByBlogId" resultType="BlogCollect">
@@ -68,7 +81,8 @@
     <select id="getCollect" resultType="BlogCollect">
         SELECT *
         FROM blog_collect
-        WHERE blog_id = #{blogId} AND collector_id = #{bloggerId}
+        WHERE blog_id = #{blogId}
+          AND collector_id = #{bloggerId}
     </select>
 
     <select id="listAllIdByBloggerId" resultType="BlogCollect">
@@ -78,19 +92,8 @@
     </select>
 
     <insert id="insert" parameterType="BlogCollect" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO blog_collect (
-        blog_id,
-        collector_id,
-        reason,
-        collect_date,
-        category_id
-        ) VALUE (
-        #{blogId},
-        #{collectorId},
-        #{reason},
-        NOW(),
-        #{categoryId}
-        )
+        INSERT INTO blog_collect (blog_id, collector_id, reason, collect_date, category_id)
+        VALUE (#{blogId}, #{collectorId}, #{reason}, NOW(), #{categoryId})
     </insert>
 
 </mapper>

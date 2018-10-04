@@ -56,7 +56,7 @@ public class LabelController extends BaseController {
         BlogLabelDTO label = bloggerLabelService.getLabel(labelId);
         if (label == null) handlerEmptyResult();
 
-        return new ResultModel<>(label);
+        return ResultModel.success(label);
     }
 
     /**
@@ -86,7 +86,7 @@ public class LabelController extends BaseController {
         Long id = bloggerLabelService.insertLabel(bloggerId, title);
         if (id == null) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     /**

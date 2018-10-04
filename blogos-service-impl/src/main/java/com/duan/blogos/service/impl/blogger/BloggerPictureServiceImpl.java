@@ -232,7 +232,8 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
         List<BloggerPictureDTO> dtos = result.stream().map(dataFillingManager::bloggerPicture2DTO)
                 .collect(Collectors.toList());
-        return new ResultModel<>(dtos);
+
+        return ResultModel.success(dtos);
     }
 
     @Override

@@ -35,7 +35,7 @@ public class SettingController extends BaseController {
         boolean result = settingService.updateMainPageNavPos(bloggerId, mainPageNavPos);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
 }

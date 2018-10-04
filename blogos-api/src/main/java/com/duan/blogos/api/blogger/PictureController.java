@@ -48,7 +48,7 @@ public class PictureController extends BaseController {
         BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId, bloggerId);
         if (picture == null) handlerEmptyResult();
 
-        return new ResultModel<>(picture);
+        return ResultModel.success(picture);
     }
 
     /**
@@ -119,7 +119,7 @@ public class PictureController extends BaseController {
                 newCategory == null ? null : BloggerPictureCategoryEnum.valueOf(newCategory), newBeWrite, newTitle);
         if (!result) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
     /**
@@ -142,7 +142,7 @@ public class PictureController extends BaseController {
         boolean succ = bloggerPictureService.deletePicture(bloggerId, picture.getId(), true);
         if (!succ) handlerOperateFail();
 
-        return new ResultModel<>("");
+        return ResultModel.success();
     }
 
 }

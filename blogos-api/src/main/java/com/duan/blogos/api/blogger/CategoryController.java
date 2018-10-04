@@ -63,7 +63,7 @@ public class CategoryController extends BaseController {
         BloggerCategoryDTO dto = bloggerCategoryService.getCategory(bloggerId, categoryId);
         if (dto == null) handlerOperateFail();
 
-        return new ResultModel<>(dto);
+        return ResultModel.success(dto);
     }
 
 
@@ -85,7 +85,7 @@ public class CategoryController extends BaseController {
         Long id = bloggerCategoryService.insertBlogCategory(bloggerId, iconId, title, bewrite);
         if (id == null) handlerOperateFail();
 
-        return new ResultModel<>(id);
+        return ResultModel.success(id);
     }
 
     /**
