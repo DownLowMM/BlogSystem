@@ -6,6 +6,7 @@ import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.enums.BloggerSettingEnums;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,12 @@ public class BloggerValidateServiceImpl implements BloggerValidateService {
     }
 
     @Override
-    public boolean checkMainPageNavPos(int mainPageNavPos) {
-        return mainPageNavPos == 0 || mainPageNavPos == 1;
+    public boolean checkMainPageNavPos(Integer mainPageNavPos) {
+        for (BloggerSettingEnums.MainPageNavPos pos : BloggerSettingEnums.MainPageNavPos.values()) {
+            if (pos.getCode().equals(mainPageNavPos))
+                return true;
+        }
+
+        return false;
     }
 }

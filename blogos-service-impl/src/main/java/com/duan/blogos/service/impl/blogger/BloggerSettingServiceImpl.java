@@ -30,7 +30,7 @@ public class BloggerSettingServiceImpl implements BloggerSettingService {
     }
 
     @Override
-    public boolean updateMainPageNavPos(Long bloggerId, int pos) {
+    public boolean updateMainPageNavPos(Long bloggerId, Integer pos) {
         int effect = settingDao.updateMainPageNavPos(bloggerId, pos);
         if (effect <= 0) return false;
 

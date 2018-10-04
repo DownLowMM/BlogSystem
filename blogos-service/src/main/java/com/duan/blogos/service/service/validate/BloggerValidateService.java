@@ -27,8 +27,8 @@ public interface BloggerValidateService {
     /**
      * 检查博主是否有权限操纵（新增，更新，删除）某些类别图片
      *
-     * @param bloggerId 博主id
-     * @param categoryId  图片类别
+     * @param bloggerId  博主id
+     * @param categoryId 图片类别
      * @return 可以操纵返回true
      */
     boolean checkBloggerPictureLegal(Long bloggerId, Integer categoryId);
@@ -59,11 +59,10 @@ public interface BloggerValidateService {
     boolean checkPassword(String password);
 
     /**
-     * 检查博主主页个人信息栏位置，0 在左，1 在右
+     * 检查博主主页个人信息栏位置
      *
      * @param mainPageNavPos 位置
-     * @return 非 0 或 1 时返回 false
      */
-    boolean checkMainPageNavPos(int mainPageNavPos);
+    boolean checkMainPageNavPos(Integer mainPageNavPos);
 
 }

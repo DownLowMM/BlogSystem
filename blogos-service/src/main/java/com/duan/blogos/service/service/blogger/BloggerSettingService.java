@@ -25,6 +25,6 @@ public interface BloggerSettingService {
      * @param bloggerId 博主id
      * @return 更新成功为true
      */
-    boolean updateMainPageNavPos(Long bloggerId, int pos);
+    boolean updateMainPageNavPos(Long bloggerId, Integer pos);
 
 }
