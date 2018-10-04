@@ -159,9 +159,11 @@ public class DataFillingManager {
         return dto;
     }
 
-    public BloggerStatisticsDTO bloggerStatisticToDTO(int blogCount, int wordCount, int likeCount, int likedCount,
-                                                      int categoryCount, int labelCount, int collectCount,
-                                                      int collectedCount, int linkCount) {
+    public BloggerStatisticsDTO bloggerStatisticToDTO(int blogCount, int wordCount,
+                                                      int likeCount, int likedCount,
+                                                      int categoryCount, int labelCount,
+                                                      int collectCount, int collectedCount,
+                                                      int linkCount) {
         BloggerStatisticsDTO dto = new BloggerStatisticsDTO();
         dto.setBlogCount(blogCount);
         dto.setWordCount(wordCount);

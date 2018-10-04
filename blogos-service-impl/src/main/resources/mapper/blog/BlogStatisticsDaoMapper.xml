@@ -11,29 +11,26 @@
     </select>
 
     <insert id="insert" parameterType="BlogStatistics" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO blog_statistics (
-        blog_id,
-        comment_count,
-        view_count,
-        reply_comment_count,
-        collect_count,
-        complain_count,
-        share_count,
-        admire_count,
-        like_count,
-        release_date
-        ) VALUE (
-        #{blogId},
-        ifnull(#{commentCount}, 0),
-        ifnull(#{viewCount}, 0),
-        ifnull(#{replyCommentCount}, 0),
-        ifnull(#{collectCount}, 0),
-        ifnull(#{complainCount}, 0),
-        ifnull(#{shareCount}, 0),
-        ifnull(#{admireCount}, 0),
-        ifnull(#{likeCount}, 0),
-        NOW()
-        )
+        INSERT INTO blog_statistics (blog_id,
+                                     comment_count,
+                                     view_count,
+                                     reply_comment_count,
+                                     collect_count,
+                                     complain_count,
+                                     share_count,
+                                     admire_count,
+                                     like_count,
+                                     release_date)
+        VALUE (#{blogId},
+               ifnull(#{commentCount}, 0),
+               ifnull(#{viewCount}, 0),
+               ifnull(#{replyCommentCount}, 0),
+               ifnull(#{collectCount}, 0),
+               ifnull(#{complainCount}, 0),
+               ifnull(#{shareCount}, 0),
+               ifnull(#{admireCount}, 0),
+               ifnull(#{likeCount}, 0),
+               NOW())
     </insert>
 
     <update id="update" parameterType="BlogStatistics">
@@ -70,12 +67,14 @@
     </update>
 
     <delete id="delete" parameterType="integer">
-        DELETE FROM blog_statistics
+        DELETE
+        FROM blog_statistics
         WHERE id = #{id}
     </delete>
 
     <delete id="deleteByUnique" parameterType="integer">
-        DELETE FROM blog_statistics
+        DELETE
+        FROM blog_statistics
         WHERE blog_id = #{value}
     </delete>
 
@@ -222,6 +221,25 @@
         SELECT like_count
         FROM blog_statistics
         WHERE blog_id = #{value}
+    </select>
+
+    <select id="listByBloggerId" resultType="BlogStatistics">
+        select s.id,
+               s.blog_id,
+               s.comment_count,
+               s.word_count,
+               s.view_count,
+               s.reply_comment_count,
+               s.collect_count,
+               s.complain_count,
+               s.share_count,
+               s.admire_count,
+               s.like_count,
+               s.release_date
+        from blog_statistics s
+                 left join blog b on s.blog_id = b.id
+                 left join blogger_account a on a.id = b.blogger_id
+        where a.id = #{value}
     </select>
 
 

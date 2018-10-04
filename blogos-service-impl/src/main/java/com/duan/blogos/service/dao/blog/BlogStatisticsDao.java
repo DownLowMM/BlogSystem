@@ -4,6 +4,8 @@ import com.duan.blogos.service.dao.BaseDao;
 import com.duan.blogos.service.entity.blog.BlogStatistics;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created on 2017/12/20.
  *
@@ -220,4 +222,12 @@ public interface BlogStatisticsDao extends BaseDao<BlogStatistics> {
      * @return 查询结果
      */
     Integer getLikeCount(Long blogId);
+
+    /**
+     * 获得博主的所有博文统计信息
+     *
+     * @param bloggerId 博主 id
+     * @return 查询结果
+     */
+    List<BlogStatistics> listByBloggerId(Long bloggerId);
 }

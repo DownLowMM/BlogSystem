@@ -7,7 +7,7 @@ import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dao.blogger.BloggerProfileDao;
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.entity.blog.Blog;
+import com.duan.blogos.service.entity.blog.BlogStatistics;
 import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
@@ -71,26 +71,25 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
     @Override
     public ResultModel<BloggerStatisticsDTO> getBloggerStatistics(Long bloggerId) {
 
-        // UPDATE: 2018/9/25 从 blog_statistics 表中查询
+
+        List<BlogStatistics> statistics = statisticsDao.listByBloggerId(bloggerId);
+        if (CollectionUtils.isEmpty(statistics)) {
+            return null;
+        }
+
+        int wordCountSum = statistics.stream().mapToInt(BlogStatistics::getWordCount).sum();
+        int likeCount = statistics.stream().mapToInt(BlogStatistics::getLikeCount).sum();
+        int collectedCount = statistics.stream().mapToInt(BlogStatistics::getCollectCount).sum();
+
         int blogCount = blogDao.countBlogByBloggerId(bloggerId, BlogStatusEnum.PUBLIC.getCode());
-
-        List<Blog> blogs = blogDao.listAllWordCountByBloggerId(bloggerId, BlogStatusEnum.PUBLIC.getCode());
-        int wordCountSum = blogs.stream().mapToInt(blog -> blog.getContent().length()).sum();
-        int likeCount = blogs.stream().mapToLong(Blog::getId).mapToInt(statisticsDao::getLikeCount).sum();
-
         int likeGiveCount = likeDao.countLikeByLikerId(bloggerId);
-
         int categoryCount = categoryDao.countByBloggerId(bloggerId);
-
         int labelCount = labelDao.countByBloggerId(bloggerId);
-
         int collectCount = collectDao.countByCollectorId(bloggerId);
-        int collectedCount = blogs.stream().mapToLong(Blog::getId).mapToInt(statisticsDao::getCollectCount).sum();
-
         int linkCount = linkDao.countLinkByBloggerId(bloggerId);
 
-        BloggerStatisticsDTO dto = dataFillingManager.bloggerStatisticToDTO(blogCount, wordCountSum, likeCount, likeGiveCount,
-                categoryCount, labelCount, collectCount, collectedCount, linkCount);
+        BloggerStatisticsDTO dto = dataFillingManager.bloggerStatisticToDTO(blogCount, wordCountSum, likeCount,
+                likeGiveCount, categoryCount, labelCount, collectCount, collectedCount, linkCount);
 
         return new ResultModel<>(dto);
     }
