@@ -1,47 +1,45 @@
 package com.duan.blogos.api.blogger;
 
+import com.duan.blogos.annonation.TokenNotRequired;
+import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.dto.blogger.BloggerLinkDTO;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLinkService;
+import com.duan.common.spring.verify.Rule;
+import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * Created on 2017/12/28.
  * 博主友情链接api
- * <p>
- * 1 获取链接
- * 2 新增链接
- * 3 更新链接
- * 4 删除链接
  *
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger/{bloggerId}/link")
+@RequestMapping("/blogger/link")
 public class LinkController extends BaseController {
 
     @Autowired
     private BloggerLinkService bloggerLinkService;
 
     /**
-     * 获取链接
+     * 获取博主的链接
      */
     @GetMapping
-    public ResultModel<List<BloggerLinkDTO>> get(@PathVariable Long bloggerId,
-                                                 @RequestParam(value = "offset", required = false) Integer offset,
-                                                 @RequestParam(value = "rows", required = false) Integer rows) {
+    @TokenNotRequired
+    public ResultModel<PageResult<BloggerLinkDTO>> get(@RequestParam Long bloggerId,
+                                                       @RequestParam(value = "pageNum", required = false) Integer pageNum,
+                                                       @RequestParam(value = "pageSize", required = false) Integer pageSize) {
 
         handleAccountCheck(bloggerId);
 
-        ResultModel<List<BloggerLinkDTO>> result = bloggerLinkService.listBloggerLink(bloggerId,
-                offset == null ? 0 : offset, rows == null ? -1 : rows);
+        ResultModel<PageResult<BloggerLinkDTO>> result = bloggerLinkService.listBloggerLink(bloggerId, pageNum, pageSize);
         if (result == null) handlerEmptyResult();
 
         return result;
@@ -51,18 +49,20 @@ public class LinkController extends BaseController {
      * 新增链接
      */
     @PostMapping
-    public ResultModel add(@PathVariable Long bloggerId,
-                           @RequestParam(value = "iconId", required = false) Long iconId,
-                           @RequestParam("title") String title,
-                           @RequestParam("url") String url,
-                           @RequestParam(value = "bewrite", required = false) String bewrite) {
+    public ResultModel add(@Uid Long bloggerId,
+                           @RequestParam(required = false) Long iconId,
+                           @ArgVerify(rule = Rule.NOT_BLANK)
+                           @RequestParam String title,
+                           @ArgVerify(rule = Rule.NOT_BLANK)
+                           @RequestParam String url,
+                           @RequestParam(required = false) String bewrite) {
         handlePictureExistCheck(bloggerId, iconId);
 
         //检查title和url规范
-        if (StringUtils.isEmpty(title) || !StringUtils.isURL(url))
+        if (!StringUtils.isURL(url))
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        Long id = bloggerLinkService.insertBloggerLink(bloggerId, iconId == null ? -1 : iconId, title, url, bewrite);
+        Long id = bloggerLinkService.insertBloggerLink(bloggerId, iconId, title, url, bewrite);
         if (id == null) handlerOperateFail();
 
         return new ResultModel<>(id);
@@ -72,27 +72,27 @@ public class LinkController extends BaseController {
      * 更新链接
      */
     @PutMapping("/{linkId}")
-    public ResultModel update(@PathVariable Long bloggerId,
+    public ResultModel update(@Uid Long bloggerId,
                               @PathVariable Long linkId,
-                              @RequestParam(value = "iconId", required = false) Long newIconId,
-                              @RequestParam(value = "title", required = false) String newTitle,
-                              @RequestParam(value = "url", required = false) String newUrl,
-                              @RequestParam(value = "bewrite", required = false) String newBewrite) {
+                              @RequestParam(required = false) Long iconId,
+                              @RequestParam(required = false) String title,
+                              @RequestParam(required = false) String url,
+                              @RequestParam(required = false) String bewrite) {
 
         //都为null则无需更新
-        if (newIconId == null && newTitle == null && newUrl == null && newBewrite == null) {
+        if (StringUtils.isBlank(title) && StringUtils.isBlank(url) && StringUtils.isBlank(bewrite)) {
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
-        handlePictureExistCheck(bloggerId, newIconId);
+        handlePictureExistCheck(bloggerId, iconId);
         checkLinkExist(linkId);
 
         //检查url规范
-        if (newUrl != null && !StringUtils.isURL(newUrl)) {
+        if (url != null && !StringUtils.isURL(url)) {
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
         }
 
-        boolean result = bloggerLinkService.updateBloggerLink(linkId, newIconId == null ? -1 : newIconId, newTitle, newUrl, newBewrite);
+        boolean result = bloggerLinkService.updateBloggerLink(linkId, iconId, title, url, bewrite);
         if (!result) handlerOperateFail();
 
         return new ResultModel<>("");
@@ -102,8 +102,7 @@ public class LinkController extends BaseController {
      * 删除链接
      */
     @DeleteMapping("/{linkId}")
-    public ResultModel delete(@PathVariable Long bloggerId,
-                              @PathVariable Long linkId) {
+    public ResultModel delete(@PathVariable Long linkId) {
 
         boolean result = bloggerLinkService.deleteBloggerLink(linkId);
         if (!result) handlerOperateFail();

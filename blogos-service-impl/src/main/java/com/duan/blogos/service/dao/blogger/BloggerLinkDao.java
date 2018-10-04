@@ -19,13 +19,9 @@ public interface BloggerLinkDao extends BaseDao<BloggerLink> {
      * 根据博主id查询其友情链接
      *
      * @param bloggerId 博主id
-     * @param offset    偏移位置
-     * @param rows      行数
      * @return 查询结果
      */
-    List<BloggerLink> listBlogLinkByBloggerId(@Param("bloggerId") Long bloggerId,
-                                              @Param("offset") int offset,
-                                              @Param("rows") int rows);
+    List<BloggerLink> listBlogLinkByBloggerId(@Param("bloggerId") Long bloggerId);
 
     /**
      * 检查链接是否存在

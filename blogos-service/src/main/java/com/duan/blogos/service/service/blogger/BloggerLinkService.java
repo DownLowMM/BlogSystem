@@ -2,9 +2,8 @@ package com.duan.blogos.service.service.blogger;
 
 
 import com.duan.blogos.service.dto.blogger.BloggerLinkDTO;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
-
-import java.util.List;
 
 /**
  * Created on 2017/12/18.
@@ -18,11 +17,9 @@ public interface BloggerLinkService {
      * 获取友情链接，自动按优先级从高到底排序
      *
      * @param bloggerId 博主id
-     * @param offset    结果集起始位置
-     * @param rows      行数
      * @return 查询结果
      */
-    ResultModel<List<BloggerLinkDTO>> listBloggerLink(Long bloggerId, int offset, int rows);
+    ResultModel<PageResult<BloggerLinkDTO>> listBloggerLink(Long bloggerId, Integer pageNum, Integer pageSize);
 
     /**
      * 新增友情链接

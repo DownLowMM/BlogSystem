@@ -10,9 +10,13 @@ import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLinkService;
+import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.CollectionUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,12 +56,17 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
     private ImageManager imageManager;
 
     @Override
-    public ResultModel<List<BloggerLinkDTO>> listBloggerLink(Long bloggerId, int offset, int rows) {
+    public ResultModel<PageResult<BloggerLinkDTO>> listBloggerLink(Long bloggerId, Integer pageNum, Integer pageSize) {
 
-        offset = offset < 0 ? 0 : offset;
-        rows = rows < 0 ? defaultProperties.getLinkCount() : rows;
+        pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
+        pageSize = pageSize == null || pageSize < 1 ? defaultProperties.getLinkCount() : pageSize;
 
-        List<BloggerLink> list = linkDao.listBlogLinkByBloggerId(bloggerId, offset, rows);
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<BloggerLink> pageInfo = new PageInfo<>(linkDao.listBlogLinkByBloggerId(bloggerId));
+        List<BloggerLink> list = pageInfo.getList();
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
 
         List<BloggerLinkDTO> result = new ArrayList<>();
         for (BloggerLink link : list) {
@@ -75,7 +84,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
             result.add(dto);
         }
 
-        return CollectionUtils.isEmpty(result) ? null : new ResultModel<>(result);
+        return ResultModelUtil.pageResult(pageInfo, result);
     }
 
     @Override

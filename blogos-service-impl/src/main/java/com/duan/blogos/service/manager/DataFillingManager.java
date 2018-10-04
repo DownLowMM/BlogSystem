@@ -99,24 +99,14 @@ public class DataFillingManager {
     }
 
     public BloggerLinkDTO bloggerLinkToDTO(BloggerLink link, BloggerPicture icon) {
-        if (link == null || icon == null) {
+        if (link == null) {
             return null;
         }
 
         BloggerLinkDTO dto = new BloggerLinkDTO();
         dto.setBewrite(link.getBewrite());
         dto.setBloggerId(link.getBloggerId());
-
-
-        BloggerPictureDTO pictureDTO = new BloggerPictureDTO();
-        pictureDTO.setId(icon.getId());
-        pictureDTO.setBloggerId(icon.getBloggerId());
-        pictureDTO.setBewrite(icon.getBewrite());
-        pictureDTO.setCategory(icon.getCategory());
-        pictureDTO.setPath(icon.getPath());
-        pictureDTO.setTitle(icon.getTitle());
-        pictureDTO.setUploadDate(icon.getUploadDate());
-        dto.setIcon(pictureDTO);
+        dto.setIcon(bloggerPicture2DTO(icon));
 
         dto.setId(link.getId());
         dto.setTitle(link.getTitle());
