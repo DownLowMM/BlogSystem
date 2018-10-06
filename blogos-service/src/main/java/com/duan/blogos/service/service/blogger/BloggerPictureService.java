@@ -2,10 +2,9 @@ package com.duan.blogos.service.service.blogger;
 
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
-import com.duan.common.util.MultipartFile;
-
-import java.util.List;
+import com.duan.blogos.service.vo.FileVO;
 
 /**
  * Created on 2017/12/18.
@@ -45,7 +44,7 @@ public interface BloggerPictureService {
      * @param title     标题
      * @return 新纪录id
      */
-    Long insertPicture(MultipartFile file, Long bloggerId, String bewrite, BloggerPictureCategoryEnum category, String title);
+    Long insertPicture(FileVO file, Long bloggerId, String bewrite, BloggerPictureCategoryEnum category, String title);
 
     /**
      * 向数据库中新增图片记录，同时将图片保存到设备
@@ -100,11 +99,10 @@ public interface BloggerPictureService {
      *
      * @param bloggerId 博主id
      * @param category  类别id，不限制类别时传递-1
-     * @param offset    结果集偏移量
-     * @param rows      结果集行数
      * @return 查询结果
      */
-    ResultModel<List<BloggerPictureDTO>> listBloggerPicture(Long bloggerId, BloggerPictureCategoryEnum category, int offset, int rows);
+    ResultModel<PageResult<BloggerPictureDTO>> listBloggerPicture(Long bloggerId, BloggerPictureCategoryEnum category,
+                                                                  Integer pageNum, Integer pageSize);
 
     /**
      * 更新图片信息，当修改了图片类别时需要同步更新设备上的图片保存位置

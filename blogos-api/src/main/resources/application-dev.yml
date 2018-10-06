@@ -15,6 +15,7 @@ spring:
     multipart:
       max-file-size: 50Mb
       max-request-size: 128Mb
+      file-size-threshold: 5Mb
   messages:
     basename: messages
     cache-seconds: 3600
@@ -88,7 +89,7 @@ preference:
     string-filed-split-character-for-number: \u0020
     string-filed-split-character-for-string: \u0020
   website:
-    manager-id: 1 # 拥有唯一图片管理权限的博主的id
+    manager-id: 40 # 拥有唯一图片管理权限的博主的id
     manager-email: duan_jia_ning@163.com # 网站管理者的邮箱（反馈邮件发送到的邮箱）
     page-nav-pos: 0 # 默认的博主主页个人信息栏位置，0在左，1在右
     sender-mail: 2213994603@qq.com # 配置了smtp 的邮件发送者

@@ -7,12 +7,13 @@ import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
+import com.duan.blogos.service.util.ImageUtils;
+import com.duan.blogos.service.vo.FileVO;
 import com.duan.common.util.FileUtils;
-import com.duan.common.util.ImageUtils;
-import com.duan.common.util.MultipartFile;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -76,14 +77,18 @@ public class ImageManager {
      * @param category  图片类别
      * @return 路径
      */
-    public String saveImageToDisk(MultipartFile file, Long bloggerId, int category) throws IOException {
+    public String saveImageToDisk(FileVO file, Long bloggerId, int category) throws IOException {
         //后缀一定要为图片类型
         String type = ImageUtils.getImageType(file);
         if (type == null) return null;
 
         BloggerAccount account = accountDao.getAccountById(bloggerId);
-        String dirPath = constructorManager.constructImageDirPath(account.getUsername(),
-                BloggerPictureCategoryEnum.valueOf(category).name());
+        BloggerPictureCategoryEnum categoryEnum = BloggerPictureCategoryEnum.valueOf(category);
+        if (categoryEnum == null) {
+            return null;
+        }
+
+        String dirPath = constructorManager.constructImageDirPath(account.getUsername(), categoryEnum.name());
 
         File specDir = new File(dirPath);
         if (!specDir.exists() || !specDir.isDirectory()) specDir.mkdirs();
@@ -93,7 +98,9 @@ public class ImageManager {
         String name = System.currentTimeMillis() + "-" + handleImageName(file.getOriginalFilename(), type);
 
         File image = new File(specDir.getAbsolutePath() + File.separator + name);
-        if (!image.exists() || image.isDirectory()) file.transferTo(image);
+        if (!image.exists() || image.isDirectory()) {
+            FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(image));
+        }
 
         return image.getAbsolutePath();
     }

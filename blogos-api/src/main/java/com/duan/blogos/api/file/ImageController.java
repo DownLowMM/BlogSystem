@@ -10,12 +10,13 @@ import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
-import com.duan.common.util.ImageUtils;
+import com.duan.blogos.service.util.DataConverter;
+import com.duan.blogos.service.util.ImageUtils;
+import com.duan.blogos.service.vo.FileVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -50,11 +51,11 @@ public class ImageController extends BaseCheckController {
     /**
      * 输出公开图片，这些图片无需验证登录，如果数据库不存在指定图片，则返回默认图片
      */
+    @GetMapping("/{imageId}")
     @TokenNotRequired
-    @GetMapping("/public/{imageId}")
     public void getBlogPicture(HttpServletRequest request, HttpServletResponse response,
                                @PathVariable("imageId") Long imageId,
-                               @RequestParam(value = "default", required = false) Integer category) {
+                               @RequestParam(required = false) Integer category) {
 
         // 检查default是否为默认类别
         if (category != null)
@@ -66,12 +67,8 @@ public class ImageController extends BaseCheckController {
         if (picture != null && picture.getCategory().equals(BloggerPictureCategoryEnum.PRIVATE.getCode()))
             throw ExceptionUtil.get(CodeMessage.COMMON_UNAUTHORIZED);
 
-        BloggerPictureDTO backupPicture = bloggerPictureService.getDefaultPicture(
-                category == null ? BloggerPictureCategoryEnum.DEFAULT_PICTURE
-                        : BloggerPictureCategoryEnum.valueOf(category)); //如果目标图片不存在，返回指定类别的默认图片
-
         // 输出图片
-        outPutPicture(picture, backupPicture, request, response);
+        outPutPicture(picture, request, response);
 
     }
 
@@ -79,23 +76,20 @@ public class ImageController extends BaseCheckController {
     /**
      * 获取博主的私有图片（任意图片），这些图片需要验证登录
      */
-    @GetMapping("/private/{imageId}")
+    @GetMapping("/prv/{imageId}")
     public void getBloggerPicture(HttpServletRequest request, HttpServletResponse response,
                                   @Uid Long bloggerId,
                                   @PathVariable("imageId") Long imageId,
-                                  @RequestParam(value = "default", required = false) Integer category) {
+                                  @RequestParam(required = false) Integer category) {
 
         // 检查默认图片类别是否为默认类别
         if (category != null)
             handleBlogCategoryDefaultCheck(category);
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(imageId, bloggerId);
-        BloggerPictureDTO backupPicture = bloggerPictureService.getDefaultPicture(
-                category == null ? BloggerPictureCategoryEnum.DEFAULT_PICTURE
-                        : BloggerPictureCategoryEnum.valueOf(category)); //如果目标图片不存在，返回指定类别的默认图片
 
         // 输出图片
-        outPutPicture(picture, backupPicture, request, response);
+        outPutPicture(picture, request, response);
 
     }
 
@@ -104,27 +98,31 @@ public class ImageController extends BaseCheckController {
      */
     @PostMapping
     @ResponseBody
-    public ResultModel upload(MultipartHttpServletRequest request,
+    public ResultModel upload(@RequestParam("image") MultipartFile file,
                               @Uid Long bloggerId,
-                              @RequestParam(value = "category", required = false) Integer category,
-                              @RequestParam(value = "bewrite", required = false) String bewrite,
-                              @RequestParam(value = "title", required = false) String title) {
+                              @RequestParam(required = false) Integer category,
+                              @RequestParam(required = false) String bewrite,
+                              @RequestParam(required = false) String title) {
 
-        MultipartFile file = request.getFile("image");// 与页面input的name相同
-        Long id;
-        if (ImageUtils.isImageFile(fileTrans(file))) {
+        FileVO fileVO = null;
+        try {
+            fileVO = DataConverter.VO.multipartFile2VO(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+        }
 
-            // 默认上传到私有目录
-            int cate = category == null ? BloggerPictureCategoryEnum.PRIVATE.getCode() : category;
+        Long id = null;
+        if (ImageUtils.isImageFile(fileVO)) {
 
             // 普通用户没有指定图片类别的必要
             //检查博主权限
-            if (!validateService.checkBloggerPictureLegal(bloggerId, cate)) {
+            if (!validateService.checkBloggerPictureLegal(bloggerId, category)) {
                 throw ExceptionUtil.get(CodeMessage.COMMON_UNAUTHORIZED);
             }
 
-            id = bloggerPictureService.insertPicture(fileTrans(file), bloggerId, bewrite, BloggerPictureCategoryEnum.valueOf(cate),
-                    title);
+            id = bloggerPictureService.insertPicture(fileVO, bloggerId, bewrite,
+                    BloggerPictureCategoryEnum.valueOf(category), title);
             if (id == null) handlerOperateFail();
         } else {
             throw ExceptionUtil.get(CodeMessage.COMMON_PICTURE_FORMAT_ERROR);
@@ -133,15 +131,10 @@ public class ImageController extends BaseCheckController {
         return ResultModel.success(id);
     }
 
-    private com.duan.common.util.MultipartFile fileTrans(MultipartFile file) {
-        return null;
-    }
-
     // 输出图片
-    private void outPutPicture(BloggerPictureDTO picture, BloggerPictureDTO backupPicture,
-                               HttpServletRequest request, HttpServletResponse response) {
+    private void outPutPicture(BloggerPictureDTO picture, HttpServletRequest request, HttpServletResponse response) {
         try (ServletOutputStream os = response.getOutputStream()) {
-            String path = picture == null ? backupPicture.getPath() : picture.getPath();
+            String path = picture == null ? getBackupPicture().getPath() : picture.getPath();
             File image = new File(path);
             if (!image.exists()) handlerOperateFail();
 
@@ -156,6 +149,11 @@ public class ImageController extends BaseCheckController {
             e.printStackTrace();
             handlerOperateFail(e);
         }
+    }
+
+    public BloggerPictureDTO getBackupPicture() {
+        //如果目标图片不存在，返回指定类别的默认图片
+        return bloggerPictureService.getDefaultPicture(BloggerPictureCategoryEnum.DEFAULT_PICTURE);
     }
 
 }

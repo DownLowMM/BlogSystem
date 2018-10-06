@@ -11,12 +11,16 @@ import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
+import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
+import com.duan.blogos.service.util.ResultModelUtil;
+import com.duan.blogos.service.vo.FileVO;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.ImageUtils;
-import com.duan.common.util.MultipartFile;
 import com.duan.common.util.StringUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,27 +72,27 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-    public Long insertPicture(MultipartFile file, Long bloggerId, String bewrite, BloggerPictureCategoryEnum category,
+    public Long insertPicture(FileVO file, Long bloggerId, String bewrite, BloggerPictureCategoryEnum category,
                               String title) {
-        // TODO
 
-        int cate = category.getCode();
-        String path;
+        // 默认上传到私有目录
+        BloggerPictureCategoryEnum cate = category == null ? BloggerPictureCategoryEnum.PRIVATE : category;
 
         //保存到磁盘
+        String path;
         try {
-            path = imageManager.saveImageToDisk(file, bloggerId, cate);
+            path = imageManager.saveImageToDisk(file, bloggerId, cate.getCode());
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
         if (path == null) return null;
 
         // 如果是图片管理员上传默认图片，需要移动其文件夹
         Long pictureManagerId = websiteProperties.getManagerId();
-        if (pictureManagerId == bloggerId && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate)) {
+        if (pictureManagerId.equals(bloggerId) && BloggerPictureCategoryEnum.isDefaultPictureCategory(cate)) {
             // 如果设备上已经有该唯一图片，将原来的图片移到私有文件夹，同时修改数据库
-            removeDefaultPictureIfNecessary(bloggerId, category);
+            removeDefaultPictureIfNecessary(bloggerId, cate);
         }
 
         //插入新纪录
@@ -190,10 +194,6 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     public BloggerPictureDTO getPicture(Long pictureId, Long bloggerId) {
         BloggerPicture picture = pictureDao.getPictureById(pictureId);
         if (picture == null || !picture.getBloggerId().equals(bloggerId)) return null;
-
-        String url = stringConstructorManager.constructPictureUrl(picture, DEFAULT_PICTURE);
-        picture.setPath(url);
-
         return dataFillingManager.bloggerPicture2DTO(picture);
     }
 
@@ -210,19 +210,21 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     }
 
     @Override
-    public ResultModel<List<BloggerPictureDTO>> listBloggerPicture(Long bloggerId, BloggerPictureCategoryEnum category,
-                                                                   int offset, int rows) {
+    public ResultModel<PageResult<BloggerPictureDTO>> listBloggerPicture(Long bloggerId, BloggerPictureCategoryEnum category,
+                                                                         Integer pageNum, Integer pageSize) {
 
-        offset = offset < 0 ? 0 : offset;
-        rows = rows < 0 ? defaultProperties.getPictureCount() : rows;
+        pageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;
+        pageSize = pageSize == null || pageSize < 1 ? defaultProperties.getPictureCount() : pageSize;
 
-        List<BloggerPicture> result;
+        PageHelper.startPage(pageNum, pageSize);
+        PageInfo<BloggerPicture> pageInfo = null;
         if (category == null) {
-            result = pictureDao.listPictureByBloggerId(bloggerId, offset, rows);
+            pageInfo = new PageInfo<>(pictureDao.listPictureByBloggerId(bloggerId));
         } else {
-            result = pictureDao.listPictureByBloggerAndCategory(bloggerId, category.getCode(), offset, rows);
+            pageInfo = new PageInfo<>(pictureDao.listPictureByBloggerAndCategory(bloggerId, category.getCode()));
         }
 
+        List<BloggerPicture> result = pageInfo.getList();
         if (CollectionUtils.isEmpty(result)) return null;
 
         for (BloggerPicture picture : result) {
@@ -230,10 +232,11 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
             picture.setPath(url);
         }
 
-        List<BloggerPictureDTO> dtos = result.stream().map(dataFillingManager::bloggerPicture2DTO)
+        List<BloggerPictureDTO> dtos = result.stream()
+                .map(dataFillingManager::bloggerPicture2DTO)
                 .collect(Collectors.toList());
 
-        return ResultModel.success(dtos);
+        return ResultModelUtil.pageResult(pageInfo, dtos);
     }
 
     @Override

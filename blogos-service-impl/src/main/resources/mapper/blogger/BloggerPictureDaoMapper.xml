@@ -26,14 +26,12 @@
         SELECT *
         FROM blogger_picture
         WHERE blogger_id = #{bloggerId}
-        LIMIT #{offset}, #{rows}
     </select>
 
     <select id="listPictureByBloggerAndCategory" resultType="BloggerPicture">
         SELECT *
         FROM blogger_picture
         WHERE blogger_id = #{bloggerId} AND category = #{category}
-        LIMIT #{offset}, #{rows}
     </select>
 
     <select id="getUseCount" resultType="java.lang.Integer">

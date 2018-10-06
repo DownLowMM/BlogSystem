@@ -5,7 +5,7 @@ import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
 import com.duan.blogos.service.enums.BlogFormatEnum;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.restful.ResultModel;
-import com.duan.common.util.MultipartFile;
+import com.duan.blogos.service.vo.FileVO;
 
 import java.util.List;
 
@@ -112,7 +112,7 @@ public interface BloggerBlogService {
      * @param bloggerId 博主id
      * @return 成功导入的博文标题和id
      */
-    List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, Long bloggerId);
+    List<BlogTitleIdDTO> insertBlogPatch(FileVO file, Long bloggerId);
 
     /**
      * 生成用于 [导出所有博文] 功能的 zip 文件

@@ -60,15 +60,15 @@ public enum BloggerPictureCategoryEnum {
             DEFAULT_BLOGGER_AVATAR, // 13
             DEFAULT_BLOGGER_BLOG_PICTURE,// 14
             DEFAULT_PICTURE); // 15
-    private int code;
+    private Integer code;
 
-    BloggerPictureCategoryEnum(int code) {
+    BloggerPictureCategoryEnum(Integer code) {
         this.code = code;
     }
 
-    public static BloggerPictureCategoryEnum valueOf(int code) {
+    public static BloggerPictureCategoryEnum valueOf(Integer code) {
         for (BloggerPictureCategoryEnum enuz : values()) {
-            if (enuz.getCode() == code) return enuz;
+            if (enuz.getCode().equals(code)) return enuz;
         }
 
         return null;
@@ -80,11 +80,15 @@ public enum BloggerPictureCategoryEnum {
      * @param categoryCode 类别id
      * @return 是返回true
      */
-    public static boolean isDefaultPictureCategory(int categoryCode) {
+    public static boolean isDefaultPictureCategory(Integer categoryCode) {
         return defaultCate.contains(valueOf(categoryCode));
     }
 
-    public int getCode() {
+    public static boolean isDefaultPictureCategory(BloggerPictureCategoryEnum category) {
+        return defaultCate.contains(category);
+    }
+
+    public Integer getCode() {
         return code;
     }
 

@@ -8,6 +8,7 @@ spring:
     multipart:
       max-file-size: 50Mb
       max-request-size: 128Mb
+      file-size-threshold: 5Mb
   messages:
     basename: i18n/messages
     cache-seconds: 3600

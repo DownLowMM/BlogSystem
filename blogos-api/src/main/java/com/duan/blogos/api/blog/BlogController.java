@@ -16,6 +16,8 @@ import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilterService;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
+import com.duan.blogos.service.util.DataConverter;
+import com.duan.blogos.service.vo.FileVO;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import com.duan.common.util.CollectionUtils;
@@ -260,8 +262,15 @@ public class BlogController extends BaseController {
         if (file.isEmpty() || !file.getOriginalFilename().endsWith(".zip"))
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
-        com.duan.common.util.MultipartFile fi = null;// TODO 转化
-        List<BlogTitleIdDTO> blogsTitles = bloggerBlogService.insertBlogPatch(fi, bloggerId);
+        FileVO fileVO = null;
+        try {
+            fileVO = DataConverter.VO.multipartFile2VO(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+        }
+
+        List<BlogTitleIdDTO> blogsTitles = bloggerBlogService.insertBlogPatch(fileVO, bloggerId);
         if (CollectionUtils.isEmpty(blogsTitles))
             handlerOperateFail();
 

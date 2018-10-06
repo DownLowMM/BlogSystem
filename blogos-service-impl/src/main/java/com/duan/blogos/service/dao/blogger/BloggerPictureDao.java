@@ -46,27 +46,19 @@ public interface BloggerPictureDao extends BaseDao<BloggerPicture> {
      * 查询博主的所有图片
      *
      * @param bloggerId 博主id
-     * @param offset    偏移位置
-     * @param rows      行数
      * @return 查询结果
      */
-    List<BloggerPicture> listPictureByBloggerId(@Param("bloggerId") Long bloggerId,
-                                                @Param("offset") int offset,
-                                                @Param("rows") int rows);
+    List<BloggerPicture> listPictureByBloggerId(@Param("bloggerId") Long bloggerId);
 
     /**
      * 查询博主的指定类别图片
      *
      * @param bloggerId 博主id
      * @param category  类别id
-     * @param offset    偏移位置
-     * @param rows      行数
      * @return 查询结果
      */
     List<BloggerPicture> listPictureByBloggerAndCategory(@Param("bloggerId") Long bloggerId,
-                                                         @Param("category") Integer category,
-                                                         @Param("offset") int offset,
-                                                         @Param("rows") int rows);
+                                                         @Param("category") Integer category);
 
     /**
      * 将图片被引用次数减一

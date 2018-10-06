@@ -10,8 +10,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod;
 
@@ -39,16 +37,6 @@ public class WebConfig extends WebMvcRegistrationsAdapter {
                 };
             }
         };
-    }
-
-    @Bean
-    public MultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setDefaultEncoding("UTF-8");
-        multipartResolver.setMaxUploadSize(10485760000L);
-        multipartResolver.setMaxInMemorySize(40960);
-
-        return multipartResolver;
     }
 
     /**

@@ -24,12 +24,17 @@ import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
-import com.duan.common.util.*;
+import com.duan.blogos.service.vo.FileVO;
+import com.duan.common.util.ArrayUtils;
+import com.duan.common.util.CollectionUtils;
+import com.duan.common.util.FileUtils;
+import com.duan.common.util.StringUtils;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -352,7 +357,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
     }
 
     @Override
-    public List<BlogTitleIdDTO> insertBlogPatch(MultipartFile file, Long bloggerId) {
+    public List<BlogTitleIdDTO> insertBlogPatch(FileVO file, Long bloggerId) {
 
         FileUtils.mkdirsIfNotExist(fileProperties.getPatchImportBlogTempPath());
 
@@ -363,12 +368,14 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
                 bloggerId +
                 "-" +
                 System.currentTimeMillis() +
-                "-"
-//                file.getOriginalFilename()
-                ;
-        // TODO
-
-//        FileUtils.saveFileTo(file, fullPath);
+                "-" +
+                file.getOriginalFilename();
+        try {
+            FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(new File(fullPath)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
+        }
 
         // 解析博文
         List<BlogTitleIdDTO> result = new ArrayList<>();
