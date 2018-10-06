@@ -127,4 +127,12 @@ public interface BloggerPictureService {
     // UPDATE: 2018/2/3 更新 初始版本不予实现
     void cleanBlogPicture(Long bloggerId);
 
+
+    /**
+     * 获得图片，path 为 url 访问路径
+     *
+     * @param pictureId 图片id
+     * @return 查询结果
+     */
+    BloggerPictureDTO getPictureWithUrl(Long pictureId);
 }

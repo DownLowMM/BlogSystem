@@ -256,19 +256,19 @@ public class DataFillingManager {
         return dtos;
     }
 
-    public BloggerPictureDTO bloggerPicture2DTO(BloggerPicture avatar) {
-        if (avatar == null) {
+    public BloggerPictureDTO bloggerPicture2DTO(BloggerPicture picture) {
+        if (picture == null) {
             return null;
         }
 
         BloggerPictureDTO pictureDTO = new BloggerPictureDTO();
-        pictureDTO.setId(avatar.getId());
-        pictureDTO.setBloggerId(avatar.getBloggerId());
-        pictureDTO.setBewrite(avatar.getBewrite());
-        pictureDTO.setCategory(avatar.getCategory());
-        pictureDTO.setPath(avatar.getPath());
-        pictureDTO.setTitle(avatar.getTitle());
-        pictureDTO.setUploadDate(avatar.getUploadDate());
+        pictureDTO.setId(picture.getId());
+        pictureDTO.setBloggerId(picture.getBloggerId());
+        pictureDTO.setBewrite(picture.getBewrite());
+        pictureDTO.setCategory(picture.getCategory());
+        pictureDTO.setPath(picture.getPath());
+        pictureDTO.setTitle(picture.getTitle());
+        pictureDTO.setUploadDate(picture.getUploadDate());
 
         return pictureDTO;
     }

@@ -304,4 +304,18 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     public void cleanBlogPicture(Long bloggerId) {
     }
 
+    @Override
+    public BloggerPictureDTO getPictureWithUrl(Long pictureId) {
+
+        BloggerPicture picture = pictureDao.getPictureById(pictureId);
+        if (picture == null) {
+            return null;
+        }
+
+        String url = stringConstructorManager.constructPictureUrl(picture, BloggerPictureCategoryEnum.DEFAULT_PICTURE);
+        picture.setPath(url);
+
+        return dataFillingManager.bloggerPicture2DTO(picture);
+    }
+
 }

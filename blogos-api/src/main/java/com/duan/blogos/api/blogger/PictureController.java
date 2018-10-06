@@ -36,10 +36,9 @@ public class PictureController extends BaseController {
      */
     @GetMapping("/{pictureId}")
     @TokenNotRequired
-    public ResultModel<BloggerPictureDTO> get(@RequestParam Long bloggerId,
-                                              @PathVariable("pictureId") Long pictureId) {
+    public ResultModel<BloggerPictureDTO> get(@PathVariable("pictureId") Long pictureId) {
 
-        BloggerPictureDTO picture = bloggerPictureService.getPicture(pictureId, bloggerId);
+        BloggerPictureDTO picture = bloggerPictureService.getPictureWithUrl(pictureId);
         if (picture == null) handlerEmptyResult();
 
         return ResultModel.success(picture);

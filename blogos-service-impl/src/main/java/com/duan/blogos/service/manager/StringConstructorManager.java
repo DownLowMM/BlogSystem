@@ -34,19 +34,17 @@ public class StringConstructorManager {
     public String constructPictureUrl(BloggerPicture picture, BloggerPictureCategoryEnum defaultCate) {
         if (picture == null) return null;
 
-        // 参见ImageController：http://localhost:8080/image/1/type=public/523?default=5
+        // 参见ImageController：http://localhost:8080/image/prv/523?category=5
         StringBuilder buffer = new StringBuilder(50);
         int cate = picture.getCategory();
         buffer.append("http://")
                 .append(websiteProperties.getAddr())
                 .append("/image/")
-                .append(picture.getBloggerId())
-                .append("/type=")
                 // 私有图片登录才能获取
-                .append(cate == BloggerPictureCategoryEnum.PRIVATE.getCode() ? "private" : "public")
+                .append(cate == BloggerPictureCategoryEnum.PRIVATE.getCode() ? "prv" : "")
                 .append("/")
                 .append(picture.getId())
-                .append("?default=")
+                .append("?category=")
                 .append(defaultCate == null ? BloggerPictureCategoryEnum.DEFAULT_PICTURE.getCode() :
                         defaultCate.getCode());
 
