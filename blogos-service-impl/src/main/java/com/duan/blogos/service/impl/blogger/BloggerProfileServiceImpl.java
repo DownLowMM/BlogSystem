@@ -4,9 +4,9 @@ import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dao.blogger.BloggerProfileDao;
 import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.service.blogger.BloggerProfileService;
+import com.duan.blogos.service.util.DataConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +26,6 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
 
     @Autowired
     private ImageManager imageManager;
-
-    @Autowired
-    private DataFillingManager dataFillingManager;
 
     @Override
     public Long insertBloggerProfile(Long bloggerId, Long avatarId, String phone, String email, String aboutMe, String intro) {
@@ -90,14 +87,14 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
     public BloggerProfileDTO getBloggerProfile(Long bloggerId) {
         BloggerProfile profile = profileDao.getProfileByBloggerId(bloggerId);
 
-        return dataFillingManager.bloggerProfile2DTO(profile);
+        return DataConverter.PO2DTO.bloggerProfile2DTO(profile);
     }
 
     @Override
     public BloggerProfileDTO getBloggerProfileByPhone(String phone) {
         BloggerProfile profile = profileDao.getProfileByPhone(phone);
 
-        return dataFillingManager.bloggerProfile2DTO(profile);
+        return DataConverter.PO2DTO.bloggerProfile2DTO(profile);
     }
 
 }

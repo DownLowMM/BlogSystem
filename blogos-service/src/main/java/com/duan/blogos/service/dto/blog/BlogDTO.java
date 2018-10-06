@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created on 2018/9/13.
@@ -22,10 +23,10 @@ public class BlogDTO implements Serializable {
     private Long bloggerId;
 
     //博文所属类别id
-    private BlogCategoryRelaDTO[] categoryIds;
+    private List<BlogCategoryRelaDTO> categoryIds;
 
     //博文包含的标签
-    private BlogLabelRelaDTO[] labelIds;
+    private List<BlogLabelRelaDTO> labelIds;
 
     //文章状态
     private Integer state;

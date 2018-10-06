@@ -14,11 +14,11 @@ import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
 import com.duan.blogos.service.enums.BlogCommentStatusEnum;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blog.CommentService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.CollectionUtils;
 import com.github.pagehelper.PageHelper;
@@ -44,9 +44,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private WebsiteProperties websiteProperties;
-
-    @Autowired
-    private DataFillingManager dataFillingManager;
 
     @Autowired
     private StringConstructorManager constructorManager;
@@ -81,10 +78,10 @@ public class CommentServiceImpl implements CommentService {
             Long sid = comment.getSpokesmanId();
             BloggerAccount smAccount = accountDao.getAccountById(sid);
             BloggerProfile smProfile = getProfile(sid);
-            BloggerDTO smDTO = dataFillingManager.bloggerAccountToDTO(smAccount, smProfile,
+            BloggerDTO smDTO = DataConverter.PO2DTO.bloggerAccountToDTO(smAccount, smProfile,
                     getAvatar(smProfile.getAvatarId()));
 
-            BlogCommentDTO dto = dataFillingManager.blogCommentToDTO(comment, smDTO);
+            BlogCommentDTO dto = DataConverter.PO2DTO.blogCommentToDTO(comment, smDTO);
             result.add(dto);
         }
 

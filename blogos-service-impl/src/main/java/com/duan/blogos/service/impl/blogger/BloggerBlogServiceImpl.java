@@ -19,11 +19,11 @@ import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.vo.FileVO;
 import com.duan.common.util.ArrayUtils;
 import com.duan.common.util.CollectionUtils;
@@ -69,9 +69,6 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
 
     @Autowired
     private FileProperties fileProperties;
-
-    @Autowired
-    private DataFillingManager dataFillingManager;
 
     @Autowired
     private ImageManager imageManager;
@@ -344,7 +341,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
             List<BlogCategoryRela> relas = categoryRelaDao.listAllByBlogId(blogId);
             List<BlogLabelRela> labelRelas = labelRelaDao.listAllByBlogId(blogId);
 
-            return ResultModel.success(dataFillingManager.blog2DTO(blog, relas, labelRelas));
+            return ResultModel.success(DataConverter.PO2DTO.blog2DTO(blog, relas, labelRelas));
 
         }
 

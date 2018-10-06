@@ -7,12 +7,12 @@ import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
 import com.duan.blogos.service.dto.blogger.BloggerLinkDTO;
 import com.duan.blogos.service.entity.blogger.BloggerLink;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLinkService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.CollectionUtils;
 import com.github.pagehelper.PageHelper;
@@ -39,9 +39,6 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
 
     @Autowired
     private BloggerPictureDao pictureDao;
-
-    @Autowired
-    private DataFillingManager fillingManager;
 
     @Autowired
     private WebsiteProperties websiteProperties;
@@ -80,7 +77,7 @@ public class BloggerLinkServiceImpl implements BloggerLinkService {
             if (icon != null)
                 icon.setPath(constructorManager.constructPictureUrl(icon, DEFAULT_BLOGGER_LINK_ICON));
 
-            BloggerLinkDTO dto = fillingManager.bloggerLinkToDTO(link, icon);
+            BloggerLinkDTO dto = DataConverter.PO2DTO.bloggerLinkToDTO(link, icon);
             result.add(dto);
         }
 

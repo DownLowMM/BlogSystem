@@ -11,12 +11,12 @@ import com.duan.blogos.service.entity.blog.BlogCategory;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
@@ -42,9 +42,6 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
 
     @Autowired
     private BlogCategoryDao categoryDao;
-
-    @Autowired
-    private DataFillingManager fillingManager;
 
     @Autowired
     private StringConstructorManager constructorManager;
@@ -182,7 +179,7 @@ public class BloggerCategoryServiceImpl implements BloggerCategoryService {
 
         List<BlogCategoryRela> relas = categoryRelaDao.listAllByBloggerIdAndCategoryId(bloggerId, category.getId());
         int count = CollectionUtils.isEmpty(relas) ? 0 : relas.size();
-        return fillingManager.blogCategoryToDTO(category, icon, count);
+        return DataConverter.PO2DTO.blogCategoryToDTO(category, icon, count);
     }
 
 }

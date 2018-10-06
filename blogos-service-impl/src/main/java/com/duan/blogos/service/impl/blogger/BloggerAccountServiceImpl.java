@@ -20,9 +20,9 @@ import com.duan.blogos.service.entity.blogger.BloggerSetting;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.manager.BlogLuceneIndexManager;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,9 +73,6 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     @Autowired
     private WebsiteProperties websiteProperties;
 
-    @Autowired
-    private DataFillingManager dataFillingManager;
-
     @Override
     public Long insertAccount(String username, String password) {
 
@@ -108,7 +105,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
     @Override
     public BloggerAccountDTO getAccount(String bloggerName) {
         BloggerAccount account = accountDao.getAccountByName(bloggerName);
-        return dataFillingManager.bloggerAccount2DTO(account);
+        return DataConverter.PO2DTO.bloggerAccount2DTO(account);
     }
 
     @Override
@@ -193,6 +190,6 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
         BloggerProfile profile = profileDao.getProfileByPhone(phone);
         if (profile == null) return null;
         BloggerAccount account = accountDao.getAccountById(profile.getBloggerId());
-        return dataFillingManager.bloggerAccount2DTO(account);
+        return DataConverter.PO2DTO.bloggerAccount2DTO(account);
     }
 }

@@ -10,10 +10,10 @@ import com.duan.blogos.service.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.entity.BlogCategoryRela;
 import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.*;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blog.StatisticsService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +32,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private DbProperties dbProperties;
-
-    @Autowired
-    private DataFillingManager dataFillingManager;
 
     @Autowired
     private BlogCategoryDao categoryDao;
@@ -137,7 +134,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             labels = labelDao.listLabelById(lids);
         }
 
-        BlogStatisticsDTO dto = dataFillingManager.blogStatisticsToDTO(blog, statistics, categories, labels,
+        BlogStatisticsDTO dto = DataConverter.PO2DTO.blogStatisticsToDTO(blog, statistics, categories, labels,
                 likes, collects, commenter, dbProperties.getStringFiledSplitCharacterForString());
 
         return ResultModel.success(dto);
@@ -150,7 +147,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         BlogStatistics statistics = statisticsDao.getStatistics(blogId);
         if (statistics == null) return null;
 
-        BlogBaseStatisticsDTO dto = dataFillingManager.blogStatisticsCountToDTO(statistics);
+        BlogBaseStatisticsDTO dto = DataConverter.PO2DTO.blogStatisticsCountToDTO(statistics);
         return ResultModel.success(dto);
     }
 

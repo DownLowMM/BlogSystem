@@ -22,6 +22,7 @@ import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,9 +39,6 @@ import java.util.regex.Pattern;
  */
 @Component
 public class BlogDataManager {
-
-    @Autowired
-    private DataFillingManager dataFillingManager;
 
     @Autowired
     private BlogCategoryRelaDao categoryRelaDao;
@@ -102,7 +100,7 @@ public class BlogDataManager {
         }
 
         BlogStatistics statistics = statisticsDao.getStatistics(blogId);
-        return dataFillingManager.blogListItemToDTO(statistics, array, a2, blog, img);
+        return DataConverter.PO2DTO.blogListItemToDTO(statistics, array, a2, blog, img);
     }
 
     public FavoriteBlogListItemDTO getFavouriteBlogListItemDTO(Long bloggerId, Long blogId, Long id, Timestamp date,
@@ -133,10 +131,10 @@ public class BlogDataManager {
         String url = constructorManager.constructPictureUrl(avatar, BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR);
         avatar.setPath(url);
 
-        BloggerDTO bloggerDTO = dataFillingManager.bloggerAccountToDTO(account, profile, avatar);
+        BloggerDTO bloggerDTO = DataConverter.PO2DTO.bloggerAccountToDTO(account, profile, avatar);
 
         // 结果
-        return dataFillingManager.favoriteBlogListItemToDTO(bloggerId, id, date, reason,
+        return DataConverter.PO2DTO.favoriteBlogListItemToDTO(bloggerId, id, date, reason,
                 listItemDTO, bloggerDTO);
     }
 

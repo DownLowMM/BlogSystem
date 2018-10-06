@@ -8,12 +8,12 @@ import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.blogos.service.vo.FileVO;
 import com.duan.common.util.CollectionUtils;
@@ -52,10 +52,6 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
     @Autowired
     private DefaultProperties defaultProperties;
-
-    @Autowired
-    private DataFillingManager dataFillingManager;
-
 
     @Override
     public Long insertPicture(Long bloggerId, String path, String bewrite, BloggerPictureCategoryEnum category, String title) {
@@ -187,14 +183,14 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
     @Override
     public BloggerPictureDTO getPicture(Long pictureId) {
         BloggerPicture picture = pictureDao.getPictureById(pictureId);
-        return dataFillingManager.bloggerPicture2DTO(picture);
+        return DataConverter.PO2DTO.bloggerPicture2DTO(picture);
     }
 
     @Override
     public BloggerPictureDTO getPicture(Long pictureId, Long bloggerId) {
         BloggerPicture picture = pictureDao.getPictureById(pictureId);
         if (picture == null || !picture.getBloggerId().equals(bloggerId)) return null;
-        return dataFillingManager.bloggerPicture2DTO(picture);
+        return DataConverter.PO2DTO.bloggerPicture2DTO(picture);
     }
 
     @Override
@@ -206,7 +202,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
             return null; // 没有默认的图片
         }
 
-        return dataFillingManager.bloggerPicture2DTO(picture);
+        return DataConverter.PO2DTO.bloggerPicture2DTO(picture);
     }
 
     @Override
@@ -233,7 +229,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         }
 
         List<BloggerPictureDTO> dtos = result.stream()
-                .map(dataFillingManager::bloggerPicture2DTO)
+                .map(DataConverter.PO2DTO::bloggerPicture2DTO)
                 .collect(Collectors.toList());
 
         return ResultModelUtil.pageResult(pageInfo, dtos);
@@ -315,7 +311,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
         String url = stringConstructorManager.constructPictureUrl(picture, BloggerPictureCategoryEnum.DEFAULT_PICTURE);
         picture.setPath(url);
 
-        return dataFillingManager.bloggerPicture2DTO(picture);
+        return DataConverter.PO2DTO.bloggerPicture2DTO(picture);
     }
 
 }

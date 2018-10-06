@@ -13,10 +13,10 @@ import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
 import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,9 +54,6 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
     private BlogStatisticsDao statisticsDao;
 
     @Autowired
-    private DataFillingManager dataFillingManager;
-
-    @Autowired
     private StringConstructorManager stringConstructorManager;
 
     @Autowired
@@ -88,7 +85,7 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
         int collectCount = collectDao.countByCollectorId(bloggerId);
         int linkCount = linkDao.countLinkByBloggerId(bloggerId);
 
-        BloggerStatisticsDTO dto = dataFillingManager.bloggerStatisticToDTO(blogCount, wordCountSum, likeCount,
+        BloggerStatisticsDTO dto = DataConverter.PO2DTO.bloggerStatisticToDTO(blogCount, wordCountSum, likeCount,
                 likeGiveCount, categoryCount, labelCount, collectCount, collectedCount, linkCount);
 
         return ResultModel.success(dto);
@@ -120,7 +117,7 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
                 avatar.setPath(stringConstructorManager.constructPictureUrl(avatar, BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR));
             }
 
-            BloggerDTO dto = dataFillingManager.bloggerAccountToDTO(account, profile, avatar);
+            BloggerDTO dto = DataConverter.PO2DTO.bloggerAccountToDTO(account, profile, avatar);
             dtos.add(dto);
         }
 

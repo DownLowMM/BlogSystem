@@ -4,10 +4,10 @@ import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.dao.blog.BlogLabelDao;
 import com.duan.blogos.service.dto.blog.BlogLabelDTO;
 import com.duan.blogos.service.entity.blog.BlogLabel;
-import com.duan.blogos.service.manager.DataFillingManager;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
+import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.util.ResultModelUtil;
 import com.duan.common.util.CollectionUtils;
 import com.github.pagehelper.PageHelper;
@@ -31,9 +31,6 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
 
     @Autowired
     private DefaultProperties defaultProperties;
-
-    @Autowired
-    private DataFillingManager dataFillingManager;
 
     @Override
     public Long insertLabel(Long bloggerId, String title) {
@@ -102,14 +99,14 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
         List<BlogLabel> result = pageInfo.getList();
         if (CollectionUtils.isEmpty(result)) return null;
 
-        List<BlogLabelDTO> dtos = result.stream().map(dataFillingManager::blogLabel2DTO).collect(Collectors.toList());
+        List<BlogLabelDTO> dtos = result.stream().map(DataConverter.PO2DTO::blogLabel2DTO).collect(Collectors.toList());
         return ResultModelUtil.pageResult(pageInfo, dtos);
     }
 
     @Override
     public BlogLabelDTO getLabel(Long labelId) {
         BlogLabel label = labelDao.getLabel(labelId);
-        return dataFillingManager.blogLabel2DTO(label);
+        return DataConverter.PO2DTO.blogLabel2DTO(label);
     }
 
     @Override
@@ -123,7 +120,7 @@ public class BloggerLabelServiceImpl implements BloggerLabelService {
         List<BlogLabel> result = pageInfo.getList();
         if (CollectionUtils.isEmpty(result)) return null;
 
-        List<BlogLabelDTO> dtos = result.stream().map(dataFillingManager::blogLabel2DTO).collect(Collectors.toList());
+        List<BlogLabelDTO> dtos = result.stream().map(DataConverter.PO2DTO::blogLabel2DTO).collect(Collectors.toList());
 
         return ResultModelUtil.pageResult(pageInfo, dtos);
 
