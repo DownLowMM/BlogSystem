@@ -97,7 +97,7 @@ public class BloggerPictureServiceImpl implements BloggerPictureService {
 
         //插入新纪录
         String ti = StringUtils.isEmpty(title) ? ImageUtils.getImageName(file.getOriginalFilename()) : title;
-        return insertPicture(bloggerId, path, bewrite, category, ti);
+        return insertPicture(bloggerId, path, bewrite, cate, ti);
 
     }
 

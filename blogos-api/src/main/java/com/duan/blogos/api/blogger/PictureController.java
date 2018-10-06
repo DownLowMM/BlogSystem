@@ -49,7 +49,7 @@ public class PictureController extends BaseController {
      */
     @GetMapping
     @TokenNotRequired
-    public ResultModel<PageResult<BloggerPictureDTO>> list(@Uid Long bloggerId,
+    public ResultModel<PageResult<BloggerPictureDTO>> list(@RequestParam Long bloggerId,
                                                            @RequestParam(required = false) Integer category,
                                                            @RequestParam(required = false) Integer pageNum,
                                                            @RequestParam(required = false) Integer pageSize) {

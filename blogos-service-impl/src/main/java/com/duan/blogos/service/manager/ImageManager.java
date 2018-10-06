@@ -9,7 +9,6 @@ import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.util.ImageUtils;
 import com.duan.blogos.service.vo.FileVO;
-import com.duan.common.util.FileUtils;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -156,7 +155,8 @@ public class ImageManager {
         File newPicture = new File(newDir.getAbsolutePath() + File.separator + oldPicture.getName());
         if (oldPicture.equals(newPicture)) return oldPicture.getAbsolutePath();
 
-        FileUtils.moveFile(oldPicture, newPicture);
+        FileCopyUtils.copy(oldPicture, newPicture);
+        oldPicture.delete();
 
         return newPicture.getAbsolutePath();
     }

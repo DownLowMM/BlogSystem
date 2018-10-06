@@ -41,8 +41,7 @@ public class StringConstructorManager {
                 .append(websiteProperties.getAddr())
                 .append("/image/")
                 // 私有图片登录才能获取
-                .append(cate == BloggerPictureCategoryEnum.PRIVATE.getCode() ? "prv" : "")
-                .append("/")
+                .append(cate == BloggerPictureCategoryEnum.PRIVATE.getCode() ? "prv/" : "")
                 .append(picture.getId())
                 .append("?category=")
                 .append(defaultCate == null ? BloggerPictureCategoryEnum.DEFAULT_PICTURE.getCode() :
