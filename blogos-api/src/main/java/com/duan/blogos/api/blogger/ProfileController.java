@@ -1,5 +1,7 @@
 package com.duan.blogos.api.blogger;
 
+import com.duan.blogos.annonation.TokenNotRequired;
+import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
@@ -16,16 +18,11 @@ import java.util.Base64;
 /**
  * Created on 2017/12/29.
  * 博主个人资料api
- * <p>
- * 1 获取资料
- * 2 新增资料
- * 3 更新资料
- * 4 删除资料
  *
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger/{bloggerId}/profile")
+@RequestMapping("/blogger/profile")
 public class ProfileController extends BaseController {
 
     @Autowired
@@ -38,7 +35,8 @@ public class ProfileController extends BaseController {
      * 获取资料
      */
     @GetMapping
-    public ResultModel<BloggerProfileDTO> get(@PathVariable Long bloggerId) {
+    @TokenNotRequired
+    public ResultModel<BloggerProfileDTO> get(@RequestParam Long bloggerId) {
         handleAccountCheck(bloggerId);
 
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(bloggerId);
@@ -52,12 +50,12 @@ public class ProfileController extends BaseController {
      * 新增资料
      */
     @PostMapping
-    public ResultModel add(@PathVariable Long bloggerId,
-                           @RequestParam(value = "avatarId", required = false) Long avatarId,
-                           @RequestParam(value = "phone", required = false) String phone,
-                           @RequestParam(value = "email", required = false) String email,
-                           @RequestParam(value = "aboutMe", required = false) String aboutMe,
-                           @RequestParam(value = "intro", required = false) String intro) {
+    public ResultModel add(@Uid Long bloggerId,
+                           @RequestParam(required = false) Long avatarId,
+                           @RequestParam(required = false) String phone,
+                           @RequestParam(required = false) String email,
+                           @RequestParam(required = false) String aboutMe,
+                           @RequestParam(required = false) String intro) {
         handlePictureExistCheck(bloggerId, avatarId);
 
         handlePhoneAndEmailCheck(phone, email);
@@ -72,12 +70,12 @@ public class ProfileController extends BaseController {
      * 更新资料
      */
     @PutMapping
-    public ResultModel update(@PathVariable Long bloggerId,
-                              @RequestParam(value = "avatarId", required = false) Long avatarId,
-                              @RequestParam(value = "phone", required = false) String phone,
-                              @RequestParam(value = "email", required = false) String email,
-                              @RequestParam(value = "aboutMe", required = false) String aboutMe,
-                              @RequestParam(value = "intro", required = false) String intro) {
+    public ResultModel update(@Uid Long bloggerId,
+                              @RequestParam(required = false) Long avatarId,
+                              @RequestParam(required = false) String phone,
+                              @RequestParam(required = false) String email,
+                              @RequestParam(required = false) String aboutMe,
+                              @RequestParam(required = false) String intro) {
 
         if (phone == null && email == null && aboutMe == null && intro == null) {
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
@@ -97,7 +95,7 @@ public class ProfileController extends BaseController {
      * 删除资料
      */
     @DeleteMapping
-    public ResultModel delete(@PathVariable Long bloggerId) {
+    public ResultModel delete(@Uid Long bloggerId) {
 
         boolean result = bloggerProfileService.deleteBloggerProfile(bloggerId);
         if (!result) handlerOperateFail();
@@ -106,10 +104,10 @@ public class ProfileController extends BaseController {
     }
 
     /**
-     * 更新头像
+     * TODO 更新头像
      */
     @PostMapping("/avatar")
-    public ResultModel updateAvatar(@PathVariable Long bloggerId,
+    public ResultModel updateAvatar(@Uid Long bloggerId,
                                     @RequestParam(value = "avatarBaseUrlData") String base64urlData) {
         handleImageBase64Check(base64urlData);
 

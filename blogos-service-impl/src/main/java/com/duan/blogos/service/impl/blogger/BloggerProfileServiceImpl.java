@@ -57,7 +57,7 @@ public class BloggerProfileServiceImpl implements BloggerProfileService {
         if (profile == null) return false;
         Long oldAvatarId = profile.getAvatarId();
 
-        profile.setAvatarId(avatarId == -1 ? null : avatarId);
+        profile.setAvatarId(avatarId);
         profile.setPhone(newPhone);
         profile.setEmail(newEmail);
         profile.setAboutMe(newAboutMe);
