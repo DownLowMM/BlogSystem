@@ -4,7 +4,11 @@ import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.SmsService;
 import com.duan.common.spring.verify.Rule;
-import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
+import com.duan.common.spring.verify.ValueRule;
+import com.duan.common.spring.verify.annoation.ArgVerifyComposite;
+import com.duan.common.spring.verify.annoation.method.RequestArgValueVerify;
+import com.duan.common.spring.verify.annoation.method.RequestArgVerify;
+import com.duan.common.spring.verify.annoation.method.RequestArgsVerifyComposite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +31,13 @@ public class SMSController extends BaseCheckController {
      * 向指定号码发送短信
      */
     @PostMapping
+    @RequestArgsVerifyComposite({
+            @ArgVerifyComposite(valueVerify = @RequestArgValueVerify(param = "phone", rule = ValueRule.TEXT_LENGTH_GREATER_THAN, value = "11")),
+            @ArgVerifyComposite(valueVerify = @RequestArgValueVerify(param = "phone", rule = ValueRule.TEXT_LENGTH_NOT_GREATER_THAN, value = "15")),
+            @ArgVerifyComposite(@RequestArgVerify(param = "content", rule = Rule.NOT_BLANK))
+    })
     public ResultModel send(
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam("phone") String phone,
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam("content") String content) {
 
         return smsService.sendSmsTo(content, phone);

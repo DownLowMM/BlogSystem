@@ -3,6 +3,8 @@ package com.duan.blogos.api.util;
 import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.EmailService;
+import com.duan.common.spring.verify.Rule;
+import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +27,13 @@ public class EmailController extends BaseCheckController {
      * 发送反馈邮件
      */
     @PostMapping("/feedback")
-    public ResultModel sendFeedback(@RequestParam(value = "bloggerId", required = false) Long bloggerId,
-                                    @RequestParam("content") String content,
-                                    @RequestParam(value = "contact", required = false) String contact) {
+    public ResultModel sendFeedback(@RequestParam(required = false) Long bloggerId,
+                                    @ArgVerify(rule = Rule.NOT_BLANK)
+                                    @RequestParam String content,
+                                    @RequestParam(required = false) String contact) {
 
-//        String subject = new RequestContext(request).getMessage("common.feedbackTitle");
-        String subject = ""; // TODO
-        if (!emailService.sendFeedback(bloggerId == null ? -1 : bloggerId, subject, content, contact))
+        String subject = "feedback email";
+        if (!emailService.sendFeedback(bloggerId, subject, content, contact))
             handlerOperateFail();
 
         return ResultModel.success();
