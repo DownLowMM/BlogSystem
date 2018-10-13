@@ -72,10 +72,10 @@ public class CategoryController extends BaseController {
      */
     @PostMapping
     public ResultModel add(@Uid Long bloggerId,
-                           @RequestParam(value = "iconId", required = false) Long iconId,
+                           @RequestParam(required = false) Long iconId,
                            @ArgVerify(rule = Rule.NOT_BLANK)
                            @RequestParam String title,
-                           @RequestParam(value = "bewrite", required = false) String bewrite) {
+                           @RequestParam(required = false) String bewrite) {
 
         handlePictureExistCheck(bloggerId, iconId);
 
@@ -118,7 +118,7 @@ public class CategoryController extends BaseController {
     @DeleteMapping("/{categoryId}")
     public ResultModel delete(@Uid Long bloggerId,
                               @PathVariable Long categoryId,
-                              @RequestParam(value = "newCategoryId", required = false) Long newCategoryId) {
+                              @RequestParam(required = false) Long newCategoryId) {
 
         handleCategoryExistCheck(bloggerId, categoryId);
 

@@ -70,14 +70,14 @@ public class BlogController extends BaseController {
             @RequestParam(value = "cids", required = false) String categoryIds,
             @RequestParam(value = "lids", required = false) String labelIds,
             @ArgVerify(rule = Rule.NOT_BLANK)
-            @RequestParam("title") String title,
+            @RequestParam String title,
             @ArgVerify(rule = Rule.NOT_BLANK)
-            @RequestParam("content") String content,
+            @RequestParam String content,
             @ArgVerify(rule = Rule.NOT_BLANK)
-            @RequestParam("contentMd") String contentMd,
+            @RequestParam String contentMd,
             @ArgVerify(rule = Rule.NOT_BLANK)
-            @RequestParam("summary") String summary,
-            @RequestParam(value = "keywords", required = false) String keyWords) {
+            @RequestParam String summary,
+            @RequestParam(required = false) String keyWords) {
 
         // 将 Unicode 解码
         content = StringUtils.unicodeToString(content);

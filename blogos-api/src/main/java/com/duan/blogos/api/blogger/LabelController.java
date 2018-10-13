@@ -37,8 +37,8 @@ public class LabelController extends BaseController {
      */
     @GetMapping("/all")
     @TokenNotRequired
-    public ResultModel<PageResult<BlogLabelDTO>> get(@RequestParam(value = "pageNum", required = false) Integer pageNum,
-                                                     @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+    public ResultModel<PageResult<BlogLabelDTO>> get(@RequestParam(required = false) Integer pageNum,
+                                                     @RequestParam(required = false) Integer pageSize) {
 
         ResultModel<PageResult<BlogLabelDTO>> resultModel = bloggerLabelService.listLabel(pageNum, pageSize);
         if (resultModel == null) handlerEmptyResult();
@@ -65,8 +65,8 @@ public class LabelController extends BaseController {
     @GetMapping
     @TokenNotRequired
     public ResultModel<PageResult<BlogLabelDTO>> list(@RequestParam Long bloggerId,
-                                                      @RequestParam(value = "pageNum", required = false) Integer pageNum,
-                                                      @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+                                                      @RequestParam(required = false) Integer pageNum,
+                                                      @RequestParam(required = false) Integer pageSize) {
         handleAccountCheck(bloggerId);
 
         ResultModel<PageResult<BlogLabelDTO>> result = bloggerLabelService.listLabelByBlogger(bloggerId, pageNum, pageSize);

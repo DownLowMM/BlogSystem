@@ -138,10 +138,10 @@ public class BloggerController extends BaseController {
     @PutMapping("/account/item=name")
     public ResultModel modifyUsername(@Uid Long uid,
                                       @ArgVerify(rule = Rule.NOT_BLANK)
-                                      @RequestParam(value = "username") String newUserName) {
-        handleNameCheck(newUserName);
+                                      @RequestParam String username) {
+        handleNameCheck(username);
 
-        boolean result = accountService.updateAccountUserName(uid, newUserName);
+        boolean result = accountService.updateAccountUserName(uid, username);
         if (!result) handlerOperateFail();
 
         return ResultModel.success();

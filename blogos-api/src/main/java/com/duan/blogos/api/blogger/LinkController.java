@@ -34,8 +34,8 @@ public class LinkController extends BaseController {
     @GetMapping
     @TokenNotRequired
     public ResultModel<PageResult<BloggerLinkDTO>> get(@RequestParam Long bloggerId,
-                                                       @RequestParam(value = "pageNum", required = false) Integer pageNum,
-                                                       @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+                                                       @RequestParam(required = false) Integer pageNum,
+                                                       @RequestParam(required = false) Integer pageSize) {
 
         handleAccountCheck(bloggerId);
 
