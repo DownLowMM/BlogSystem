@@ -52,7 +52,4 @@ public class BlogDTO implements Serializable {
     //博文关键字
     private String keyWords;
 
-    //总字数
-    private Integer wordCount;
-
 }

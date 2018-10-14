@@ -71,4 +71,10 @@ public interface OperateService {
      */
     boolean deleteLike(Long likerId, Long blogId);
 
+    /**
+     * 博文浏览次数加一
+     *
+     * @param blogId 博文 id
+     */
+    void updateBlogViewCountPlus(Long blogId);
 }

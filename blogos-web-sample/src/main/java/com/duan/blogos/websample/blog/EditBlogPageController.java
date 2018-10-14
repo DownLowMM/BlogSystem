@@ -7,7 +7,7 @@ import com.duan.blogos.service.enums.BlogStatusEnum;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
-import com.duan.blogos.service.service.validate.BloggerValidateService;
+import com.duan.blogos.websample.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class EditBlogPageController {
 
     @Autowired
-    private BloggerValidateService validateService;
-
-    @Autowired
     private BloggerBlogService blogService;
 
     @Autowired
@@ -37,11 +34,11 @@ public class EditBlogPageController {
                                  @RequestParam(required = false) Long blogId) {
         ModelAndView mv = new ModelAndView();
 
-        if (bloggerId == null || !validateService.checkBloggerSignIn(bloggerId)) {
+        if (bloggerId == null || Util.getToken() == null) {
             return new ModelAndView("redirect:/login");
         } else {
             if (blogId != null) {
-                ResultModel<BlogDTO> blog = blogService.getBlog(bloggerId, blogId);
+                ResultModel<BlogDTO> blog = blogService.getBlog(blogId);
                 BlogDTO data = blog.getData();
                 mv.addObject("blogId", blogId);
                 mv.addObject("categoryId", data.getCategoryIds());

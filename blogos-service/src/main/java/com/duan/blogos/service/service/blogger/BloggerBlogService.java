@@ -90,11 +90,10 @@ public interface BloggerBlogService {
     /**
      * 获得指定博主的指定博文
      *
-     * @param bloggerId 博主id
      * @param blogId    博文id
      * @return 查询结果
      */
-    ResultModel<BlogDTO> getBlog(Long bloggerId, Long blogId);
+    ResultModel<BlogDTO> getBlog(Long blogId);
 
     /**
      * 通过博主id和博文名获得博文id

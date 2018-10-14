@@ -145,11 +145,9 @@ public class BlogController extends BaseController {
      */
     @GetMapping("/{blogId}")
     @TokenNotRequired
-    public ResultModel<BlogDTO> get(
-            @RequestParam Long bloggerId,
-            @PathVariable Long blogId) {
+    public ResultModel<BlogDTO> get(@PathVariable Long blogId) {
 
-        ResultModel<BlogDTO> blog = bloggerBlogService.getBlog(bloggerId, blogId);
+        ResultModel<BlogDTO> blog = bloggerBlogService.getBlog(blogId);
         if (blog == null) handlerEmptyResult();
 
         // 编码为 Unicode

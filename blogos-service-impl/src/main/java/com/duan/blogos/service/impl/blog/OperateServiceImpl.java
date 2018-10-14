@@ -109,5 +109,10 @@ public class OperateServiceImpl implements OperateService {
         return true;
     }
 
+    @Override
+    public void updateBlogViewCountPlus(Long blogId) {
+        statisticsDao.updateViewCountPlus(blogId);
+    }
+
 
 }

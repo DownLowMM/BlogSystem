@@ -333,10 +333,10 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
     }
 
     @Override
-    public ResultModel<BlogDTO> getBlog(Long bloggerId, Long blogId) {
+    public ResultModel<BlogDTO> getBlog(Long blogId) {
 
         Blog blog = blogDao.getBlogById(blogId);
-        if (blog != null && blog.getBloggerId().equals(bloggerId)) {
+        if (blog != null) {
 
             List<BlogCategoryRela> relas = categoryRelaDao.listAllByBlogId(blogId);
             List<BlogLabelRela> labelRelas = labelRelaDao.listAllByBlogId(blogId);

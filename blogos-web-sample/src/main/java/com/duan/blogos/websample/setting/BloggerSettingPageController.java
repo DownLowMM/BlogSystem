@@ -10,7 +10,7 @@ import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.blogger.BloggerProfileService;
 import com.duan.blogos.service.service.blogger.BloggerSettingService;
-import com.duan.blogos.service.service.validate.BloggerValidateService;
+import com.duan.blogos.websample.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,9 +36,6 @@ public class BloggerSettingPageController {
     private BloggerProfileService profileService;
 
     @Autowired
-    private BloggerValidateService validateService;
-
-    @Autowired
     private BloggerPictureService pictureService;
 
     @Autowired
@@ -52,15 +49,15 @@ public class BloggerSettingPageController {
         mv.setViewName("/blogger/setting");
 
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
-        Long bloggerId;
         if (account == null) {
             request.setAttribute("code", CodeMessage.BLOGGER_UNKNOWN_BLOGGER.getCode());
             mv.setViewName("/blogger/register");
             return mv;
-        } else if (!validateService.checkBloggerSignIn(bloggerId = account.getId())) {
+        } else if (Util.getToken() == null) {
             return new ModelAndView("redirect:/login");
         }
 
+        Long bloggerId = Util.getUid();
         BloggerProfileDTO profile = profileService.getBloggerProfile(bloggerId);
         if (profile.getAvatarId() == null) {
             BloggerPictureDTO picture = pictureService.getDefaultPicture(BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR);
