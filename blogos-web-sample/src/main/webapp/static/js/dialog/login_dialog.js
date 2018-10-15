@@ -167,26 +167,6 @@ function sendPhoneCode() {
         }
     });
 
-    // $.post(
-    //     '/sms',
-    //     {
-    //         phone: phone,
-    //         content: '【BLOG】 你的验证码是: ' + phoneCode + ' ,此验证码用于登录 BLOG，10分钟内有效。'
-    //     },
-    //     function (result) {
-    //         if (result.code === 0) {
-    //             countDown(60, 1000, function (c) {
-    //                 if (c === 0) {
-    //                     return true;
-    //                 } else {
-    //                     disableButton(false, 'sendPhoneCodeBtn', c + ' 秒后重新发送', "button-info-disable");
-    //                     return false;
-    //                 }
-    //             });
-    //         } else {
-    //             errorInfoWhenLogin('验证码无法发送');
-    //         }
-    //     }, 'json');
 }
 
 // 短信验证码
