@@ -3,7 +3,7 @@ package com.duan.blogos.service.manager;
 import com.duan.blogos.service.config.preference.FileProperties;
 import com.duan.blogos.service.entity.blog.Blog;
 import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ExceptionUtil;
+import com.duan.blogos.service.util.ExceptionUtil;
 import com.duan.common.util.StringUtils;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;

@@ -9,13 +9,10 @@ import com.duan.blogos.service.entity.BlogCategoryRela;
 import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.*;
 import com.duan.blogos.service.entity.blogger.*;
-import com.duan.blogos.service.vo.FileVO;
 import com.duan.common.util.ArrayUtils;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -435,18 +432,6 @@ public class DataConverter {
             return dto;
         }
 
-    }
-
-    public static class VO {
-
-        public static FileVO multipartFile2VO(MultipartFile file) throws IOException {
-            FileVO vo = new FileVO();
-            vo.setContentType(file.getContentType());
-            vo.setInputStream(file.getInputStream());
-            vo.setOriginalFilename(file.getOriginalFilename());
-
-            return vo;
-        }
     }
 
 }

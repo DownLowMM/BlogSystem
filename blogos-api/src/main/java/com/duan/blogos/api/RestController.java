@@ -1,9 +1,9 @@
 package com.duan.blogos.api;
 
 import com.duan.blogos.service.exception.BlogOSException;
-import com.duan.blogos.service.exception.CodeMessage;
-import com.duan.blogos.service.exception.ExceptionUtil;
 import com.duan.blogos.service.restful.ResultModel;
+import com.duan.blogos.util.CodeMessage;
+import com.duan.blogos.util.ExceptionUtil;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

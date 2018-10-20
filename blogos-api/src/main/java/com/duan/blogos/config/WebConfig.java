@@ -1,9 +1,9 @@
 package com.duan.blogos.config;
 
-import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.restful.ResultModel;
+import com.duan.blogos.util.CodeMessage;
 import com.duan.common.spring.verify.ServletInvocableHandlerMethodArgumentVerify;
-import org.springframework.boot.autoconfigure.web.WebMvcRegistrationsAdapter;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHan
  * @author DuanJiaNing
  */
 @Configuration
-public class WebConfig extends WebMvcRegistrationsAdapter {
+public class WebConfig implements WebMvcRegistrations {
 
     @Override
     public RequestMappingHandlerAdapter getRequestMappingHandlerAdapter() {
