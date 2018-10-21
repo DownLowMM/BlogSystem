@@ -1,5 +1,6 @@
 package com.duan.blogos.api.util;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.SmsService;
@@ -9,7 +10,6 @@ import com.duan.common.spring.verify.annoation.ArgVerifyComposite;
 import com.duan.common.spring.verify.annoation.method.RequestArgValueVerify;
 import com.duan.common.spring.verify.annoation.method.RequestArgVerify;
 import com.duan.common.spring.verify.annoation.method.RequestArgsVerifyComposite;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sms")
 public class SMSController extends BaseCheckController {
 
-    @Autowired
+    @Reference
     private SmsService smsService;
 
     /**

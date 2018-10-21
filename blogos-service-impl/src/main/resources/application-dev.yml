@@ -42,6 +42,15 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
+  dubbo:
+    application:
+      name: blogos-service-impl
+    registry:
+      address: 127.0.0.1:2181
+    protocol:
+      name: dubbo
+      port: 20880
+    scan: com.duan.blogos.service.impl
 
 server:
   port: 9090

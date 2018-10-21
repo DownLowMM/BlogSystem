@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blog.BlogCollectDao;
 import com.duan.blogos.service.dao.blog.BlogDao;
@@ -26,7 +27,6 @@ import com.duan.blogos.service.util.ExceptionUtil;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;

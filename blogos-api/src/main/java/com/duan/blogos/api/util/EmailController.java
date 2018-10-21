@@ -1,11 +1,11 @@
 package com.duan.blogos.api.util;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.api.BaseCheckController;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.EmailService;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/email")
 public class EmailController extends BaseCheckController {
 
-    @Autowired
+    @Reference
     private EmailService emailService;
 
     /**

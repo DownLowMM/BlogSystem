@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.common.BlogSortRule;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.dao.blog.BlogLikeDao;
@@ -14,7 +15,6 @@ import com.duan.common.util.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;

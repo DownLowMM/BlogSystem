@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blogger;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
@@ -12,7 +13,6 @@ import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,10 +25,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/blogger")
 public class BloggerController extends BaseController {
 
-    @Autowired
+    @Reference
     private BloggerAccountService accountService;
 
-    @Autowired
+    @Reference
     private OnlineService onlineService;
 
     @PostMapping("/login/way=name")

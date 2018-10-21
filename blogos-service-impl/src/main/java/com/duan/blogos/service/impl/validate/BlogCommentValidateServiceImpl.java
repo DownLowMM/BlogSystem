@@ -1,8 +1,7 @@
 package com.duan.blogos.service.impl.validate;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.service.validate.BlogCommentValidateService;
-import org.springframework.stereotype.Service;
-
 /**
  * Created on 2018/9/13.
  *

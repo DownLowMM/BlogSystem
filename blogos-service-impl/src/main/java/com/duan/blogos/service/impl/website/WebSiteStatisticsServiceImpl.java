@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.website;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dto.blogger.BloggerBriefDTO;
 import com.duan.blogos.service.dto.blogger.BloggerDTO;
@@ -11,7 +12,6 @@ import com.duan.blogos.service.service.website.WebSiteStatisticsService;
 import com.duan.blogos.service.util.DataConverter;
 import com.duan.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;

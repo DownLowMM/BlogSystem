@@ -1,12 +1,12 @@
 package com.duan.blogos.api.blog;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blog.OperateService;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/blog/{blogId}")
 public class OperateController extends BaseController {
 
-    @Autowired
+    @Reference
     private OperateService operateService;
 
     /**

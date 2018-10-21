@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.blogger;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.config.preference.FileProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.BlogCategoryRelaDao;
@@ -33,7 +34,6 @@ import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.*;

@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blogger;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.restful.ResultModel;
@@ -9,7 +10,6 @@ import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import static com.duan.blogos.service.enums.BlogCommentStatusEnum.RIGHTFUL;
@@ -23,10 +23,10 @@ import static com.duan.blogos.service.enums.BlogCommentStatusEnum.RIGHTFUL;
 @RequestMapping("/blogger/comment")
 public class CommentController extends BaseController {
 
-    @Autowired
+    @Reference
     private BlogCommentValidateService commentValidateService;
 
-    @Autowired
+    @Reference
     private BloggerCommentService commentService;
 
     /**

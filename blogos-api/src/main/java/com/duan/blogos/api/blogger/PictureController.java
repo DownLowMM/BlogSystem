@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blogger;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
@@ -11,7 +12,6 @@ import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -25,10 +25,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/blogger/picture")
 public class PictureController extends BaseController {
 
-    @Autowired
+    @Reference
     private BloggerPictureService bloggerPictureService;
 
-    @Autowired
+    @Reference
     private BloggerValidateService validateService;
 
     /**

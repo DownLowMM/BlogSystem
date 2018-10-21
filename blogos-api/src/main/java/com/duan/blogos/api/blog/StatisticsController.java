@@ -1,12 +1,12 @@
 package com.duan.blogos.api.blog;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blog.StatisticsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/blog/{blogId}/statistics")
 public class StatisticsController extends BaseController {
 
-    @Autowired
+    @Reference
     private StatisticsService statisticsService;
 
     /**

@@ -1,5 +1,6 @@
 package com.duan.blogos.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
@@ -9,7 +10,6 @@ import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created on 2018/2/4.
@@ -18,10 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class BaseCheckController extends RestController {
 
-    @Autowired
+    @Reference
     protected BlogValidateService blogValidateService;
 
-    @Autowired
+    @Reference
     protected BloggerValidateService bloggerValidateService;
 
     /**

@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.validate;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.dao.blog.BlogCategoryDao;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
@@ -10,7 +11,6 @@ import com.duan.blogos.service.enums.BloggerSettingEnums;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * Created on 2018/9/13.

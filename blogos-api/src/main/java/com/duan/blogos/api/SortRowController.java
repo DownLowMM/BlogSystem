@@ -1,9 +1,9 @@
 package com.duan.blogos.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blog.BlogSortRuleDTO;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogSortRuleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/sort-rule")
 public class SortRowController extends BaseCheckController {
 
-    @Autowired
+    @Reference
     private BlogSortRuleService sortRuleService;
 
     /**

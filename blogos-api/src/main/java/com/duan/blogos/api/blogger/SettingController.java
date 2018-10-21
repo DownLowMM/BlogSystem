@@ -1,10 +1,10 @@
 package com.duan.blogos.api.blogger;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerSettingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/blogger/setting")
 public class SettingController extends BaseController {
 
-    @Autowired
+    @Reference
     private BloggerSettingService settingService;
 
     /**

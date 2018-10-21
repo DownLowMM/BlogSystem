@@ -6,11 +6,11 @@ app:
 
 # 直接依赖 blog-service-impl 项目，而不是 rpc 的方式，因此需要将配置移到这里
 spring:
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    serialization:
-      write_dates_as_timestamps: false
-    default-property-inclusion: NON_NULL
+  #  jackson:
+  #    date-format: yyyy-MM-dd HH:mm:ss
+  #    serialization:
+  #      write_dates_as_timestamps: false
+  #    default-property-inclusion: NON_NULL
   http:
     multipart:
       max-file-size: 50Mb
@@ -49,6 +49,12 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
+  dubbo:
+    application:
+      name: blogos-api
+    registry:
+      address: 127.0.0.1:2181
+    scan: com.duan.blogos.service.service
 
 mybatis:
   mapperLocations: classpath:mapper/*/*.xml

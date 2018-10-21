@@ -1,11 +1,11 @@
 package com.duan.blogos.service.impl.common;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.common.Order;
 import com.duan.blogos.service.common.Rule;
 import com.duan.blogos.service.dto.blog.BlogSortRuleDTO;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.common.BlogSortRuleService;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;

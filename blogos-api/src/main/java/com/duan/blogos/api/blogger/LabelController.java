@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blogger;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
@@ -9,7 +10,6 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
 import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/label")
 public class LabelController extends BaseController {
 
-    @Autowired
+    @Reference
     private BloggerLabelService bloggerLabelService;
 
     /**

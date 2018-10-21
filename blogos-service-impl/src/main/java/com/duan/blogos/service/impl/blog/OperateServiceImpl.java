@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.blog;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.dao.blog.BlogCollectDao;
 import com.duan.blogos.service.dao.blog.BlogComplainDao;
 import com.duan.blogos.service.dao.blog.BlogLikeDao;
@@ -10,7 +11,6 @@ import com.duan.blogos.service.entity.blog.BlogLike;
 import com.duan.blogos.service.service.blog.OperateService;
 import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * Created on 2017/12/26.

@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blog;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
@@ -22,7 +23,6 @@ import com.duan.common.spring.verify.Rule;
 import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import com.duan.common.util.CollectionUtils;
 import com.duan.common.util.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,10 +55,10 @@ import static com.duan.blogos.service.common.Rule.VIEW_COUNT;
 @RequestMapping("/blog")
 public class BlogController extends BaseController {
 
-    @Autowired
+    @Reference
     private BloggerBlogService bloggerBlogService;
 
-    @Autowired
+    @Reference
     private BlogFilterService blogFilterService;
 
     /**

@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.common;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSONObject;
 import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.restful.ResultModel;
@@ -10,7 +11,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

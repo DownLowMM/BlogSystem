@@ -1,5 +1,6 @@
 package com.duan.blogos.api.file;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseCheckController;
@@ -13,7 +14,6 @@ import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.DataConverter;
 import com.duan.blogos.util.ExceptionUtil;
 import com.duan.blogos.util.ImageUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,10 +42,10 @@ import java.io.IOException;
 @RequestMapping("/image")
 public class ImageController extends BaseCheckController {
 
-    @Autowired
+    @Reference
     private BloggerPictureService bloggerPictureService;
 
-    @Autowired
+    @Reference
     private BloggerValidateService validateService;
 
     /**

@@ -1,5 +1,6 @@
 package com.duan.blogos.api.blogger.favorite;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.common.BlogSortRule;
@@ -11,7 +12,6 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLikeBlogService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/blogger/like")
 public class LikeBlogController extends BaseController {
 
-    @Autowired
+    @Reference
     private BloggerLikeBlogService likeBlogService;
 
     /**

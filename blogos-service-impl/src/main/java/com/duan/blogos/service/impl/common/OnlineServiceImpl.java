@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl.common;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
 import com.duan.blogos.service.entity.blogger.BloggerAccount;
 import com.duan.blogos.service.exception.CodeMessage;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -39,7 +39,7 @@ public class OnlineServiceImpl implements OnlineService {
     @Value("${redis.key.expire}")
     private long expireTime;
 
-    @Value("${redis.key.token.expire-day}")
+    @Value("${redis.token.expire-day}")
     private int tokenExpireDay;
 
     @Autowired
