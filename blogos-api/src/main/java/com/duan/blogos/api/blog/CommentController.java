@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/blog/{blogId}/comment")
 public class CommentController extends BaseCheckController {
 
-    @Reference
+    @Reference(url = "dubbo://127.0.0.1:20880")
     private CommentService commentService;
 
     /**

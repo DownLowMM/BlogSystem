@@ -43,13 +43,14 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
   dubbo:
+    server: true
     application:
       name: blogos-service-impl
     registry:
-      address: 127.0.0.1:2181
-    protocol:
-      name: dubbo
-      port: 20880
+      address: zookeeper://127.0.0.1:2181
+    #    protocol:
+    #      name: dubbo
+    #      port: 20880
     scan: com.duan.blogos.service.impl
 
 server:

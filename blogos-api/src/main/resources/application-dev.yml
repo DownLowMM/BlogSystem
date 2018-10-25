@@ -53,8 +53,8 @@ spring:
     application:
       name: blogos-api
     registry:
-      address: 127.0.0.1:2181
-    scan: com.duan.blogos.service.service
+      address: zookeeper://127.0.0.1:2181
+    scan: com.duan.blogos.api
 
 mybatis:
   mapperLocations: classpath:mapper/*/*.xml

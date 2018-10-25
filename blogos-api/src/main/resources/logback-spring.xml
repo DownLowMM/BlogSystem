@@ -1,23 +1,66 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<configuration debug="true">
-    <!-- 控制台日志 -->
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%5level] %logger{36} [%file:%line] - %msg%n</Pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-    </appender>
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/blogos-api.log.%d{yyyy-MM-dd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-        <encoder>
-            <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%5level] %logger{36} [%file:%line] - %msg%n</Pattern>
-        </encoder>
-    </appender>
-    <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </root>
+<?xml version="1.0"?>
+<configuration>
+
+    <property name="CONSOLE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}] [%5level] %logger{36} [%file:%line] - %msg%n"/>
+    <property name="FILE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}] [%5level] %logger{36} [%file:%line] - %msg%n"/>
+
+    <!-- 指定环境的日志 -->
+    <springProfile name="dev">
+
+        <property name="CONSOLE_LOG_COLOR_PATTERN"
+                  value="[%d{yyyy-MM-dd HH:mm:ss}] [%highlight(%5level)] %cyan(%logger{36}) [%file:%line] - %msg%n"/>
+
+        <property name="FILE_NAME_PATTERN" value="./logs/rh-admin.log.%d{yyyy-MM-dd}"/>
+
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>${CONSOLE_LOG_COLOR_PATTERN}</Pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${FILE_NAME_PATTERN}</fileNamePattern>
+                <maxHistory>30</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <Pattern>${FILE_LOG_PATTERN}</Pattern>
+            </encoder>
+        </appender>
+
+        <root level="info">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+
+        <property name="FILE_NAME_PATTERN" value="./logs/context.log.%d{yyyy-MM-dd}"/>
+
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${FILE_NAME_PATTERN}</fileNamePattern>
+                <maxHistory>30</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <Pattern>${FILE_LOG_PATTERN}</Pattern>
+            </encoder>
+        </appender>
+
+        <root level="error">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
 </configuration>
