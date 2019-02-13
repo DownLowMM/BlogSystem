@@ -49,12 +49,17 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
-  dubbo:
-    application:
-      name: blogos-api
-    registry:
-      address: zookeeper://127.0.0.1:2181
-    scan: com.duan.blogos.api
+
+dubbo:
+  service:
+    version: 1.0.0
+  application:
+    id: blogos-api
+    name: blogos-api
+  protocol:
+    id: dubbo-blogos
+    name: dubbo-blogos
+    port: 20880
 
 mybatis:
   mapperLocations: classpath:mapper/*/*.xml

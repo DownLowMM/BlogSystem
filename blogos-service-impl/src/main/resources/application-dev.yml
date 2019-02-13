@@ -42,16 +42,24 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
-  dubbo:
-    server: true
-    application:
-      name: blogos-service-impl
-    registry:
-      address: zookeeper://127.0.0.1:2181
-    #    protocol:
-    #      name: dubbo
-    #      port: 20880
-    scan: com.duan.blogos.service.impl
+
+# Base packages to scan Dubbo Components (e.g @Service , @Reference)
+dubbo:
+  service:
+    version: 1.0.0
+  scan:
+    base-packages: com.duan.blogos.service.impl
+  application:
+    id: blogos-service-dubbo
+    name: blogos-service-dubbo
+  protocol:
+    id: dubbo-blogos
+    name: dubbo-blogos
+    port: 20880
+    status: server
+  registry:
+    address: N/A
+    id: dubbo-redistry-blogos
 
 server:
   port: 9090
