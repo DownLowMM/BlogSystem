@@ -36,12 +36,7 @@ import static com.duan.blogos.service.enums.BloggerPictureCategoryEnum.DEFAULT_B
  *
  * @author DuanJiaNing
  */
-@Service(
-        version = "${dubbo.service.version}",
-        application = "${dubbo.application.id}",
-        protocol = "${dubbo.protocol.id}",
-        registry = "${dubbo.registry.id}"
-)
+@Service
 public class CommentServiceImpl implements CommentService {
 
     @Autowired

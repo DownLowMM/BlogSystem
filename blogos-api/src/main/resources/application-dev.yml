@@ -51,15 +51,12 @@ spring:
     maxOpenPreparedStatements: 20
 
 dubbo:
-  service:
-    version: 1.0.0
   application:
-    id: blogos-api
     name: blogos-api
-  protocol:
-    id: dubbo-blogos
-    name: dubbo-blogos
-    port: 20880
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  consumer:
+    timeout: 3000
 
 mybatis:
   mapperLocations: classpath:mapper/*/*.xml

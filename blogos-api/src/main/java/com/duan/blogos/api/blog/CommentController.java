@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/blog/{blogId}/comment")
 public class CommentController extends BaseCheckController {
 
-    @Reference(version = "${dubbo.service.version}",
-            application = "${dubbo.application.id}",
-            url = "dubbo-blogos://localhost:20880")
+    @Reference
     private CommentService commentService;
 
     /**
