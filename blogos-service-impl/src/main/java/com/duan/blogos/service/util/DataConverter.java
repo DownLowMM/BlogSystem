@@ -9,13 +9,12 @@ import com.duan.blogos.service.entity.BlogCategoryRela;
 import com.duan.blogos.service.entity.BlogLabelRela;
 import com.duan.blogos.service.entity.blog.*;
 import com.duan.blogos.service.entity.blogger.*;
-import com.duan.common.util.ArrayUtils;
-import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 /**
  * Created on 2018/10/1.
@@ -272,7 +271,7 @@ public class DataConverter {
             dto.setCollects(collects);
             dto.setCommenter(commenter);
             dto.setId(statistics.getId());
-            dto.setKeyWords(StringUtils.stringArrayToArray(blog.getKeyWords(), splitChar));
+            dto.setKeyWords(Util.stringArrayToArray(blog.getKeyWords(), splitChar));
             dto.setLabels(blogLabel2DTO(labels));
             dto.setLikes(likes);
             dto.setNearestModifyDate(blog.getNearestModifyDate());
@@ -333,7 +332,7 @@ public class DataConverter {
         }
 
         public static BlogCategoryDTO[] blogCategory2DTO(BlogCategory[] categories) {
-            if (ArrayUtils.isEmpty(categories)) {
+            if (Util.isArrayEmpty(categories)) {
                 return null;
             }
 
@@ -346,7 +345,7 @@ public class DataConverter {
         }
 
         public static BlogLabelDTO[] blogLabel2DTO(BlogLabel[] labels) {
-            if (ArrayUtils.isEmpty(labels)) {
+            if (Util.isArrayEmpty(labels)) {
                 return null;
             }
 

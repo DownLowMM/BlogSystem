@@ -13,7 +13,6 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCollectBlogService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
-import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -64,7 +63,6 @@ public class CollectBlogController extends BaseController {
     @PutMapping("/{blogId}")
     public ResultModel update(@PathVariable("blogId") Long blogId,
                               @Uid Long bloggerId,
-                              @ArgVerify(rule = com.duan.common.spring.verify.Rule.NOT_BLANK)
                               @RequestParam String reason) {
 
         boolean result = bloggerCollectBlogService.updateCollect(bloggerId, blogId, reason, null);

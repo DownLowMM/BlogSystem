@@ -8,8 +8,6 @@ import com.duan.blogos.service.service.blogger.BloggerCommentService;
 import com.duan.blogos.service.service.validate.BlogCommentValidateService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
-import com.duan.common.spring.verify.Rule;
-import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.web.bind.annotation.*;
 
 import static com.duan.blogos.service.enums.BlogCommentStatusEnum.RIGHTFUL;
@@ -35,7 +33,6 @@ public class CommentController extends BaseController {
     @PostMapping
     public ResultModel add(@Uid Long bloggerId,
                            @RequestParam("blogId") Long blogId,
-                           @ArgVerify(rule = Rule.NOT_BLANK)
                            @RequestParam("content") String content,
                            @RequestParam("listenerId") Long listenerId) {
         handleBlogExistCheck(blogId);

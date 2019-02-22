@@ -1,17 +1,16 @@
 package com.duan.blogos.websample.blog;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blog.OperateService;
 import com.duan.blogos.service.service.blog.StatisticsService;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.OnlineService;
 import com.duan.blogos.websample.Util;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,28 +27,28 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/{bloggerName}/blog/{blogName}")
 public class BlogReadPageController {
 
-    @Autowired
+    @Reference
     private BloggerAccountService accountService;
 
-    @Autowired
+    @Reference
     private BloggerBlogService blogService;
 
-    @Autowired
+    @Reference
     private BloggerStatisticsService bloggerStatisticsService;
 
-    @Autowired
+    @Reference
     private OnlineService onlineService;
 
-    @Autowired
+    @Reference
     private OperateService operateService;
 
-    @Autowired
+    @Reference
     private StatisticsService statisticsService;
 
-    @Autowired
+    @Reference
     private BloggerLikeBlogService likeService;
 
-    @Autowired
+    @Reference
     private BloggerCollectBlogService collectBlogService;
 
     @RequestMapping
@@ -62,7 +61,7 @@ public class BlogReadPageController {
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
 
         if (account == null) {
-            request.setAttribute("code", CodeMessage.BLOGGER_UNKNOWN_BLOGGER.getCode());
+            request.setAttribute("code", 500);
             mv.setViewName("/blogger/register");
             return mv;
         }

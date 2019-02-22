@@ -23,9 +23,9 @@ import com.duan.blogos.service.entity.blogger.BloggerPicture;
 import com.duan.blogos.service.entity.blogger.BloggerProfile;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.util.DataConverter;
-import com.duan.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.Timestamp;
 import java.util.List;

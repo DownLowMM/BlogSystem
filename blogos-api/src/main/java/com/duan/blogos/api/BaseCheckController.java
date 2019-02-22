@@ -8,8 +8,8 @@ import com.duan.blogos.service.service.validate.BlogValidateService;
 import com.duan.blogos.service.service.validate.BloggerValidateService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
-import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.StringUtils;
+import com.duan.blogos.util.StringUtils;
+import com.duan.blogos.util.Util;
 
 /**
  * Created on 2018/2/4.
@@ -66,14 +66,14 @@ public class BaseCheckController extends RestController {
             return;
         }
 
-        if (!CollectionUtils.isEmpty(cids)) {
+        if (!Util.isArrayEmpty(cids)) {
             for (Long id : cids) {
                 if (!bloggerValidateService.checkBloggerBlogCategoryExist(bloggerId, id))
                     throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
             }
         }
 
-        if (!CollectionUtils.isEmpty(lids)) {
+        if (!Util.isArrayEmpty(lids)) {
             for (Long id : lids) {
                 if (!blogValidateService.checkLabelsExist(id))
                     throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);

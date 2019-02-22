@@ -19,13 +19,14 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilterService;
 import com.duan.blogos.service.util.ExceptionUtil;
 import com.duan.blogos.service.util.ResultModelUtil;
-import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.StringUtils;
+import com.duan.blogos.service.util.Util;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -106,7 +107,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
             throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
         //关键字为首要条件
-        if (CollectionUtils.isEmpty(ids)) return null;
+        if (Util.isArrayEmpty(ids)) return null;
 
         Set<Long> blogIds = filterByCategoryAndLabels(categoryIds, labelIds, bloggerId);
         blogIds.addAll(Arrays.asList(ids));

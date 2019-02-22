@@ -16,13 +16,8 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.BlogFilterService;
 import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.vo.FileVO;
-import com.duan.blogos.util.CodeMessage;
-import com.duan.blogos.util.DataConverter;
-import com.duan.blogos.util.ExceptionUtil;
-import com.duan.common.spring.verify.Rule;
-import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
-import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.StringUtils;
+import com.duan.blogos.util.*;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,13 +64,9 @@ public class BlogController extends BaseController {
             @Uid Long bloggerId,
             @RequestParam(value = "cids", required = false) String categoryIds,
             @RequestParam(value = "lids", required = false) String labelIds,
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam String title,
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam String content,
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam String contentMd,
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam String summary,
             @RequestParam(required = false) String keyWords) {
 
@@ -233,7 +224,7 @@ public class BlogController extends BaseController {
             @RequestParam String ids) {
 
         Long[] blogIds = StringUtils.longStringDistinctToArray(ids, ",");
-        if (CollectionUtils.isEmpty(blogIds))
+        if (Util.isArrayEmpty(blogIds))
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         for (Long id : blogIds) {

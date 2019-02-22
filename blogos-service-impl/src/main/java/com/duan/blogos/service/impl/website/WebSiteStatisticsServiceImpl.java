@@ -10,8 +10,8 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.service.website.WebSiteStatisticsService;
 import com.duan.blogos.service.util.DataConverter;
-import com.duan.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;

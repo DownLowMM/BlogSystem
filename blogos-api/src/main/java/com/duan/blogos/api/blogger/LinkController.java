@@ -10,9 +10,7 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLinkService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
-import com.duan.common.spring.verify.Rule;
-import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
-import com.duan.common.util.StringUtils;
+import com.duan.blogos.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -51,9 +49,7 @@ public class LinkController extends BaseController {
     @PostMapping
     public ResultModel add(@Uid Long bloggerId,
                            @RequestParam(required = false) Long iconId,
-                           @ArgVerify(rule = Rule.NOT_BLANK)
                            @RequestParam String title,
-                           @ArgVerify(rule = Rule.NOT_BLANK)
                            @RequestParam String url,
                            @RequestParam(required = false) String bewrite) {
         handlePictureExistCheck(bloggerId, iconId);

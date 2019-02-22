@@ -11,8 +11,6 @@ import com.duan.blogos.service.service.common.OnlineService;
 import com.duan.blogos.service.vo.LoginVO;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
-import com.duan.common.spring.verify.Rule;
-import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -33,9 +31,7 @@ public class BloggerController extends BaseController {
 
     @PostMapping("/login/way=name")
     @TokenNotRequired
-    public ResultModel loginWithUserName(@ArgVerify(rule = Rule.NOT_BLANK)
-                                         @RequestParam String username,
-                                         @ArgVerify(rule = Rule.NOT_BLANK)
+    public ResultModel loginWithUserName(@RequestParam String username,
                                          @RequestParam String password) {
         LoginVO vo = new LoginVO();
         vo.setUsername(username);
@@ -78,9 +74,7 @@ public class BloggerController extends BaseController {
     @PostMapping("/register")
     @TokenNotRequired
     public ResultModel register(
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam String username,
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam String password) {
 
         handleNameCheck(username);
@@ -100,7 +94,6 @@ public class BloggerController extends BaseController {
     @GetMapping("/account/check=username")
     @TokenNotRequired
     public ResultModel checkUsernameUsed(
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam String username) {
         handleNameCheck(username);
 
@@ -119,7 +112,6 @@ public class BloggerController extends BaseController {
     @GetMapping("/account/check=phone")
     @TokenNotRequired
     public ResultModel checkProfileExist(
-            @ArgVerify(rule = Rule.NOT_BLANK)
             @RequestParam String phone) {
 
         BloggerAccountDTO account = accountService.getAccountByPhone(phone);
@@ -137,7 +129,6 @@ public class BloggerController extends BaseController {
      */
     @PutMapping("/account/item=name")
     public ResultModel modifyUsername(@Uid Long uid,
-                                      @ArgVerify(rule = Rule.NOT_BLANK)
                                       @RequestParam String username) {
         handleNameCheck(username);
 
@@ -152,9 +143,7 @@ public class BloggerController extends BaseController {
      */
     @PutMapping("/account/item=pwd")
     public ResultModel modifyPassword(@Uid Long uid,
-                                      @ArgVerify(rule = Rule.NOT_BLANK)
                                       @RequestParam(value = "old") String oldPassword,
-                                      @ArgVerify(rule = Rule.NOT_BLANK)
                                       @RequestParam(value = "new") String newPassword) {
 
         if (!bloggerValidateService.checkPassword(newPassword)) {

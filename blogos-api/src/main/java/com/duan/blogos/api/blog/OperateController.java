@@ -5,8 +5,6 @@ import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blog.OperateService;
-import com.duan.common.spring.verify.Rule;
-import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -72,7 +70,6 @@ public class OperateController extends BaseController {
     @PostMapping("/operate=complain")
     public ResultModel complainBlog(@PathVariable Long blogId,
                                     @Uid Long bloggerId,
-                                    @ArgVerify(rule = Rule.NOT_BLANK)
                                     @RequestParam("content") String content) {
         handleBlogExistCheck(blogId);
 

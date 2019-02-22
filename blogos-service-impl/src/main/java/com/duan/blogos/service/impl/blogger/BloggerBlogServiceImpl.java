@@ -25,15 +25,14 @@ import com.duan.blogos.service.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.util.ExceptionUtil;
+import com.duan.blogos.service.util.FileUtils;
+import com.duan.blogos.service.util.Util;
 import com.duan.blogos.service.vo.FileVO;
-import com.duan.common.util.ArrayUtils;
-import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.FileUtils;
-import com.duan.common.util.StringUtils;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.*;
@@ -107,7 +106,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
         blog.setContent(content);
         blog.setContentMd(contentMd);
         blog.setSummary(summary);
-        blog.setKeyWords(StringUtils.arrayToString(keyWords, websiteProperties.getConditionSplitCharacter()));
+        blog.setKeyWords(Util.arrayToString(keyWords, websiteProperties.getConditionSplitCharacter()));
 
         int effect = blogDao.insert(blog);
         if (effect <= 0) return null;
@@ -128,7 +127,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
             // 3 解析本地图片引用并使自增
             Long[] imids = parseContentForImageIds(content, bloggerId);
             // UPDATE: 2018/1/19 更新 自增并没有实际作用
-            if (!CollectionUtils.isEmpty(imids)) {
+            if (!Util.isArrayEmpty(imids)) {
                 // 修改图片可见性，引用次数
                 Arrays.stream(imids).forEach(id -> imageManager.imageInsertHandle(bloggerId, id));
             }
@@ -147,7 +146,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
 
     private void insertCategoryAndLabels(Long blogId, Long[] categories, Long[] labels) {
         // 标签和类别
-        if (!ArrayUtils.isEmpty(categories)) {
+        if (!Util.isArrayEmpty(categories)) {
             List<BlogCategoryRela> relas = new ArrayList<>();
             for (Long ca : categories) {
                 BlogCategoryRela rela = new BlogCategoryRela();
@@ -159,7 +158,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
             categoryRelaDao.insertBatch(relas);
         }
 
-        if (!ArrayUtils.isEmpty(labels)) {
+        if (!Util.isArrayEmpty(labels)) {
             List<BlogLabelRela> relas = new ArrayList<>();
             for (Long ca : labels) {
                 BlogLabelRela rela = new BlogLabelRela();
@@ -258,18 +257,18 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
         }
         if (newSummary != null) blog.setSummary(newSummary);
         if (newContentMd != null) blog.setContentMd(newContentMd);
-        if (newKeyWords != null) blog.setKeyWords(StringUtils.arrayToString(newKeyWords,
+        if (newKeyWords != null) blog.setKeyWords(Util.arrayToString(newKeyWords,
                 websiteProperties.getConditionSplitCharacter()));
         int effect = blogDao.update(blog);
         if (effect <= 0)
             throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, new SQLException());
 
-        if (ArrayUtils.isEmpty(newCategories)) {
+        if (Util.isArrayEmpty(newCategories)) {
             categoryRelaDao.deleteByBlogId(blogId);
             insertCategoryAndLabels(blogId, newCategories, null);
         }
 
-        if (ArrayUtils.isEmpty(newLabels)) {
+        if (Util.isArrayEmpty(newLabels)) {
             labelRelaDao.deleteByBlogId(blogId);
             insertCategoryAndLabels(blogId, null, newLabels);
         }
@@ -307,7 +306,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
 
         // 3 图片引用useCount--
         Long[] ids = parseContentForImageIds(blog.getContent(), bloggerId);
-        if (!CollectionUtils.isEmpty(ids))
+        if (!Util.isArrayEmpty(ids))
             Arrays.stream(ids).forEach(pictureDao::updateUseCountMinus);
 
         // 4 删除lucene索引

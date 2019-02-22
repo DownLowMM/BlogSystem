@@ -1,17 +1,16 @@
 package com.duan.blogos.websample.setting;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.dto.blogger.BloggerSettingDTO;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.blogger.BloggerProfileService;
 import com.duan.blogos.service.service.blogger.BloggerSettingService;
 import com.duan.blogos.websample.Util;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,16 +28,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/{bloggerName}/setting")
 public class BloggerSettingPageController {
 
-    @Autowired
+    @Reference
     private BloggerAccountService accountService;
 
-    @Autowired
+    @Reference
     private BloggerProfileService profileService;
 
-    @Autowired
+    @Reference
     private BloggerPictureService pictureService;
 
-    @Autowired
+    @Reference
     private BloggerSettingService settingService;
 
     @RequestMapping
@@ -50,7 +49,7 @@ public class BloggerSettingPageController {
 
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
         if (account == null) {
-            request.setAttribute("code", CodeMessage.BLOGGER_UNKNOWN_BLOGGER.getCode());
+            request.setAttribute("code", 500);
             mv.setViewName("/blogger/register");
             return mv;
         } else if (Util.getToken() == null) {

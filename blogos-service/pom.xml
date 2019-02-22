@@ -25,12 +25,6 @@
             <version>1.16.6</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.duan.common</groupId>
-            <artifactId>common-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <build>

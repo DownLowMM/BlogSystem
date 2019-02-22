@@ -9,8 +9,8 @@ import com.duan.blogos.service.service.common.OnlineService;
 import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.util.ExceptionUtil;
 import com.duan.blogos.service.util.TokenUtil;
+import com.duan.blogos.service.util.Util;
 import com.duan.blogos.service.vo.LoginVO;
-import com.duan.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -68,7 +68,7 @@ public class OnlineServiceImpl implements OnlineService {
 
         // 密码错误
         try {
-            if (!acc.getPassword().equals(new BigInteger(StringUtils.toSha(vo.getPassword())).toString())) {
+            if (!acc.getPassword().equals(new BigInteger(Util.toSha(vo.getPassword())).toString())) {
                 throw ExceptionUtil.get(CodeMessage.BLOGGER_PASSWORD_INCORRECT);
             }
         } catch (NoSuchAlgorithmException e) {

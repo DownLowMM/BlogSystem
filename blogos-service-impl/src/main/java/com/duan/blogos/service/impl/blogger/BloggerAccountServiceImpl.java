@@ -24,9 +24,9 @@ import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.util.DataConverter;
 import com.duan.blogos.service.util.ExceptionUtil;
-import com.duan.common.util.CollectionUtils;
-import com.duan.common.util.StringUtils;
+import com.duan.blogos.service.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -79,7 +79,7 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
         String shaPwd;
         try {
             //将密码通过sha的方式保存
-            shaPwd = new BigInteger(StringUtils.toSha(password)).toString();
+            shaPwd = new BigInteger(Util.toSha(password)).toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
@@ -163,8 +163,8 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
         String newSha;
 
         try {
-            oldSha = new BigInteger(StringUtils.toSha(oldPassword)).toString();
-            newSha = new BigInteger(StringUtils.toSha(newPassword)).toString();
+            oldSha = new BigInteger(Util.toSha(oldPassword)).toString();
+            newSha = new BigInteger(Util.toSha(newPassword)).toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);

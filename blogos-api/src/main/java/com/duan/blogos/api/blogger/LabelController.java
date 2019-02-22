@@ -8,8 +8,6 @@ import com.duan.blogos.service.dto.blog.BlogLabelDTO;
 import com.duan.blogos.service.restful.PageResult;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerLabelService;
-import com.duan.common.spring.verify.Rule;
-import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -80,7 +78,6 @@ public class LabelController extends BaseController {
      */
     @PostMapping
     public ResultModel add(@Uid Long bloggerId,
-                           @ArgVerify(rule = Rule.NOT_BLANK)
                            @RequestParam("title") String title) {
 
         Long id = bloggerLabelService.insertLabel(bloggerId, title);
@@ -94,7 +91,6 @@ public class LabelController extends BaseController {
      */
     @PutMapping("/{labelId}")
     public ResultModel update(@Uid Long bloggerId, @PathVariable Long labelId,
-                              @ArgVerify(rule = Rule.NOT_BLANK)
                               @RequestParam("title") String newTitle) {
 
         boolean result = bloggerLabelService.updateLabel(labelId, bloggerId, newTitle);

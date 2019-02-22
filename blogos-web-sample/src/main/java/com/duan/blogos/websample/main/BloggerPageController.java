@@ -1,12 +1,11 @@
 package com.duan.blogos.websample.main;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blogger.*;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.exception.CodeMessage;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.OnlineService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,22 +24,22 @@ import java.util.Optional;
 @RequestMapping("/{bloggerName}")
 public class BloggerPageController {
 
-    @Autowired
+    @Reference
     private BloggerAccountService accountService;
 
-    @Autowired
+    @Reference
     private BloggerProfileService bloggerProfileService;
 
-    @Autowired
+    @Reference
     private BloggerStatisticsService statisticsService;
 
-    @Autowired
+    @Reference
     private BloggerPictureService bloggerPictureService;
 
-    @Autowired
+    @Reference
     private OnlineService onlineService;
 
-    @Autowired
+    @Reference
     private BloggerSettingService settingService;
 
     @RequestMapping("/archives")
@@ -51,7 +50,7 @@ public class BloggerPageController {
 
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
         if (account == null) {
-            request.setAttribute("code", CodeMessage.BLOGGER_UNKNOWN_BLOGGER.getCode());
+            request.setAttribute("code", 500);
             mv.setViewName("/blogger/register");
             return mv;
         }

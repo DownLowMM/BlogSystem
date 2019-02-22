@@ -2,134 +2,16 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
-       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <!-- ############################ rpc 方式调用服务前需要在此进行配置 ############################ -->
-
-    <!-- ############################ aop ############################ -->
-    <!-- 配置事务通知属性 -->
-    <aop:aspectj-autoproxy/>
-
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <!-- 定义事务传播属性 -->
-        <!--tx:method也规定了如果方法名匹配“add*”和“get*”...方法时使用事务，propagation是设定事务的传播级别。-->
-        <tx:attributes>
-            <!--propagation 传播行为
-            REQUIRED 如果当前没有事务，就创建一个新事务，如果当前存在事务，就加入该事务-->
-            <tx:method name="insert*" propagation="REQUIRED" isolation="DEFAULT"/>
-            <tx:method name="update*" propagation="REQUIRED" isolation="DEFAULT"/>
-            <tx:method name="delete*" propagation="REQUIRED" isolation="DEFAULT"/>
-        </tx:attributes>
-    </tx:advice>
-
-    <!--配置事务切面-->
-    <aop:config>
-        <!--只对业务层启用事务 - impl包和所有子包中任意类的任意方法-->
-        <aop:pointcut id="pointCut" expression="execution(* com.duan.blogos.service.impl..*.*(..))"/>
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointCut"/>
-    </aop:config>
-
-    <!-- ############################ dao 注意 mybatis 配置和 mapper 的扫描位置 ############################ -->
-    <context:component-scan base-package="com.duan.blogos.service.dao"/>
-
-    <!--引入 properties 文件 properties文件要在一个地方统一引入，context:property-placeholder 只能定义一次（见spring笔记）-->
-    <context:property-placeholder location="classpath:config/*.properties"/>
-
-    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
-    <!--数据库连接池-->
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
-        <property name="driverClassName" value="${jdbc.driver}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-
-        <!-- 配置初始化大小、最小、最大 -->
-        <property name="initialSize" value="3"/>
-        <property name="minIdle" value="3"/>
-        <property name="maxActive" value="20"/>
-        <!-- 配置获取连接等待超时的时间 -->
-        <property name="maxWait" value="60000"/>
-        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
-        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-        <property name="minEvictableIdleTimeMillis" value="300000"/>
-        <property name="validationQuery" value="SELECT 'x'"/>
-        <property name="testWhileIdle" value="true"/>
-        <property name="testOnBorrow" value="false"/>
-        <property name="testOnReturn" value="false"/>
-        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
-        <property name="poolPreparedStatements" value="true"/>
-        <property name="maxPoolPreparedStatementPerConnectionSize"
-                  value="20"/>
-        <!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->
-        <property name="filters" value="stat"/>
-    </bean>
-
-    <!--sqlSessionFactory对象-->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <!--mybatis 全局配置文件-->
-        <property name="configLocation" value="classpath:mybatis-config.xml"/>
-        <!--别名所对应的实体类-->
-        <property name="typeAliasesPackage" value="com.duan.blogos.service.entity"/>
-        <!--sql 与 dao 的映射文件-->
-        <property name="mapperLocations" value="classpath*:mapper/*/*.xml"/>
-    </bean>
-
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-        <!--需要扫描的 dao 所在包-->
-        <property name="basePackage" value="com.duan.blogos.service.dao"/>
-    </bean>
-
-    <!-- ############################ service ############################ -->
-    <!--扫描 service 包下所有被 @Service 注解的类-->
-    <context:component-scan base-package="com.duan.blogos.service.impl"/>
-    <context:component-scan base-package="com.duan.blogos.service.manager"/>
-    <!--<context:component-scan base-package="com.duan.blogos.service.config.preference"/>-->
-
-    <!--blogos-service-impl 项目中下面的 bean 使用了 ConfigurationProperties 注解，因而 spring 项目中需要手动配置，后续-->
-    <!--使用 blogos-service-impl 单独提供服务时可移除-->
-    <bean class="com.duan.blogos.service.config.preference.DbProperties" id="dbProperties">
-        <property name="stringFiledSplitCharacterForNumber" value="${string-filed-split-character-for-number}"/>
-        <property name="stringFiledSplitCharacterForString" value="${string-filed-split-character-for-string}"/>
-    </bean>
-
-    <bean class="com.duan.blogos.service.config.preference.DefaultProperties" id="defaultProperties">
-        <property name="blogCount" value="${blog-count}"/>
-        <property name="commentCount" value="${comment-count}"/>
-        <property name="linkCount" value="${link-count}"/>
-        <property name="pictureCount" value="${picture-count}"/>
-        <property name="collectCount" value="${collect-count}"/>
-        <property name="categoryCount" value="${category-count}"/>
-        <property name="blogCategoryId" value="${blog-category-id}"/>
-        <property name="labelCount" value="${label-count}"/>
-    </bean>
-
-    <bean class="com.duan.blogos.service.config.preference.FileProperties" id="fileProperties">
-        <property name="imageRootPath" value="${image-root-path}"/>
-        <property name="patchImportBlogTempPath" value="${patch-import-blog-temp-path}"/>
-        <property name="patchDownloadBlogTempPath" value="${patch-download-blog-temp-path}"/>
-        <property name="luceneIndexDir" value="${lucene-index-dir}"/>
-    </bean>
-
-    <bean class="com.duan.blogos.service.config.preference.WebsiteProperties" id="websiteProperties">
-        <property name="managerId" value="${manager-id}"/>
-        <property name="managerEmail" value="${manager-email}"/>
-        <property name="pageNavPos" value="${page-nav-pos}"/>
-        <property name="senderMail" value="${sender-mail}"/>
-        <property name="senderMailPassword" value="${sender-mail-password}"/>
-        <property name="activeBloggerCount" value="${active-blogger-count}"/>
-        <property name="addr" value="${addr}"/>
-        <property name="conditionSplitCharacter" value="${url-condition-split-character}"/>
-    </bean>
+    <!-- ############################ dubbo ############################ -->
+    <dubbo:application name="blogos-web-sample"/>
+    <dubbo:registry group="blogos-web-sample-group" address="zookeeper://127.0.0.1:2181"/>
+    <dubbo:reference id="demoService" check="false" interface="TODO"/>
 
     <!-- ############################ web ############################ -->
     <context:component-scan base-package="com.duan.blogos.websample"/>

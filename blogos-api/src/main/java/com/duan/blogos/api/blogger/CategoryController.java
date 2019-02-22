@@ -10,9 +10,6 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerCategoryService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
-import com.duan.common.spring.verify.Rule;
-import com.duan.common.spring.verify.annoation.parameter.ArgVerify;
-import com.duan.common.util.CheckUtil;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,7 +70,6 @@ public class CategoryController extends BaseController {
     @PostMapping
     public ResultModel add(@Uid Long bloggerId,
                            @RequestParam(required = false) Long iconId,
-                           @ArgVerify(rule = Rule.NOT_BLANK)
                            @RequestParam String title,
                            @RequestParam(required = false) String bewrite) {
 
@@ -98,9 +94,9 @@ public class CategoryController extends BaseController {
                               @RequestParam(value = "title", required = false) String newTitle,
                               @RequestParam(value = "bewrite", required = false) String newBewrite) {
 
-        if (CheckUtil.isAllNull(newIconId, newTitle, newBewrite)) {
+        /*if (CheckUtil.isAllNull(newIconId, newTitle, newBewrite)) {
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
-        }
+        }*/
 
         handleCategoryExistCheck(bloggerId, categoryId);
         handlePictureExistCheck(bloggerId, newIconId);

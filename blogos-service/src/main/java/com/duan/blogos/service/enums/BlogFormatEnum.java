@@ -1,8 +1,6 @@
 package com.duan.blogos.service.enums;
 
 
-import com.duan.common.util.StringUtils;
-
 /**
  * Created on 2018/4/5.
  * 博文格式
@@ -22,7 +20,7 @@ public enum BlogFormatEnum {
     }
 
     public static boolean contains(String type) {
-        if (StringUtils.isEmpty(type)) return false;
+        if (type == null) return false;
 
         return type.equalsIgnoreCase(MD.name()) || type.equalsIgnoreCase(HTML.name());
     }

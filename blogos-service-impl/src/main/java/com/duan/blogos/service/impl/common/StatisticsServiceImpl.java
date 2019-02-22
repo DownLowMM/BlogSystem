@@ -15,8 +15,8 @@ import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blog.StatisticsService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.util.DataConverter;
-import com.duan.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
