@@ -44,8 +44,10 @@ public class WebSiteStatisticsServiceImpl implements WebSiteStatisticsService {
         List<BloggerBriefDTO> dtos = new ArrayList<>();
         for (BloggerDTO blogger : bloggerDTOS) {
             ResultModel<BloggerStatisticsDTO> statistics = statisticsService.getBloggerStatistics(blogger.getId());
-            final BloggerBriefDTO dto = DataConverter.DTO2DTO.bloggerTobrief(blogger, statistics.getData());
-            dtos.add(dto);
+            if (statistics != null && statistics.getData() != null) {
+                BloggerBriefDTO dto = DataConverter.DTO2DTO.bloggerTobrief(blogger, statistics.getData());
+                dtos.add(dto);
+            }
         }
 
         return dtos;

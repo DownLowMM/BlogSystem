@@ -241,6 +241,8 @@
                s.like_count,
                s.release_date
         from blog_statistics s
+                 left join blog b on s.blog_id = b.id
+                 left join blogger_account a on a.id = b.blogger_id
         where a.id = #{value}
     </select>
 
