@@ -60,9 +60,6 @@
             <if test="keyWords != null">
                 key_words=#{keyWords},
             </if>
-            <if test="wordCount != null">
-                word_count=#{wordCount},
-            </if>
         </set>
         <where>
             id=#{id}
@@ -85,10 +82,9 @@
                           summary,
                           release_date,
                           nearest_modify_date,
-                          key_words,
-                          word_count)
+                          key_words)
         VALUE (#{bloggerId}, ifnull(#{state}, 0), # state 0 为正在审核
-               #{title}, #{content}, #{contentMd}, #{summary}, NOW(), NOW(), #{keyWords}, ifnull(#{wordCount}, 0))
+               #{title}, #{content}, #{contentMd}, #{summary}, NOW(), NOW(), #{keyWords}, 0))
     </insert>
 
     <select id="listBlogByBlogIds" resultType="Blog" parameterType="list">
@@ -140,13 +136,6 @@
           AND state = #{state}
     </select>
 
-    <select id="listAllWordCountByBloggerId" resultType="Blog">
-        SELECT id, word_count
-        FROM blog
-        WHERE blogger_id = #{bloggerId}
-          AND state = #{state}
-    </select>
-
     <select id="listAllByFormat" resultType="Blog">
         SELECT
         blogger_id,
@@ -163,8 +152,7 @@
         summary,
         release_date,
         nearest_modify_date,
-        key_words,
-        word_count
+        key_words
         FROM blog
         WHERE blogger_id = #{bloggerId}
     </select>

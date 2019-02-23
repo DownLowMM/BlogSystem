@@ -20,6 +20,7 @@
                                      share_count,
                                      admire_count,
                                      like_count,
+                                     word_count,
                                      release_date)
         VALUE (#{blogId},
                ifnull(#{commentCount}, 0),
@@ -30,6 +31,7 @@
                ifnull(#{shareCount}, 0),
                ifnull(#{admireCount}, 0),
                ifnull(#{likeCount}, 0),
+               ifnull(#{wordCount}, 0),
                NOW())
     </insert>
 
@@ -59,6 +61,8 @@
             </if>
             <if test="likeCount != null">
                 like_count=#{likeCount}
+            </if><if test="wordCount != null">
+                word_count=#{wordCount}
             </if>
         </set>
         <where>
@@ -237,8 +241,6 @@
                s.like_count,
                s.release_date
         from blog_statistics s
-                 left join blog b on s.blog_id = b.id
-                 left join blogger_account a on a.id = b.blogger_id
         where a.id = #{value}
     </select>
 

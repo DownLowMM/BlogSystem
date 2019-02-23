@@ -96,15 +96,6 @@ public interface BlogDao extends BaseDao<Blog> {
     List<Blog> listAllLabelByBloggerId(Long bloggerId);
 
     /**
-     * 根据博主获得其所有博文的字数统计
-     *
-     * @param bloggerId 博主id
-     * @return 只有 wordCount 属性有值的结果
-     */
-    List<Blog> listAllWordCountByBloggerId(@Param("bloggerId") Long bloggerId,
-                                           @Param("state") int state);
-
-    /**
      * 统计指定博主的博文数量
      *
      * @param bloggerId 博主id
