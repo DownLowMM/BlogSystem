@@ -1,6 +1,5 @@
 package com.duan.blogos.websample;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
@@ -11,6 +10,7 @@ import com.duan.blogos.service.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.service.blogger.BloggerProfileService;
 import com.duan.blogos.service.service.blogger.BloggerSettingService;
 import com.duan.blogos.websample.util.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,16 +28,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/{bloggerName}/setting")
 public class BloggerSettingPageController {
 
-    @Reference
+    @Autowired
     private BloggerAccountService accountService;
 
-    @Reference
+    @Autowired
     private BloggerProfileService profileService;
 
-    @Reference
+    @Autowired
     private BloggerPictureService pictureService;
 
-    @Reference
+    @Autowired
     private BloggerSettingService settingService;
 
     @RequestMapping

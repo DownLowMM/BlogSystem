@@ -64,7 +64,7 @@
     <dubbo:reference id="bloggerAccountService"
                      interface="com.duan.blogos.service.service.blogger.BloggerAccountService"/>
     <dubbo:reference id="bloggerProfileService"
-                     interface="com.duan.blogos.service.service.blogger.BloggerAccountService"/>
+                     interface="com.duan.blogos.service.service.blogger.BloggerProfileService"/>
     <dubbo:reference id="bloggerStatisticsService"
                      interface="com.duan.blogos.service.service.blogger.BloggerStatisticsService"/>
     <dubbo:reference id="bloggerSettingService"

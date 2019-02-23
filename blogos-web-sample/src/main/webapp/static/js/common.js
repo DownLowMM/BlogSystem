@@ -239,8 +239,9 @@ function initToolTip() {
     $('[data-toggle="tooltip"]').tooltip();
 }
 
+var apiGateHost = 'http://127.0.0.1:8080';
 function ajax(url, data, async, type, success) {
-    var host = 'http://127.0.0.1:7070';
+    var host = apiGateHost;
     $.ajax({
         url: host + url,
         data: data,
@@ -252,7 +253,7 @@ function ajax(url, data, async, type, success) {
 }
 
 function ajaxSpe(url, data, async, type, dataType, success) {
-    var host = 'http://127.0.0.1:7070';
+    var host = apiGateHost;
     $.ajax({
         url: host + url,
         data: data,
@@ -265,7 +266,7 @@ function ajaxSpe(url, data, async, type, dataType, success) {
 }
 
 function ajaxForUpload(url, data, cache, type, processData, contentType, success) {
-    var host = 'http://127.0.0.1:7070';
+    var host = apiGateHost;
     $.ajax({
         url: host + url,
         type: type,
@@ -279,7 +280,7 @@ function ajaxForUpload(url, data, cache, type, processData, contentType, success
 }
 
 function ajaxUploadBase64Url(url, data, cache, type, dataType, beforeSend, success) {
-    var host = 'http://127.0.0.1:7070';
+    var host = apiGateHost;
     $.ajax({
         url: host + url,
         type: type,

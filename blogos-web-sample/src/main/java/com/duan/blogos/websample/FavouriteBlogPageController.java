@@ -1,12 +1,12 @@
 package com.duan.blogos.websample;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.BloggerAccountService;
 import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.service.common.OnlineService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,13 +24,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/{pageOwnerBloggerName}/blog/favourite")
 public class FavouriteBlogPageController {
 
-    @Reference
+    @Autowired
     private BloggerAccountService accountService;
 
-    @Reference
+    @Autowired
     private OnlineService onlineService;
 
-    @Reference
+    @Autowired
     private BloggerStatisticsService statisticsService;
 
     @RequestMapping("/like")

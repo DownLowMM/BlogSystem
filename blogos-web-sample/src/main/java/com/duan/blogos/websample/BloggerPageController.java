@@ -1,11 +1,11 @@
 package com.duan.blogos.websample;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blogger.*;
 import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.restful.ResultModel;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.OnlineService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,22 +24,22 @@ import java.util.Optional;
 @RequestMapping("/{bloggerName}")
 public class BloggerPageController {
 
-    @Reference
+    @Autowired
     private BloggerAccountService accountService;
 
-    @Reference
+    @Autowired
     private BloggerProfileService bloggerProfileService;
 
-    @Reference
+    @Autowired
     private BloggerStatisticsService statisticsService;
 
-    @Reference
+    @Autowired
     private BloggerPictureService bloggerPictureService;
 
-    @Reference
+    @Autowired
     private OnlineService onlineService;
 
-    @Reference
+    @Autowired
     private BloggerSettingService settingService;
 
     @RequestMapping("/archives")
@@ -73,7 +73,7 @@ public class BloggerPageController {
 
         Long loginBgId;
         String token = ""; // TODO redis + token 维护会话
-        if ((loginBgId = onlineService.getLoginBloggerId(token)) != -1) {
+        if ((loginBgId = onlineService.getLoginBloggerId(token)) != null) {
             ResultModel<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBgId);
             mv.addObject("loginBgStat", loginBgStat.getData());
         }

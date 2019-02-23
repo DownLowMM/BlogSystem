@@ -1,6 +1,5 @@
 package com.duan.blogos.websample;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.dto.blog.BlogDTO;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
@@ -11,6 +10,7 @@ import com.duan.blogos.service.service.blog.StatisticsService;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.OnlineService;
 import com.duan.blogos.websample.util.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,28 +27,28 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/{bloggerName}/blog/{blogName}")
 public class BlogReadPageController {
 
-    @Reference
+    @Autowired
     private BloggerAccountService accountService;
 
-    @Reference
+    @Autowired
     private BloggerBlogService blogService;
 
-    @Reference
+    @Autowired
     private BloggerStatisticsService bloggerStatisticsService;
 
-    @Reference
+    @Autowired
     private OnlineService onlineService;
 
-    @Reference
+    @Autowired
     private OperateService operateService;
 
-    @Reference
+    @Autowired
     private StatisticsService statisticsService;
 
-    @Reference
+    @Autowired
     private BloggerLikeBlogService likeService;
 
-    @Reference
+    @Autowired
     private BloggerCollectBlogService collectBlogService;
 
     @RequestMapping
