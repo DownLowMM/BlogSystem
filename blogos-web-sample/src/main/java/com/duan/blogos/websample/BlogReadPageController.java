@@ -1,4 +1,4 @@
-package com.duan.blogos.websample.blog;
+package com.duan.blogos.websample;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
@@ -10,7 +10,7 @@ import com.duan.blogos.service.service.blog.OperateService;
 import com.duan.blogos.service.service.blog.StatisticsService;
 import com.duan.blogos.service.service.blogger.*;
 import com.duan.blogos.service.service.common.OnlineService;
-import com.duan.blogos.websample.Util;
+import com.duan.blogos.websample.util.Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

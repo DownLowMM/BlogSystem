@@ -8,11 +8,6 @@
        http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <!-- ############################ dubbo ############################ -->
-    <dubbo:application name="blogos-web-sample"/>
-    <dubbo:registry group="blogos-web-sample-group" address="zookeeper://127.0.0.1:2181"/>
-    <dubbo:reference id="demoService" check="false" interface="TODO"/>
-
     <!-- ############################ web ############################ -->
     <context:component-scan base-package="com.duan.blogos.websample"/>
 
@@ -39,11 +34,8 @@
     <!-- 文件上传 -->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- 默认编码 -->
         <property name="defaultEncoding" value="utf-8"/>
-        <!-- 文件大小最大值 -->
         <property name="maxUploadSize" value="10485760000"/>
-        <!-- 内存中的最大值 -->
         <property name="maxInMemorySize" value="40960"/>
     </bean>
 
@@ -64,5 +56,33 @@
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
     </mvc:interceptors>
+
+    <!-- ############################ dubbo ############################ -->
+    <dubbo:application name="blogos-web-sample"/>
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+
+    <dubbo:reference id="bloggerAccountService"
+                     interface="com.duan.blogos.service.service.blogger.BloggerAccountService"/>
+    <dubbo:reference id="bloggerProfileService"
+                     interface="com.duan.blogos.service.service.blogger.BloggerAccountService"/>
+    <dubbo:reference id="bloggerStatisticsService"
+                     interface="com.duan.blogos.service.service.blogger.BloggerStatisticsService"/>
+    <dubbo:reference id="bloggerSettingService"
+                     interface="com.duan.blogos.service.service.blogger.BloggerSettingService"/>
+    <dubbo:reference id="bloggerPictureService"
+                     interface="com.duan.blogos.service.service.blogger.BloggerPictureService"/>
+
+    <dubbo:reference id="bloggerBlogService" interface="com.duan.blogos.service.service.blogger.BloggerBlogService"/>
+    <dubbo:reference id="bloggerLikeBlogService"
+                     interface="com.duan.blogos.service.service.blogger.BloggerLikeBlogService"/>
+    <dubbo:reference id="bloggerCollectBlogService"
+                     interface="com.duan.blogos.service.service.blogger.BloggerCollectBlogService"/>
+
+    <dubbo:reference id="onlineService" interface="com.duan.blogos.service.service.common.OnlineService"/>
+
+    <dubbo:reference id="operateService" interface="com.duan.blogos.service.service.blog.OperateService"/>
+    <dubbo:reference id="statisticsService" interface="com.duan.blogos.service.service.blog.StatisticsService"/>
+    <dubbo:reference id="webSiteStatisticsService" timeout="10000"
+                     interface="com.duan.blogos.service.service.website.WebSiteStatisticsService"/>
 
 </beans>

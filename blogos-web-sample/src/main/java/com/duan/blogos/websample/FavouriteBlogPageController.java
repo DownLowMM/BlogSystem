@@ -1,4 +1,4 @@
-package com.duan.blogos.websample.favourite;
+package com.duan.blogos.websample;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;

@@ -1,4 +1,4 @@
-package com.duan.blogos.websample.blog;
+package com.duan.blogos.websample;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;

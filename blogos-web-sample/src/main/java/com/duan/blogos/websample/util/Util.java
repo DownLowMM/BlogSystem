@@ -1,4 +1,4 @@
-package com.duan.blogos.websample;
+package com.duan.blogos.websample.util;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.duan.blogos.service.util.TokenUtil;
