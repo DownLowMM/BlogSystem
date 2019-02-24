@@ -1,4 +1,4 @@
-var defaultBlogCount = 10;
+var defaultBlogPageSize = 10;
 
 // 博文检索条件
 var filterData = {
@@ -43,37 +43,6 @@ function loadLabel() {
             }
 
         });
-
-    // $.get(
-    //     '/blogger/' + pageOwnerBloggerId + '/label',
-    //     {offset: 0, rows: 20},
-    //     function (result) {
-    //         var html = '';
-    //         if (result.code === 0) {
-    //             var array = result.data;
-    //             // 设置高级筛选框内容
-    //             setComplexFilterLabel(array);
-    //             // 设置标签编辑框内容
-    //             setModifyLabel(array);
-    //
-    //             $('#labelCount').html('(' + array.length + ')');
-    //
-    //             for (var index in array) {
-    //                 var size = 0.4 + 1.5 * Math.random();
-    //                 var label = array[index];
-    //                 html += '<a class="blog-list-item-label" style="font-size: ' + size + 'em" onclick="filterBlogByLabel(' + label.id + ')">' +
-    //                     label.title + '</a>&nbsp;&nbsp;';
-    //             }
-    //         }
-    //
-    //         if (html === '') {
-    //             setLabelWhenEmpty('blogLabel');
-    //         } else {
-    //             $('#blogLabel').html(html);
-    //         }
-    //
-    //     }, 'json'
-    // )
 }
 
 function loadCategory() {
@@ -107,37 +76,6 @@ function loadCategory() {
 
         });
 
-    // $.get(
-    //     '/blogger/' + pageOwnerBloggerId + '/category',
-    //     {offset: 0, rows: 1000},
-    //     function (result) {
-    //         var html = '';
-    //         if (result.code === 0) {
-    //             var array = result.data;
-    //             // 设置高级筛选框内容
-    //             setComplexFilterCategory(array);
-    //             // 设置类别编辑框内容
-    //             setModifyCategory(array);
-    //             $('#categoryCount').html('(' + array.length + ')');
-    //
-    //             for (var index in array) {
-    //                 var ca = array[index];
-    //                 html += '<a class="list-group-item vertical-center border0" ' +
-    //                     'onclick="filterBlogByCategory(' + ca.id + ')"' +
-    //                     'onmouseenter="if(isPageOwnerBloggerLogin()) $(this).find(\'.badge\').fadeToggle(\'fast\',\'linear\');"' +
-    //                     'onmouseleave="if(isPageOwnerBloggerLogin()) $(this).find(\'.badge\').fadeToggle(\'fast\',\'linear\');">'
-    //                     + ca.title + '<span class="count">&nbsp;(' + ca.count + ')</span></a>'
-    //             }
-    //         }
-    //
-    //         if (html === '') {
-    //             setCategoryWhenEmpty('blogCategory');
-    //         } else {
-    //             $('#blogCategory').html(html);
-    //         }
-    //
-    //     }, 'json'
-    // )
 }
 
 function loadContact() {
@@ -172,38 +110,6 @@ function loadContact() {
 
         });
 
-    // $.get(
-    //     '/blogger/' + pageOwnerBloggerId + '/link',
-    //     {offset: 0, rows: 20},
-    //     function (result) {
-    //         var html = '';
-    //         if (result.code === 0) {
-    //             var array = result.data;
-    //             setModifyLink(array);
-    //             $('#linkCount').html('(' + array.length + ')');
-    //
-    //             for (var index in array) {
-    //                 var link = array[index];
-    //                 html += '<a class="blogger-link-item"';
-    //
-    //                 var bewrite = link.bewrite;
-    //                 if (!isStrEmpty_(bewrite))
-    //                     html += ' data-toggle="tooltip" title="' + bewrite + '" data-placement="bottom"';
-    //
-    //                 html += ' target="_blank" href="' + link.url + '">' + link.title + '</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    //             }
-    //
-    //         }
-    //
-    //         if (html === '') {
-    //             setContactWhenEmpty("bloggerLink");
-    //         } else {
-    //             $('#bloggerLink').html(html);
-    //             initToolTip();
-    //         }
-    //
-    //     }, 'json'
-    // );
 }
 
 function loadSortRule() {
@@ -223,22 +129,6 @@ function loadSortRule() {
             }
         });
 
-    // $.get(
-    //     '/sort-rule/rule',
-    //     null,
-    //     function (result) {
-    //         if (result.code === 0) {
-    //             var html = '';
-    //             var array = result.data;
-    //             for (var index in array) {
-    //                 var item = array[index];
-    //                 html += '<li><a onclick="setSortRule(\'' + item.key + '\',\'' + item.title + '\')">' + item.title + '</a></li>';
-    //             }
-    //             $('#complexFilterSortRuleShow').html(array[0].title + '<span class="caret"></span>&nbsp;');
-    //             $('#complexFilterSortRule').html(html);
-    //         }
-    //     }, 'json');
-
     ajaxSpe('/sort-rule/order',
         null, true, 'get', 'json',
         function (result) {
@@ -253,22 +143,6 @@ function loadSortRule() {
                 $('#complexFilterSortOrder').html(html);
             }
         });
-
-    // $.get(
-    //     '/sort-rule/order',
-    //     null,
-    //     function (result) {
-    //         if (result.code === 0) {
-    //             var html = '';
-    //             var array = result.data;
-    //             for (var index in array) {
-    //                 var item = array[index];
-    //                 html += '<li><a onclick="setSortOrder(\'' + item.key + '\',\'' + item.title + '\')">' + item.title + '</a></li>';
-    //             }
-    //             $('#complexFilterSortOrderShow').html(array[0].title + '<span class="caret"></span>');
-    //             $('#complexFilterSortOrder').html(html);
-    //         }
-    //     }, 'json');
 
 }
 
@@ -436,19 +310,17 @@ function toggleCategoryClass(t) {
 function complexFilter() {
     var keyword = $('#keyWord').val();
     setFilterData(cidsArray.join(','), lidsArray.join(','), keyword, filterData.sort, filterData.order);
-    filterBloggerBlog(0, defaultBlogCount, true, true, false);
+    filterBloggerBlog(1, defaultBlogPageSize, true, true, false);
     $('#complexFilterDialog').modal('toggle');
 }
 
 /**
  * 重新加载博文列表
- * @param offset
- * @param rows
  * @param refreshPageIndicator 刷新列表分页插件（博文列表重新加载时一般都需要刷新）
  * @param toTop 滑动到顶部
  * @param refreshTotalRealCount 刷新总博文数量（博文新增或删除时才需刷新）
  */
-function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTotalRealCount) {
+function filterBloggerBlog(pageNum, pageSize, refreshPageIndicator, toTop, refreshTotalRealCount) {
 
     if (toTop) {
         scrollToTop();
@@ -459,11 +331,11 @@ function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTot
     ajaxSpe('/blog',
         {
             bloggerId: pageOwnerBloggerId,
-            offset: offset,
-            rows: rows,
+            pageNum: pageNum,
+            pageSize: pageSize,
             cids: filterData.cids,
             lids: filterData.lids,
-            kword: filterData.kword,
+            keyWord: filterData.kword,
             sort: filterData.sort,
             order: filterData.order
         }, true, 'get', 'json',
@@ -476,12 +348,12 @@ function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTot
             setBlogs(result.data.list, '<br><br><br><p class="text-center lead">没有博文' + ins + '</p><br><br><br>');
 
             if (refreshPageIndicator) {
-                setPageIndicator(0);
+                setPageIndicator(result.data, result.data.currentPage - 1);
             }
 
             if (refreshTotalRealCount) {
-                $('#blogCount').html(result.data.length + '&nbsp;篇博文');
-                $('#subBlogCount').html('(' + result.data.length + ')');
+                $('#blogCount').html(result.data.total + '&nbsp;篇博文');
+                $('#subBlogCount').html('(' + result.data.total + ')');
 
             }
 
@@ -489,57 +361,23 @@ function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTot
 
         });
 
-    // $.get(
-    //     '/blog',
-    //     {
-    //         bloggerId: pageOwnerBloggerId,
-    //         offset: offset,
-    //         rows: rows,
-    //         cids: filterData.cids,
-    //         lids: filterData.lids,
-    //         kword: filterData.kword,
-    //         sort: filterData.sort,
-    //         order: filterData.order
-    //     },
-    //     function (result) {
-    //
-    //         var ins = '';
-    //         if (isPageOwnerBloggerLogin())
-    //             ins = '，去<a style="font-size: x-large" href="/edit_blog?bid=' + loginBloggerId + '" target="_blank">写博文</a>';
-    //
-    //         setBlogs(result.data, '<br><br><br><p class="text-center lead">没有博文' + ins + '</p><br><br><br>');
-    //
-    //         if (refreshPageIndicator) {
-    //             setPageIndicator(0);
-    //         }
-    //
-    //         if (refreshTotalRealCount) {
-    //             $('#blogCount').html(result.data.length + '&nbsp;篇博文');
-    //             $('#subBlogCount').html('(' + result.data.length + ')');
-    //
-    //         }
-    //
-    //         initToolTip();
-    //
-    //     }, 'json'
-    // );
 }
 
 function filterBlogByLabel(id) {
     setFilterData(null, id, null, null, null);
-    filterBloggerBlog(0, defaultBlogCount, true, true, false);
+    filterBloggerBlog(1, defaultBlogPageSize, true, true, false);
 }
 
 function filterBlogByCategory(id) {
     setFilterData(id, null, null, null, null);
-    filterBloggerBlog(0, defaultBlogCount, true, true, false);
+    filterBloggerBlog(1, defaultBlogPageSize, true, true, false);
 }
 
 function filterBlogByKeyWord() {
     var word = $('#searchBlog').val();
     if (word !== '') {
         setFilterData(null, null, word, null, null);
-        filterBloggerBlog(0, defaultBlogCount, true, true, false);
+        filterBloggerBlog(1, defaultBlogPageSize, true, true, false);
     } else {
         initBlog();
     }
@@ -683,7 +521,7 @@ function confirmExe() {
             if (result.code === 200) {
                 confirmDeleteBlogId = -1;
                 disableButton(false, 'confirmBtn', '删除成功', "button-disable");
-                filterBloggerBlog(0, defaultBlogCount, true, false, true);
+                filterBloggerBlog(1, defaultBlogPageSize, true, false, true);
                 loadCategory();
 
                 setTimeout(function () {
@@ -700,31 +538,6 @@ function confirmExe() {
             }
         });
 
-    // $.ajax({
-    //     url: '/blogger/' + loginBloggerId + '/blog/' + confirmDeleteBlogId,
-    //     async: false,
-    //     type: 'delete',
-    //     success: function (result) {
-    //         if (result.code === 0) {
-    //             confirmDeleteBlogId = -1;
-    //             disableButton(false, 'confirmBtn', '删除成功', "button-disable");
-    //             filterBloggerBlog(0, defaultBlogCount, true, false, true);
-    //             loadCategory();
-    //
-    //             setTimeout(function () {
-    //                 disableButton(true, 'confirmBtn', '确认', "button-disable");
-    //
-    //                 $('#confirmDialog').modal('hide');
-    //                 clearDiv('confirmText');
-    //
-    //             }, 1000);
-    //
-    //         } else {
-    //             disableButton(true, 'confirmBtn', '确认', "button-disable");
-    //             error('删除失败：' + result.msg, 'confirmErrorMsg', true, 3000);
-    //         }
-    //     }
-    // });
 }
 
 // -----------------------------------------------------------------------------------------------------重置高级检索条件
@@ -733,7 +546,7 @@ function resetComplexFilter() {
     cidsArray = [];
     lidsArray = [];
 
-    // filterBloggerBlog(0, defaultBlogCount, true, true);
+    // filterBloggerBlog(1, defaultBlogPageSize, true, true);
     $('#keyWord').val('');
 
     $('.blog-filter-category-choose').each(function (index, item) {
@@ -757,7 +570,7 @@ function isPageOwnerBloggerLogin() {
 function initBlog() {
     // 将会加载两次
     setFilterData(null, null, null, "release_date", "desc");
-    filterBloggerBlog(0, defaultBlogCount, true, true, false);
+    filterBloggerBlog(1, defaultBlogPageSize, true, true, false);
 }
 
 // 填充检索条件
@@ -770,56 +583,25 @@ function setFilterData(cids, lids, kword, sort, order) {
 }
 
 // 刷新分页插件
-function setPageIndicator(initIndex) {
+function setPageIndicator(data, initIndex) {
     var init = true;
-    ajaxSpe('/blog/count',
-        null, true, 'get', 'json',
-        function (result) {
-            if (result.code === 200) {
-                var count = result.data;
-                $('#box').paging({
-                    initPageNo: initIndex, // 初始页码
-                    totalPages: Math.ceil(count / defaultBlogCount), //总页数
-                    totalCount: count + '条', // 条目总数
-                    slideSpeed: 600, // 缓动速度。单位毫秒
-                    jump: true, //是否支持跳转
-                    callback: function (page) { // 回调函数
-                        if (init && page === 1) {
-                            init = false;
-                            return;
-                        }
-
-                        filterBloggerBlog((page - 1) * defaultBlogCount, defaultBlogCount, false, true, false);
-                    }
-                })
+    var count = data.total;
+    var pageSize = data.pageSize;
+    $('#box').paging({
+        initPageNo: initIndex, // 初始页码
+        totalPages: Math.ceil(data.totalPage), //总页数
+        totalCount: count + '条', // 条目总数
+        slideSpeed: 600, // 缓动速度。单位毫秒
+        jump: true, //是否支持跳转
+        callback: function (page) { // 回调函数
+            if (init && page === 1) {
+                init = false;
+                return;
             }
-        });
 
-    // $.get(
-    //     '/blog/count',
-    //     null,
-    //     function (result) {
-    //         if (result.code === 0) {
-    //             var count = result.data;
-    //             $('#box').paging({
-    //                 initPageNo: initIndex, // 初始页码
-    //                 totalPages: Math.ceil(count / defaultBlogCount), //总页数
-    //                 totalCount: count + '条', // 条目总数
-    //                 slideSpeed: 600, // 缓动速度。单位毫秒
-    //                 jump: true, //是否支持跳转
-    //                 callback: function (page) { // 回调函数
-    //                     if (init && page === 1) {
-    //                         init = false;
-    //                         return;
-    //                     }
-    //
-    //                     filterBloggerBlog((page - 1) * defaultBlogCount, defaultBlogCount, false, true, false);
-    //                 }
-    //             })
-    //         }
-    //     }, 'json'
-    // );
-
+            filterBloggerBlog(page, pageSize, false, true, false);
+        }
+    })
 }
 
 // 显示 修改头像 框
@@ -854,13 +636,13 @@ var funWhenCreateLinkFail = function (result) {
 // -------------------------------------------------------------------------------------------------------编辑标签后回调
 var funWhenEditLabelSuccess = function () {
     loadLabel();
-    filterBloggerBlog(0, defaultBlogCount, true, false, false);
+    filterBloggerBlog(1, defaultBlogPageSize, true, false, false);
 };
 
 // -------------------------------------------------------------------------------------------------------编辑类别后回调
 var funWhenEditCategorySuccess = function () {
     loadCategory();
-    filterBloggerBlog(0, defaultBlogCount, true, false, false);
+    filterBloggerBlog(1, defaultBlogPageSize, true, false, false);
 };
 
 // -------------------------------------------------------------------------------------------------------编辑链接后回调
@@ -871,13 +653,13 @@ var funWhenEditLinkSuccess = function () {
 // -------------------------------------------------------------------------------------------------------删除标签后回调
 var funWhenDeleteLabelSuccess = function () {
     loadLabel();
-    filterBloggerBlog(0, defaultBlogCount, true, false, false);
+    filterBloggerBlog(1, defaultBlogPageSize, true, false, false);
 };
 
 // -------------------------------------------------------------------------------------------------------删除类别后回调
 var funWhenDeleteCategorySuccess = function () {
     loadCategory();
-    filterBloggerBlog(0, defaultBlogCount, true, false, false);
+    filterBloggerBlog(1, defaultBlogPageSize, true, false, false);
 };
 
 // -------------------------------------------------------------------------------------------------------删除链接后回调
