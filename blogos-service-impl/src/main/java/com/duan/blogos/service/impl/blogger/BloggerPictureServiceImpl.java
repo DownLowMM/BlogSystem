@@ -3,21 +3,21 @@ package com.duan.blogos.service.impl.blogger;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
-import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
-import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
-import com.duan.blogos.service.entity.blogger.BloggerPicture;
-import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.exception.CodeMessage;
+import com.duan.blogos.service.dao.BloggerPictureDao;
+import com.duan.blogos.service.common.dto.blogger.BloggerPictureDTO;
+import com.duan.blogos.service.entity.BloggerPicture;
+import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.common.exception.CodeMessage;
 import com.duan.blogos.service.manager.ImageManager;
 import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.restful.PageResult;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blogger.BloggerPictureService;
-import com.duan.blogos.service.util.DataConverter;
-import com.duan.blogos.service.util.ExceptionUtil;
-import com.duan.blogos.service.util.ImageUtils;
-import com.duan.blogos.service.util.ResultModelUtil;
-import com.duan.blogos.service.vo.FileVO;
+import com.duan.blogos.service.common.restful.PageResult;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.blogger.BloggerPictureService;
+import com.duan.blogos.service.common.util.DataConverter;
+import com.duan.blogos.service.common.util.ExceptionUtil;
+import com.duan.blogos.service.common.util.ImageUtils;
+import com.duan.blogos.service.common.util.ResultModelUtil;
+import com.duan.blogos.service.common.vo.FileVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.duan.blogos.service.enums.BloggerPictureCategoryEnum.DEFAULT_PICTURE;
+import static com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum.DEFAULT_PICTURE;
 
 /**
  * Created on 2017/12/19.

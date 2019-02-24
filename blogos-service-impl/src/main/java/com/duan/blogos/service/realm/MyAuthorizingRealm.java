@@ -1,7 +1,7 @@
 package com.duan.blogos.service.realm;
 
-import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
-import com.duan.blogos.service.entity.blogger.BloggerAccount;
+import com.duan.blogos.service.dao.BloggerAccountDao;
+import com.duan.blogos.service.entity.BloggerAccount;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

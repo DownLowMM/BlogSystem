@@ -1,13 +1,13 @@
 package com.duan.blogos.service.impl.blogger;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
-import com.duan.blogos.service.dao.blogger.BloggerProfileDao;
-import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
-import com.duan.blogos.service.entity.blogger.BloggerProfile;
+import com.duan.blogos.service.dao.BloggerPictureDao;
+import com.duan.blogos.service.dao.BloggerProfileDao;
+import com.duan.blogos.service.common.dto.blogger.BloggerProfileDTO;
+import com.duan.blogos.service.entity.BloggerProfile;
 import com.duan.blogos.service.manager.ImageManager;
-import com.duan.blogos.service.service.blogger.BloggerProfileService;
-import com.duan.blogos.service.util.DataConverter;
+import com.duan.blogos.service.blogger.BloggerProfileService;
+import com.duan.blogos.service.common.util.DataConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

@@ -3,8 +3,8 @@ package com.duan.blogos.api.blog;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blog.OperateService;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.blog.OperateService;
 import org.springframework.web.bind.annotation.*;
 
 /**

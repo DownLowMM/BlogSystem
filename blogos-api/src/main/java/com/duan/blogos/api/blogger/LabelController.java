@@ -4,10 +4,10 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
-import com.duan.blogos.service.dto.blog.BlogLabelDTO;
-import com.duan.blogos.service.restful.PageResult;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blogger.BloggerLabelService;
+import com.duan.blogos.service.common.dto.blog.BlogLabelDTO;
+import com.duan.blogos.service.common.restful.PageResult;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.blogger.BloggerLabelService;
 import org.springframework.web.bind.annotation.*;
 
 /**

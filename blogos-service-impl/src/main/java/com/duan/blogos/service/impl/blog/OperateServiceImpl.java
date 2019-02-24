@@ -1,14 +1,14 @@
 package com.duan.blogos.service.impl.blog;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.duan.blogos.service.dao.blog.BlogCollectDao;
-import com.duan.blogos.service.dao.blog.BlogComplainDao;
-import com.duan.blogos.service.dao.blog.BlogLikeDao;
-import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
-import com.duan.blogos.service.entity.blog.BlogCollect;
-import com.duan.blogos.service.entity.blog.BlogComplain;
-import com.duan.blogos.service.entity.blog.BlogLike;
-import com.duan.blogos.service.service.blog.OperateService;
+import com.duan.blogos.service.dao.BlogCollectDao;
+import com.duan.blogos.service.dao.BlogComplainDao;
+import com.duan.blogos.service.dao.BlogLikeDao;
+import com.duan.blogos.service.dao.BlogStatisticsDao;
+import com.duan.blogos.service.entity.BlogCollect;
+import com.duan.blogos.service.entity.BlogComplain;
+import com.duan.blogos.service.entity.BlogLike;
+import com.duan.blogos.service.blog.OperateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 

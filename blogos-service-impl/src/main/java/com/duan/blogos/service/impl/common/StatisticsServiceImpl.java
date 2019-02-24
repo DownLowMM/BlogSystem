@@ -2,19 +2,15 @@ package com.duan.blogos.service.impl.common;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.config.preference.DbProperties;
-import com.duan.blogos.service.dao.BlogCategoryRelaDao;
-import com.duan.blogos.service.dao.BlogLabelRelaDao;
-import com.duan.blogos.service.dao.blog.*;
-import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
-import com.duan.blogos.service.dto.blog.BlogStatisticsDTO;
-import com.duan.blogos.service.dto.blogger.BloggerDTO;
-import com.duan.blogos.service.entity.BlogCategoryRela;
-import com.duan.blogos.service.entity.BlogLabelRela;
-import com.duan.blogos.service.entity.blog.*;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blog.StatisticsService;
-import com.duan.blogos.service.service.blogger.BloggerStatisticsService;
-import com.duan.blogos.service.util.DataConverter;
+import com.duan.blogos.service.dao.*;
+import com.duan.blogos.service.common.dto.blog.BlogBaseStatisticsDTO;
+import com.duan.blogos.service.common.dto.blog.BlogStatisticsDTO;
+import com.duan.blogos.service.common.dto.blogger.BloggerDTO;
+import com.duan.blogos.service.entity.*;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.blog.StatisticsService;
+import com.duan.blogos.service.blogger.BloggerStatisticsService;
+import com.duan.blogos.service.common.util.DataConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 

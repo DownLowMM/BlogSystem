@@ -3,13 +3,13 @@ package com.duan.blogos.service.impl.validate;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
-import com.duan.blogos.service.dao.blog.BlogCategoryDao;
-import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
-import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
-import com.duan.blogos.service.entity.blogger.BloggerPicture;
-import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.enums.BloggerSettingEnums;
-import com.duan.blogos.service.service.validate.BloggerValidateService;
+import com.duan.blogos.service.dao.BlogCategoryDao;
+import com.duan.blogos.service.dao.BloggerAccountDao;
+import com.duan.blogos.service.dao.BloggerPictureDao;
+import com.duan.blogos.service.entity.BloggerPicture;
+import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.common.enums.BloggerSettingEnums;
+import com.duan.blogos.service.validate.BloggerValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

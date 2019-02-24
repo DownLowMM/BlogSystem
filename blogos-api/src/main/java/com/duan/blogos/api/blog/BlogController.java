@@ -4,18 +4,15 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
-import com.duan.blogos.service.common.BlogSortRule;
-import com.duan.blogos.service.common.Order;
-import com.duan.blogos.service.dto.blog.BlogDTO;
-import com.duan.blogos.service.dto.blog.BlogListItemDTO;
-import com.duan.blogos.service.dto.blog.BlogTitleIdDTO;
-import com.duan.blogos.service.enums.BlogFormatEnum;
-import com.duan.blogos.service.enums.BlogStatusEnum;
-import com.duan.blogos.service.restful.PageResult;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.BlogFilterService;
-import com.duan.blogos.service.service.blogger.BloggerBlogService;
-import com.duan.blogos.service.vo.FileVO;
+import com.duan.blogos.service.common.enums.*;
+import com.duan.blogos.service.common.dto.blog.BlogDTO;
+import com.duan.blogos.service.common.dto.blog.BlogListItemDTO;
+import com.duan.blogos.service.common.dto.blog.BlogTitleIdDTO;
+import com.duan.blogos.service.common.restful.PageResult;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.BlogFilterService;
+import com.duan.blogos.service.blogger.BloggerBlogService;
+import com.duan.blogos.service.common.vo.FileVO;
 import com.duan.blogos.util.*;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static com.duan.blogos.service.common.Rule.VIEW_COUNT;
+import static com.duan.blogos.service.common.enums.Rule.VIEW_COUNT;
 
 /**
  * Created on 2018/1/15.
@@ -124,7 +121,7 @@ public class BlogController extends BaseController {
         if (stat == null) stat = BlogStatusEnum.PUBLIC; // status 传参错误
 
         //执行数据查询
-        BlogSortRule rule = new BlogSortRule(com.duan.blogos.service.common.Rule.valueOf(sor), Order.valueOf(ord));
+        BlogSortRule rule = new BlogSortRule(Rule.valueOf(sor), Order.valueOf(ord));
 
         return blogFilterService.listFilterAll(Arrays.asList(cids), Arrays.asList(lids), keyWord, bloggerId,
                 pageNum, pageSize, rule, stat);

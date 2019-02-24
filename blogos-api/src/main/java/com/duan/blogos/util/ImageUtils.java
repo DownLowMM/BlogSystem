@@ -1,6 +1,6 @@
 package com.duan.blogos.util;
 
-import com.duan.blogos.service.vo.FileVO;
+import com.duan.blogos.service.common.vo.FileVO;
 
 import java.io.File;
 

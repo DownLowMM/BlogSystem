@@ -1,6 +1,6 @@
 package com.duan.blogos.service.manager;
 
-import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
+import com.duan.blogos.service.dao.BloggerAccountDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,14 +1,14 @@
 package com.duan.blogos.websample;
 
-import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
-import com.duan.blogos.service.dto.blogger.BloggerPictureDTO;
-import com.duan.blogos.service.dto.blogger.BloggerProfileDTO;
-import com.duan.blogos.service.dto.blogger.BloggerSettingDTO;
-import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.service.blogger.BloggerAccountService;
-import com.duan.blogos.service.service.blogger.BloggerPictureService;
-import com.duan.blogos.service.service.blogger.BloggerProfileService;
-import com.duan.blogos.service.service.blogger.BloggerSettingService;
+import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
+import com.duan.blogos.service.common.dto.blogger.BloggerPictureDTO;
+import com.duan.blogos.service.common.dto.blogger.BloggerProfileDTO;
+import com.duan.blogos.service.common.dto.blogger.BloggerSettingDTO;
+import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.blogger.BloggerAccountService;
+import com.duan.blogos.service.blogger.BloggerPictureService;
+import com.duan.blogos.service.blogger.BloggerProfileService;
+import com.duan.blogos.service.blogger.BloggerSettingService;
 import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

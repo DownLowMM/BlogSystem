@@ -1,8 +1,8 @@
 package com.duan.blogos.service.manager.comparator;
 
 
-import com.duan.blogos.service.common.Order;
-import com.duan.blogos.service.common.Rule;
+import com.duan.blogos.service.common.enums.Order;
+import com.duan.blogos.service.common.enums.Rule;
 
 import java.util.Comparator;
 import java.util.HashMap;

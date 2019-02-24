@@ -1,14 +1,14 @@
 package com.duan.blogos.websample;
 
-import com.duan.blogos.service.dto.blog.BlogBaseStatisticsDTO;
-import com.duan.blogos.service.dto.blog.BlogDTO;
-import com.duan.blogos.service.dto.blogger.BloggerAccountDTO;
-import com.duan.blogos.service.dto.blogger.BloggerStatisticsDTO;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blog.OperateService;
-import com.duan.blogos.service.service.blog.StatisticsService;
-import com.duan.blogos.service.service.blogger.*;
-import com.duan.blogos.service.service.common.OnlineService;
+import com.duan.blogos.service.common.dto.blog.BlogBaseStatisticsDTO;
+import com.duan.blogos.service.common.dto.blog.BlogDTO;
+import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
+import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.blog.OperateService;
+import com.duan.blogos.service.blog.StatisticsService;
+import com.duan.blogos.service.blogger.*;
+import com.duan.blogos.service.OnlineService;
 import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

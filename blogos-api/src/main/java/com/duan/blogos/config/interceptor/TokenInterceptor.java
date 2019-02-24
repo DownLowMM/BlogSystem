@@ -3,8 +3,8 @@ package com.duan.blogos.config.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.duan.blogos.annonation.TokenNotRequired;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.util.TokenUtil;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.common.util.TokenUtil;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.CurrentUserThreadLocal;
 import com.duan.blogos.util.SpringUtil;

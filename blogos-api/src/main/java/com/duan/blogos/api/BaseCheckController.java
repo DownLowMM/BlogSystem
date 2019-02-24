@@ -1,11 +1,11 @@
 package com.duan.blogos.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.duan.blogos.service.common.Order;
-import com.duan.blogos.service.common.Rule;
-import com.duan.blogos.service.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.service.validate.BlogValidateService;
-import com.duan.blogos.service.service.validate.BloggerValidateService;
+import com.duan.blogos.service.common.enums.Order;
+import com.duan.blogos.service.common.enums.Rule;
+import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.validate.BlogValidateService;
+import com.duan.blogos.service.validate.BloggerValidateService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
 import com.duan.blogos.util.StringUtils;

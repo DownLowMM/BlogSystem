@@ -1,6 +1,6 @@
 package com.duan.blogos.service.config;
 
-import com.duan.blogos.service.util.SpringUtil;
+import com.duan.blogos.service.common.util.SpringUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

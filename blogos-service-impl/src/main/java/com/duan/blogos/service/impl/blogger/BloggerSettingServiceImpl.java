@@ -1,11 +1,11 @@
 package com.duan.blogos.service.impl.blogger;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.duan.blogos.service.dao.blogger.BloggerSettingDao;
-import com.duan.blogos.service.dto.blogger.BloggerSettingDTO;
-import com.duan.blogos.service.entity.blogger.BloggerSetting;
-import com.duan.blogos.service.service.blogger.BloggerSettingService;
-import com.duan.blogos.service.util.DataConverter;
+import com.duan.blogos.service.dao.BloggerSettingDao;
+import com.duan.blogos.service.common.dto.blogger.BloggerSettingDTO;
+import com.duan.blogos.service.entity.BloggerSetting;
+import com.duan.blogos.service.blogger.BloggerSettingService;
+import com.duan.blogos.service.common.util.DataConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

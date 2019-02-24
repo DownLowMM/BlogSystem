@@ -1,11 +1,11 @@
 package com.duan.blogos.service.impl.common;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.duan.blogos.service.common.Order;
-import com.duan.blogos.service.common.Rule;
-import com.duan.blogos.service.dto.blog.BlogSortRuleDTO;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.common.BlogSortRuleService;
+import com.duan.blogos.service.common.enums.Order;
+import com.duan.blogos.service.common.enums.Rule;
+import com.duan.blogos.service.common.dto.blog.BlogSortRuleDTO;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.BlogSortRuleService;
 
 import java.util.ArrayList;
 import java.util.Arrays;

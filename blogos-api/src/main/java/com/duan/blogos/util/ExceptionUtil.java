@@ -1,6 +1,6 @@
 package com.duan.blogos.util;
 
-import com.duan.blogos.service.exception.BlogOSException;
+import com.duan.blogos.service.common.exception.BlogOSException;
 
 /**
  * Created on 2018/9/13.

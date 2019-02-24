@@ -1,16 +1,16 @@
 package com.duan.blogos.service.impl.blogger;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.duan.blogos.service.common.BlogSortRule;
+import com.duan.blogos.service.common.enums.BlogSortRule;
 import com.duan.blogos.service.config.preference.DefaultProperties;
-import com.duan.blogos.service.dao.blog.BlogLikeDao;
-import com.duan.blogos.service.dto.blogger.FavoriteBlogListItemDTO;
-import com.duan.blogos.service.entity.blog.BlogLike;
+import com.duan.blogos.service.dao.BlogLikeDao;
+import com.duan.blogos.service.common.dto.blogger.FavoriteBlogListItemDTO;
+import com.duan.blogos.service.entity.BlogLike;
 import com.duan.blogos.service.manager.BlogDataManager;
-import com.duan.blogos.service.restful.PageResult;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blogger.BloggerLikeBlogService;
-import com.duan.blogos.service.util.ResultModelUtil;
+import com.duan.blogos.service.common.restful.PageResult;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.blogger.BloggerLikeBlogService;
+import com.duan.blogos.service.common.util.ResultModelUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

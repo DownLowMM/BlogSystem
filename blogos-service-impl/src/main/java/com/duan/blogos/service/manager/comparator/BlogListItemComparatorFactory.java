@@ -1,9 +1,9 @@
 package com.duan.blogos.service.manager.comparator;
 
 
-import com.duan.blogos.service.common.Order;
-import com.duan.blogos.service.common.Rule;
-import com.duan.blogos.service.entity.blog.BlogStatistics;
+import com.duan.blogos.service.common.enums.Order;
+import com.duan.blogos.service.common.enums.Rule;
+import com.duan.blogos.service.entity.BlogStatistics;
 
 /**
  * Created on 2017/12/20.

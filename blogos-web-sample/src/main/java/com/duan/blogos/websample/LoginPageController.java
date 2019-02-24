@@ -1,7 +1,7 @@
 package com.duan.blogos.websample;
 
-import com.duan.blogos.service.dto.blogger.BloggerBriefDTO;
-import com.duan.blogos.service.service.website.WebSiteStatisticsService;
+import com.duan.blogos.service.common.dto.blogger.BloggerBriefDTO;
+import com.duan.blogos.service.website.WebSiteStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;

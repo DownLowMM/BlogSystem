@@ -1,6 +1,6 @@
 package com.duan.blogos.util;
 
-import com.duan.blogos.service.vo.FileVO;
+import com.duan.blogos.service.common.vo.FileVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

@@ -4,23 +4,23 @@ package com.duan.blogos.service.impl.blog;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
-import com.duan.blogos.service.dao.blog.BlogCommentDao;
-import com.duan.blogos.service.dao.blogger.BloggerAccountDao;
-import com.duan.blogos.service.dao.blogger.BloggerPictureDao;
-import com.duan.blogos.service.dao.blogger.BloggerProfileDao;
-import com.duan.blogos.service.dto.blog.BlogCommentDTO;
-import com.duan.blogos.service.dto.blogger.BloggerDTO;
-import com.duan.blogos.service.entity.blog.BlogComment;
-import com.duan.blogos.service.entity.blogger.BloggerAccount;
-import com.duan.blogos.service.entity.blogger.BloggerPicture;
-import com.duan.blogos.service.entity.blogger.BloggerProfile;
-import com.duan.blogos.service.enums.BlogCommentStatusEnum;
+import com.duan.blogos.service.dao.BlogCommentDao;
+import com.duan.blogos.service.dao.BloggerAccountDao;
+import com.duan.blogos.service.dao.BloggerPictureDao;
+import com.duan.blogos.service.dao.BloggerProfileDao;
+import com.duan.blogos.service.common.dto.blog.BlogCommentDTO;
+import com.duan.blogos.service.common.dto.blogger.BloggerDTO;
+import com.duan.blogos.service.entity.BlogComment;
+import com.duan.blogos.service.entity.BloggerAccount;
+import com.duan.blogos.service.entity.BloggerPicture;
+import com.duan.blogos.service.entity.BloggerProfile;
+import com.duan.blogos.service.common.enums.BlogCommentStatusEnum;
 import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.restful.PageResult;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blog.CommentService;
-import com.duan.blogos.service.util.DataConverter;
-import com.duan.blogos.service.util.ResultModelUtil;
+import com.duan.blogos.service.common.restful.PageResult;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.blog.CommentService;
+import com.duan.blogos.service.common.util.DataConverter;
+import com.duan.blogos.service.common.util.ResultModelUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.duan.blogos.service.enums.BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR;
+import static com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR;
 
 /**
  * Created on 2017/12/19.

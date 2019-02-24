@@ -1,7 +1,7 @@
 package com.duan.blogos.websample.util;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
-import com.duan.blogos.service.util.TokenUtil;
+import com.duan.blogos.service.common.util.TokenUtil;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

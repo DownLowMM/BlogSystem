@@ -1,10 +1,10 @@
 package com.duan.blogos.service.impl.blogger;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.duan.blogos.service.dao.blog.BlogCommentDao;
-import com.duan.blogos.service.dao.blog.BlogStatisticsDao;
-import com.duan.blogos.service.entity.blog.BlogComment;
-import com.duan.blogos.service.service.blogger.BloggerCommentService;
+import com.duan.blogos.service.dao.BlogCommentDao;
+import com.duan.blogos.service.dao.BlogStatisticsDao;
+import com.duan.blogos.service.entity.BlogComment;
+import com.duan.blogos.service.blogger.BloggerCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

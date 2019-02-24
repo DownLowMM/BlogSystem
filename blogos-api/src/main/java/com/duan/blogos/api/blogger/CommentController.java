@@ -3,14 +3,14 @@ package com.duan.blogos.api.blogger;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
-import com.duan.blogos.service.restful.ResultModel;
-import com.duan.blogos.service.service.blogger.BloggerCommentService;
-import com.duan.blogos.service.service.validate.BlogCommentValidateService;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.blogger.BloggerCommentService;
+import com.duan.blogos.service.validate.BlogCommentValidateService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
 import org.springframework.web.bind.annotation.*;
 
-import static com.duan.blogos.service.enums.BlogCommentStatusEnum.RIGHTFUL;
+import static com.duan.blogos.service.common.enums.BlogCommentStatusEnum.RIGHTFUL;
 
 /**
  * Created on 2018/3/13.
