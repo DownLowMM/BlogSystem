@@ -2,12 +2,11 @@ package com.duan.blogos.api.blogger;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
-import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
+import com.duan.blogos.service.blogger.BloggerLinkService;
 import com.duan.blogos.service.common.dto.blogger.BloggerLinkDTO;
 import com.duan.blogos.service.common.restful.PageResult;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerLinkService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
 import com.duan.blogos.util.StringUtils;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger/link")
+@RequestMapping("/blogger/{bloggerId}/link")
 public class LinkController extends BaseController {
 
     @Reference
@@ -31,7 +30,7 @@ public class LinkController extends BaseController {
      */
     @GetMapping
     @TokenNotRequired
-    public ResultModel<PageResult<BloggerLinkDTO>> get(@RequestParam Long bloggerId,
+    public ResultModel<PageResult<BloggerLinkDTO>> get(@PathVariable Long bloggerId,
                                                        @RequestParam(required = false) Integer pageNum,
                                                        @RequestParam(required = false) Integer pageSize) {
 
@@ -47,7 +46,7 @@ public class LinkController extends BaseController {
      * 新增链接
      */
     @PostMapping
-    public ResultModel add(@Uid Long bloggerId,
+    public ResultModel add(@PathVariable Long bloggerId,
                            @RequestParam(required = false) Long iconId,
                            @RequestParam String title,
                            @RequestParam String url,
@@ -68,7 +67,7 @@ public class LinkController extends BaseController {
      * 更新链接
      */
     @PutMapping("/{linkId}")
-    public ResultModel update(@Uid Long bloggerId,
+    public ResultModel update(@PathVariable Long bloggerId,
                               @PathVariable Long linkId,
                               @RequestParam(required = false) Long iconId,
                               @RequestParam(required = false) String title,

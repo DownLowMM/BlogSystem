@@ -146,7 +146,7 @@ function loadContact() {
         function (result) {
             var html = '';
             if (result.code === 200) {
-                var array = result.data;
+                var array = result.data.list;
                 setModifyLink(array);
                 $('#linkCount').html('(' + array.length + ')');
 
