@@ -29,7 +29,7 @@ function createLink(funWhenCreateLinkSuccess, funWhenCreateLinkFail) {
             bewrite: bewrite
         }, true, 'post', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'newLinkBtn', '创建成功', "button-disable");
                 funWhenCreateLinkSuccess(result.data);
 

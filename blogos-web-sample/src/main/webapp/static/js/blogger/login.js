@@ -24,7 +24,7 @@ function login() {
         username: name,
         password: pwd
     }, true, 'post', function (result) {
-        if (result.code === 0) {
+        if (result.code === 200) {
             disableButton(false, 'loginBtn', '登录成功', "button-disable");
 
             setTimeout(function () {

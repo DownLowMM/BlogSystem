@@ -51,7 +51,7 @@ function loadLabel() {
     ajaxSpe('/blogger/' + bloggerId + '/label',
         {offset: 0, rows: 20}, true, 'get', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 var array = result.data;
                 // 填充立即发布对话框数据
                 setLabel(array);
@@ -75,7 +75,7 @@ function loadCategory() {
     ajaxSpe('/blogger/' + bloggerId + '/category',
         {offset: 0, rows: 1000}, true, 'get', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 var array = result.data;
                 // 填充立即发布对话框数据
                 setCategory(array);

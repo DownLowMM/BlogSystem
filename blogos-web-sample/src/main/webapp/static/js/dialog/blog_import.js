@@ -55,7 +55,7 @@ function importBlog(bloggerId) {
     ajaxForUpload('/blogger/' + bloggerId + '/blog/patch', 'POST', data, false, false, false,
         function (result) {
 
-            if (result.code === 0) {
+            if (result.code === 200) {
                 stopSuc = true;
 
                 // 60% -> 100% 处理时间
@@ -102,7 +102,7 @@ function importBlog(bloggerId) {
     //     contentType: false,
     //     success: function (result) {
     //
-    //         if (result.code === 0) {
+    //         if (result.code === 200) {
     //             stopSuc = true;
     //
     //             // 60% -> 100% 处理时间

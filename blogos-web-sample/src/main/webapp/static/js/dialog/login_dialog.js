@@ -26,7 +26,7 @@ function login(funAfterLoginSuccess, funAfterLoginFail) {
             username: name,
             password: pwd
         }, true, 'post', function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'loginBtn', '登录成功', "button-disable");
 
                 setTimeout(function () {
@@ -86,7 +86,7 @@ function login(funAfterLoginSuccess, funAfterLoginFail) {
             disableButton(false, 'loginBtn', '正在登录...', "button-disable");
             ajax('/blogger/login/way=phone', {phone: phone}, true, 'post',
                 function (result) {
-                    if (result.code === 0) {
+                    if (result.code === 200) {
                         disableButton(false, 'loginBtn', '登录成功', "button-disable");
 
                         setTimeout(function () {
@@ -153,7 +153,7 @@ function sendPhoneCode() {
         phone: phone,
         content: '【BLOG】 你的验证码是: ' + phoneCode + ' ,此验证码用于登录 BLOG，10分钟内有效。'
     }, true, 'get', 'json', function (result) {
-        if (result.code === 0) {
+        if (result.code === 200) {
             countDown(60, 1000, function (c) {
                 if (c === 0) {
                     return true;

@@ -17,7 +17,7 @@ function createCategory(funWhenCreateCategorySuccess, funWhenCreateCategoryFail)
     disableButton(false, 'newCategoryBtn', '正在创建...', "button-disable");
     ajaxSpe('/blogger/' + pageOwnerBloggerId + '/category', {title: title, bewrite: bewrite}, true, 'post', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'newCategoryBtn', '创建成功', "button-disable");
                 funWhenCreateCategorySuccess(result.data);
 

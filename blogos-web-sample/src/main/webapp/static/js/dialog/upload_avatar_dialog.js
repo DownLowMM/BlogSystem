@@ -32,7 +32,7 @@ function sendAvatarData(base64url, bloggerId) {
             disableButton(false, 'editAvatarBtn', '正在上传...', 'button-disable');
         },
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'editAvatarBtn', '上传成功', 'button-disable');
 
                 setTimeout(function () {

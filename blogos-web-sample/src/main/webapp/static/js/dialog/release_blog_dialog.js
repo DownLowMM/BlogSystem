@@ -232,7 +232,7 @@ function releaseBlog(editMode, funAfterReleaseBlogSuccess) {
     }
 
     function afterReleaseSuccess(result) {
-        if (result.code === 0) {
+        if (result.code === 200) {
             disableButton(false, 'editReleaseBtn', '发布成功', "button-disable");
 
             setTimeout(function () {

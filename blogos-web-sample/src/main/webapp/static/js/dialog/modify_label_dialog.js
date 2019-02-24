@@ -39,7 +39,7 @@ function exeLabelUpdate(th, bloggerId, funWhenEditLabelSuccess) {
 
     ajax('/blogger/' + bloggerId + '/label/' + labelId, {title: newName}, false, 'put',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'modifyEditLabelBtn', '修改成功', "button-disable");
 
                 setTimeout(function () {
@@ -59,7 +59,7 @@ function exeLabelUpdate(th, bloggerId, funWhenEditLabelSuccess) {
 
     ajax('/blogger/' + bloggerId + '/label/' + labelId, {title: newName}, true, 'put',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'modifyEditLabelBtn', '修改成功', "button-disable");
 
                 setTimeout(function () {

@@ -22,7 +22,7 @@ function likeBlog(th) {
     if (like.attr('title') === '点击添加至 [喜欢]') {
         ajax('/blogger/' + loginBloggerId + '/' + blogId + '/operate=like', null, true, 'post',
             function (result) {
-                if (result.code === 0) {
+                if (result.code === 200) {
                     like.attr('title', '你已喜欢，点击取消喜欢');
                     toast('已喜欢', 1000);
                     updateBlogCountStatistics();
@@ -48,7 +48,7 @@ function likeBlog(th) {
 
         ajax('/blogger/' + loginBloggerId + '/' + blogId + '/operate=like', null, true, 'delete',
             function (result) {
-                if (result.code === 0) {
+                if (result.code === 200) {
                     like.attr('title', '点击添加至 [喜欢]');
                     toast('已取消喜欢', 1000);
                     updateBlogCountStatistics();
@@ -81,7 +81,7 @@ function collectBlog(th) {
     if (collect.attr('title') === '点击添加至 [收藏]') {
         ajax('/blogger/' + loginBloggerId + '/' + blogId + '/operate=collect', null, true, 'post',
             function (result) {
-                if (result.code === 0) {
+                if (result.code === 200) {
                     collect.attr('title', '你已收藏，点击可取消收藏');
                     toast('已收藏', 1000);
                     updateBlogCountStatistics();
@@ -107,7 +107,7 @@ function collectBlog(th) {
 
         ajax('/blogger/' + loginBloggerId + '/' + blogId + '/operate=collect', null, true, 'delete',
             function (result) {
-                if (result.code === 0) {
+                if (result.code === 200) {
                     collect.attr('title', '点击添加至 [收藏]');
                     toast('已取消收藏', 1000);
                     updateBlogCountStatistics();
@@ -136,7 +136,7 @@ function collectBlog(th) {
 function updateBlogCountStatistics() {
     ajax('/blog/' + blogId + '/statistics/count', null, true, 'get',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 $('#blogLikeCount').html(result.data.likeCount);
 
                 $('#blogCollectCount').html(result.data.collectCount);
@@ -186,7 +186,7 @@ function loadComment() {
             var container = $('#commentContainer');
             var html = '';
 
-            if (result.code === 0) {
+            if (result.code === 200) {
 
                 var array = result.data;
                 $('#commentCount').html(array.length);
@@ -323,7 +323,7 @@ function deleteComment(bgid) {
 
     ajax('/blogger/' + loginBloggerId + '/comment/' + bgid + '?blogId=' + blogId, null, false, 'delete',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 loadComment();
             }
         });
@@ -364,7 +364,7 @@ function leaveAComment() {
             listenerId: blogOwnerBloggerId
         }, true, 'post',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'commentBtn', '留言成功', "button-disable");
 
                 setTimeout(function () {

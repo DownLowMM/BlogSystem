@@ -2,12 +2,11 @@ package com.duan.blogos.api.blogger;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
-import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
+import com.duan.blogos.service.blogger.BloggerLabelService;
 import com.duan.blogos.service.common.dto.blog.BlogLabelDTO;
 import com.duan.blogos.service.common.restful.PageResult;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerLabelService;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -24,45 +23,18 @@ import org.springframework.web.bind.annotation.*;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/label")
-public class LabelController extends BaseController {
+@RequestMapping("/blogger/{bloggerId}/label")
+public class BloggerLabelController extends BaseController {
 
     @Reference
     private BloggerLabelService bloggerLabelService;
-
-    /**
-     * 查看所有标签
-     */
-    @GetMapping("/all")
-    @TokenNotRequired
-    public ResultModel<PageResult<BlogLabelDTO>> get(@RequestParam(required = false) Integer pageNum,
-                                                     @RequestParam(required = false) Integer pageSize) {
-
-        ResultModel<PageResult<BlogLabelDTO>> resultModel = bloggerLabelService.listLabel(pageNum, pageSize);
-        if (resultModel == null) handlerEmptyResult();
-
-        return resultModel;
-    }
-
-    /**
-     * 获取指定标签
-     */
-    @GetMapping("/{labelId}")
-    @TokenNotRequired
-    public ResultModel<BlogLabelDTO> getLabel(@PathVariable("labelId") Long labelId) {
-
-        BlogLabelDTO label = bloggerLabelService.getLabel(labelId);
-        if (label == null) handlerEmptyResult();
-
-        return ResultModel.success(label);
-    }
 
     /**
      * 获取指定博主创建的标签
      */
     @GetMapping
     @TokenNotRequired
-    public ResultModel<PageResult<BlogLabelDTO>> list(@RequestParam Long bloggerId,
+    public ResultModel<PageResult<BlogLabelDTO>> list(@PathVariable Long bloggerId,
                                                       @RequestParam(required = false) Integer pageNum,
                                                       @RequestParam(required = false) Integer pageSize) {
         handleAccountCheck(bloggerId);
@@ -77,7 +49,7 @@ public class LabelController extends BaseController {
      * 新增标签
      */
     @PostMapping
-    public ResultModel add(@Uid Long bloggerId,
+    public ResultModel add(@PathVariable Long bloggerId,
                            @RequestParam("title") String title) {
 
         Long id = bloggerLabelService.insertLabel(bloggerId, title);
@@ -90,7 +62,7 @@ public class LabelController extends BaseController {
      * 修改标签
      */
     @PutMapping("/{labelId}")
-    public ResultModel update(@Uid Long bloggerId, @PathVariable Long labelId,
+    public ResultModel update(@PathVariable Long bloggerId, @PathVariable Long labelId,
                               @RequestParam("title") String newTitle) {
 
         boolean result = bloggerLabelService.updateLabel(labelId, bloggerId, newTitle);
@@ -103,7 +75,7 @@ public class LabelController extends BaseController {
      * 删除标签
      */
     @DeleteMapping("/{labelId}")
-    public ResultModel delete(@Uid Long bloggerId, @PathVariable Long labelId) {
+    public ResultModel delete(@PathVariable Long bloggerId, @PathVariable Long labelId) {
         handleAccountCheck(bloggerId);
         boolean result = bloggerLabelService.deleteLabel(bloggerId, labelId);
         if (!result) handlerOperateFail();

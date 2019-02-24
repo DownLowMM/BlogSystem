@@ -85,7 +85,7 @@ function setPageIndicator(initIndex) {
     ajaxSpe('/blogger/' + pageOwnerBloggerId + '/' + type + '/count',
         null, true, 'get', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 var count = result.data;
                 $('#blogCount').html('共&nbsp;' + count + '&nbsp;篇');
                 if (type === 'like') {
@@ -233,7 +233,7 @@ function removeFavourite(blogId) {
 
     ajax('/blogger/' + loginBloggerId + '/' + blogId + '/operate=' + type, null, true, 'delete',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 filterBloggerBlog(0, defaultBlogCount, true, false, true);
                 toast('已移除', 500);
 

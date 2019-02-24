@@ -71,7 +71,7 @@ function saveProfileDiv() {
                 aboutMe: mAboutMe
             }, false, 'put',
             function (result) {
-                if (result.code === 0) {
+                if (result.code === 200) {
                     disableButton(false, btnId, '修改成功', "button-disable");
                     toast('修改成功', 1000);
                     setTimeout(function () {
@@ -131,7 +131,7 @@ function saveBaseDiv() {
 
         ajax('/blogger/' + bloggerId + '/item=name', {username: mBloggerName}, false, 'put',
             function (result) {
-                if (result.code === 0) {
+                if (result.code === 200) {
                     bloggerName = mBloggerName;
                     bloggerNameModify = true;
                     editSucc = true;
@@ -168,7 +168,7 @@ function saveBaseDiv() {
                 email: mEmail
             }, false, 'put',
             function (result) {
-                if (result.code === 0) {
+                if (result.code === 200) {
                     email = mEmail;
                     phone = mPhone;
                     editSucc = true;
@@ -206,7 +206,7 @@ function saveBaseDiv() {
 
         ajax('/blogger/' + bloggerId + '/setting/item=mainPageNavPos', {mainPageNavPos: mMainNavPos}, false, 'put',
             function (result) {
-                if (result.code === 0) {
+                if (result.code === 200) {
                     editSucc = true;
                     mainNavPos = mMainNavPos;
                 } else {
@@ -270,7 +270,7 @@ function confirmExe() {
 
     ajax('/blogger/' + bloggerId, null, false, 'delete',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'confirmBtn', '删除成功', 'button-disable');
 
                 setTimeout(function () {
@@ -324,7 +324,7 @@ function sendPhoneCode() {
             content: '【BLOG】 你的验证码是: ' + phoneCode + ' ,此验证码用于重置登录密码，10分钟内有效。'
         }, true, 'post', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 countDown(60, 1000, function (c) {
                     if (c === 0) {
                         return true;

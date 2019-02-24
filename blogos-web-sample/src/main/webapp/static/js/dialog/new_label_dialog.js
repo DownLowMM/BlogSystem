@@ -17,7 +17,7 @@ function createLabel(funWhenCreateLabelSuccess, funWhenCreateLabelFail) {
     disableButton(false, 'newLabelBtn', '正在创建...', "button-disable");
     ajaxSpe('/blogger/' + pageOwnerBloggerId + '/label', {title: name}, true, 'post', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'newLabelBtn', '创建成功', "button-disable");
                 funWhenCreateLabelSuccess(result.data);
 
@@ -40,7 +40,7 @@ function createLabel(funWhenCreateLabelSuccess, funWhenCreateLabelFail) {
     //     '/blogger/' + pageOwnerBloggerId + '/label',
     //     {title: name},
     //     function (result) {
-    //         if (result.code === 0) {
+    //         if (result.code === 200) {
     //             disableButton(false, 'newLabelBtn', '创建成功', "button-disable");
     //             funWhenCreateLabelSuccess(result.data);
     //

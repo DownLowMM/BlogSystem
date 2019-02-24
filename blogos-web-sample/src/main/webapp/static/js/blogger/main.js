@@ -19,8 +19,8 @@ function loadLabel() {
         {offset: 0, rows: 20}, true, 'get', 'json',
         function (result) {
             var html = '';
-            if (result.code === 0) {
-                var array = result.data;
+            if (result.code === 200) {
+                var array = result.data.list;
                 // 设置高级筛选框内容
                 setComplexFilterLabel(array);
                 // 设置标签编辑框内容
@@ -81,7 +81,7 @@ function loadCategory() {
         {offset: 0, rows: 1000}, true, 'get', 'json',
         function (result) {
             var html = '';
-            if (result.code === 0) {
+            if (result.code === 200) {
                 var array = result.data;
                 // 设置高级筛选框内容
                 setComplexFilterCategory(array);
@@ -145,7 +145,7 @@ function loadContact() {
         {offset: 0, rows: 20}, true, 'get', 'json',
         function (result) {
             var html = '';
-            if (result.code === 0) {
+            if (result.code === 200) {
                 var array = result.data;
                 setModifyLink(array);
                 $('#linkCount').html('(' + array.length + ')');
@@ -211,7 +211,7 @@ function loadSortRule() {
     ajaxSpe('/sort-rule/rule',
         null, true, 'get', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 var html = '';
                 var array = result.data;
                 for (var index in array) {
@@ -242,7 +242,7 @@ function loadSortRule() {
     ajaxSpe('/sort-rule/order',
         null, true, 'get', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 var html = '';
                 var array = result.data;
                 for (var index in array) {
@@ -680,7 +680,7 @@ function confirmExe() {
 
     ajax('/blogger/' + loginBloggerId + '/blog/' + confirmDeleteBlogId, null, false, 'delete',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 confirmDeleteBlogId = -1;
                 disableButton(false, 'confirmBtn', '删除成功', "button-disable");
                 filterBloggerBlog(0, defaultBlogCount, true, false, true);
@@ -775,7 +775,7 @@ function setPageIndicator(initIndex) {
     ajaxSpe('/blog/count',
         null, true, 'get', 'json',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 var count = result.data;
                 $('#box').paging({
                     initPageNo: initIndex, // 初始页码

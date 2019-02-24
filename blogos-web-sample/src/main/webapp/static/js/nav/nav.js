@@ -2,7 +2,7 @@ function logout(bloggerId, bloggerName) {
 
     ajax('/blogger/' + bloggerId + '/logout', null, true, 'post',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 location.href = '/' + bloggerName + '/archives';
             } else {
                 toast(result.msg, 2000);

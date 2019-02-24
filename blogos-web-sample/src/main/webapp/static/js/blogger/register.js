@@ -182,7 +182,7 @@ function register() {
         }, true, 'post', 'json',
         function (result) {
 
-            if (result.code === 0) {
+            if (result.code === 200) {
                 login(result.data);
             } else {
                 failInfo(result.msg);
@@ -196,7 +196,7 @@ function register() {
                         intro: intro
                     }, true, 'post', 'json',
                     function (result) {
-                        if (result.code === 0) {
+                        if (result.code === 200) {
                             countDown(3, 1000, function (c) {
                                 if (c === 0) {
                                     location.href = '/' + userName + '/archives';
@@ -243,7 +243,7 @@ function register() {
                         password: password
                     }, true, 'post', 'json',
                     function (result) {
-                        if (result.code === 0) {
+                        if (result.code === 200) {
                             addProfile(id);
                         } else {
                             failInfo(result.msg);

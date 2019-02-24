@@ -1,7 +1,7 @@
 function loadBlogStatistics(blogId) {
     ajax('/blog/' + blogId + '/statistics', null, true, 'get',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 setData(result.data);
             } else {
                 $('#blogStatisticsDialog').modal('hide');
@@ -132,7 +132,7 @@ function loadBlogComment(blogId) {
             offset: 0
         }, true, 'get',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 setComment(result.data);
             } else if (result.code === 14) {
                 $('#blogStatistics-comment').html('<h4>还没有评论，去&nbsp;<a onclick="goCheckBlog()">查看</a>&nbsp;并发表评论。</h4>');

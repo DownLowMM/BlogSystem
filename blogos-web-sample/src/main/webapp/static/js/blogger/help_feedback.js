@@ -15,7 +15,7 @@ function sendFeedback(bloggerId) {
     disableButton(false, 'sendFeedbackBtn', '正在提交...', "button-disable");
     ajax('/email/feedback', data, true, 'post',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'sendFeedbackBtn', '提交成功', "button-disable");
 
                 setTimeout(function () {

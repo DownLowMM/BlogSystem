@@ -63,7 +63,7 @@ function exeCategoryUpdate(th, bloggerId, funWhenEditCategorySuccess) {
     var id = $('#showChoosedCategory > span').attr('did');
     ajax('/blogger/' + bloggerId + '/category/' + id, data, true, 'put',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'modifyEditCategoryBtn', '修改成功', "button-disable");
 
                 setTimeout(function () {

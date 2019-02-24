@@ -65,7 +65,7 @@ function exeLinkUpdate(th, bloggerId, funWhenEditLinkSuccess) {
 
     ajax('/blogger/' + bloggerId + '/link/' + id, data, true, 'put',
         function (result) {
-            if (result.code === 0) {
+            if (result.code === 200) {
                 disableButton(false, 'modifyEditLinkBtn', '修改成功', "button-disable");
 
                 setTimeout(function () {
