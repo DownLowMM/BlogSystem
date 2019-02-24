@@ -3,6 +3,8 @@ package com.duan.blogos.service.common.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 /**
  * Created on 2017/12/16.
  * 博文排序规则
@@ -11,7 +13,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public class BlogSortRule {
+public class BlogSortRule implements Serializable {
 
     /**
      * 排序依据

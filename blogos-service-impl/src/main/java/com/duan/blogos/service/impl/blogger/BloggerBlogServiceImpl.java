@@ -170,7 +170,7 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
     private Long[] parseContentForImageIds(String content, Long bloggerId) {
         //http://localhost:8080/image/1/type=public/523?default=5
         //http://localhost:8080/image/1/type=private/1
-        String regex = "http://" + websiteProperties.getAddr() + "/image/" + bloggerId + "/.*?/(\\d+)";
+        String regex = "http://" + websiteProperties.getImageServerHost() + "/image/" + bloggerId + "/.*?/(\\d+)";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(content);
 

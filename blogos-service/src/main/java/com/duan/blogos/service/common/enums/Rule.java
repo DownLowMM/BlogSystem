@@ -1,12 +1,14 @@
 package com.duan.blogos.service.common.enums;
 
+import java.io.Serializable;
+
 /**
  * Created on 2017/12/16.
  * 排序依据
  *
  * @author DuanJiaNing
  */
-public enum Rule {
+public enum Rule implements Serializable {
 
     /**
      * 评论次数

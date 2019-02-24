@@ -1,9 +1,9 @@
 package com.duan.blogos.service.manager;
 
+import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.config.preference.FileProperties;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.entity.BloggerPicture;
-import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ public class StringConstructorManager {
         StringBuilder buffer = new StringBuilder(50);
         int cate = picture.getCategory();
         buffer.append("http://")
-                .append(websiteProperties.getAddr())
+                .append(websiteProperties.getImageServerHost())
                 .append("/image/")
                 // 私有图片登录才能获取
                 .append(cate == BloggerPictureCategoryEnum.PRIVATE.getCode() ? "prv/" : "")

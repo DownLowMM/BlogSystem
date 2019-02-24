@@ -61,7 +61,7 @@ app:
 
 mybatis:
   mapperLocations: classpath:mapper/*/*.xml
-  typeAliasesPackage: com.duan.blogos.service.entity
+#  typeAliasesPackage: com.duan.blogos.service.entity
   config: classpath:mybatis-config.xml
   #  typeHandlersPackage: cn.com.*.dao
   #  checkConfigLocation:
@@ -95,7 +95,7 @@ preference:
     sender-mail: 2213994603@qq.com # 配置了smtp 的邮件发送者
     sender-mail-password: athupcbmeyvvdjif # 配置了smtp 的邮件发送者的授权码
     active-blogger-count: 20 # 默认获取活跃博主数
-    addr: 127.0.0.1:8080 # 站点域名
+    imageServerHost: 127.0.0.1:7070 # 图片服务器
     condition-split-character: \u002C # 默认的url请求参数的间隔字符（英文字符）
   file:
     image-root-path: E:/blog/blogger/image # 博主图片保存根路径
@@ -103,5 +103,4 @@ preference:
     patch-download-blog-temp-path: E:/blog/temp/blog-patch-download # 批量下载时临时 zip 文件和 md/html 文件路径
     lucene-index-dir: E:/blog/lucene # lucene生成的索引保存路径
   db:
-    string-filed-split-character-for-number: \u0020
     string-filed-split-character-for-string: \u0020

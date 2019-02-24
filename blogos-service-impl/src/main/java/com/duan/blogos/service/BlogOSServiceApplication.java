@@ -4,7 +4,6 @@ import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ImportResource;
 
 /**
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.ImportResource;
  * @author DuanJiaNing
  */
 @SpringBootApplication
-@EntityScan("com.duan.blogos.service.entity")
 @MapperScan("com.duan.blogos.service.dao")
 @ImportResource("classpath:spring/spring-*.xml")
 @EnableDubbo(scanBasePackages = "com.duan.blogos.service.impl")

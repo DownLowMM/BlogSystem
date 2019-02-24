@@ -3,12 +3,12 @@ package com.duan.blogos.config.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.duan.blogos.annonation.TokenNotRequired;
+import com.duan.blogos.service.OnlineService;
 import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.common.util.TokenUtil;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.CurrentUserThreadLocal;
 import com.duan.blogos.util.SpringUtil;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -21,8 +21,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author DuanJiaNing
  */
 public class TokenInterceptor extends HandlerInterceptorAdapter {
-
-    private RedisTemplate redisTemplate = (RedisTemplate) SpringUtil.getBean("redisTemplate");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -79,16 +77,17 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     private boolean expiredToken(String token) {
 
         try {
-            Long uid = TokenUtil.decode(token);
-            String key = TokenUtil.getTokenKey(uid);
+//            Long uid = TokenUtil.decode(token);
+//            String key = TokenUtil.getTokenKey(uid);
 
-            Object object = redisTemplate.opsForValue().get(key);
-            if (object == null) {
+            OnlineService onlineService = SpringUtil.getBean(OnlineService.class);
+            Long bloggerId = onlineService.getLoginBloggerId(token);
+            if (bloggerId == null) {
                 // 过期
                 return true;
             }
 
-            CurrentUserThreadLocal.setCurrentUid(uid);
+            CurrentUserThreadLocal.setCurrentUid(bloggerId);
 
         } catch (Exception e) {
             e.printStackTrace();

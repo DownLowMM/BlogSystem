@@ -45,9 +45,9 @@ public class WebsiteProperties {
     private Integer activeBloggerCount;
 
     /**
-     * 站点域名
+     * 图片服务器
      */
-    private String addr;
+    private String imageServerHost;
 
     /**
      * 默认的url请求参数的间隔字符

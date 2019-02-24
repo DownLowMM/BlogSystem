@@ -19,36 +19,6 @@ spring:
   messages:
     basename: messages
     cache-seconds: 3600
-  redis:
-    host: 127.0.0.1
-    password:
-    port: 6379
-    timeout: 0
-    pool:
-      maxTotal: 1024
-      maxIdle: 200
-      maxWait: 1000
-      testOnBorrow: true
-      testOnReturn: true
-  datasource:
-    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: ABC246810
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.jdbc.Driver
-    filters: wall
-    maxActive: 100
-    initialSize: 5
-    maxWait: 60000
-    minIdle: 10
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: select 'x'
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxOpenPreparedStatements: 20
 
 dubbo:
   application:
@@ -57,58 +27,3 @@ dubbo:
     address: zookeeper://127.0.0.1:2181
   consumer:
     timeout: 3000
-
-mybatis:
-  mapperLocations: classpath:mapper/*/*.xml
-  typeAliasesPackage: com.duan.blogos.service.entity
-  config: classpath:mybatis-config.xml
-  #  typeHandlersPackage: cn.com.*.dao
-  #  checkConfigLocation:
-  #  executorType:
-
-  ## 测试
-redis:
-  key:
-    expire: 2592000
-    token:
-      expire-day: 30
-
-jisu:
-  appkey: 5171de6ae9fd57a6
-  smssend-url: http://api.jisuapi.com/sms/send
-
-preference:
-  default:
-    blog-count: 10 # 读者默认请求博主博文列表时默认返回的条目数量
-    comment-count: 10 # 默认返回的博主博文评论数量
-    link-count: 10 # 博主友情链接默认请求条数
-    picture-count: 10 # 博主相册图片默认请求数量
-    collect-count: 10 # 博主收藏博文默认请求条数
-    category-count: 10 # 博主收藏博文默认请求条数
-    label-count: 10 # 博文标签默认请求条数
-    blog-category-id: 1 # 默认收藏到博主的该类别博文下
-    url-condition-split-character: \u002C # 默认的url请求参数的间隔字符（英文字符）
-  file:
-    image-root-path: E:/blog/blogger/image # 博主图片保存根路径
-    patch-import-blog-temp-path: E:/blog/temp/blog-patch-import # 批量导入博文时临时 zip 文件路径
-    patch-download-blog-temp-path: E:/blog/temp/blog-patch-download # 批量下载时临时 zip 文件和 md/html 文件路径
-    lucene-index-dir: E:/blog/lucene # lucene生成的索引保存路径
-  db:
-    string-filed-split-character-for-number: \u0020
-    string-filed-split-character-for-string: \u0020
-  website:
-    manager-id: 40 # 拥有唯一图片管理权限的博主的id
-    manager-email: duan_jia_ning@163.com # 网站管理者的邮箱（反馈邮件发送到的邮箱）
-    page-nav-pos: 0 # 默认的博主主页个人信息栏位置，0在左，1在右
-    sender-mail: 2213994603@qq.com # 配置了smtp 的邮件发送者
-    sender-mail-password: athupcbmeyvvdjif # 配置了smtp 的邮件发送者的授权码
-    active-blogger-count: 20 # 默认获取活跃博主数
-    addr: 127.0.0.1:${server.port} # 站点域名
-
-#    session:
-#      blogger-id: bloggerId # 保存在session属性中的博主id对应的名字
-#      blogger-name: bloggerName # 保存在session属性中的博主用户名对应的名字
-#      login-signal: bloggerLoginSignal # 保存在session属性中的博主登录标识，有值（任意值）就表示已登录
-#      error-msg: errorMsg # 保存在session属性中的错误信息对应的名字
-#      owner-id: pageOwnerBloggerId # 页面所属博主id
-#      owner-name: pageOwnerBloggerName # 页面所属博主name

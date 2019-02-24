@@ -25,8 +25,8 @@ public class SMSController extends BaseCheckController {
      */
     @PostMapping
     public ResultModel send(
-            @RequestParam("phone") String phone,
-            @RequestParam("content") String content) {
+            @RequestParam String phone,
+            @RequestParam String content) {
 
         return smsService.sendSmsTo(content, phone);
     }

@@ -1,12 +1,14 @@
 package com.duan.blogos.service.common.enums;
 
+import java.io.Serializable;
+
 /**
  * Created on 2017/12/16.
  * 排序顺序
  *
  * @author DuanJiaNing
  */
-public enum Order {
+public enum Order implements Serializable {
 
     /**
      * 升序

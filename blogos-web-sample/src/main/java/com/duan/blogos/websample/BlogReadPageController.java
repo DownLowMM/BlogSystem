@@ -1,14 +1,14 @@
 package com.duan.blogos.websample;
 
+import com.duan.blogos.service.OnlineService;
+import com.duan.blogos.service.blog.OperateService;
+import com.duan.blogos.service.blog.StatisticsService;
+import com.duan.blogos.service.blogger.*;
 import com.duan.blogos.service.common.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.common.dto.blog.BlogDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blog.OperateService;
-import com.duan.blogos.service.blog.StatisticsService;
-import com.duan.blogos.service.blogger.*;
-import com.duan.blogos.service.OnlineService;
 import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -67,7 +67,7 @@ public class BlogReadPageController {
         }
 
         Long blogId = blogService.getBlogId(account.getId(), blogName);
-        if (blogId == -1) {
+        if (blogId == null || blogId == -1) {
             mv.setViewName("error/error");
             mv.addObject("code", 5);
             mv.addObject("errorMsg", "博文不存在！");

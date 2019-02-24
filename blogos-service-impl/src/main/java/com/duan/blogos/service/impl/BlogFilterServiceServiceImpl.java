@@ -1,5 +1,6 @@
 package com.duan.blogos.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.BlogFilterService;
 import com.duan.blogos.service.common.CodeMessage;
 import com.duan.blogos.service.common.dto.blog.BlogListItemDTO;
@@ -10,7 +11,6 @@ import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.common.util.ExceptionUtil;
 import com.duan.blogos.service.common.util.ResultModelUtil;
 import com.duan.blogos.service.common.util.Util;
-import com.duan.blogos.service.config.preference.DbProperties;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.dao.BlogCategoryRelaDao;
 import com.duan.blogos.service.dao.BlogDao;
@@ -24,7 +24,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -37,14 +36,11 @@ import java.util.*;
  *
  * @author DuanJiaNing
  */
-@Component
+@Service
 public class BlogFilterServiceServiceImpl implements BlogFilterService {
 
     @Autowired
     private DefaultProperties defaultProperties;
-
-    @Autowired
-    protected DbProperties dbProperties;
 
     @Autowired
     protected BlogDao blogDao;

@@ -473,7 +473,7 @@ function filterBloggerBlog(offset, rows, refreshPageIndicator, toTop, refreshTot
             if (isPageOwnerBloggerLogin())
                 ins = '，去<a style="font-size: x-large" href="/edit_blog?bid=' + loginBloggerId + '" target="_blank">写博文</a>';
 
-            setBlogs(result.data, '<br><br><br><p class="text-center lead">没有博文' + ins + '</p><br><br><br>');
+            setBlogs(result.data.list, '<br><br><br><p class="text-center lead">没有博文' + ins + '</p><br><br><br>');
 
             if (refreshPageIndicator) {
                 setPageIndicator(0);

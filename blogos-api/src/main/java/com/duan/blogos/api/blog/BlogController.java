@@ -4,14 +4,14 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
-import com.duan.blogos.service.common.enums.*;
+import com.duan.blogos.service.BlogFilterService;
+import com.duan.blogos.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.common.dto.blog.BlogDTO;
 import com.duan.blogos.service.common.dto.blog.BlogListItemDTO;
 import com.duan.blogos.service.common.dto.blog.BlogTitleIdDTO;
+import com.duan.blogos.service.common.enums.*;
 import com.duan.blogos.service.common.restful.PageResult;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.BlogFilterService;
-import com.duan.blogos.service.blogger.BloggerBlogService;
 import com.duan.blogos.service.common.vo.FileVO;
 import com.duan.blogos.util.*;
 import org.springframework.util.CollectionUtils;
@@ -96,8 +96,8 @@ public class BlogController extends BaseController {
     @TokenNotRequired
     public ResultModel<PageResult<BlogListItemDTO>> list(
             @RequestParam(required = false) Long bloggerId,
-            @RequestParam(required = false) String categoryIds,
-            @RequestParam(required = false) String labelIds,
+            @RequestParam(required = false, value = "cids") String categoryIds,
+            @RequestParam(required = false, value = "lids") String labelIds,
             @RequestParam(required = false) String keyWord,
             @RequestParam(required = false) Integer pageNum,
             @RequestParam(required = false) Integer pageSize,
@@ -110,12 +110,6 @@ public class BlogController extends BaseController {
         String ord = order == null ? Order.DESC.name() : order.toUpperCase();
         handleSortRuleCheck(sor, ord);
 
-        String sp = ",";
-        Long[] cids = StringUtils.longStringDistinctToArray(categoryIds, sp);
-        Long[] lids = StringUtils.longStringDistinctToArray(labelIds, sp);
-        //检查博文类别和标签
-        handleCategoryAndLabelCheck(bloggerId, cids, lids);
-
         BlogStatusEnum stat = null;
         if (status != null) stat = BlogStatusEnum.valueOf(status);
         if (stat == null) stat = BlogStatusEnum.PUBLIC; // status 传参错误
@@ -123,7 +117,14 @@ public class BlogController extends BaseController {
         //执行数据查询
         BlogSortRule rule = new BlogSortRule(Rule.valueOf(sor), Order.valueOf(ord));
 
-        return blogFilterService.listFilterAll(Arrays.asList(cids), Arrays.asList(lids), keyWord, bloggerId,
+        String sp = ",";
+        Long[] cids = StringUtils.longStringDistinctToArray(categoryIds, sp);
+        Long[] lids = StringUtils.longStringDistinctToArray(labelIds, sp);
+        //检查博文类别和标签
+        handleCategoryAndLabelCheck(bloggerId, cids, lids);
+
+        return blogFilterService.listFilterAll(Util.isArrayEmpty(cids) ? null : Arrays.asList(cids),
+                Util.isArrayEmpty(lids) ? null : Arrays.asList(lids), keyWord, bloggerId,
                 pageNum, pageSize, rule, stat);
 
     }

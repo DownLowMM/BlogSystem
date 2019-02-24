@@ -239,7 +239,7 @@ function initToolTip() {
     $('[data-toggle="tooltip"]').tooltip();
 }
 
-var apiGateHost = 'http://127.0.0.1:8080';
+var apiGateHost = 'http://127.0.0.1:7070';
 function ajax(url, data, async, type, success) {
     var host = apiGateHost;
     $.ajax({
