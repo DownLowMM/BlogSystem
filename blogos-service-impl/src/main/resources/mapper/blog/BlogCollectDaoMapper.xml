@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.duan.blogos.service.dao.BlogCollectDao">
 
-    <update id="update" parameterType="BlogCollect">
+    <update id="update" parameterType="com.duan.blogos.service.entity.BlogCollect">
         UPDATE blog_collect
         <set>
             <if test="blogId != null">
@@ -49,7 +49,7 @@
           AND collector_id = #{bloggerId}
     </delete>
 
-    <select id="listCollectBlog" resultType="BlogCollect">
+    <select id="listCollectBlog" resultType="com.duan.blogos.service.entity.BlogCollect">
         SELECT
         b.id,
         b.blog_id,
@@ -66,7 +66,7 @@
         order by s.${sortRule.rule.code} ${sortRule.order.code}
     </select>
 
-    <select id="listAllCollectByBlogId" resultType="BlogCollect">
+    <select id="listAllCollectByBlogId" resultType="com.duan.blogos.service.entity.BlogCollect">
         SELECT *
         FROM blog_collect
         WHERE blog_id = #{value}
@@ -78,20 +78,21 @@
         WHERE collector_id = #{value}
     </select>
 
-    <select id="getCollect" resultType="BlogCollect">
+    <select id="getCollect" resultType="com.duan.blogos.service.entity.BlogCollect">
         SELECT *
         FROM blog_collect
         WHERE blog_id = #{blogId}
           AND collector_id = #{bloggerId}
     </select>
 
-    <select id="listAllIdByBloggerId" resultType="BlogCollect">
+    <select id="listAllIdByBloggerId" resultType="com.duan.blogos.service.entity.BlogCollect">
         SELECT blog_id
         FROM blog_collect
         WHERE collector_id = #{value}
     </select>
 
-    <insert id="insert" parameterType="BlogCollect" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.duan.blogos.service.entity.BlogCollect" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO blog_collect (blog_id, collector_id, reason, collect_date, category_id)
         VALUE (#{blogId}, #{collectorId}, #{reason}, NOW(), #{categoryId})
     </insert>

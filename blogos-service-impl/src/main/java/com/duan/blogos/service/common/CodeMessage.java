@@ -1,4 +1,4 @@
-package com.duan.blogos.service.common.exception;
+package com.duan.blogos.service.common;
 
 /**
  * Created on 2018/9/13.

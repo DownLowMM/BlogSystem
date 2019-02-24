@@ -4,26 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.duan.blogos.service.dao.BlogCommentDao">
 
-    <select id="listCommentByBlogId" resultType="BlogComment">
+    <select id="listCommentByBlogId" resultType="com.duan.blogos.service.entity.BlogComment">
         SELECT *
         FROM blog_comment
         WHERE blog_id = #{blogId} AND state = #{status}
         ORDER BY release_date
     </select>
 
-    <select id="listAllCommentByBlogId" resultType="BlogComment">
+    <select id="listAllCommentByBlogId" resultType="com.duan.blogos.service.entity.BlogComment">
         SELECT *
         FROM blog_comment
         WHERE blog_id = #{value}
     </select>
 
-    <select id="getCommentById" resultType="BlogComment">
+    <select id="getCommentById" resultType="com.duan.blogos.service.entity.BlogComment">
         SELECT *
         FROM blog_comment
         WHERE id = #{value}
     </select>
 
-    <update id="update" parameterType="BlogComment">
+    <update id="update" parameterType="com.duan.blogos.service.entity.BlogComment">
         UPDATE blog_comment
         <set>
             <if test="blogId != null">
@@ -50,7 +50,8 @@
         </where>
     </update>
 
-    <insert id="insert" parameterType="BlogComment" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.duan.blogos.service.entity.BlogComment" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO blog_comment (
         blog_id,
         spokesman_id,

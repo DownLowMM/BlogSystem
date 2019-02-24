@@ -1,7 +1,7 @@
 package com.duan.blogos.service.common.util;
 
+import com.duan.blogos.service.common.CodeMessage;
 import com.duan.blogos.service.common.exception.BlogOSException;
-import com.duan.blogos.service.common.exception.CodeMessage;
 
 /**
  * Created on 2018/9/13.

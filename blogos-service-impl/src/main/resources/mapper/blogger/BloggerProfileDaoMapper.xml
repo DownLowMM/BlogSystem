@@ -4,19 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.duan.blogos.service.dao.BloggerProfileDao">
 
-    <select id="getProfileByBloggerId" resultType="BloggerProfile">
+    <select id="getProfileByBloggerId" resultType="com.duan.blogos.service.entity.BloggerProfile">
         SELECT *
         FROM blogger_profile
         WHERE blogger_id = #{value}
     </select>
 
-    <select id="getProfileByPhone" resultType="BloggerProfile">
+    <select id="getProfileByPhone" resultType="com.duan.blogos.service.entity.BloggerProfile">
         SELECT *
         FROM blogger_profile
         WHERE phone = #{value}
     </select>
 
-    <update id="update" parameterType="BloggerProfile">
+    <update id="update" parameterType="com.duan.blogos.service.entity.BloggerProfile">
         UPDATE blogger_profile
         <set>
             <if test="phone != null">
@@ -45,7 +45,8 @@
         WHERE blogger_id = #{value}
     </delete>
 
-    <insert id="insert" parameterType="BloggerProfile" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.duan.blogos.service.entity.BloggerProfile" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO blogger_profile (
         blogger_id,
         avatar_id,

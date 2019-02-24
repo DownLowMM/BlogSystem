@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.duan.blogos.service.dao.BloggerSettingDao">
 
-    <update id="update" parameterType="BloggerSetting">
+    <update id="update" parameterType="com.duan.blogos.service.entity.BloggerSetting">
         UPDATE blogger_setting
         <set>
             <if test="mainPageNavPos != null">
@@ -28,13 +28,14 @@
         WHERE id = #{value}
     </delete>
 
-    <select id="getSetting" resultType="BloggerSetting">
+    <select id="getSetting" resultType="com.duan.blogos.service.entity.BloggerSetting">
         SELECT *
         FROM blogger_setting
         WHERE blogger_id = #{value}
     </select>
 
-    <insert id="insert" parameterType="BloggerSetting" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.duan.blogos.service.entity.BloggerSetting" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO blogger_setting (
         blogger_id,
         main_page_nav_pos

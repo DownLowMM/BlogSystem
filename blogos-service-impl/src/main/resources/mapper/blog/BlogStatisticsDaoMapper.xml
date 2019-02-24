@@ -4,13 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.duan.blogos.service.dao.BlogStatisticsDao">
 
-    <select id="getStatistics" resultType="BlogStatistics">
+    <select id="getStatistics" resultType="com.duan.blogos.service.entity.BlogStatistics">
         SELECT *
         FROM blog_statistics s
         WHERE s.blog_id = #{blogId};
     </select>
 
-    <insert id="insert" parameterType="BlogStatistics" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.duan.blogos.service.entity.BlogStatistics" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO blog_statistics (blog_id,
                                      comment_count,
                                      view_count,
@@ -35,7 +36,7 @@
                NOW())
     </insert>
 
-    <update id="update" parameterType="BlogStatistics">
+    <update id="update" parameterType="com.duan.blogos.service.entity.BlogStatistics">
         UPDATE blog_statistics
         <set>
             <if test="commentCount != null">
@@ -61,7 +62,8 @@
             </if>
             <if test="likeCount != null">
                 like_count=#{likeCount}
-            </if><if test="wordCount != null">
+            </if>
+            <if test="wordCount != null">
                 word_count=#{wordCount}
             </if>
         </set>
@@ -227,7 +229,7 @@
         WHERE blog_id = #{value}
     </select>
 
-    <select id="listByBloggerId" resultType="BlogStatistics">
+    <select id="listByBloggerId" resultType="com.duan.blogos.service.entity.BlogStatistics">
         select s.id,
                s.blog_id,
                s.comment_count,

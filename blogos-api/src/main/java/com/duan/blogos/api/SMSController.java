@@ -1,9 +1,8 @@
-package com.duan.blogos.api.util;
+package com.duan.blogos.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.duan.blogos.api.BaseCheckController;
-import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.SmsService;
+import com.duan.blogos.service.common.restful.ResultModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -4,31 +4,31 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.duan.blogos.service.dao.BloggerPictureDao">
 
-    <select id="getPictureByCategory" resultType="BloggerPicture">
+    <select id="getPictureByCategory" resultType="com.duan.blogos.service.entity.BloggerPicture">
         SELECT *
         FROM blogger_picture p
         WHERE p.category = #{category} AND p.blogger_id = #{bloggerId}
     </select>
 
-    <select id="getPictureById" resultType="BloggerPicture">
+    <select id="getPictureById" resultType="com.duan.blogos.service.entity.BloggerPicture">
         SELECT *
         FROM blogger_picture
         WHERE id = #{value}
     </select>
 
-    <select id="getBloggerUniquePicture" resultType="BloggerPicture">
+    <select id="getBloggerUniquePicture" resultType="com.duan.blogos.service.entity.BloggerPicture">
         SELECT *
         FROM blogger_picture
         WHERE category = #{category} AND blogger_id = #{bloggerId}
     </select>
 
-    <select id="listPictureByBloggerId" resultType="BloggerPicture">
+    <select id="listPictureByBloggerId" resultType="com.duan.blogos.service.entity.BloggerPicture">
         SELECT *
         FROM blogger_picture
         WHERE blogger_id = #{bloggerId}
     </select>
 
-    <select id="listPictureByBloggerAndCategory" resultType="BloggerPicture">
+    <select id="listPictureByBloggerAndCategory" resultType="com.duan.blogos.service.entity.BloggerPicture">
         SELECT *
         FROM blogger_picture
         WHERE blogger_id = #{bloggerId} AND category = #{category}
@@ -40,13 +40,13 @@
         WHERE id = #{value}
     </select>
 
-    <select id="getPictureByBloggerId" resultType="BloggerPicture">
+    <select id="getPictureByBloggerId" resultType="com.duan.blogos.service.entity.BloggerPicture">
         SELECT *
         FROM blogger_picture
         WHERE blogger_id = #{value}
     </select>
 
-    <update id="update" parameterType="BloggerPicture">
+    <update id="update" parameterType="com.duan.blogos.service.entity.BloggerPicture">
         UPDATE blogger_picture
         <set>
             <if test="bloggerId != null">
@@ -90,7 +90,8 @@
         WHERE id = #{value}
     </delete>
 
-    <insert id="insert" parameterType="BloggerPicture" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.duan.blogos.service.entity.BloggerPicture" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO blogger_picture (
         blogger_id,
         bewrite,
