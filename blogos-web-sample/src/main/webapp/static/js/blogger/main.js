@@ -82,7 +82,7 @@ function loadCategory() {
         function (result) {
             var html = '';
             if (result.code === 200) {
-                var array = result.data;
+                var array = result.data.list;
                 // 设置高级筛选框内容
                 setComplexFilterCategory(array);
                 // 设置类别编辑框内容
@@ -612,14 +612,14 @@ function setBlogs(array, defaulz) {
                 '<h4>' +
                 '<small style="color: black">' + dateFormat(item.releaseDate) + '</small>' +
                 '<small class="list-group-item-count-text">&nbsp;&nbsp;' +
-                '喜欢&nbsp;' + item.likeCount + '<span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>' +
-                '收藏&nbsp;' + item.collectCount + '<span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>' +
+                '喜欢&nbsp;' + item.statistics.likeCount + '<span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>' +
+                '收藏&nbsp;' + item.statistics.collectCount + '<span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>' +
                 '<span class="text-clickable"' +
-                ' onclick="if (' + item.commentCount + ' > 0) ' +
+                ' onclick="if (' + item.statistics.commentCount + ' > 0) ' +
                 'window.open(\'/' + pageOwnerBloggerName + '/blog/' + item.title + '/#comment\',\'_blank\')" >' +
-                '留言&nbsp;' + item.commentCount + '</span>' +
+                '留言&nbsp;' + item.statistics.commentCount + '</span>' +
                 '<span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>' +
-                item.viewCount + '&nbsp;次浏览' +
+                item.statistics.viewCount + '&nbsp;次浏览' +
                 '</small>' +
                 '</h4>' +
 

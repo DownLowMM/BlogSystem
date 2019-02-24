@@ -2,12 +2,11 @@ package com.duan.blogos.api.blogger;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
-import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
+import com.duan.blogos.service.blogger.BloggerCategoryService;
 import com.duan.blogos.service.common.dto.blogger.BloggerCategoryDTO;
 import com.duan.blogos.service.common.restful.PageResult;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerCategoryService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
 import org.springframework.util.StringUtils;
@@ -20,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/category")
-public class CategoryController extends BaseController {
+@RequestMapping("/blogger/{bloggerId}/category")
+public class BloggerCategoryController extends BaseController {
 
     @Reference
     private BloggerCategoryService bloggerCategoryService;
@@ -32,7 +31,7 @@ public class CategoryController extends BaseController {
     @GetMapping
     @TokenNotRequired
     public ResultModel<PageResult<BloggerCategoryDTO>> list(
-            @RequestParam Long bloggerId,
+            @PathVariable Long bloggerId,
             @RequestParam(required = false) Integer pageNum,
             @RequestParam(required = false) Integer pageSize) {
         handleAccountCheck(bloggerId);
@@ -51,7 +50,7 @@ public class CategoryController extends BaseController {
     @GetMapping("/{categoryId}")
     @TokenNotRequired
     public ResultModel<BloggerCategoryDTO> get(
-            @RequestParam Long bloggerId,
+            @PathVariable Long bloggerId,
             @PathVariable Long categoryId) {
 
         handleAccountCheck(bloggerId);
@@ -68,7 +67,7 @@ public class CategoryController extends BaseController {
      * 增加类别
      */
     @PostMapping
-    public ResultModel add(@Uid Long bloggerId,
+    public ResultModel add(@PathVariable Long bloggerId,
                            @RequestParam(required = false) Long iconId,
                            @RequestParam String title,
                            @RequestParam(required = false) String bewrite) {
@@ -88,7 +87,7 @@ public class CategoryController extends BaseController {
      * 修改类别
      */
     @PutMapping("/{categoryId}")
-    public ResultModel update(@Uid Long bloggerId,
+    public ResultModel update(@PathVariable Long bloggerId,
                               @PathVariable Long categoryId,
                               @RequestParam(value = "iconId", required = false) Long newIconId,
                               @RequestParam(value = "title", required = false) String newTitle,
@@ -112,7 +111,7 @@ public class CategoryController extends BaseController {
      * 不能同时删除类别下的所有文章，删除博文通过博文api操控。
      */
     @DeleteMapping("/{categoryId}")
-    public ResultModel delete(@Uid Long bloggerId,
+    public ResultModel delete(@PathVariable Long bloggerId,
                               @PathVariable Long categoryId,
                               @RequestParam(required = false) Long newCategoryId) {
 

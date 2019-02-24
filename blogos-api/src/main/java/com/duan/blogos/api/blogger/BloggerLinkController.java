@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/blogger/{bloggerId}/link")
-public class LinkController extends BaseController {
+public class BloggerLinkController extends BaseController {
 
     @Reference
     private BloggerLinkService bloggerLinkService;
