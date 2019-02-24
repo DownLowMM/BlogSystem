@@ -4,12 +4,12 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseCheckController;
+import com.duan.blogos.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.common.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerPictureService;
-import com.duan.blogos.service.validate.BloggerValidateService;
 import com.duan.blogos.service.common.vo.FileVO;
+import com.duan.blogos.service.validate.BloggerValidateService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.DataConverter;
 import com.duan.blogos.util.ExceptionUtil;
@@ -54,12 +54,11 @@ public class ImageController extends BaseCheckController {
     @GetMapping("/{imageId}")
     @TokenNotRequired
     public void getBlogPicture(HttpServletRequest request, HttpServletResponse response,
-                               @PathVariable("imageId") Long imageId,
-                               @RequestParam(required = false) Integer category) {
+                               @PathVariable Long imageId) {
 
         // 检查default是否为默认类别
-        if (category != null)
-            handleBlogCategoryDefaultCheck(category);
+//        if (category != null)
+//            handleBlogCategoryDefaultCheck(category);
 
         BloggerPictureDTO picture = bloggerPictureService.getPicture(imageId);
 
