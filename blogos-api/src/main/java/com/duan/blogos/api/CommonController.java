@@ -31,7 +31,8 @@ public class CommonController extends BaseController {
                                                      @RequestParam(required = false) Integer pageSize) {
 
         ResultModel<PageResult<BlogLabelDTO>> resultModel = bloggerLabelService.listLabel(pageNum, pageSize);
-        if (resultModel == null) handlerEmptyResult();
+        if (resultModel == null)
+            return handlerEmptyResult();
 
         return resultModel;
     }
@@ -44,7 +45,8 @@ public class CommonController extends BaseController {
     public ResultModel<BlogLabelDTO> getLabel(@PathVariable("labelId") Long labelId) {
 
         BlogLabelDTO label = bloggerLabelService.getLabel(labelId);
-        if (label == null) handlerEmptyResult();
+        if (label == null)
+            return handlerEmptyResult();
 
         return ResultModel.success(label);
     }

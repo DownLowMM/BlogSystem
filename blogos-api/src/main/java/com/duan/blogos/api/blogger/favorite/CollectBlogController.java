@@ -4,13 +4,13 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
+import com.duan.blogos.service.blogger.BloggerCollectBlogService;
+import com.duan.blogos.service.common.dto.blogger.FavoriteBlogListItemDTO;
 import com.duan.blogos.service.common.enums.BlogSortRule;
 import com.duan.blogos.service.common.enums.Order;
 import com.duan.blogos.service.common.enums.Rule;
-import com.duan.blogos.service.common.dto.blogger.FavoriteBlogListItemDTO;
 import com.duan.blogos.service.common.restful.PageResult;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerCollectBlogService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +52,8 @@ public class CollectBlogController extends BaseController {
         // 查询数据
         ResultModel<PageResult<FavoriteBlogListItemDTO>> result = bloggerCollectBlogService.listCollectBlog(bloggerId,
                 null, pageNum, pageSize, BlogSortRule.valueOf(sor, ord));
-        if (result == null) handlerEmptyResult();
+        if (result == null)
+            return handlerEmptyResult();
 
         return result;
     }
@@ -66,7 +67,8 @@ public class CollectBlogController extends BaseController {
                               @RequestParam String reason) {
 
         boolean result = bloggerCollectBlogService.updateCollect(bloggerId, blogId, reason, null);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }

@@ -69,10 +69,9 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
     @Override
     public ResultModel<BloggerStatisticsDTO> getBloggerStatistics(Long bloggerId) {
 
-
         List<BlogStatistics> statistics = statisticsDao.listByBloggerId(bloggerId);
         if (CollectionUtils.isEmpty(statistics)) {
-            return null;
+            return ResultModel.success(getInitBloggerStatics());
         }
 
         int wordCountSum = statistics.stream().mapToInt(BlogStatistics::getWordCount).sum();
@@ -90,6 +89,20 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
                 likeGiveCount, categoryCount, labelCount, collectCount, collectedCount, linkCount);
 
         return ResultModel.success(dto);
+    }
+
+    private BloggerStatisticsDTO getInitBloggerStatics() {
+        BloggerStatisticsDTO dto = new BloggerStatisticsDTO();
+        dto.setBlogCount(0);
+        dto.setWordCount(0);
+        dto.setLikeCount(0);
+        dto.setLikedCount(0);
+        dto.setCategoryCount(0);
+        dto.setLabelCount(0);
+        dto.setCollectCount(0);
+        dto.setCollectedCount(0);
+        dto.setLinkCount(0);
+        return dto;
     }
 
     // 获得博主dto

@@ -40,7 +40,8 @@ public class BloggerLabelController extends BaseController {
         handleAccountCheck(bloggerId);
 
         ResultModel<PageResult<BlogLabelDTO>> result = bloggerLabelService.listLabelByBlogger(bloggerId, pageNum, pageSize);
-        if (result == null) handlerEmptyResult();
+        if (result == null)
+            return handlerEmptyResult();
 
         return result;
     }
@@ -53,7 +54,8 @@ public class BloggerLabelController extends BaseController {
                            @RequestParam("title") String title) {
 
         Long id = bloggerLabelService.insertLabel(bloggerId, title);
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }
@@ -66,7 +68,8 @@ public class BloggerLabelController extends BaseController {
                               @RequestParam("title") String newTitle) {
 
         boolean result = bloggerLabelService.updateLabel(labelId, bloggerId, newTitle);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -78,7 +81,8 @@ public class BloggerLabelController extends BaseController {
     public ResultModel delete(@PathVariable Long bloggerId, @PathVariable Long labelId) {
         handleAccountCheck(bloggerId);
         boolean result = bloggerLabelService.deleteLabel(bloggerId, labelId);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }

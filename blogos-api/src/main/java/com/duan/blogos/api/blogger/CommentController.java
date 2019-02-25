@@ -3,8 +3,8 @@ package com.duan.blogos.api.blogger;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
-import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.blogger.BloggerCommentService;
+import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.validate.BlogCommentValidateService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
@@ -42,7 +42,8 @@ public class CommentController extends BaseController {
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         Long id = commentService.insertComment(blogId, bloggerId, listenerId, RIGHTFUL.getCode(), content);
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }
@@ -54,7 +55,7 @@ public class CommentController extends BaseController {
     public ResultModel delete(@Uid Long bloggerId,
                               @PathVariable Long commentId) {
         if (!commentService.deleteComment(commentId, bloggerId))
-            handlerOperateFail();
+            return handlerOperateFail();
 
         return ResultModel.success();
     }

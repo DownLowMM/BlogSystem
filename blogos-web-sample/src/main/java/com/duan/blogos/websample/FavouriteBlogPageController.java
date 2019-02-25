@@ -7,6 +7,7 @@ import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.common.util.Utils;
+import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -48,9 +49,9 @@ public class FavouriteBlogPageController {
     @RequestMapping("/collect")
     public ModelAndView pageCollect(HttpServletRequest request,
                                     @ModelAttribute
-                                    @PathVariable String pageOwnerBloggerName) {
+                                    @PathVariable String pageOwnerBloggerNameBase64) {
         ModelAndView mv = new ModelAndView();
-        setCommon(mv, request, pageOwnerBloggerName);
+        setCommon(mv, request, Utils.decodeUrlBase64(pageOwnerBloggerNameBase64));
 
         mv.addObject("type", "collect");
         return mv;
@@ -60,10 +61,11 @@ public class FavouriteBlogPageController {
         mv.setViewName("/blogger/favourite_blog");
 
         // 登陆博主 id
-        String token = ""; // TODO redis + token 维护会话
-        Long loginBloggerId = onlineService.getLoginBloggerId(token);
-        ResultModel<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBloggerId);
-        mv.addObject("loginBgStat", loginBgStat.getData());
+        Long loginBloggerId = onlineService.getLoginBloggerId(Util.getToken());
+        if (loginBloggerId != null) {
+            ResultModel<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBloggerId);
+            mv.addObject("loginBgStat", loginBgStat.getData());
+        }
 
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
         mv.addObject("bloggerId", account.getId());

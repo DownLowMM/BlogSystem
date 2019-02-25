@@ -1,9 +1,9 @@
 package com.duan.blogos.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.duan.blogos.service.BlogSortRuleService;
 import com.duan.blogos.service.common.dto.blog.BlogSortRuleDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.BlogSortRuleService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +29,8 @@ public class SortRowController extends BaseCheckController {
     public ResultModel<List<BlogSortRuleDTO>> list() {
 
         ResultModel<List<BlogSortRuleDTO>> result = sortRuleService.listSortRule();
-        if (result == null) handlerEmptyResult();
+        if (result == null)
+            return handlerEmptyResult();
 
         return result;
     }
@@ -42,7 +43,8 @@ public class SortRowController extends BaseCheckController {
     public ResultModel<List<BlogSortRuleDTO>> listOrder() {
 
         ResultModel<List<BlogSortRuleDTO>> result = sortRuleService.listSortOrder();
-        if (result == null) handlerEmptyResult();
+        if (result == null)
+            return handlerEmptyResult();
 
         return result;
     }

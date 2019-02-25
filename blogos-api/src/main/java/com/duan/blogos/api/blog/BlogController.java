@@ -84,7 +84,8 @@ public class BlogController extends BaseController {
         // UPDATE: 2018/1/16 更新 博文审核 图片引用
         Long id = bloggerBlogService.insertBlog(bloggerId, cids, lids, BlogStatusEnum.PUBLIC, title, content, contentMd,
                 summary, kw, false);
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }
@@ -137,7 +138,8 @@ public class BlogController extends BaseController {
     public ResultModel<BlogDTO> get(@PathVariable Long blogId) {
 
         ResultModel<BlogDTO> blog = bloggerBlogService.getBlog(blogId);
-        if (blog == null) handlerEmptyResult();
+        if (blog == null)
+            return handlerEmptyResult();
 
         // 编码为 Unicode
         BlogDTO bg = blog.getData();
@@ -192,7 +194,7 @@ public class BlogController extends BaseController {
 
         //执行更新
         if (!bloggerBlogService.updateBlog(bloggerId, blogId, cids, lids, stat, title, content, contentMd, summary, kw))
-            handlerOperateFail();
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -208,7 +210,7 @@ public class BlogController extends BaseController {
         handleBlogExistAndCreatorCheck(bloggerId, blogId);
 
         if (!bloggerBlogService.deleteBlog(bloggerId, blogId))
-            handlerOperateFail();
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -230,7 +232,7 @@ public class BlogController extends BaseController {
         }
 
         if (!bloggerBlogService.deleteBlogPatch(bloggerId, blogIds))
-            handlerOperateFail();
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -259,7 +261,7 @@ public class BlogController extends BaseController {
 
         List<BlogTitleIdDTO> blogsTitles = bloggerBlogService.insertBlogPatch(fileVO, bloggerId);
         if (CollectionUtils.isEmpty(blogsTitles))
-            handlerOperateFail();
+            return handlerOperateFail();
 
         return ResultModel.success(blogsTitles);
     }
@@ -275,11 +277,12 @@ public class BlogController extends BaseController {
         // 检查请求的文件类别
         BlogFormatEnum format = BlogFormatEnum.get(type);
         if (format == null) {
-            throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
+            return;
         }
 
         String zipFilePath = bloggerBlogService.getAllBlogForDownload(bloggerId, format);
-        if (StringUtils.isEmpty(zipFilePath)) handlerOperateFail();
+        if (StringUtils.isEmpty(zipFilePath))
+            return;
 
         // 输出文件流
         outFile(zipFilePath, response);
@@ -295,7 +298,7 @@ public class BlogController extends BaseController {
 
         try (ServletOutputStream os = response.getOutputStream()) {
             File zipFile = new File(zipFilePath);
-            if (!zipFile.exists()) handlerOperateFail();
+            if (!zipFile.exists()) return;
 
             response.setContentType("application/x-zip-compressed");
             FileInputStream in = new FileInputStream(zipFile);
@@ -309,7 +312,7 @@ public class BlogController extends BaseController {
             os.close();
 
         } catch (IOException e) {
-            handlerOperateFail(e);
+            //
         }
 
     }

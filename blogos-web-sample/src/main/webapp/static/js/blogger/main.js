@@ -340,24 +340,31 @@ function filterBloggerBlog(pageNum, pageSize, refreshPageIndicator, toTop, refre
             order: filterData.order
         }, true, 'get', 'json',
         function (result) {
-
             var ins = '';
             if (isPageOwnerBloggerLogin())
                 ins = '，去<a style="font-size: x-large" href="/edit_blog?bid=' + loginBloggerId + '" target="_blank">写博文</a>';
 
-            setBlogs(result.data.list, '<br><br><br><p class="text-center lead">没有博文' + ins + '</p><br><br><br>');
+            var defaultz = '<br><br><br><p class="text-center lead">没有博文' + ins + '</p><br><br><br>';
 
-            if (refreshPageIndicator) {
-                setPageIndicator(result.data, result.data.currentPage - 1);
+            if (result === 200) {
+
+                setBlogs(result.data.list, defaultz);
+
+                if (refreshPageIndicator) {
+                    setPageIndicator(result.data.list, result.data.currentPage - 1);
+                }
+
+                if (refreshTotalRealCount) {
+                    $('#blogCount').html(result.data.total + '&nbsp;篇博文');
+                    $('#subBlogCount').html('(' + result.data.total + ')');
+
+                }
+
+                initToolTip();
+
+            } else {
+                $('#blogList').html(defaultz);
             }
-
-            if (refreshTotalRealCount) {
-                $('#blogCount').html(result.data.total + '&nbsp;篇博文');
-                $('#subBlogCount').html('(' + result.data.total + ')');
-
-            }
-
-            initToolTip();
 
         });
 

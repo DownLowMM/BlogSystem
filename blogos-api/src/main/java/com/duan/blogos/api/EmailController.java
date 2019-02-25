@@ -30,7 +30,7 @@ public class EmailController extends BaseCheckController {
 
         String subject = "feedback email";
         if (!emailService.sendFeedback(bloggerId, subject, content, contact))
-            handlerOperateFail();
+            return handlerOperateFail();
 
         return ResultModel.success();
     }

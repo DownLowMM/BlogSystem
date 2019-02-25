@@ -98,7 +98,8 @@ public class BloggerController extends BaseController {
         }
 
         Long id = accountService.insertAccount(username, password);
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }
@@ -148,7 +149,8 @@ public class BloggerController extends BaseController {
         handleNameCheck(username);
 
         boolean result = accountService.updateAccountUserName(uid, username);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -166,7 +168,8 @@ public class BloggerController extends BaseController {
         }
 
         boolean result = accountService.updateAccountPassword(uid, oldPassword, newPassword);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -180,7 +183,8 @@ public class BloggerController extends BaseController {
         onlineService.logout(uid);
 
         boolean result = accountService.deleteAccount(uid);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }

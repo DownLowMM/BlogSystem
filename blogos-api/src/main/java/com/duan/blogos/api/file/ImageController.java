@@ -122,7 +122,8 @@ public class ImageController extends BaseCheckController {
 
             id = bloggerPictureService.insertPicture(fileVO, bloggerId, bewrite,
                     BloggerPictureCategoryEnum.valueOf(category), title);
-            if (id == null) handlerOperateFail();
+            if (id == null)
+                return handlerOperateFail();
         } else {
             throw ExceptionUtil.get(CodeMessage.COMMON_PICTURE_FORMAT_ERROR);
         }
@@ -135,18 +136,19 @@ public class ImageController extends BaseCheckController {
         try (ServletOutputStream os = response.getOutputStream()) {
             String path = picture == null ? getBackupPicture().getPath() : picture.getPath();
             File image = new File(path);
-            if (!image.exists()) handlerOperateFail();
+            if (!image.exists())
+                return;
 
             String type = ImageUtils.getImageMimeType(image.getName());
-            if (type == null) handlerOperateFail();
+            if (type == null)
+                return;
 
             response.setContentType("image/" + type);
 
             BufferedImage read = ImageIO.read(image);
             ImageIO.write(read, type, os);
         } catch (IOException e) {
-            e.printStackTrace();
-            handlerOperateFail(e);
+            //
         }
     }
 

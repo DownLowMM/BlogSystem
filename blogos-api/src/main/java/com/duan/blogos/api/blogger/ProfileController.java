@@ -39,7 +39,8 @@ public class ProfileController extends BaseController {
         handleAccountCheck(bloggerId);
 
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(bloggerId);
-        if (profile == null) handlerEmptyResult();
+        if (profile == null)
+            return handlerEmptyResult();
 
         return ResultModel.success(profile);
 
@@ -60,7 +61,8 @@ public class ProfileController extends BaseController {
         handlePhoneAndEmailCheck(phone, email);
         Long id = bloggerProfileService.insertBloggerProfile(bloggerId, avatarId,
                 phone, email, aboutMe, intro);
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }
@@ -84,7 +86,8 @@ public class ProfileController extends BaseController {
 
         handlePhoneAndEmailCheck(phone, email);
         boolean result = bloggerProfileService.updateBloggerProfile(bloggerId, avatarId, phone, email, aboutMe, intro);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -97,7 +100,8 @@ public class ProfileController extends BaseController {
     public ResultModel delete(@PathVariable Long bloggerId) {
 
         boolean result = bloggerProfileService.deleteBloggerProfile(bloggerId);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -114,10 +118,12 @@ public class ProfileController extends BaseController {
         String base = base64urlData.replaceFirst("^data:image/(png|jpg);base64,", "");
         byte[] bs = Base64.getDecoder().decode(base);
         Long id = bloggerPictureService.insertPicture(bs, bloggerId, "once-avatar-" + bloggerId + ".png", "", BloggerPictureCategoryEnum.PUBLIC, "");
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         boolean res = bloggerProfileService.updateBloggerProfile(bloggerId, id, null, null, null, null);
-        if (!res) handlerOperateFail();
+        if (!res)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }

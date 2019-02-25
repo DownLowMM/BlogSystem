@@ -3,10 +3,10 @@ package com.duan.blogos.api.blog;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.api.BaseController;
+import com.duan.blogos.service.blog.StatisticsService;
 import com.duan.blogos.service.common.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.common.dto.blog.BlogStatisticsDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blog.StatisticsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +38,8 @@ public class StatisticsController extends BaseController {
         handleBlogStatisticsExistCheck(blogId);
 
         ResultModel<BlogStatisticsDTO> result = statisticsService.getBlogStatistics(blogId);
-        if (result == null) handlerEmptyResult();
+        if (result == null)
+            return handlerEmptyResult();
 
         return result;
     }
@@ -51,7 +52,8 @@ public class StatisticsController extends BaseController {
         handleBlogStatisticsExistCheck(blogId);
 
         ResultModel<BlogBaseStatisticsDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
-        if (statistics == null) handlerEmptyResult();
+        if (statistics == null)
+            return handlerEmptyResult();
 
         return statistics;
     }

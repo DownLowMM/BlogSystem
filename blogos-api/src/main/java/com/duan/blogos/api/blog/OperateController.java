@@ -3,8 +3,8 @@ package com.duan.blogos.api.blog;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
-import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.blog.OperateService;
+import com.duan.blogos.service.common.restful.ResultModel;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -53,13 +53,14 @@ public class OperateController extends BaseController {
 
         // 如果博文属于当前博主，收藏失败d
         if (blogValidateService.isCreatorOfBlog(bloggerId, blogId)) {
-            handlerOperateFail();
+            return handlerOperateFail();
         }
 
         //执行
         // UPDATE: 2018/1/19 更新 收藏到自己的某一类别不开发，只收藏到一个类别中
         Long id = operateService.insertCollect(blogId, bloggerId, reason, null);
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }
@@ -75,7 +76,8 @@ public class OperateController extends BaseController {
 
         //执行
         Long id = operateService.insertComplain(blogId, bloggerId, content);
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }
@@ -106,7 +108,8 @@ public class OperateController extends BaseController {
 
         //执行
         boolean result = operateService.deleteCollect(bloggerId, blogId);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -121,7 +124,8 @@ public class OperateController extends BaseController {
 
         //执行
         boolean result = operateService.deleteLike(bloggerId, blogId);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }

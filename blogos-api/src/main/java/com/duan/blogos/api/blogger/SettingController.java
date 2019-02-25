@@ -3,8 +3,8 @@ package com.duan.blogos.api.blogger;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
-import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.blogger.BloggerSettingService;
+import com.duan.blogos.service.common.restful.ResultModel;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +33,8 @@ public class SettingController extends BaseController {
         handleMainPageNavPosCheck(mainPageNavPos);
 
         boolean result = settingService.updateMainPageNavPos(bloggerId, mainPageNavPos);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }

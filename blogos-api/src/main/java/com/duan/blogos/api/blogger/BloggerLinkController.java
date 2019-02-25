@@ -37,7 +37,8 @@ public class BloggerLinkController extends BaseController {
         handleAccountCheck(bloggerId);
 
         ResultModel<PageResult<BloggerLinkDTO>> result = bloggerLinkService.listBloggerLink(bloggerId, pageNum, pageSize);
-        if (result == null) handlerEmptyResult();
+        if (result == null)
+            return handlerEmptyResult();
 
         return result;
     }
@@ -58,7 +59,8 @@ public class BloggerLinkController extends BaseController {
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         Long id = bloggerLinkService.insertBloggerLink(bloggerId, iconId, title, url, bewrite);
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }
@@ -88,7 +90,8 @@ public class BloggerLinkController extends BaseController {
         }
 
         boolean result = bloggerLinkService.updateBloggerLink(linkId, iconId, title, url, bewrite);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -100,7 +103,8 @@ public class BloggerLinkController extends BaseController {
     public ResultModel delete(@PathVariable Long linkId) {
 
         boolean result = bloggerLinkService.deleteBloggerLink(linkId);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }

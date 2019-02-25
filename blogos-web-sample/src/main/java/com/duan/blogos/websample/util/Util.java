@@ -28,9 +28,12 @@ public class Util {
 
     public static String getCookie(String key) {
         HttpServletRequest request = getServletRequest();
-        for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals(key)) {
-                return cookie.getValue();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null && cookies.length > 0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(key)) {
+                    return cookie.getValue();
+                }
             }
         }
 

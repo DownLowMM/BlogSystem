@@ -34,14 +34,14 @@ public class ResultModel<T> implements Serializable {
     /**
      * 返回成功的构造函数
      */
-    private ResultModel(T data) {
+    public ResultModel(T data) {
         this.data = data;
     }
 
     /**
      * 自定义信息和代码
      */
-    private ResultModel(String msg, int code) {
+    public ResultModel(String msg, int code) {
         this.msg = msg;
         this.code = code;
     }

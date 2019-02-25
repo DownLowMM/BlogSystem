@@ -4,11 +4,11 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
+import com.duan.blogos.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.common.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.common.restful.PageResult;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerPictureService;
 import com.duan.blogos.service.validate.BloggerValidateService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
@@ -39,7 +39,8 @@ public class PictureController extends BaseController {
     public ResultModel<BloggerPictureDTO> get(@PathVariable("pictureId") Long pictureId) {
 
         BloggerPictureDTO picture = bloggerPictureService.getPictureWithUrl(pictureId);
-        if (picture == null) handlerEmptyResult();
+        if (picture == null)
+            return handlerEmptyResult();
 
         return ResultModel.success(picture);
     }
@@ -70,7 +71,8 @@ public class PictureController extends BaseController {
 
         ResultModel<PageResult<BloggerPictureDTO>> result = bloggerPictureService.listBloggerPicture(bloggerId,
                 cate == -1 ? null : BloggerPictureCategoryEnum.valueOf(cate), pageNum, pageSize);
-        if (result == null) handlerEmptyResult();
+        if (result == null)
+            return handlerEmptyResult();
 
         return result;
     }
@@ -110,7 +112,8 @@ public class PictureController extends BaseController {
 
         boolean result = bloggerPictureService.updatePicture(pictureId,
                 category == null ? null : BloggerPictureCategoryEnum.valueOf(category), bewrite, title);
-        if (!result) handlerOperateFail();
+        if (!result)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -132,7 +135,8 @@ public class PictureController extends BaseController {
             throw ExceptionUtil.get(CodeMessage.COMMON_UNAUTHORIZED);
 
         boolean succ = bloggerPictureService.deletePicture(bloggerId, picture.getId(), true);
-        if (!succ) handlerOperateFail();
+        if (!succ)
+            return handlerOperateFail();
 
         return ResultModel.success();
     }

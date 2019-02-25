@@ -104,11 +104,14 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
             throw ExceptionUtil.get(CodeMessage.COMMON_UNKNOWN_ERROR, e);
         }
         //关键字为首要条件
-        if (Util.isArrayEmpty(ids)) return null;
+        if (Util.isArrayEmpty(ids))
+            return new ResultModel<>("empty result", CodeMessage.COMMON_EMPTY_RESULT.getCode());
+
 
         Set<Long> blogIds = filterByCategoryAndLabels(categoryIds, labelIds, bloggerId);
         blogIds.addAll(Arrays.asList(ids));
-        if (CollectionUtils.isEmpty(blogIds)) return null;
+        if (CollectionUtils.isEmpty(blogIds))
+            return new ResultModel<>("empty result", CodeMessage.COMMON_EMPTY_RESULT.getCode());
 
         PageResult<BlogListItemDTO> res = constructResult(blogIds, status, sortRule, pageNum, pageSize);
         return ResultModel.success(res);
@@ -121,7 +124,8 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
             BlogSortRule sortRule, BlogStatusEnum status) {
 
         Set<Long> blogIds = filterByCategoryAndLabels(categoryIds, labelIds, bloggerId);
-        if (CollectionUtils.isEmpty(blogIds)) return null;
+        if (CollectionUtils.isEmpty(blogIds))
+            return new ResultModel<>("empty result", CodeMessage.COMMON_EMPTY_RESULT.getCode());
 
         PageResult<BlogListItemDTO> res = constructResult(blogIds, status, sortRule, pageNum, pageSize);
         return ResultModel.success(res);

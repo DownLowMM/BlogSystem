@@ -20,22 +20,15 @@ public class RestController {
     /**
      * 处理结果为空的情况
      */
-    protected void handlerEmptyResult() {
-        throw ExceptionUtil.get(CodeMessage.COMMON_EMPTY_RESULT);
+    protected ResultModel handlerEmptyResult() {
+        return new ResultModel<>("empty result", CodeMessage.COMMON_EMPTY_RESULT.getCode());
     }
 
     /**
      * 处理操作失败的情况
      */
-    protected void handlerOperateFail() {
-        throw ExceptionUtil.get(CodeMessage.COMMON_OPERATE_FAIL);
-    }
-
-    /**
-     * 处理操作失败的情况
-     */
-    protected void handlerOperateFail(Throwable e) {
-        throw ExceptionUtil.get(CodeMessage.COMMON_OPERATE_FAIL, e);
+    protected ResultModel handlerOperateFail() {
+        return new ResultModel<>("operate fail", CodeMessage.COMMON_OPERATE_FAIL.getCode());
     }
 
     /**

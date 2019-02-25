@@ -38,7 +38,8 @@ public class BloggerCategoryController extends BaseController {
 
         ResultModel<PageResult<BloggerCategoryDTO>> result = bloggerCategoryService.listBlogCategory(bloggerId,
                 pageNum, pageSize);
-        if (result == null) handlerEmptyResult();
+        if (result == null)
+            return handlerEmptyResult();
 
         return result;
     }
@@ -57,7 +58,8 @@ public class BloggerCategoryController extends BaseController {
         handleCategoryExistCheck(bloggerId, categoryId);
 
         BloggerCategoryDTO dto = bloggerCategoryService.getCategory(bloggerId, categoryId);
-        if (dto == null) handlerOperateFail();
+        if (dto == null)
+            return handlerOperateFail();
 
         return ResultModel.success(dto);
     }
@@ -78,7 +80,8 @@ public class BloggerCategoryController extends BaseController {
             throw ExceptionUtil.get(CodeMessage.COMMON_PARAMETER_ILLEGAL);
 
         Long id = bloggerCategoryService.insertBlogCategory(bloggerId, iconId, title, bewrite);
-        if (id == null) handlerOperateFail();
+        if (id == null)
+            return handlerOperateFail();
 
         return ResultModel.success(id);
     }
@@ -101,7 +104,7 @@ public class BloggerCategoryController extends BaseController {
         handlePictureExistCheck(bloggerId, newIconId);
 
         if (!bloggerCategoryService.updateBlogCategory(bloggerId, categoryId, newIconId, newTitle, newBewrite))
-            handlerOperateFail();
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
@@ -131,7 +134,7 @@ public class BloggerCategoryController extends BaseController {
         }
 
         if (!bloggerCategoryService.deleteCategoryAndMoveBlogsTo(bloggerId, categoryId, cate))
-            handlerOperateFail();
+            return handlerOperateFail();
 
         return ResultModel.success();
     }
