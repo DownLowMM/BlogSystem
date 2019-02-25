@@ -7,6 +7,7 @@ import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.common.util.Utils;
 import com.duan.blogos.websample.util.Util;
+import com.duan.blogos.websample.vo.PageOwnerBloggerVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,31 +59,40 @@ public class BloggerPageController {
             return mv;
         }
 
-        mv.addObject("pageOwnerBloggerId", account.getId());
-        mv.addObject("pageOwnerBloggerName", account.getUsername());
-        mv.addObject("pageOwnerBloggerNameBase64", bloggerNameBase64);
-
+        // 页面所有者
         Long ownerId = account.getId();
+
+        PageOwnerBloggerVO vo = new PageOwnerBloggerVO();
+        vo.setId(ownerId);
+        vo.setName(account.getUsername());
+        vo.setNameBase64(bloggerNameBase64);
+
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(ownerId);
-        mv.addObject("blogName", profile.getIntro());
-        mv.addObject("aboutMe", profile.getAboutMe());
+        vo.setIntro(profile.getIntro());
+        vo.setAboutMe(profile.getAboutMe());
 
         BloggerPictureDTO defaultPicture = bloggerPictureService.getDefaultPicture(BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR);
-        mv.addObject("avatarId",
-                Optional.ofNullable(profile.getAvatarId())
-                        .orElse(defaultPicture == null ? null : defaultPicture.getId()));
+        vo.setAvatarId(Optional.ofNullable(profile.getAvatarId())
+                .orElse(defaultPicture == null ? null : defaultPicture.getId()));
 
         ResultModel<BloggerStatisticsDTO> ownerBgStat = statisticsService.getBloggerStatistics(ownerId);
-        mv.addObject("ownerBgStat", ownerBgStat.getData());
+        vo.setStatistics(ownerBgStat.getData());
 
+        BloggerSettingDTO setting = settingService.getSetting(ownerId);
+        vo.setSetting(setting);
+
+        mv.addObject("pageOwnerBlogger", vo);
+
+        // 登录博主
         Long loginBgId;
         if ((loginBgId = onlineService.getLoginBloggerId(Util.getToken())) != null) {
             ResultModel<BloggerStatisticsDTO> loginBgStat = statisticsService.getBloggerStatistics(loginBgId);
             mv.addObject("loginBgStat", loginBgStat.getData());
-        }
 
-        BloggerSettingDTO setting = settingService.getSetting(ownerId);
-        mv.addObject("setting", setting);
+            mv.addObject("bloggerLoginSignal", "yes");
+            mv.addObject("loginBlogger", vo);
+
+        }
 
         return mv;
     }

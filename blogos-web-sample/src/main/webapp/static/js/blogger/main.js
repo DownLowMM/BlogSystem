@@ -676,7 +676,7 @@ var funWhenDeleteLinkSuccess = function () {
 
 // ------------------------------------------------------------------------------------------------------ 登录对话框回调
 function funAfterLoginSuccess(result, name) {
-    location.href = '/' + name + '/archives';
+    location.href = '/' + result.data.usernameBase64 + '/archives';
 }
 
 // ------------------------------------------------------------------------------------------------------ 头像修改成功后回调回调

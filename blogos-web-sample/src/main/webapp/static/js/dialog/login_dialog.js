@@ -33,7 +33,7 @@ function login(funAfterLoginSuccess, funAfterLoginFail) {
 
                 setTimeout(function () {
                     disableButton(true, 'loginBtn', '登录', "button-disable");
-                    funAfterLoginSuccess(result, name);
+                    funAfterLoginSuccess(result);
                 }, 1000);
 
             } else {
