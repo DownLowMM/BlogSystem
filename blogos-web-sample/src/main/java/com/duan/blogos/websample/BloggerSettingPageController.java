@@ -1,14 +1,14 @@
 package com.duan.blogos.websample;
 
+import com.duan.blogos.service.blogger.BloggerAccountService;
+import com.duan.blogos.service.blogger.BloggerPictureService;
+import com.duan.blogos.service.blogger.BloggerProfileService;
+import com.duan.blogos.service.blogger.BloggerSettingService;
 import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerSettingDTO;
 import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
-import com.duan.blogos.service.blogger.BloggerAccountService;
-import com.duan.blogos.service.blogger.BloggerPictureService;
-import com.duan.blogos.service.blogger.BloggerProfileService;
-import com.duan.blogos.service.blogger.BloggerSettingService;
 import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author DuanJiaNing
  */
 @Controller
-@RequestMapping("/{bloggerName}/setting")
+@RequestMapping("/{bloggerNameBase64}/setting")
 public class BloggerSettingPageController {
 
     @Autowired
@@ -43,10 +43,11 @@ public class BloggerSettingPageController {
     @RequestMapping
     public ModelAndView pageSetting(HttpServletRequest request,
                                     @ModelAttribute
-                                    @PathVariable String bloggerName) {
+                                    @PathVariable String bloggerNameBase64) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/blogger/setting");
 
+        String bloggerName = Util.decodeBase64(bloggerNameBase64);
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
         if (account == null) {
             request.setAttribute("code", 500);

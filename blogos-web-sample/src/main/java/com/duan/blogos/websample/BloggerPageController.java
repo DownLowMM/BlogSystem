@@ -59,6 +59,7 @@ public class BloggerPageController {
 
         mv.addObject("pageOwnerBloggerId", account.getId());
         mv.addObject("pageOwnerBloggerName", account.getUsername());
+        mv.addObject("pageOwnerBloggerNameBase64", bloggerNameBase64);
 
         Long ownerId = account.getId();
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(ownerId);

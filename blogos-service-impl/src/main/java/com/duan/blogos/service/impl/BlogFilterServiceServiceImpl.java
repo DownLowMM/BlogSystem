@@ -164,7 +164,11 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
 
         List<BlogListItemDTO> dtos = new ArrayList<>();
         for (Blog blog : pageInfo.getList()) {
-            dtos.add(blogDataManager.getBlogListItemDTO(blog, true));
+            BlogListItemDTO dto = blogDataManager.getBlogListItemDTO(blog, true);
+            if (dto != null) {
+                dto.setTitleBase64(Util.encodeUrlBase64(dto.getTitle()));
+                dtos.add(dto);
+            }
         }
 
         return ResultModelUtil.page(pageInfo, dtos);

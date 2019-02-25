@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author DuanJiaNing
  */
 @Controller
-@RequestMapping("/{bloggerName}/blog/{blogName}")
+@RequestMapping("/{bloggerNameBase64}/blog/{blogNameBase64}")
 public class BlogReadPageController {
 
     @Autowired
@@ -53,11 +53,12 @@ public class BlogReadPageController {
 
     @RequestMapping
     public ModelAndView page(HttpServletRequest request,
-                             @PathVariable String bloggerName,
-                             @PathVariable String blogName) {
+                             @PathVariable String bloggerNameBase64,
+                             @PathVariable String blogNameBase64) {
         ModelAndView mv = new ModelAndView();
 
         // 博文作者博主账户
+        String bloggerName = Util.decodeBase64(bloggerNameBase64);
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
 
         if (account == null) {
@@ -66,6 +67,7 @@ public class BlogReadPageController {
             return mv;
         }
 
+        String blogName = Util.decodeBase64(blogNameBase64);
         Long blogId = blogService.getBlogId(account.getId(), blogName);
         if (blogId == null || blogId == -1) {
             mv.setViewName("error/error");
@@ -74,28 +76,32 @@ public class BlogReadPageController {
             return mv;
         }
 
-        // 登陆博主 id
-        Long loginBloggerId = onlineService.getLoginBloggerId(Util.getToken());
-
         // 博文浏览次数自增 1
         operateService.updateBlogViewCountPlus(blogId);
 
         ResultModel<BlogBaseStatisticsDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
-        ResultModel<BlogDTO> blog = blogService.getBlog(loginBloggerId);
+        ResultModel<BlogDTO> blog = blogService.getBlog(blogId);
 
         mv.addObject("blogOwnerBloggerId", account.getId());
-        mv.addObject("main", blog);
+        mv.addObject("blogOwnerBloggerName", bloggerName);
+        mv.addObject("blogOwnerBloggerNameBase64", bloggerNameBase64);
+        mv.addObject("main", blog.getData());
         mv.addObject("stat", statistics.getData());
 
+        // 登陆博主 id
+        Long loginBloggerId = onlineService.getLoginBloggerId(Util.getToken());
+        if (loginBloggerId != null && loginBloggerId != -1) {
 
-        ResultModel<BloggerStatisticsDTO> loginBgStat = bloggerStatisticsService.getBloggerStatistics(loginBloggerId);
-        mv.addObject("loginBgStat", loginBgStat.getData());
+            ResultModel<BloggerStatisticsDTO> loginBgStat = bloggerStatisticsService.getBloggerStatistics(loginBloggerId);
+            mv.addObject("loginBgStat", loginBgStat.getData());
 
-        if (loginBloggerId != -1) {
-            if (likeService.getLikeState(loginBloggerId, blogId))
+            if (likeService.getLikeState(loginBloggerId, blogId)) {
                 mv.addObject("likeState", true);
-            if (collectBlogService.getCollectState(loginBloggerId, blogId))
+            }
+
+            if (collectBlogService.getCollectState(loginBloggerId, blogId)) {
                 mv.addObject("collectState", true);
+            }
         }
 
         mv.setViewName("blogger/read_blog");

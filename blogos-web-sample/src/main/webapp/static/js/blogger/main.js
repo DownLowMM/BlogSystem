@@ -428,8 +428,8 @@ function setBlogs(array, defaulz) {
                 '<div class="row">' +
                 '<div class="col-md-9">' +
                 '<p>' +
-                '<h3 class="list-group-item-heading"><span onclick="window.open(\'/' + pageOwnerBloggerName + '/blog/' +
-                item.title + '\',\'_blank\')" class="blog-list-item-title" title="' + item.title + '">' +
+                '<h3 class="list-group-item-heading"><span onclick="window.open(\'/' + pageOwnerBloggerNameBase64 + '/blog/' +
+                item.titleBase64 + '\',\'_blank\')" class="blog-list-item-title" title="' + item.title + '">' +
                 item.title + '</span></h3>' +
                 '</p>' +
                 '</div>' +
@@ -454,7 +454,7 @@ function setBlogs(array, defaulz) {
                 '收藏&nbsp;' + item.statistics.collectCount + '<span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>' +
                 '<span class="text-clickable"' +
                 ' onclick="if (' + item.statistics.commentCount + ' > 0) ' +
-                'window.open(\'/' + pageOwnerBloggerName + '/blog/' + item.title + '/#comment\',\'_blank\')" >' +
+                'window.open(\'/' + pageOwnerBloggerNameBase64 + '/blog/' + item.titleBase64 + '/#comment\',\'_blank\')" >' +
                 '留言&nbsp;' + item.statistics.commentCount + '</span>' +
                 '<span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>' +
                 item.statistics.viewCount + '&nbsp;次浏览' +
@@ -508,7 +508,7 @@ function showDeleteConfirmDialog(blogId) {
 }
 
 function showBlogStatisticsDialog(blogId) {
-    window.open('/' + pageOwnerBloggerName + '/blog-statistics?blogId=' + blogId, '_blank');
+    window.open('/' + pageOwnerBloggerNameBase64 + '/blog-statistics?blogId=' + blogId, '_blank');
 }
 
 // -------------------------------------------------------------------------------------------------------- 确认删除博文

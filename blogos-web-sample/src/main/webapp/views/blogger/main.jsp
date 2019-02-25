@@ -227,7 +227,7 @@
                                 &nbsp;<span class="count" id="subBlogCount">(${ownerBgStat["blogCount"]})</span>
                             </a>
                             <a class="list-group-item vertical-center blogger-favourite"
-                               href="/${pageOwnerBloggerName}/blog/favourite/like">
+                               href="/${pageOwnerBloggerNameBase64}/blog/favourite/like">
                                     <%--<i class="material-icons icons">favorite_border</i>&nbsp;--%>
                                 <img class="img24px" src="/images/icon/icons8-heart-outline-80.png">&nbsp;
                                 <c:choose>
@@ -242,7 +242,7 @@
                                 &nbsp;<span class="count">(${ownerBgStat.likedCount})</span>
                             </a>
                             <a class="list-group-item vertical-center blogger-favourite"
-                               href="/${pageOwnerBloggerName}/blog/favourite/collect">
+                               href="/${pageOwnerBloggerNameBase64}/blog/favourite/collect">
                                 <img class="img24px" src="/images/icon/icons8-collect-100.png">&nbsp;
                                 <c:choose>
                                     <c:when test="${sessionScope['bloggerId'] == pageOwnerBloggerId}">
@@ -386,7 +386,7 @@
                                 &nbsp;<span class="count" id="subBlogCount">(${ownerBgStat["blogCount"]})</span>
                             </a>
                             <a class="list-group-item vertical-center blogger-favourite"
-                               href="/${pageOwnerBloggerName}/blog/favourite/like">
+                               href="/${pageOwnerBloggerNameBase64}/blog/favourite/like">
                                     <%--<i class="material-icons icons">favorite_border</i>&nbsp;--%>
                                 <img class="img24px" src="/images/icon/icons8-heart-outline-80.png">&nbsp;
                                 <c:choose>
@@ -401,7 +401,7 @@
                                 &nbsp;<span class="count">(${ownerBgStat.likedCount})</span>
                             </a>
                             <a class="list-group-item vertical-center blogger-favourite"
-                               href="/${pageOwnerBloggerName}/blog/favourite/collect">
+                               href="/${pageOwnerBloggerNameBase64}/blog/favourite/collect">
                                 <img class="img24px" src="/images/icon/icons8-collect-100.png">&nbsp;
                                 <c:choose>
                                     <c:when test="${sessionScope['bloggerId'] == pageOwnerBloggerId}">
@@ -494,6 +494,7 @@
 
 <script type="application/javascript">
     var pageOwnerBloggerId = ${pageOwnerBloggerId};
+    var pageOwnerBloggerNameBase64 = '${pageOwnerBloggerNameBase64}';
     var pageOwnerBloggerName = '${pageOwnerBloggerName}';
     var bloggerLoginSignal = ${not empty sessionScope['bloggerLoginSignal']};
     var blogCount = ${ownerBgStat["blogCount"]};

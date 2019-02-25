@@ -1,5 +1,6 @@
 package com.duan.blogos.websample;
 
+import com.duan.blogos.websample.util.Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,15 +13,15 @@ import org.springframework.web.servlet.ModelAndView;
  * @author DuanJiaNing
  */
 @Controller
-@RequestMapping("/{bloggerName}/blog-statistics")
+@RequestMapping("/{bloggerNameBase64}/blog-statistics")
 public class BlogStatisticsPageController {
 
     @RequestMapping
-    public ModelAndView page(@PathVariable String bloggerName,
+    public ModelAndView page(@PathVariable String bloggerNameBase64,
                              @ModelAttribute("blogId") Integer blogId) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/blogger/blog_statistics");
-        mv.addObject("bloggerName", bloggerName);
+        mv.addObject("bloggerName", Util.decodeBase64(bloggerNameBase64));
 
         return mv;
     }

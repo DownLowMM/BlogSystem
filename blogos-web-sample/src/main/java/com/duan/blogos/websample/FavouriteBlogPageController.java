@@ -1,11 +1,12 @@
 package com.duan.blogos.websample;
 
+import com.duan.blogos.service.OnlineService;
+import com.duan.blogos.service.blogger.BloggerAccountService;
+import com.duan.blogos.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerAccountService;
-import com.duan.blogos.service.blogger.BloggerStatisticsService;
-import com.duan.blogos.service.OnlineService;
+import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author DuanJiaNing
  */
 @Controller
-@RequestMapping("/{pageOwnerBloggerName}/blog/favourite")
+@RequestMapping("/{pageOwnerBloggerNameBase64}/blog/favourite")
 public class FavouriteBlogPageController {
 
     @Autowired
@@ -36,9 +37,9 @@ public class FavouriteBlogPageController {
     @RequestMapping("/like")
     public ModelAndView pageLike(HttpServletRequest request,
                                  @ModelAttribute
-                                 @PathVariable String pageOwnerBloggerName) {
+                                 @PathVariable String pageOwnerBloggerNameBase64) {
         ModelAndView mv = new ModelAndView();
-        setCommon(mv, request, pageOwnerBloggerName);
+        setCommon(mv, request, Util.decodeBase64(pageOwnerBloggerNameBase64));
 
         mv.addObject("type", "like");
         return mv;

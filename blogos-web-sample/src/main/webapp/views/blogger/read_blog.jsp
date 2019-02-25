@@ -96,8 +96,8 @@
             </p>
             <p class="text-center">
                 <small style="color: gray">
-                    <a href="/${bloggerName}/archives"
-                       class="button-info blog-author">${bloggerName}</a>&nbsp;&nbsp;&nbsp;发表于&nbsp;
+                    <a href="/${blogOwnerBloggerNameBase64}/archives"
+                       class="button-info blog-author">${blogOwnerBloggerName}</a>&nbsp;&nbsp;&nbsp;发表于&nbsp;
                     <script>document.write(dateFormat(new Date('${main.releaseDate}')))</script>
                     <span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                     喜欢&nbsp;<span id="blogLikeCount">${stat.likeCount}</span>
@@ -106,7 +106,7 @@
                     <span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                     留言&nbsp;<span id="blogCommentCount">${stat.commentCount}</span>
                     <span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                    ${main["wordCount"]}&nbsp;字
+                    ${stat.wordCount}&nbsp;字
                     <span class="vertical-line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                     <span id="blogViewCount">${stat.viewCount}</span>&nbsp;次浏览
                 </small>

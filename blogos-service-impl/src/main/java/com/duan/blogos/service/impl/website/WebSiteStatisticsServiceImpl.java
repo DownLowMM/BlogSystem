@@ -47,7 +47,7 @@ public class WebSiteStatisticsServiceImpl implements WebSiteStatisticsService {
             ResultModel<BloggerStatisticsDTO> statistics = statisticsService.getBloggerStatistics(blogger.getId());
             if (statistics != null && statistics.getData() != null) {
                 BloggerBriefDTO dto = DataConverter.DTO2DTO.bloggerTobrief(blogger, statistics.getData());
-                dto.getBlogger().setUsernameBase64(Util.encodeBase64(dto.getBlogger().getUsername()));
+                dto.getBlogger().setUsernameBase64(Util.encodeUrlBase64(dto.getBlogger().getUsername()));
                 dtos.add(dto);
             }
         }
