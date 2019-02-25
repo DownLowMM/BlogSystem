@@ -1,6 +1,6 @@
 package com.duan.blogos.websample;
 
-import com.duan.blogos.websample.util.Util;
+import com.duan.blogos.service.common.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +21,7 @@ public class BlogStatisticsPageController {
                              @ModelAttribute("blogId") Integer blogId) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/blogger/blog_statistics");
-        mv.addObject("bloggerName", Util.decodeBase64(bloggerNameBase64));
+        mv.addObject("bloggerName", Utils.decodeUrlBase64(bloggerNameBase64));
 
         return mv;
     }

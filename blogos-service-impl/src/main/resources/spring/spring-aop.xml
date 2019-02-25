@@ -5,9 +5,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- 配置事务通知属性 -->
-    <aop:aspectj-autoproxy/>
 
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:advice id="txAdvice">
         <!-- 定义事务传播属性 -->
         <!--tx:method也规定了如果方法名匹配“add*”和“get*”...方法时使用事务，propagation是设定事务的传播级别。-->
         <tx:attributes>

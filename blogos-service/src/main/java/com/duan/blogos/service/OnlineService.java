@@ -1,5 +1,6 @@
 package com.duan.blogos.service;
 
+import com.duan.blogos.service.common.dto.LoginResultDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.common.vo.LoginVO;
 
@@ -18,7 +19,7 @@ public interface OnlineService {
     /**
      * 登入
      */
-    ResultModel login(LoginVO account);
+    ResultModel<LoginResultDTO> login(LoginVO account);
 
     /**
      * 登出

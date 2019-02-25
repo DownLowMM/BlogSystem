@@ -3,6 +3,7 @@ package com.duan.blogos.service.impl.common;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.duan.blogos.service.OnlineService;
 import com.duan.blogos.service.common.CodeMessage;
+import com.duan.blogos.service.common.dto.LoginResultDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.common.util.DataConverter;
 import com.duan.blogos.service.common.util.ExceptionUtil;
@@ -57,7 +58,7 @@ public class OnlineServiceImpl implements OnlineService {
     }
 
     @Override
-    public ResultModel login(LoginVO vo) {
+    public ResultModel<LoginResultDTO> login(LoginVO vo) {
 
         BloggerAccount acc = accountDao.getAccountByName(vo.getUsername());
 

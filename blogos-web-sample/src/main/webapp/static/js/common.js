@@ -62,7 +62,7 @@ function isPassword(str) {
 
     if (isStrEmpty(str)) return false;
 
-    var pwdRegex = "^(?:(?=.*[A-z])(?=.*[0-9])).{6,12}$";
+    var pwdRegex = "^(?:(?=.*[A-z])(?=.*[0-9])).{6,20}$";
 
     var re = str.match(pwdRegex);
     return re != null;
@@ -240,9 +240,13 @@ function initToolTip() {
 }
 
 var apiGateHost = 'http://127.0.0.1:7070';
+
 function ajax(url, data, async, type, success) {
     var host = apiGateHost;
     $.ajax({
+        headers: {
+            token: token
+        },
         url: host + url,
         data: data,
         async: async,
@@ -255,6 +259,9 @@ function ajax(url, data, async, type, success) {
 function ajaxSpe(url, data, async, type, dataType, success) {
     var host = apiGateHost;
     $.ajax({
+        headers: {
+            token: token
+        },
         url: host + url,
         data: data,
         async: async,
@@ -268,6 +275,9 @@ function ajaxSpe(url, data, async, type, dataType, success) {
 function ajaxForUpload(url, data, cache, type, processData, contentType, success) {
     var host = apiGateHost;
     $.ajax({
+        headers: {
+            token: token
+        },
         url: host + url,
         type: type,
         data: data,
@@ -282,6 +292,9 @@ function ajaxForUpload(url, data, cache, type, processData, contentType, success
 function ajaxUploadBase64Url(url, data, cache, type, dataType, beforeSend, success) {
     var host = apiGateHost;
     $.ajax({
+        headers: {
+            token: token
+        },
         url: host + url,
         type: type,
         data: data,
@@ -291,4 +304,10 @@ function ajaxUploadBase64Url(url, data, cache, type, dataType, beforeSend, succe
         success: success,
         crossDomain: true
     });
+}
+
+var token;
+
+function refreshToken(token1) {
+    token = token1;
 }

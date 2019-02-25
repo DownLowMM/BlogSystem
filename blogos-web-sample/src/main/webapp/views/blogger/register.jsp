@@ -101,8 +101,19 @@
                 <span class="error-msg" id="registerErrorMsg"></span>
                 <br>
                 <br>
-                <button class="button-success" style="padding: 8px 64px;" onclick="nextStep()" id="nextStep">下一步
-                </button>
+                <table>
+                    <tr>
+                        <td>
+                            <button class="button-success" style="padding: 8px 64px;" onclick="nextStep()"
+                                    id="nextStep">下一步
+                            </button>
+                        </td>
+                        <td style="vertical-align: center">
+                            <a id="ignoreProfile" style="display: none"
+                                                 onclick="ignoreProfile()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;跳过&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div style="height: 10%">
                 <span class="powered-by">Powered by <a style="color: black"

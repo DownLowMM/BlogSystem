@@ -3,23 +3,11 @@ function nextStep() {
 
         $('#nextStep').on('click', null, null, function () {
             if (checkInputProfile() && $('#nextStep').attr('disable') !== 'disable') {
-
-                $('#nextStep').css('display', 'none');
-                $('#nextStep').attr('disable', 'disable');
-
-                $('#inputAccount').css('display', 'none');
-                $('#inputProfile').css('display', 'none');
-                $('#inputFinish').css('display', 'block');
-
-                $('#stepTitle3').removeClass('step-title');
-                $('#stepTitle3').addClass('step-title-choose');
-                $('#stepTitle3_').removeClass('step');
-                $('#stepTitle3_').addClass('step-choose');
-
-                register();
+                gotoRegister(true);
             }
         });
 
+        $('#ignoreProfile').css('display', 'block');
         $('#inputAccount').css('display', 'none');
         $('#inputProfile').css('display', 'block');
         $('#inputFinish').css('display', 'none');
@@ -29,9 +17,30 @@ function nextStep() {
         $('#stepTitle2_').removeClass('step');
         $('#stepTitle2_').addClass('step-choose');
 
-
     }
 
+}
+
+function ignoreProfile() {
+    $('#ignoreProfile').css('display', 'none');
+    gotoRegister(false);
+}
+
+function gotoRegister(includeProfile) {
+
+    $('#nextStep').css('display', 'none');
+    $('#nextStep').attr('disable', 'disable');
+
+    $('#inputAccount').css('display', 'none');
+    $('#inputProfile').css('display', 'none');
+    $('#inputFinish').css('display', 'block');
+
+    $('#stepTitle3').removeClass('step-title');
+    $('#stepTitle3').addClass('step-title-choose');
+    $('#stepTitle3_').removeClass('step');
+    $('#stepTitle3_').addClass('step-choose');
+
+    register(includeProfile);
 }
 
 // 为 '' 返回true
@@ -57,7 +66,7 @@ function checkInputAccount() {
     // 检查密码格式规范
     var pwd = $('#registerPassword').val();
     if (!isPassword(pwd)) {
-        errorInfoWhenRegister('密码格式不正确，<small>密码由 6-12 位字母和数字组成</small>');
+        errorInfoWhenRegister('密码格式不正确，<small>密码由 6-20 位字母和数字组成</small>');
         return false;
     }
 
@@ -69,26 +78,14 @@ function checkInputAccount() {
     }
 
     // 检查用户名是否存在
-    ajax('/blogger/check=username?username=' + $('#registerUserName').val(), null, false, 'get',
+    ajax('/blogger/account/check=username?username=' + $('#registerUserName').val(), null, false, 'get',
         function (result) {
-            if (result.code === 18) {
+            if (result.code !== 200) {
                 errorInfoWhenRegister('用户名已被占用');
             } else {
                 errorInfoWhenRegister('');
             }
         });
-
-    // $.ajax({
-    //     url: '/blogger/check=username?username=' + $('#registerUserName').val(),
-    //     async: false,
-    //     success: function (result) {
-    //         if (result.code === 18) {
-    //             errorInfoWhenRegister('用户名已被占用');
-    //         } else {
-    //             errorInfoWhenRegister('');
-    //         }
-    //     }
-    // });
 
     if ($('#registerErrorMsg').html() === '') return true;
     else return false;
@@ -135,26 +132,14 @@ function checkInputProfile() {
     }
 
     //检查电话号码重复
-    ajax('/blogger/check=phone?phone=' + phone, null, false, 'get',
+    ajax('/blogger/account/check=phone?phone=' + phone, null, false, 'get',
         function (result) {
-            if (result.code === 18) {
+            if (result.code !== 200) {
                 errorInfoWhenRegister('该手机号已经被注册');
             } else {
                 errorInfoWhenRegister('');
             }
         });
-
-    // $.ajax({
-    //     url: '/blogger/check=phone?phone=' + phone,
-    //     async: false,
-    //     success: function (result) {
-    //         if (result.code === 18) {
-    //             errorInfoWhenRegister('该手机号已经被注册');
-    //         } else {
-    //             errorInfoWhenRegister('');
-    //         }
-    //     }
-    // });
 
     if ($('#registerErrorMsg').html() === '') return true;
     else return false;
@@ -165,18 +150,13 @@ function errorInfoWhenRegister(msg) {
     error(msg, 'registerErrorMsg', true, 3000);
 }
 
-function register() {
+function register(includeProfile) {
     var userName = $('#registerUserName').val();
     var password = $('#registerPassword').val();
 
-    var phone = $('#registerPhone').val();
-    var email = $('#registerEmail').val();
-    var intro = $('#registerIntro').val();
-    var aboutMe = $('#registerAboutMe').val();
-
     info('正在注册...');
 
-    ajaxSpe('/blogger', {
+    ajaxSpe('/blogger/register', {
             username: userName,
             password: password
         }, true, 'post', 'json',
@@ -189,17 +169,23 @@ function register() {
             }
 
             function addProfile(id) {
-                ajaxSpe('/blogger/' + id + '/profile', {
+
+                var phone = $('#registerPhone').val();
+                var email = $('#registerEmail').val();
+                var intro = $('#registerIntro').val();
+                var aboutMe = $('#registerAboutMe').val();
+
+                ajaxSpe('/blogger/' + id + '/profile', includeProfile ? {
                         phone: phone,
                         email: email,
                         aboutMe: aboutMe,
                         intro: intro
-                    }, true, 'post', 'json',
+                    } : null, true, 'post', 'json',
                     function (result) {
                         if (result.code === 200) {
                             countDown(3, 1000, function (c) {
                                 if (c === 0) {
-                                    location.href = '/' + userName + '/archives';
+                                    location.href = '/' + usernameBase64 + '/archives';
                                     return true;
                                 } else {
                                     info('<small> 注册成功，' + c + '秒后将进入</small><a>个人主页</a>');
@@ -211,31 +197,9 @@ function register() {
                         }
                     });
 
-                // $.post(
-                //     '/blogger/' + id + '/profile',
-                //     {
-                //         phone: phone,
-                //         email: email,
-                //         aboutMe: aboutMe,
-                //         intro: intro
-                //     },
-                //     function (result) {
-                //         if (result.code === 0) {
-                //             countDown(3, 1000, function (c) {
-                //                 if (c === 0) {
-                //                     location.href = '/' + userName + '/archives';
-                //                     return true;
-                //                 } else {
-                //                     info('<small> 注册成功，' + c + '秒后将进入</small><a>个人主页</a>');
-                //                     return false;
-                //                 }
-                //             });
-                //         } else {
-                //             failInfo(result.msg);
-                //         }
-                //     }, 'json'
-                // )
             }
+
+            var usernameBase64;
 
             function login(id) {
                 ajaxSpe('/blogger/login/way=name', {
@@ -244,92 +208,23 @@ function register() {
                     }, true, 'post', 'json',
                     function (result) {
                         if (result.code === 200) {
+                            usernameBase64 = result.data.usernameBase64;
+                            refreshToken(result.data.token);
                             addProfile(id);
                         } else {
                             failInfo(result.msg);
                         }
                     });
-
-                // $.post(
-                //     '/blogger/login/way=name',
-                //     {
-                //         username: userName,
-                //         password: password
-                //     }, function (result) {
-                //         if (result.code === 0) {
-                //             addProfile(id);
-                //         } else {
-                //             failInfo(result.msg);
-                //         }
-                //     }, 'json');
             }
 
         });
-
-    // $.post(
-    //     '/blogger',
-    //     {
-    //         username: userName,
-    //         password: password
-    //     },
-    //     function (result) {
-    //
-    //         if (result.code === 0) {
-    //             login(result.data);
-    //         } else {
-    //             failInfo(result.msg);
-    //         }
-    //
-    //         function addProfile(id) {
-    //             $.post(
-    //                 '/blogger/' + id + '/profile',
-    //                 {
-    //                     phone: phone,
-    //                     email: email,
-    //                     aboutMe: aboutMe,
-    //                     intro: intro
-    //                 },
-    //                 function (result) {
-    //                     if (result.code === 0) {
-    //                         countDown(3, 1000, function (c) {
-    //                             if (c === 0) {
-    //                                 location.href = '/' + userName + '/archives';
-    //                                 return true;
-    //                             } else {
-    //                                 info('<small> 注册成功，' + c + '秒后将进入</small><a>个人主页</a>');
-    //                                 return false;
-    //                             }
-    //                         });
-    //                     } else {
-    //                         failInfo(result.msg);
-    //                     }
-    //                 }, 'json'
-    //             )
-    //         }
-    //
-    //         function login(id) {
-    //             $.post(
-    //                 '/blogger/login/way=name',
-    //                 {
-    //                     username: userName,
-    //                     password: password
-    //                 }, function (result) {
-    //                     if (result.code === 0) {
-    //                         addProfile(id);
-    //                     } else {
-    //                         failInfo(result.msg);
-    //                     }
-    //                 }, 'json');
-    //         }
-    //
-    //     }, 'json');
 
     function info(info) {
         $('#finalInfo').html('&nbsp;&nbsp;' + info);
     }
 
     function failInfo(info) {
-        $('#finalInfo').html('&nbsp;&nbsp;<small>注册失败，' + info + '</small>，<a href="/blogger/register">重试</a>');
+        $('#finalInfo').html('&nbsp;&nbsp;<small>注册失败，' + info + '</small>，<a href="/register">重试</a>');
     }
 
 }

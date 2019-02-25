@@ -5,7 +5,7 @@ import com.duan.blogos.service.blogger.*;
 import com.duan.blogos.service.common.dto.blogger.*;
 import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.websample.util.Util;
+import com.duan.blogos.service.common.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +49,7 @@ public class BloggerPageController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("blogger/main");
 
-        String bloggerName = Util.decodeBase64(bloggerNameBase64);
+        String bloggerName = Utils.decodeUrlBase64(bloggerNameBase64);
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
         if (account == null) {
             request.setAttribute("code", 500);

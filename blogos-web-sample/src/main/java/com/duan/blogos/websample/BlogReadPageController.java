@@ -9,6 +9,7 @@ import com.duan.blogos.service.common.dto.blog.BlogDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.common.util.Utils;
 import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,7 +59,7 @@ public class BlogReadPageController {
         ModelAndView mv = new ModelAndView();
 
         // 博文作者博主账户
-        String bloggerName = Util.decodeBase64(bloggerNameBase64);
+        String bloggerName = Utils.decodeUrlBase64(bloggerNameBase64);
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
 
         if (account == null) {
@@ -67,7 +68,7 @@ public class BlogReadPageController {
             return mv;
         }
 
-        String blogName = Util.decodeBase64(blogNameBase64);
+        String blogName = Utils.decodeUrlBase64(blogNameBase64);
         Long blogId = blogService.getBlogId(account.getId(), blogName);
         if (blogId == null || blogId == -1) {
             mv.setViewName("error/error");

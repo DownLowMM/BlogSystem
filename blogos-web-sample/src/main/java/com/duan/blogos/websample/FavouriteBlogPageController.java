@@ -6,7 +6,7 @@ import com.duan.blogos.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.websample.util.Util;
+import com.duan.blogos.service.common.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,7 +39,7 @@ public class FavouriteBlogPageController {
                                  @ModelAttribute
                                  @PathVariable String pageOwnerBloggerNameBase64) {
         ModelAndView mv = new ModelAndView();
-        setCommon(mv, request, Util.decodeBase64(pageOwnerBloggerNameBase64));
+        setCommon(mv, request, Utils.decodeUrlBase64(pageOwnerBloggerNameBase64));
 
         mv.addObject("type", "like");
         return mv;

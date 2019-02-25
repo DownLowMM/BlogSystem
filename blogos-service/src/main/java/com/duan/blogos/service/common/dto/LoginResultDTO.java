@@ -19,6 +19,9 @@ public class LoginResultDTO implements Serializable {
     //用户名
     private String username;
 
+    //用户名
+    private String usernameBase64;
+
     //token
     private String token;
 

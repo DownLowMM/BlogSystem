@@ -66,4 +66,8 @@ public class ResultModel<T> implements Serializable {
         return model;
     }
 
+    public boolean isSuccess() {
+        return code == SUCCESS;
+    }
+
 }

@@ -7,9 +7,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created on 2018/10/14.
@@ -18,9 +16,18 @@ import java.util.Base64;
  */
 public class Util {
 
-    public static String getCookie(String key) {
+    public static HttpServletRequest getServletRequest() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
+        return attributes.getRequest();
+    }
+
+    public static HttpServletResponse getServletResponse() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return attributes.getResponse();
+    }
+
+    public static String getCookie(String key) {
+        HttpServletRequest request = getServletRequest();
         for (Cookie cookie : request.getCookies()) {
             if (cookie.getName().equals(key)) {
                 return cookie.getValue();
@@ -32,8 +39,7 @@ public class Util {
     }
 
     public static String getToken() {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
+        HttpServletRequest request = getServletRequest();
         String token = request.getHeader("token");
         if (token == null) {
             token = request.getParameter("token");
@@ -80,10 +86,4 @@ public class Util {
         return getUid(getToken());
     }
 
-    public static String decodeBase64(String str) {
-        Charset utf8 = StandardCharsets.UTF_8;
-        byte[] de1 = Base64.getUrlDecoder().decode(str.getBytes(utf8));
-        byte[] de2 = Base64.getDecoder().decode(de1);
-        return new String(de2, utf8);
-    }
 }

@@ -9,6 +9,7 @@ import com.duan.blogos.service.common.util.TokenUtil;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.CurrentUserThreadLocal;
 import com.duan.blogos.util.SpringUtil;
+import com.duan.blogos.util.Util;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -29,10 +30,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        String token = request.getHeader("token");
-        if (token == null) {
-            token = request.getParameter("token");
-        }
+        String token = Util.getToken();
 
         // 判断请求是否有 token，非法 token
         if (token == null || illegalToken(token)) {

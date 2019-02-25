@@ -11,6 +11,7 @@ import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.common.util.ExceptionUtil;
 import com.duan.blogos.service.common.util.ResultModelUtil;
 import com.duan.blogos.service.common.util.Util;
+import com.duan.blogos.service.common.util.Utils;
 import com.duan.blogos.service.config.preference.DefaultProperties;
 import com.duan.blogos.service.dao.BlogCategoryRelaDao;
 import com.duan.blogos.service.dao.BlogDao;
@@ -166,7 +167,7 @@ public class BlogFilterServiceServiceImpl implements BlogFilterService {
         for (Blog blog : pageInfo.getList()) {
             BlogListItemDTO dto = blogDataManager.getBlogListItemDTO(blog, true);
             if (dto != null) {
-                dto.setTitleBase64(Util.encodeUrlBase64(dto.getTitle()));
+                dto.setTitleBase64(Utils.encodeUrlBase64(dto.getTitle()));
                 dtos.add(dto);
             }
         }

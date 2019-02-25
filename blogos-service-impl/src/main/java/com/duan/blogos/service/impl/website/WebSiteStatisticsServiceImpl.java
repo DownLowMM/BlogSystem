@@ -7,7 +7,7 @@ import com.duan.blogos.service.common.dto.blogger.BloggerDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.common.util.DataConverter;
-import com.duan.blogos.service.common.util.Util;
+import com.duan.blogos.service.common.util.Utils;
 import com.duan.blogos.service.config.preference.WebsiteProperties;
 import com.duan.blogos.service.manager.WebsiteManager;
 import com.duan.blogos.service.website.WebSiteStatisticsService;
@@ -47,7 +47,7 @@ public class WebSiteStatisticsServiceImpl implements WebSiteStatisticsService {
             ResultModel<BloggerStatisticsDTO> statistics = statisticsService.getBloggerStatistics(blogger.getId());
             if (statistics != null && statistics.getData() != null) {
                 BloggerBriefDTO dto = DataConverter.DTO2DTO.bloggerTobrief(blogger, statistics.getData());
-                dto.getBlogger().setUsernameBase64(Util.encodeUrlBase64(dto.getBlogger().getUsername()));
+                dto.getBlogger().setUsernameBase64(Utils.encodeUrlBase64(dto.getBlogger().getUsername()));
                 dtos.add(dto);
             }
         }

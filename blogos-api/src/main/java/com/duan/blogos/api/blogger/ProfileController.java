@@ -2,13 +2,12 @@ package com.duan.blogos.api.blogger;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
-import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
+import com.duan.blogos.service.blogger.BloggerPictureService;
+import com.duan.blogos.service.blogger.BloggerProfileService;
 import com.duan.blogos.service.common.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerPictureService;
-import com.duan.blogos.service.blogger.BloggerProfileService;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ import java.util.Base64;
  * @author DuanJiaNing
  */
 @RestController
-@RequestMapping("/blogger/profile")
+@RequestMapping("/blogger/{bloggerId}/profile")
 public class ProfileController extends BaseController {
 
     @Reference
@@ -36,7 +35,7 @@ public class ProfileController extends BaseController {
      */
     @GetMapping
     @TokenNotRequired
-    public ResultModel<BloggerProfileDTO> get(@RequestParam Long bloggerId) {
+    public ResultModel<BloggerProfileDTO> get(@PathVariable Long bloggerId) {
         handleAccountCheck(bloggerId);
 
         BloggerProfileDTO profile = bloggerProfileService.getBloggerProfile(bloggerId);
@@ -50,7 +49,7 @@ public class ProfileController extends BaseController {
      * 新增资料
      */
     @PostMapping
-    public ResultModel add(@Uid Long bloggerId,
+    public ResultModel add(@PathVariable Long bloggerId,
                            @RequestParam(required = false) Long avatarId,
                            @RequestParam(required = false) String phone,
                            @RequestParam(required = false) String email,
@@ -70,7 +69,7 @@ public class ProfileController extends BaseController {
      * 更新资料
      */
     @PutMapping
-    public ResultModel update(@Uid Long bloggerId,
+    public ResultModel update(@PathVariable Long bloggerId,
                               @RequestParam(required = false) Long avatarId,
                               @RequestParam(required = false) String phone,
                               @RequestParam(required = false) String email,
@@ -95,7 +94,7 @@ public class ProfileController extends BaseController {
      * 删除资料
      */
     @DeleteMapping
-    public ResultModel delete(@Uid Long bloggerId) {
+    public ResultModel delete(@PathVariable Long bloggerId) {
 
         boolean result = bloggerProfileService.deleteBloggerProfile(bloggerId);
         if (!result) handlerOperateFail();
@@ -107,7 +106,7 @@ public class ProfileController extends BaseController {
      * TODO 更新头像
      */
     @PostMapping("/avatar")
-    public ResultModel updateAvatar(@Uid Long bloggerId,
+    public ResultModel updateAvatar(@PathVariable Long bloggerId,
                                     @RequestParam(value = "avatarBaseUrlData") String base64urlData) {
         handleImageBase64Check(base64urlData);
 

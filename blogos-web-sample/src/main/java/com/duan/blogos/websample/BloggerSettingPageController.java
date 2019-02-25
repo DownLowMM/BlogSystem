@@ -9,6 +9,7 @@ import com.duan.blogos.service.common.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerProfileDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerSettingDTO;
 import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.common.util.Utils;
 import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,7 @@ public class BloggerSettingPageController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/blogger/setting");
 
-        String bloggerName = Util.decodeBase64(bloggerNameBase64);
+        String bloggerName = Utils.decodeUrlBase64(bloggerNameBase64);
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
         if (account == null) {
             request.setAttribute("code", 500);

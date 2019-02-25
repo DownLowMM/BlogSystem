@@ -4,14 +4,19 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.duan.blogos.annonation.TokenNotRequired;
 import com.duan.blogos.annonation.Uid;
 import com.duan.blogos.api.BaseController;
+import com.duan.blogos.service.OnlineService;
+import com.duan.blogos.service.blogger.BloggerAccountService;
+import com.duan.blogos.service.common.dto.LoginResultDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerAccountService;
-import com.duan.blogos.service.OnlineService;
+import com.duan.blogos.service.common.util.Utils;
 import com.duan.blogos.service.common.vo.LoginVO;
 import com.duan.blogos.util.CodeMessage;
 import com.duan.blogos.util.ExceptionUtil;
+import com.duan.blogos.util.Util;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
 
 /**
  * Created on 2018/1/17.
@@ -37,7 +42,17 @@ public class BloggerController extends BaseController {
         vo.setUsername(username);
         vo.setPassword(password);
 
-        return onlineService.login(vo);
+        ResultModel<LoginResultDTO> login = onlineService.login(vo);
+        LoginResultDTO data = login.getData();
+        if (login.isSuccess() && data != null) {
+            data.setUsernameBase64(Utils.encodeUrlBase64(data.getUsername()));
+
+            Cookie tokenCookie = new Cookie("token", data.getToken());
+            tokenCookie.setPath("/");
+            Util.getServletResponse().addCookie(tokenCookie);
+        }
+
+        return login;
     }
 
     @TokenNotRequired
