@@ -1,23 +1,21 @@
 package com.duan.blogos.service.impl.blogger;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.duan.blogos.service.dao.*;
-import com.duan.blogos.service.dao.BloggerAccountDao;
-import com.duan.blogos.service.dao.BloggerLinkDao;
-import com.duan.blogos.service.dao.BloggerPictureDao;
-import com.duan.blogos.service.dao.BloggerProfileDao;
+import com.duan.blogos.service.blogger.BloggerPictureService;
+import com.duan.blogos.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.common.dto.blogger.BloggerDTO;
+import com.duan.blogos.service.common.dto.blogger.BloggerPictureDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
+import com.duan.blogos.service.common.enums.BlogStatusEnum;
+import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
+import com.duan.blogos.service.common.restful.ResultModel;
+import com.duan.blogos.service.common.util.DataConverter;
+import com.duan.blogos.service.dao.*;
 import com.duan.blogos.service.entity.BlogStatistics;
 import com.duan.blogos.service.entity.BloggerAccount;
 import com.duan.blogos.service.entity.BloggerPicture;
 import com.duan.blogos.service.entity.BloggerProfile;
-import com.duan.blogos.service.common.enums.BlogStatusEnum;
-import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.manager.StringConstructorManager;
-import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerStatisticsService;
-import com.duan.blogos.service.common.util.DataConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
@@ -65,6 +63,9 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
     @Autowired
     private BloggerProfileDao profileDao;
 
+    @Autowired
+    private BloggerPictureService bloggerPictureService;
+
     @Override
     public ResultModel<BloggerStatisticsDTO> getBloggerStatistics(Long bloggerId) {
 
@@ -110,10 +111,11 @@ public class BloggerStatisticsServiceImpl implements BloggerStatisticsService {
 
             // 设置默认头像
             if (avatar == null) {
+                BloggerPictureDTO defaultAvatar = bloggerPictureService.getDefaultPicture(BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR);
                 avatar = new BloggerPicture();
                 avatar.setBloggerId(id);
                 avatar.setCategory(BloggerPictureCategoryEnum.PUBLIC.getCode());
-                avatar.setId(null);
+                avatar.setId(defaultAvatar.getId());
                 avatar.setPath(stringConstructorManager.constructPictureUrl(avatar, BloggerPictureCategoryEnum.DEFAULT_BLOGGER_AVATAR));
             }
 

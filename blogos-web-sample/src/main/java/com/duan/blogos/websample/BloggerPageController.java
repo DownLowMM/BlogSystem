@@ -1,10 +1,11 @@
 package com.duan.blogos.websample;
 
+import com.duan.blogos.service.OnlineService;
+import com.duan.blogos.service.blogger.*;
 import com.duan.blogos.service.common.dto.blogger.*;
 import com.duan.blogos.service.common.enums.BloggerPictureCategoryEnum;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.*;
-import com.duan.blogos.service.OnlineService;
+import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,7 @@ import java.util.Optional;
  * @author DuanJiaNing
  */
 @Controller
-@RequestMapping("/{bloggerName}")
+@RequestMapping("/{bloggerNameBase64}")
 public class BloggerPageController {
 
     @Autowired
@@ -44,10 +45,11 @@ public class BloggerPageController {
 
     @RequestMapping("/archives")
     public ModelAndView mainPage(HttpServletRequest request,
-                                 @PathVariable String bloggerName) {
+                                 @PathVariable String bloggerNameBase64) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("blogger/main");
 
+        String bloggerName = Util.decodeBase64(bloggerNameBase64);
         BloggerAccountDTO account = accountService.getAccount(bloggerName);
         if (account == null) {
             request.setAttribute("code", 500);

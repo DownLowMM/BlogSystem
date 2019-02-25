@@ -26,6 +26,9 @@ public class BloggerDTO implements Serializable {
     //用户名
     private String username;
 
+    //用户名
+    private String usernameBase64;
+
     //注册时间
     private Timestamp registerDate;
 

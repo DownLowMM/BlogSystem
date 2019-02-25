@@ -42,10 +42,10 @@ public class StringConstructorManager {
                 .append("/image/")
                 // 私有图片登录才能获取
                 .append(cate == BloggerPictureCategoryEnum.PRIVATE.getCode() ? "prv/" : "")
-                .append(picture.getId())
-                .append("?category=")
-                .append(defaultCate == null ? BloggerPictureCategoryEnum.DEFAULT_PICTURE.getCode() :
-                        defaultCate.getCode());
+                .append(picture.getId());
+//                .append("?category=")
+//                .append(defaultCate == null ? BloggerPictureCategoryEnum.DEFAULT_PICTURE.getCode() :
+//                        defaultCate.getCode());
 
         return buffer.toString();
     }

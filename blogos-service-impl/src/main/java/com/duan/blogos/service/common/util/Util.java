@@ -2,8 +2,10 @@ package com.duan.blogos.service.common.util;
 
 import org.springframework.util.StringUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 /**
  * Created on 2019/2/22.
@@ -49,5 +51,13 @@ public class Util {
 
     public static String[] stringArrayToArray(String sour, String regex) {
         return StringUtils.isEmpty(sour) ? null : sour.split(regex);
+    }
+
+    public static String encodeBase64(String str) {
+        return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static String decodeBase64(byte[] bytes) {
+        return new String(Base64.getDecoder().decode(bytes), StandardCharsets.UTF_8);
     }
 }

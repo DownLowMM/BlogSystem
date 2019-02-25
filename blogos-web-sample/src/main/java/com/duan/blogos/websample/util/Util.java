@@ -6,6 +6,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * Created on 2018/10/14.
@@ -59,4 +61,15 @@ public class Util {
         return getUid(getToken());
     }
 
+    public static String encodeBase64(String str) {
+        return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static String decodeBase64(byte[] bytes) {
+        return new String(Base64.getDecoder().decode(bytes), StandardCharsets.UTF_8);
+    }
+
+    public static String decodeBase64(String str) {
+        return new String(Base64.getDecoder().decode(str.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+    }
 }

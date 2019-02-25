@@ -100,7 +100,7 @@
                     <div class="image-bg">
                         <img class="grid-item-img img-circle" src="${brief.blogger.avatar.path}"
                              data-adaptive-background='1' title="查看主页"
-                             onclick="location.href = '/${brief.blogger.username}/archives'">
+                             onclick="location.href = '/${brief.blogger.usernameBase64}/archives'">
                     </div>
                 </div>
                 <div class="col-md-2"></div>
@@ -109,7 +109,7 @@
             <p class="text-center">
                 <br>
                 <span class="check-blog" title="查看主页"
-                      onclick="location.href = '/${brief.blogger.username}/archives'">${brief.blogger.username}</span>
+                      onclick="location.href = '/${brief.blogger.usernameBase64}/archives'">${brief.blogger.username}</span>
             </p>
             <hr>
 
