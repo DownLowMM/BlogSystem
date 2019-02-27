@@ -380,7 +380,21 @@ public class BloggerBlogServiceImpl implements BloggerBlogService {
 
             Long cateId = null;
             while (entries.hasMoreElements()) {
-                ZipEntry entry = entries.nextElement();
+                ZipEntry entry;
+                try {
+                    entry = entries.nextElement();
+                } catch (IllegalArgumentException e) {
+                    if (e.getMessage().equals("MALFORMED")) {
+                        zipFile.close();
+
+                        zipFile = new ZipFile(fullPath, Charset.forName("GBK"));
+                        entries = zipFile.entries();
+                        continue;
+                    } else {
+                        throw e;
+                    }
+                }
+
                 String name = entry.getName();
 
                 /*
