@@ -40,7 +40,7 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
 
-    <title>${pageOwnerBloggerName}-主页</title>
+    <title>${bloggerModel.pageOwnerBlogger.profile.intro}</title>
 
 </head>
 <body>
@@ -134,14 +134,14 @@
         <table style="height: 100%;width: 100%">
             <tr style="height: 100%">
                 <td valign="middle">
-                    <h4>${blogName}
+                    <h4>${bloggerModel.pageOwnerBlogger.profile.intro}
                         <small>
                             &nbsp;&nbsp;
-                            <span id="blogCount">${ownerBgStat["blogCount"]}&nbsp;篇博文</span>
+                            <span id="blogCount">${bloggerModel.pageOwnerBlogger.statistics.blogCount}&nbsp;篇博文</span>
                             <span class="vertical-line">&nbsp;|&nbsp;</span>
-                            ${ownerBgStat["wordCount"]}&nbsp;字<span
+                            ${bloggerModel.pageOwnerBlogger.statistics.wordCount}&nbsp;字<span
                                 class="vertical-line">&nbsp;|&nbsp;</span>
-                            收获&nbsp;${ownerBgStat["likeCount"]}&nbsp;个喜欢
+                            收获&nbsp;${bloggerModel.pageOwnerBlogger.statistics.likeCount}&nbsp;个喜欢
                         </small>
                     </h4>
                 </td>
@@ -176,7 +176,7 @@
     <div class="row">
 
         <c:choose>
-            <c:when test="${setting.mainPageNavPos eq 0}">
+            <c:when test="${bloggerModel.pageOwnerBlogger.setting.mainPageNavPos eq 0}">
 
                 <%--左侧--%>
                 <div class="col-md-3">
@@ -184,12 +184,12 @@
                         <%--头像--%>
                     <div class="blogger-profile border">
                         <c:choose>
-                            <c:when test="${sessionScope['bloggerId'] == pageOwnerBloggerId}">
+                            <c:when test="${not empty bloggerModel.loginBlogger and bloggerModel.loginBlogger.account.id eq bloggerModel.pageOwnerBlogger.account.id}">
                                 <%--头像--%>
                                 <div class="avatar">
                                     <a class="avatar-edit" id="editAvatar" style="display: none">点击更换头像</a>
 
-                                    <img src="http://127.0.0.1:7070/image/${avatarId}"
+                                    <img src="/image/${bloggerModel.loginBlogger.profile.avatarId}"
                                          class="avatar-img avatar-img-editable"
                                          id="bloggerAvatar"
                                          onmouseenter="if(isPageOwnerBloggerLogin())$('#editAvatar').show()"
@@ -198,21 +198,21 @@
                                 </div>
                                 <%--用户名--%>
                                 <p class="text-center blogger-name">
-                                        ${pageOwnerBloggerName}
+                                        ${bloggerModel.loginBlogger.account.username}
                                 </p>
                             </c:when>
                             <c:otherwise>
                                 <%--头像--%>
                                 <div class="avatar">
-                                    <img src="http://127.0.0.1:7070/image/${avatarId}"
+                                    <img src="/image/${bloggerModel.pageOwnerBlogger.profile.avatarId}"
                                          class="avatar-img">
                                 </div>
                                 <%--用户名--%>
-                                <p class="text-center blogger-name">${pageOwnerBloggerName}</p>
+                                <p class="text-center blogger-name">${bloggerModel.pageOwnerBlogger.account.username}</p>
                             </c:otherwise>
                         </c:choose>
                         <hr>
-                        <p class="text-center blogger-aboutme">${aboutMe}</p>
+                        <p class="text-center blogger-aboutme">${bloggerModel.pageOwnerBlogger.profile.aboutMe}</p>
                     </div>
                     <br>
 
@@ -224,14 +224,15 @@
                                onclick="initBlog()">
                                 <img class="img24px" src="/images/icon/icons8-news-80.png">&nbsp;
                                 所有文章
-                                &nbsp;<span class="count" id="subBlogCount">(${ownerBgStat["blogCount"]})</span>
+                                &nbsp;<span class="count"
+                                            id="subBlogCount">(${bloggerModel.pageOwnerBlogger.statistics.blogCount})</span>
                             </a>
                             <a class="list-group-item vertical-center blogger-favourite"
-                               href="/${pageOwnerBloggerNameBase64}/blog/favourite/like">
+                               href="/${bloggerModel.pageOwnerBlogger.nameBase64}/blog/favourite/like">
                                     <%--<i class="material-icons icons">favorite_border</i>&nbsp;--%>
                                 <img class="img24px" src="/images/icon/icons8-heart-outline-80.png">&nbsp;
                                 <c:choose>
-                                    <c:when test="${sessionScope['bloggerId'] == pageOwnerBloggerId}">
+                                    <c:when test="${not empty bloggerModel.loginBlogger and bloggerModel.loginBlogger.account.id eq bloggerModel.pageOwnerBlogger.account.id}">
                                         我喜欢的文章
                                     </c:when>
                                     <c:otherwise>
@@ -239,13 +240,14 @@
                                     </c:otherwise>
 
                                 </c:choose>
-                                &nbsp;<span class="count">(${ownerBgStat.likedCount})</span>
+                                &nbsp;<span
+                                    class="count">(${bloggerModel.pageOwnerBlogger.statistics.likedCount})</span>
                             </a>
                             <a class="list-group-item vertical-center blogger-favourite"
-                               href="/${pageOwnerBloggerNameBase64}/blog/favourite/collect">
+                               href="/${bloggerModel.pageOwnerBlogger.nameBase64}/blog/favourite/collect">
                                 <img class="img24px" src="/images/icon/icons8-collect-100.png">&nbsp;
                                 <c:choose>
-                                    <c:when test="${sessionScope['bloggerId'] == pageOwnerBloggerId}">
+                                    <c:when test="${not empty bloggerModel.loginBlogger and bloggerModel.loginBlogger.account.id eq bloggerModel.pageOwnerBlogger.account.id}">
                                         我收藏的文章
                                     </c:when>
                                     <c:otherwise>
@@ -253,7 +255,8 @@
                                     </c:otherwise>
                                 </c:choose>
 
-                                &nbsp;<span class="count">(${ownerBgStat.collectCount})</span>
+                                &nbsp;<span
+                                    class="count">(${bloggerModel.pageOwnerBlogger.statistics.collectCount})</span>
                             </a>
                         </div>
                     </div>
@@ -265,7 +268,9 @@
                          class="blogger-profile border">
 
                         <p class="text-center blogger-profile-title">
-                            标签&nbsp;<small id="labelCount" style="color: darkgray">(${ownerBgStat.labelCount})</small>
+                            标签&nbsp;<small id="labelCount" style="color: darkgray">
+                            (${bloggerModel.pageOwnerBlogger.statistics.labelCount})
+                        </small>
                         </p>
 
                         <p class="text-center" style="display: none" id="bloggerLabelContainer">
@@ -287,7 +292,8 @@
                          onmouseleave="if(isPageOwnerBloggerLogin())$('#bloggerCategoryContainer').slideToggle()"
                          class="blogger-profile border">
                         <p class="text-center blogger-profile-title">
-                            类别&nbsp;<small id="categoryCount" style="color: darkgray">(${ownerBgStat.categoryCount})
+                            类别&nbsp;<small id="categoryCount" style="color: darkgray">
+                            (${bloggerModel.pageOwnerBlogger.statistics.categoryCount})
                         </small>
                         </p>
 
@@ -308,7 +314,9 @@
                          onmouseleave="if(isPageOwnerBloggerLogin())$('#bloggerLinkContainer').slideToggle()"
                          class="blogger-profile border">
                         <p class="text-center blogger-profile-title">
-                            联系我&nbsp;<small id="linkCount" style="color: darkgray">(${ownerBgStat.linkCount})</small>
+                            联系我&nbsp;<small id="linkCount" style="color: darkgray">
+                            (${bloggerModel.pageOwnerBlogger.statistics.linkCount})
+                        </small>
                         </p>
 
                         <p class="text-center" style="display: none" id="bloggerLinkContainer">
@@ -343,12 +351,12 @@
                         <%--头像--%>
                     <div class="blogger-profile border">
                         <c:choose>
-                            <c:when test="${sessionScope['bloggerId'] == pageOwnerBloggerId}">
+                            <c:when test="${not empty bloggerModel.loginBlogger and bloggerModel.loginBlogger.account.id eq bloggerModel.pageOwnerBlogger.account.id}">
                                 <%--头像--%>
                                 <div class="avatar">
                                     <a class="avatar-edit" id="editAvatar" style="display: none">点击更换头像</a>
 
-                                    <img src="http://127.0.0.1:7070/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
+                                    <img src="http://127.0.0.1:7070/image/${bloggerModel.pageOwnerBlogger.profile.avatarId}"
                                          class="avatar-img avatar-img-editable"
                                          id="bloggerAvatar"
                                          onmouseenter="if(isPageOwnerBloggerLogin())$('#editAvatar').show()"
@@ -357,21 +365,21 @@
                                 </div>
                                 <%--用户名--%>
                                 <p class="text-center blogger-name">
-                                        ${pageOwnerBloggerName}
+                                        ${bloggerModel.pageOwnerBlogger.account.username}
                                 </p>
                             </c:when>
                             <c:otherwise>
                                 <%--头像--%>
                                 <div class="avatar">
-                                    <img src="http://127.0.0.1:7070/image/${pageOwnerBloggerId}/type=public/${avatarId}?default=13"
+                                    <img src="http://127.0.0.1:7070/image/${bloggerModel.pageOwnerBlogger.profile.avatarId}"
                                          class="avatar-img">
                                 </div>
                                 <%--用户名--%>
-                                <p class="text-center blogger-name">${pageOwnerBloggerName}</p>
+                                <p class="text-center blogger-name">${bloggerModel.pageOwnerBlogger.account.username}</p>
                             </c:otherwise>
                         </c:choose>
                         <hr>
-                        <p class="text-center blogger-aboutme">${aboutMe}</p>
+                        <p class="text-center blogger-aboutme">${bloggerModel.pageOwnerBlogger.profile.aboutMe}</p>
                     </div>
                     <br>
 
@@ -383,14 +391,15 @@
                                onclick="initBlog()">
                                 <img class="img24px" src="/images/icon/icons8-news-80.png">&nbsp;
                                 所有文章
-                                &nbsp;<span class="count" id="subBlogCount">(${ownerBgStat["blogCount"]})</span>
+                                &nbsp;<span class="count"
+                                            id="subBlogCount">(${bloggerModel.pageOwnerBlogger.statistics.blogCount})</span>
                             </a>
                             <a class="list-group-item vertical-center blogger-favourite"
-                               href="/${pageOwnerBloggerNameBase64}/blog/favourite/like">
+                               href="/${bloggerModel.pageOwnerBlogger.nameBase64}/blog/favourite/like">
                                     <%--<i class="material-icons icons">favorite_border</i>&nbsp;--%>
                                 <img class="img24px" src="/images/icon/icons8-heart-outline-80.png">&nbsp;
                                 <c:choose>
-                                    <c:when test="${sessionScope['bloggerId'] == pageOwnerBloggerId}">
+                                    <c:when test="${not empty bloggerModel.loginBlogger and bloggerModel.loginBlogger.account.id eq bloggerModel.pageOwnerBlogger.account.id}">
                                         我喜欢的文章
                                     </c:when>
                                     <c:otherwise>
@@ -398,13 +407,14 @@
                                     </c:otherwise>
 
                                 </c:choose>
-                                &nbsp;<span class="count">(${ownerBgStat.likedCount})</span>
+                                &nbsp;<span
+                                    class="count">(${bloggerModel.pageOwnerBlogger.statistics.likedCount})</span>
                             </a>
                             <a class="list-group-item vertical-center blogger-favourite"
-                               href="/${pageOwnerBloggerNameBase64}/blog/favourite/collect">
+                               href="/${bloggerModel.pageOwnerBlogger.nameBase64}/blog/favourite/collect">
                                 <img class="img24px" src="/images/icon/icons8-collect-100.png">&nbsp;
                                 <c:choose>
-                                    <c:when test="${sessionScope['bloggerId'] == pageOwnerBloggerId}">
+                                    <c:when test="${not empty bloggerModel.loginBlogger and bloggerModel.loginBlogger.account.id eq bloggerModel.pageOwnerBlogger.account.id}">
                                         我收藏的文章
                                     </c:when>
                                     <c:otherwise>
@@ -412,7 +422,8 @@
                                     </c:otherwise>
                                 </c:choose>
 
-                                &nbsp;<span class="count">(${ownerBgStat.collectCount})</span>
+                                &nbsp;<span
+                                    class="count">(${bloggerModel.pageOwnerBlogger.statistics.collectCount})</span>
                             </a>
                         </div>
                     </div>
@@ -424,7 +435,9 @@
                          class="blogger-profile border">
 
                         <p class="text-center blogger-profile-title">
-                            标签&nbsp;<small id="labelCount" style="color: darkgray">(${ownerBgStat.labelCount})</small>
+                            标签&nbsp;<small id="labelCount" style="color: darkgray">
+                            (${bloggerModel.pageOwnerBlogger.statistics.labelCount})
+                        </small>
                         </p>
 
                         <p class="text-center" style="display: none" id="bloggerLabelContainer">
@@ -446,7 +459,8 @@
                          onmouseleave="if(isPageOwnerBloggerLogin())$('#bloggerCategoryContainer').slideToggle()"
                          class="blogger-profile border">
                         <p class="text-center blogger-profile-title">
-                            类别&nbsp;<small id="categoryCount" style="color: darkgray">(${ownerBgStat.categoryCount})
+                            类别&nbsp;<small id="categoryCount" style="color: darkgray">
+                            (${bloggerModel.pageOwnerBlogger.statistics.categoryCount})
                         </small>
                         </p>
 
@@ -467,7 +481,9 @@
                          onmouseleave="if(isPageOwnerBloggerLogin())$('#bloggerLinkContainer').slideToggle()"
                          class="blogger-profile border">
                         <p class="text-center blogger-profile-title">
-                            联系我&nbsp;<small id="linkCount" style="color: darkgray">(${ownerBgStat.linkCount})</small>
+                            联系我&nbsp;<small id="linkCount" style="color: darkgray">
+                            (${bloggerModel.pageOwnerBlogger.statistics.linkCount})
+                        </small>
                         </p>
 
                         <p class="text-center" style="display: none" id="bloggerLinkContainer">
@@ -493,13 +509,9 @@
 <jsp:include page="/views/footer/footer.jsp"/>
 
 <script type="application/javascript">
-    var pageOwnerBloggerId = ${pageOwnerBloggerId};
-    var pageOwnerBloggerNameBase64 = '${pageOwnerBloggerNameBase64}';
-    var pageOwnerBloggerName = '${pageOwnerBloggerName}';
-    var bloggerLoginSignal = ${not empty sessionScope['bloggerLoginSignal']};
-    var blogCount = ${ownerBgStat["blogCount"]};
-    <c:if test="${not empty sessionScope['bloggerLoginSignal']}">
-    var loginBloggerId = ${sessionScope["bloggerId"]};
+    var pageOwnerBloggerId = ${bloggerModel.pageOwnerBlogger.account.id};
+    <c:if test="${not empty bloggerModel.loginBlogger}">
+    var loginBloggerId = ${bloggerModel.loginBlogger.account.id};
     </c:if>
 </script>
 

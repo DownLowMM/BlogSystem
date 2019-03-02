@@ -570,7 +570,7 @@ function resetComplexFilter() {
 
 // 判断当前博客是否为登陆博主主页
 function isPageOwnerBloggerLogin() {
-    return bloggerLoginSignal && pageOwnerBloggerId === loginBloggerId;
+    return pageOwnerBloggerId === loginBloggerId;
 }
 
 // 加载初始博文列表
@@ -676,7 +676,7 @@ var funWhenDeleteLinkSuccess = function () {
 
 // ------------------------------------------------------------------------------------------------------ 登录对话框回调
 function funAfterLoginSuccess(result, name) {
-    location.href = '/' + result.data.usernameBase64 + '/archives';
+    location.href = '/' + result.data.usernameBase64 + '/archives?pageOwnerBloggerId=' + result.data.id;
 }
 
 // ------------------------------------------------------------------------------------------------------ 头像修改成功后回调回调

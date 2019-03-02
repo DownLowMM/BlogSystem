@@ -8,6 +8,8 @@ import lombok.Data;
  * @author DuanJiaNing
  */
 @Data
-public class PageOwnerBloggerVO extends BloggerVO {
+public class LoginBloggerVO extends BloggerVO {
+
+    private String loginSignal;
 
 }

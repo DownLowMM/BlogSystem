@@ -44,7 +44,7 @@ public interface BloggerAccountService {
     /**
      * 更新用户名
      *
-     * @param uid   博主id
+     * @param uid         博主id
      * @param newUserName 新的用户名
      * @return 更新成功返回true
      */
@@ -53,7 +53,7 @@ public interface BloggerAccountService {
     /**
      * 更新密码
      *
-     * @param uid   博主id
+     * @param uid         博主id
      * @param oldPassword 旧密码
      * @param newPassword 新的密码
      * @return 更新成功返回true
@@ -67,4 +67,6 @@ public interface BloggerAccountService {
      * @return 结果
      */
     BloggerAccountDTO getAccountByPhone(String phone);
+
+    BloggerAccountDTO getAccountById(Long uid);
 }

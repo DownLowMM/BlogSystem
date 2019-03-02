@@ -1,16 +1,16 @@
 package com.duan.blogos.websample;
 
-import com.duan.blogos.service.OnlineService;
 import com.duan.blogos.service.blog.OperateService;
 import com.duan.blogos.service.blog.StatisticsService;
-import com.duan.blogos.service.blogger.*;
+import com.duan.blogos.service.blogger.BloggerAccountService;
+import com.duan.blogos.service.blogger.BloggerBlogService;
+import com.duan.blogos.service.blogger.BloggerCollectBlogService;
+import com.duan.blogos.service.blogger.BloggerLikeBlogService;
 import com.duan.blogos.service.common.dto.blog.BlogBaseStatisticsDTO;
 import com.duan.blogos.service.common.dto.blog.BlogDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerAccountDTO;
-import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.common.restful.ResultModel;
 import com.duan.blogos.service.common.util.Utils;
-import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,12 +33,6 @@ public class BlogReadPageController {
 
     @Autowired
     private BloggerBlogService blogService;
-
-    @Autowired
-    private BloggerStatisticsService bloggerStatisticsService;
-
-    @Autowired
-    private OnlineService onlineService;
 
     @Autowired
     private OperateService operateService;
@@ -82,19 +76,12 @@ public class BlogReadPageController {
 
         ResultModel<BlogBaseStatisticsDTO> statistics = statisticsService.getBlogStatisticsCount(blogId);
         ResultModel<BlogDTO> blog = blogService.getBlog(blogId);
-
-        mv.addObject("blogOwnerBloggerId", account.getId());
-        mv.addObject("blogOwnerBloggerName", bloggerName);
-        mv.addObject("blogOwnerBloggerNameBase64", bloggerNameBase64);
         mv.addObject("main", blog.getData());
         mv.addObject("stat", statistics.getData());
 
         // 登陆博主 id
-        Long loginBloggerId = onlineService.getLoginBloggerId(Util.getToken());
-        if (loginBloggerId != null && loginBloggerId != -1) {
-
-            ResultModel<BloggerStatisticsDTO> loginBgStat = bloggerStatisticsService.getBloggerStatistics(loginBloggerId);
-            mv.addObject("loginBgStat", loginBgStat.getData());
+        Long loginBloggerId = MyControllerAdvice.getLoginBloggerId();
+        if (loginBloggerId != null) {
 
             if (likeService.getLikeState(loginBloggerId, blogId)) {
                 mv.addObject("likeState", true);

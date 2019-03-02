@@ -98,9 +98,9 @@
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
                     <div class="image-bg">
-                        <img class="grid-item-img img-circle" src="${brief.blogger.avatar.path}"
+                        <img class="grid-item-img img-circle" src="/image/${brief.avatarId}"
                              data-adaptive-background='1' title="查看主页"
-                             onclick="location.href = '/${brief.blogger.usernameBase64}/archives'">
+                             onclick="gotoBloggerArchives('${brief.nameBase64}',${brief.id})">
                     </div>
                 </div>
                 <div class="col-md-2"></div>
@@ -109,7 +109,7 @@
             <p class="text-center">
                 <br>
                 <span class="check-blog" title="查看主页"
-                      onclick="location.href = '/${brief.blogger.usernameBase64}/archives'">${brief.blogger.username}</span>
+                      onclick="gotoBloggerArchives('${brief.nameBase64}',${brief.id})">${brief.name}</span>
             </p>
             <hr>
 
@@ -123,7 +123,7 @@
                 </small>
             </p>
             <p class="text-left about-me lead">
-                    ${brief.blogger.profile.aboutMe}
+                    ${brief.aboutMe}
             </p>
 
         </div>
@@ -138,11 +138,6 @@
 <script type="application/javascript" src="/js/blogger/login.js"></script>
 <script type="application/javascript" src="/plugin/masonry/masonry.pkgd.min.js"></script>
 <script type="text/javascript" src='/plugin/adaptiveBgColor/jquery.adaptive-backgrounds.js'></script>
-
-<script>
-    var show = false;
-</script>
-
 
 </body>
 </html>

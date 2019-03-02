@@ -1,11 +1,11 @@
 package com.duan.blogos.websample;
 
+import com.duan.blogos.service.blogger.BloggerBlogService;
+import com.duan.blogos.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.service.common.dto.blog.BlogDTO;
 import com.duan.blogos.service.common.dto.blogger.BloggerStatisticsDTO;
 import com.duan.blogos.service.common.enums.BlogStatusEnum;
 import com.duan.blogos.service.common.restful.ResultModel;
-import com.duan.blogos.service.blogger.BloggerBlogService;
-import com.duan.blogos.service.blogger.BloggerStatisticsService;
 import com.duan.blogos.websample.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +33,7 @@ public class EditBlogPageController {
                                  @RequestParam(required = false) Long blogId) {
         ModelAndView mv = new ModelAndView();
 
-        if (bloggerId == null || Util.getToken() == null) {
+        if (bloggerId == null || Util.getParameter("token") == null) {
             return new ModelAndView("redirect:/login");
         } else {
             if (blogId != null) {

@@ -41,18 +41,19 @@ public class Util {
 
     }
 
-    public static String getToken() {
+    public static String getParameter(String name) {
         HttpServletRequest request = getServletRequest();
-        String token = request.getHeader("token");
-        if (token == null) {
-            token = request.getParameter("token");
+        String value = request.getHeader(name);
+
+        if (value == null) {
+            value = request.getParameter(name);
         }
 
-        if (token == null) {
-            token = getCookie("token");
+        if (value == null) {
+            value = getCookie(name);
         }
 
-        return token;
+        return value;
     }
 
     public static String stringToUnicode(String str) {
@@ -86,7 +87,7 @@ public class Util {
     }
 
     public static Long getUid() {
-        return getUid(getToken());
+        return getUid(getParameter("token"));
     }
 
 }

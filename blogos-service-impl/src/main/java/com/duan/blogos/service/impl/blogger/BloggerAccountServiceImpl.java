@@ -179,4 +179,10 @@ public class BloggerAccountServiceImpl implements BloggerAccountService {
         BloggerAccount account = accountDao.getAccountById(profile.getBloggerId());
         return DataConverter.PO2DTO.bloggerAccount2DTO(account);
     }
+
+    @Override
+    public BloggerAccountDTO getAccountById(Long uid) {
+        BloggerAccount account = accountDao.getAccountById(uid);
+        return DataConverter.PO2DTO.bloggerAccount2DTO(account);
+    }
 }

@@ -26,6 +26,7 @@ function login() {
     }, true, 'post', function (result) {
         if (result.code === 200) {
             refreshToken(result.data.token);
+            refreshLoginBloggerId(result.data.id);
 
             disableButton(false, 'loginBtn', '登录成功', "button-disable");
 

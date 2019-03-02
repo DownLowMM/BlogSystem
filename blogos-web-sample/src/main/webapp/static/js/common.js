@@ -239,13 +239,13 @@ function initToolTip() {
     $('[data-toggle="tooltip"]').tooltip();
 }
 
-var apiGateHost = 'http://127.0.0.1:7070';
-
 function ajax(url, data, async, type, success) {
     var host = apiGateHost;
     $.ajax({
         headers: {
-            token: token
+            token: token,
+            pageOwnerBloggerId: pageOwnerBloggerId,
+            loginBloggerId: loginBloggerId
         },
         url: host + url,
         data: data,
@@ -260,7 +260,9 @@ function ajaxSpe(url, data, async, type, dataType, success) {
     var host = apiGateHost;
     $.ajax({
         headers: {
-            token: token
+            token: token,
+            pageOwnerBloggerId: pageOwnerBloggerId,
+            loginBloggerId: loginBloggerId
         },
         url: host + url,
         data: data,
@@ -276,7 +278,9 @@ function ajaxForUpload(url, data, cache, type, processData, contentType, success
     var host = apiGateHost;
     $.ajax({
         headers: {
-            token: token
+            token: token,
+            pageOwnerBloggerId: pageOwnerBloggerId,
+            loginBloggerId: loginBloggerId
         },
         url: host + url,
         type: type,
@@ -293,7 +297,9 @@ function ajaxUploadBase64Url(url, data, cache, type, dataType, beforeSend, succe
     var host = apiGateHost;
     $.ajax({
         headers: {
-            token: token
+            token: token,
+            pageOwnerBloggerId: pageOwnerBloggerId,
+            loginBloggerId: loginBloggerId
         },
         url: host + url,
         type: type,
@@ -307,7 +313,19 @@ function ajaxUploadBase64Url(url, data, cache, type, dataType, beforeSend, succe
 }
 
 var token;
+var pageOwnerBloggerId;
+var loginBloggerId;
+var apiGateHost = 'http://127.0.0.1:7070';
 
 function refreshToken(token1) {
     token = token1;
+}
+
+function refreshLoginBloggerId(id) {
+    loginBloggerId = id;
+}
+
+function gotoBloggerArchives(nameBase64, id) {
+    pageOwnerBloggerId = id;
+    location.href = '/' + nameBase64 + '/archives?pageOwnerBloggerId=' + id;
 }
