@@ -189,7 +189,8 @@
                                 <div class="avatar">
                                     <a class="avatar-edit" id="editAvatar" style="display: none">点击更换头像</a>
 
-                                    <img src="/image/${bloggerModel.loginBlogger.profile.avatarId}"
+                                    <img src="${applicationModel.imageServerHost}/image/${empty bloggerModel.loginBlogger.profile.avatarId ? -1 :
+                                    bloggerModel.loginBlogger.profile.avatarId}"
                                          class="avatar-img avatar-img-editable"
                                          id="bloggerAvatar"
                                          onmouseenter="if(isPageOwnerBloggerLogin())$('#editAvatar').show()"
@@ -204,7 +205,8 @@
                             <c:otherwise>
                                 <%--头像--%>
                                 <div class="avatar">
-                                    <img src="/image/${bloggerModel.pageOwnerBlogger.profile.avatarId}"
+                                    <img src="${applicationModel.imageServerHost}/image/${empty bloggerModel.pageOwnerBlogger.profile.avatarId ? -1 :
+                                    bloggerModel.pageOwnerBlogger.profile.avatarId}"
                                          class="avatar-img">
                                 </div>
                                 <%--用户名--%>
@@ -356,7 +358,8 @@
                                 <div class="avatar">
                                     <a class="avatar-edit" id="editAvatar" style="display: none">点击更换头像</a>
 
-                                    <img src="http://127.0.0.1:7070/image/${bloggerModel.pageOwnerBlogger.profile.avatarId}"
+                                    <img src="/image/${empty bloggerModel.pageOwnerBlogger.profile.avatarId ? -1 :
+                                    bloggerModel.pageOwnerBlogger.profile.avatarId}"
                                          class="avatar-img avatar-img-editable"
                                          id="bloggerAvatar"
                                          onmouseenter="if(isPageOwnerBloggerLogin())$('#editAvatar').show()"
@@ -371,7 +374,8 @@
                             <c:otherwise>
                                 <%--头像--%>
                                 <div class="avatar">
-                                    <img src="http://127.0.0.1:7070/image/${bloggerModel.pageOwnerBlogger.profile.avatarId}"
+                                    <img src="${applicationModel.imageServerHost}/image/${empty bloggerModel.pageOwnerBlogger.profile.avatarId ? -1 :
+                                    bloggerModel.pageOwnerBlogger.profile.avatarId}"
                                          class="avatar-img">
                                 </div>
                                 <%--用户名--%>

@@ -319,15 +319,16 @@ var loginBloggerId;
 var loginBloggerNameBase64;
 var apiGateHost = 'http://127.0.0.1:7070';
 
-function refreshToken(token1) {
-    token = token1;
-}
-
-function refreshLoginBloggerId(id) {
-    loginBloggerId = id;
-}
-
-function gotoBloggerArchives(nameBase64, id) {
+function gotoOwnerBloggerArchives(nameBase64, id) {
     pageOwnerBloggerId = id;
     location.href = '/' + nameBase64 + '/archives?pageOwnerBloggerId=' + id;
+}
+
+function gotoBloggerArchives(login) {
+    var tm;
+    var url = '/' + (login ? loginBloggerNameBase64 : pageOwnerBloggerNameBase64) + '/archives'
+        + ((tm = (typeof(pageOwnerBloggerId) !== 'undefined')) ? ('?pageOwnerBloggerId=' + pageOwnerBloggerId) : '')
+        + (login ? (((tm ? '&' : '?') + 'loginBloggerId=' + loginBloggerId) + '&token=' + token) : "");
+
+    location.href = url;
 }

@@ -209,7 +209,7 @@ function register(includeProfile) {
                     function (result) {
                         if (result.code === 200) {
                             usernameBase64 = result.data.usernameBase64;
-                            refreshToken(result.data.token);
+                            token = result.data.token;
                             addProfile(id);
                         } else {
                             failInfo(result.msg);

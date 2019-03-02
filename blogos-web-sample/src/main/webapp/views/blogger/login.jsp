@@ -98,9 +98,9 @@
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
                     <div class="image-bg">
-                        <img class="grid-item-img img-circle" src="/image/${brief.avatarId}"
+                        <img class="grid-item-img img-circle" src="${applicationModel.imageServerHost}/image/${empty brief.avatarId ? -1 : brief.avatarId}"
                              data-adaptive-background='1' title="查看主页"
-                             onclick="gotoBloggerArchives('${brief.nameBase64}',${brief.id})">
+                             onclick="gotoOwnerBloggerArchives('${brief.nameBase64}',${brief.id})">
                     </div>
                 </div>
                 <div class="col-md-2"></div>
@@ -109,7 +109,7 @@
             <p class="text-center">
                 <br>
                 <span class="check-blog" title="查看主页"
-                      onclick="gotoBloggerArchives('${brief.nameBase64}',${brief.id})">${brief.name}</span>
+                      onclick="gotoOwnerBloggerArchives('${brief.nameBase64}',${brief.id})">${brief.name}</span>
             </p>
             <hr>
 

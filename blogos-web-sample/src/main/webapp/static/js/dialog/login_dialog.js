@@ -27,7 +27,7 @@ function login(funAfterLoginSuccess, funAfterLoginFail) {
             password: pwd
         }, true, 'post', function (result) {
             if (result.code === 200) {
-                refreshToken(result.data.token);
+                token = result.data.token;
 
                 disableButton(false, 'loginBtn', '登录成功', "button-disable");
 

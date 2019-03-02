@@ -25,15 +25,16 @@ function login() {
         password: pwd
     }, true, 'post', function (result) {
         if (result.code === 200) {
-            refreshToken(result.data.token);
-            refreshLoginBloggerId(result.data.id);
+            token = result.data.token;
+            loginBloggerId = result.data.id;
+            loginBloggerNameBase64 = result.data.usernameBase64;
 
             disableButton(false, 'loginBtn', '登录成功', "button-disable");
 
             setTimeout(function () {
                 disableButton(true, 'loginBtn', '登录', "button-disable");
 
-                window.location.href = '/' + name + '/archives';
+                gotoBloggerArchives(true);
             }, 1000);
 
         } else {
