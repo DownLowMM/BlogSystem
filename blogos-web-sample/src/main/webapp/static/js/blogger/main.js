@@ -346,12 +346,12 @@ function filterBloggerBlog(pageNum, pageSize, refreshPageIndicator, toTop, refre
 
             var defaultz = '<br><br><br><p class="text-center lead">没有博文' + ins + '</p><br><br><br>';
 
-            if (result === 200) {
+            if (result.code === 200) {
 
                 setBlogs(result.data.list, defaultz);
 
                 if (refreshPageIndicator) {
-                    setPageIndicator(result.data.list, result.data.currentPage - 1);
+                    setPageIndicator(result.data, result.data.currentPage - 1);
                 }
 
                 if (refreshTotalRealCount) {
@@ -515,7 +515,7 @@ function showDeleteConfirmDialog(blogId) {
 }
 
 function showBlogStatisticsDialog(blogId) {
-    window.open('/' + pageOwnerBloggerNameBase64 + '/blog-statistics?blogId=' + blogId, '_blank');
+    window.open('/' + pageOwnerBlogger.nameBase64 + '/blog-statistics?blogId=' + blogId, '_blank');
 }
 
 // -------------------------------------------------------------------------------------------------------- 确认删除博文

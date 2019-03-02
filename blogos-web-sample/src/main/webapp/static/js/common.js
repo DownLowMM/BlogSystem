@@ -314,7 +314,9 @@ function ajaxUploadBase64Url(url, data, cache, type, dataType, beforeSend, succe
 
 var token;
 var pageOwnerBloggerId;
+var pageOwnerBloggerNameBase64;
 var loginBloggerId;
+var loginBloggerNameBase64;
 var apiGateHost = 'http://127.0.0.1:7070';
 
 function refreshToken(token1) {

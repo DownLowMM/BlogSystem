@@ -508,15 +508,17 @@
 <br>
 <jsp:include page="/views/footer/footer.jsp"/>
 
+<script type="application/javascript" src="/js/common.js"></script>
 <script type="application/javascript">
-    var pageOwnerBloggerId = ${bloggerModel.pageOwnerBlogger.account.id};
+    pageOwnerBloggerNameBase64 = '${bloggerModel.pageOwnerBlogger.nameBase64}';
+    pageOwnerBloggerId = ${bloggerModel.pageOwnerBlogger.account.id};
     <c:if test="${not empty bloggerModel.loginBlogger}">
-    var loginBloggerId = ${bloggerModel.loginBlogger.account.id};
+    loginBloggerId = ${bloggerModel.loginBlogger.account.id};
+    loginBloggerNameBase64 = '${bloggerModel.loginBlogger.nameBase64}';
     </c:if>
 </script>
 
 <script type="application/javascript" src="/js/paging.js"></script>
-<script type="application/javascript" src="/js/common.js"></script>
 <script type="application/javascript" src="/js/blogger/main.js"></script>
 
 </body>
